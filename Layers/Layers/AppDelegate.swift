@@ -13,9 +13,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        window = LRWindow(frame: UIScreen.mainScreen().bounds)
+        window?.tintColor = Color.DarkNavyColor
+        
+        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).barTintColor = Color.DarkNavyColor
+        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.whiteColor()
+        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).titleTextAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),
+                                                                                                            NSFontAttributeName: Font.CharterBold(size: 20.0),
+                                                                                                            NSKernAttributeName: 3.0]
+
+        AppStateTransitioner.transitionToMainStoryboard(false)
+        
+        window?.makeKeyAndVisible()
+        
+//        for family: String in UIFont.familyNames()
+//        {
+//            print("\(family)")
+//            for names: String in UIFont.fontNamesForFamilyName(family)
+//            {
+//                print("== \(names)")
+//            }
+//        }
+        
         return true
     }
 
