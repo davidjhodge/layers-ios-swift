@@ -8,14 +8,16 @@
 
 import Foundation
 import UIKit
+import HidingNavigationBar
 
 class ProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
     private let kProductCellIdentfier = "ProductCell"
 
-    
     @IBOutlet weak var collectionView: UICollectionView!
     
+    var hidingNavBarManager: HidingNavigationBarManager?
+
     var products: Array<Product>?
     
     required init?(coder aDecoder: NSCoder) {
@@ -39,7 +41,14 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         collectionView.backgroundColor = Color.BackgroundGrayColor
         collectionView.alwaysBounceVertical = true
-                
+        
+        hidingNavBarManager = HidingNavigationBarManager(viewController: self, scrollView: collectionView)
+        hidingNavBarManager?.expansionResistance = 150
+
+        if let tabBar = navigationController?.tabBarController?.tabBar {
+            hidingNavBarManager?.manageBottomBar(tabBar)
+        }
+        
         //TEMP
         products = Array<Product>()
 
@@ -54,10 +63,25 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let navigation = navigationController
-        {
-            navigation.navigationBar.frame = CGRectMake(0, 0, view.frame.size.width, 80.0)
-        }
+        hidingNavBarManager?.viewWillAppear(animated)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        hidingNavBarManager?.viewDidLayoutSubviews()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        hidingNavBarManager?.viewWillDisappear(animated)
+    }
+    
+    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
+        hidingNavBarManager?.shouldScrollToTop()
+
+        return true
     }
     
 //    override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -82,7 +106,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         if let items = products
         {
 //            return items.count
-            return 8
+            return 20
         }
         
         return 0
@@ -118,6 +142,11 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     }
     
     // MARK: Collection View Delegate
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        performSegueWithIdentifier("ShowProductViewController", sender: self)
+    }
+    
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
         let flowLayout: UICollectionViewFlowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
@@ -125,5 +154,20 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         let width: CGFloat = (collectionView.bounds.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right - 8) * 0.5
         
         return CGSizeMake(width, 226.0)
+    }
+    
+    // MARK: Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "ShowProductViewController"
+        {
+            if segue.destinationViewController is ProductViewController
+            {
+//                let destinationVC: ProductViewController = segue.destinationViewController as! ProductViewController
+//                destinationVC.productIdentifier = product.identifier
+
+            }
+            
+            
+        }
     }
 }

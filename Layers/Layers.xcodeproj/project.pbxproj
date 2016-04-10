@@ -29,6 +29,10 @@
 		70987C281CB9A4A500D86FBA /* Account.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70987C271CB9A4A500D86FBA /* Account.storyboard */; };
 		70987C2A1CB9A4BF00D86FBA /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C291CB9A4BF00D86FBA /* AccountViewController.swift */; };
 		70987C2E1CB9A81C00D86FBA /* LRNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C2D1CB9A81C00D86FBA /* LRNavigationBar.swift */; };
+		70987C301CB9B4E400D86FBA /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C2F1CB9B4E400D86FBA /* ProductViewController.swift */; };
+		70987C331CB9CA1300D86FBA /* ProductHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C321CB9CA1300D86FBA /* ProductHeaderCell.swift */; };
+		70987C371CB9D15100D86FBA /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70987C361CB9D15100D86FBA /* Login.storyboard */; };
+		70987C3B1CBAB4BF00D86FBA /* SimpleWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C3A1CBAB4BF00D86FBA /* SimpleWebViewController.swift */; };
 		70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D84A9E1CB9557300A70485 /* AppDelegate.swift */; };
 		70D84AA41CB9557300A70485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA21CB9557300A70485 /* Main.storyboard */; };
 		70D84AA61CB9557300A70485 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA51CB9557300A70485 /* Assets.xcassets */; };
@@ -61,6 +65,10 @@
 		70987C271CB9A4A500D86FBA /* Account.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Account.storyboard; sourceTree = "<group>"; };
 		70987C291CB9A4BF00D86FBA /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		70987C2D1CB9A81C00D86FBA /* LRNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LRNavigationBar.swift; sourceTree = "<group>"; };
+		70987C2F1CB9B4E400D86FBA /* ProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductViewController.swift; sourceTree = "<group>"; };
+		70987C321CB9CA1300D86FBA /* ProductHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductHeaderCell.swift; sourceTree = "<group>"; };
+		70987C361CB9D15100D86FBA /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
+		70987C3A1CBAB4BF00D86FBA /* SimpleWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleWebViewController.swift; sourceTree = "<group>"; };
 		70D84A9B1CB9557200A70485 /* Layers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Layers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70D84A9E1CB9557300A70485 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70D84AA31CB9557300A70485 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -112,6 +120,7 @@
 			children = (
 				70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */,
 				70987BF01CB9672200D86FBA /* ProductCell.swift */,
+				70987C311CB9C9FC00D86FBA /* Product Detail */,
 			);
 			name = "Product Collection";
 			sourceTree = "<group>";
@@ -119,6 +128,7 @@
 		70987BF31CB9706200D86FBA /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				70987C361CB9D15100D86FBA /* Login.storyboard */,
 				70D84AA21CB9557300A70485 /* Main.storyboard */,
 				70987C201CB9A43F00D86FBA /* Closet.storyboard */,
 				70987C271CB9A4A500D86FBA /* Account.storyboard */,
@@ -222,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				70987C291CB9A4BF00D86FBA /* AccountViewController.swift */,
+				70987C3A1CBAB4BF00D86FBA /* SimpleWebViewController.swift */,
 			);
 			name = Account;
 			sourceTree = "<group>";
@@ -233,6 +244,15 @@
 				70987BEF1CB9658700D86FBA /* Data Model */,
 			);
 			name = "Session Manager / Data Layer";
+			sourceTree = "<group>";
+		};
+		70987C311CB9C9FC00D86FBA /* Product Detail */ = {
+			isa = PBXGroup;
+			children = (
+				70987C2F1CB9B4E400D86FBA /* ProductViewController.swift */,
+				70987C321CB9CA1300D86FBA /* ProductHeaderCell.swift */,
+			);
+			name = "Product Detail";
 			sourceTree = "<group>";
 		};
 		70D84A921CB9557200A70485 = {
@@ -350,6 +370,7 @@
 				70987C0F1CB9832E00D86FBA /* Charter-Black.ttf in Resources */,
 				70987C281CB9A4A500D86FBA /* Account.storyboard in Resources */,
 				70987C071CB980B300D86FBA /* Oxygen-Regular.ttf in Resources */,
+				70987C371CB9D15100D86FBA /* Login.storyboard in Resources */,
 				70987C051CB980B300D86FBA /* Oxygen-Bold.ttf in Resources */,
 				70987C111CB9832E00D86FBA /* Charter-Bold.ttf in Resources */,
 				70987C061CB980B300D86FBA /* Oxygen-Light.ttf in Resources */,
@@ -428,14 +449,17 @@
 				70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */,
 				70987BF51CB970CA00D86FBA /* LRSessionManager.swift in Sources */,
 				70987C2A1CB9A4BF00D86FBA /* AccountViewController.swift in Sources */,
+				70987C301CB9B4E400D86FBA /* ProductViewController.swift in Sources */,
 				70987C251CB9A47600D86FBA /* ClosetViewController.swift in Sources */,
 				70987C171CB985DE00D86FBA /* Font.swift in Sources */,
 				70987BFC1CB97A9900D86FBA /* LRWindow.swift in Sources */,
+				70987C3B1CBAB4BF00D86FBA /* SimpleWebViewController.swift in Sources */,
 				70987BEC1CB9657900D86FBA /* Product.swift in Sources */,
 				70987BEA1CB95F1900D86FBA /* ProductCollectionViewController.swift in Sources */,
 				70987BF11CB9672200D86FBA /* ProductCell.swift in Sources */,
 				70987C2E1CB9A81C00D86FBA /* LRNavigationBar.swift in Sources */,
 				70987BFA1CB9749700D86FBA /* Color.swift in Sources */,
+				70987C331CB9CA1300D86FBA /* ProductHeaderCell.swift in Sources */,
 				70987C1B1CB98A7700D86FBA /* NSAttributedString+Pricing.m in Sources */,
 				70987BEE1CB9658200D86FBA /* User.swift in Sources */,
 				70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */,
