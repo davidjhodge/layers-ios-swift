@@ -1,24 +1,33 @@
 PODS:
   - Alamofire (3.3.1)
+  - Cosmos (1.2.2)
+  - HidingNavigationBar (0.3.0)
   - KeychainAccess (2.3.5)
   - ObjectMapper (1.2.0)
   - SDWebImage (3.7.5):
     - SDWebImage/Core (= 3.7.5)
   - SDWebImage/Core (3.7.5)
+  - SwiftyBeaver (0.4.2)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
   - Alamofire
+  - Cosmos (~> 1.2)
+  - HidingNavigationBar (~> 0.3)
   - KeychainAccess
   - ObjectMapper
   - SDWebImage
+  - SwiftyBeaver
   - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
+  Cosmos: 87c49100c69d2cb2eebfa4eb8d1e801fe29ff774
+  HidingNavigationBar: 6378af14cea27bfef8be73470b081a36d45b87c4
   KeychainAccess: e283c1981a6c5655e1984cd411c6faf16fa165ae
   ObjectMapper: b1e9c7c8a9f6400b72690c80072c131504caa66f
   SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
+  SwiftyBeaver: 3eced9aabe4f10b975453cc1baaa2d523a5eaeae
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
 COCOAPODS: 0.39.0

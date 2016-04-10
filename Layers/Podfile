@@ -10,6 +10,9 @@ pod 'KeychainAccess'
 pod 'SDWebImage'
 pod 'Alamofire'
 pod 'SwiftyJSON'
+pod 'HidingNavigationBar', '~> 0.3'
+pod 'Cosmos', '~> 1.2'
+pod 'SwiftyBeaver'
 
 end
 
