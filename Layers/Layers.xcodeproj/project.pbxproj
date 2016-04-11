@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		35D2CA6AC9BC70A0D97C9B38 /* Pods_Layers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29055E7EACEA98F3107E42C /* Pods_Layers.framework */; };
+		706FF8881CBC4EF8007B26AD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8871CBC4EF8007B26AD /* LoginViewController.swift */; };
+		706FF88A1CBC54F8007B26AD /* EmailLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */; };
+		706FF88C1CBC57D6007B26AD /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */; };
 		70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */; };
 		70987BEA1CB95F1900D86FBA /* ProductCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */; };
 		70987BEC1CB9657900D86FBA /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BEB1CB9657900D86FBA /* Product.swift */; };
@@ -43,6 +46,9 @@
 /* Begin PBXFileReference section */
 		2617CC4AE1CA59B7C7DFB253 /* Pods-Layers.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Layers.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Layers/Pods-Layers.debug.xcconfig"; sourceTree = "<group>"; };
 		3FCE59FA6B494AAB3C36EE8C /* Pods-Layers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Layers.release.xcconfig"; path = "Pods/Target Support Files/Pods-Layers/Pods-Layers.release.xcconfig"; sourceTree = "<group>"; };
+		706FF8871CBC4EF8007B26AD /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailLoginViewController.swift; sourceTree = "<group>"; };
+		706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldCell.swift; sourceTree = "<group>"; };
 		70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStateTransitioner.swift; sourceTree = "<group>"; };
 		70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewController.swift; sourceTree = "<group>"; };
 		70987BEB1CB9657900D86FBA /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
@@ -262,6 +268,9 @@
 			isa = PBXGroup;
 			children = (
 				70987C3C1CBBF07B00D86FBA /* GetStartedViewController.swift */,
+				706FF8871CBC4EF8007B26AD /* LoginViewController.swift */,
+				706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */,
+				706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -461,6 +470,9 @@
 				70987BF51CB970CA00D86FBA /* LRSessionManager.swift in Sources */,
 				70987C2A1CB9A4BF00D86FBA /* AccountViewController.swift in Sources */,
 				70987C301CB9B4E400D86FBA /* ProductViewController.swift in Sources */,
+				706FF8881CBC4EF8007B26AD /* LoginViewController.swift in Sources */,
+				706FF88C1CBC57D6007B26AD /* TextFieldCell.swift in Sources */,
+				706FF88A1CBC54F8007B26AD /* EmailLoginViewController.swift in Sources */,
 				70987C251CB9A47600D86FBA /* ClosetViewController.swift in Sources */,
 				70987C171CB985DE00D86FBA /* Font.swift in Sources */,
 				70987BFC1CB97A9900D86FBA /* LRWindow.swift in Sources */,
