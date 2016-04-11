@@ -24,10 +24,18 @@ class AppStateTransitioner
             window?.addSubview(coverView)
             
             UIView.animateWithDuration(0.5, animations: { () -> Void in
-                coverView.alpha = 0.0
-                }, completion: { (finished) -> Void in
-                    coverView.removeFromSuperview()
-            })
+                coverView.alpha = 1.0
+            }) { (finished) -> Void in
+                window?.rootViewController = destinationViewController
+                window?.bringSubviewToFront(coverView)
+                
+                
+                UIView.animateWithDuration(0.5, animations: { () -> Void in
+                    coverView.alpha = 0.0
+                    }, completion: { (finished) -> Void in
+                        coverView.removeFromSuperview()
+                })
+            }
         }
         else
         {
