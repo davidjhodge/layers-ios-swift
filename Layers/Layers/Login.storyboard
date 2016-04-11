@@ -26,19 +26,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hero-image" translatesAutoresizingMaskIntoConstraints="NO" id="kdb-rk-KmF">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="modern-logo" translatesAutoresizingMaskIntoConstraints="NO" id="gAw-gp-0yb">
-                                <rect key="frame" x="252" y="72" width="96" height="96"/>
+                                <rect key="frame" x="252" y="102" width="96" height="96"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="96" id="UUd-Fx-REs"/>
                                     <constraint firstAttribute="height" constant="96" id="oda-0o-YHx"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finding clothes you like just got easier." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HUu-Md-VCL">
-                                <rect key="frame" x="72" y="289.5" width="456" height="21.5"/>
-                                <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDY-WP-stc">
                                 <rect key="frame" x="24" y="424" width="552" height="50"/>
                                 <color key="backgroundColor" red="0.44313725490196076" green="0.59215686274509804" blue="0.85098039215686272" alpha="1" colorSpace="calibratedRGB"/>
@@ -64,7 +61,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LAYERS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GAL-Zl-dcr">
-                                <rect key="frame" x="236" y="192" width="128" height="36"/>
+                                <rect key="frame" x="236" y="222" width="128" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="1cj-v8-R0j"/>
                                     <constraint firstAttribute="width" constant="128" id="7j0-6r-sbH"/>
@@ -73,27 +70,41 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hero-image" translatesAutoresizingMaskIntoConstraints="NO" id="kdb-rk-KmF">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8p6-DK-9IA" userLabel="Container">
+                                <rect key="frame" x="0.0" y="258" width="600" height="166"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finding clothes you like just got easier." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HUu-Md-VCL">
+                                        <rect key="frame" x="72" y="72.5" width="456" height="21.5"/>
+                                        <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="HUu-Md-VCL" firstAttribute="leading" secondItem="8p6-DK-9IA" secondAttribute="leading" constant="72" id="4uk-me-Wkt"/>
+                                    <constraint firstItem="HUu-Md-VCL" firstAttribute="centerY" secondItem="8p6-DK-9IA" secondAttribute="centerY" id="kxj-31-cv2"/>
+                                    <constraint firstAttribute="trailing" secondItem="HUu-Md-VCL" secondAttribute="trailing" constant="72" id="wuv-Dc-XxU"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="gAw-gp-0yb" firstAttribute="centerY" secondItem="zQT-tU-KJd" secondAttribute="centerY" multiplier="0.4" id="2e0-B9-Fdp"/>
-                            <constraint firstItem="HUu-Md-VCL" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="7Pk-zS-1Kf"/>
+                            <constraint firstItem="gAw-gp-0yb" firstAttribute="centerY" secondItem="zQT-tU-KJd" secondAttribute="centerY" multiplier="0.5" id="2e0-B9-Fdp"/>
+                            <constraint firstItem="TDY-WP-stc" firstAttribute="top" secondItem="8p6-DK-9IA" secondAttribute="bottom" id="4T0-IR-d4I"/>
+                            <constraint firstItem="8p6-DK-9IA" firstAttribute="top" secondItem="GAL-Zl-dcr" secondAttribute="bottom" id="6a1-RP-xE1"/>
                             <constraint firstItem="TDY-WP-stc" firstAttribute="leading" secondItem="zQT-tU-KJd" secondAttribute="leading" constant="24" id="IrE-Ts-PXh"/>
+                            <constraint firstAttribute="trailing" secondItem="8p6-DK-9IA" secondAttribute="trailing" id="Mr7-ix-g23"/>
                             <constraint firstItem="GAL-Zl-dcr" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="Nae-Oe-Z7F"/>
-                            <constraint firstAttribute="trailing" secondItem="HUu-Md-VCL" secondAttribute="trailing" constant="72" id="OS3-Kl-sZA"/>
                             <constraint firstItem="6YJ-Q7-aB6" firstAttribute="top" secondItem="ftk-AZ-MfL" secondAttribute="bottom" constant="80" id="R6c-3k-2Q2"/>
                             <constraint firstItem="ftk-AZ-MfL" firstAttribute="top" secondItem="TDY-WP-stc" secondAttribute="bottom" constant="16" id="SSU-JX-jgd"/>
                             <constraint firstItem="gAw-gp-0yb" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="X1f-sm-yD6"/>
                             <constraint firstItem="TDY-WP-stc" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="cmn-Qc-T3g"/>
                             <constraint firstItem="ftk-AZ-MfL" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="cr6-8u-CsJ"/>
                             <constraint firstItem="kdb-rk-KmF" firstAttribute="top" secondItem="zQT-tU-KJd" secondAttribute="top" id="gr1-Ps-2Yv"/>
+                            <constraint firstItem="8p6-DK-9IA" firstAttribute="leading" secondItem="zQT-tU-KJd" secondAttribute="leading" id="hSN-TN-RJS"/>
                             <constraint firstItem="6YJ-Q7-aB6" firstAttribute="top" secondItem="kdb-rk-KmF" secondAttribute="bottom" id="if2-Ln-DTp"/>
                             <constraint firstAttribute="trailing" secondItem="kdb-rk-KmF" secondAttribute="trailing" id="juS-Nc-3Qc"/>
-                            <constraint firstItem="HUu-Md-VCL" firstAttribute="leading" secondItem="zQT-tU-KJd" secondAttribute="leading" constant="72" id="mZg-IK-3vv"/>
-                            <constraint firstItem="HUu-Md-VCL" firstAttribute="centerY" secondItem="zQT-tU-KJd" secondAttribute="centerY" id="oKQ-Zb-m23"/>
                             <constraint firstItem="kdb-rk-KmF" firstAttribute="leading" secondItem="zQT-tU-KJd" secondAttribute="leading" id="qOM-Ll-aSQ"/>
                             <constraint firstItem="GAL-Zl-dcr" firstAttribute="top" secondItem="gAw-gp-0yb" secondAttribute="bottom" constant="24" id="uSt-pi-5Fd"/>
                             <constraint firstAttribute="trailing" secondItem="TDY-WP-stc" secondAttribute="trailing" constant="24" id="wdK-yW-7nv"/>
