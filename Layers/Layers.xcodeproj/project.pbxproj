@@ -33,6 +33,7 @@
 		70987C331CB9CA1300D86FBA /* ProductHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C321CB9CA1300D86FBA /* ProductHeaderCell.swift */; };
 		70987C371CB9D15100D86FBA /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70987C361CB9D15100D86FBA /* Login.storyboard */; };
 		70987C3B1CBAB4BF00D86FBA /* SimpleWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C3A1CBAB4BF00D86FBA /* SimpleWebViewController.swift */; };
+		70987C3D1CBBF07B00D86FBA /* GetStartedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C3C1CBBF07B00D86FBA /* GetStartedViewController.swift */; };
 		70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D84A9E1CB9557300A70485 /* AppDelegate.swift */; };
 		70D84AA41CB9557300A70485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA21CB9557300A70485 /* Main.storyboard */; };
 		70D84AA61CB9557300A70485 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA51CB9557300A70485 /* Assets.xcassets */; };
@@ -69,6 +70,7 @@
 		70987C321CB9CA1300D86FBA /* ProductHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductHeaderCell.swift; sourceTree = "<group>"; };
 		70987C361CB9D15100D86FBA /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		70987C3A1CBAB4BF00D86FBA /* SimpleWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleWebViewController.swift; sourceTree = "<group>"; };
+		70987C3C1CBBF07B00D86FBA /* GetStartedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetStartedViewController.swift; sourceTree = "<group>"; };
 		70D84A9B1CB9557200A70485 /* Layers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Layers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70D84A9E1CB9557300A70485 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70D84AA31CB9557300A70485 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				70D84AA21CB9557300A70485 /* Main.storyboard */,
 				70987C201CB9A43F00D86FBA /* Closet.storyboard */,
 				70987C271CB9A4A500D86FBA /* Account.storyboard */,
+				70987C3E1CBBF07F00D86FBA /* Login */,
 				70987BF21CB9705C00D86FBA /* Product Collection */,
 				70987C261CB9A49100D86FBA /* Closet */,
 				70987C2B1CB9A4C200D86FBA /* Account */,
@@ -253,6 +256,14 @@
 				70987C321CB9CA1300D86FBA /* ProductHeaderCell.swift */,
 			);
 			name = "Product Detail";
+			sourceTree = "<group>";
+		};
+		70987C3E1CBBF07F00D86FBA /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				70987C3C1CBBF07B00D86FBA /* GetStartedViewController.swift */,
+			);
+			name = Login;
 			sourceTree = "<group>";
 		};
 		70D84A921CB9557200A70485 = {
@@ -461,6 +472,7 @@
 				70987BFA1CB9749700D86FBA /* Color.swift in Sources */,
 				70987C331CB9CA1300D86FBA /* ProductHeaderCell.swift in Sources */,
 				70987C1B1CB98A7700D86FBA /* NSAttributedString+Pricing.m in Sources */,
+				70987C3D1CBBF07B00D86FBA /* GetStartedViewController.swift in Sources */,
 				70987BEE1CB9658200D86FBA /* User.swift in Sources */,
 				70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */,
 			);
