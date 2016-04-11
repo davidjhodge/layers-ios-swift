@@ -28,8 +28,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                                                             NSFontAttributeName: Font.CharterBold(size: 20.0),
                                                                                                             NSKernAttributeName: 3.0]
 
-        AppStateTransitioner.transitionToMainStoryboard(false)
-        
+        AppStateTransitioner.transitionToLoginStoryboard(false)
+//        AppStateTransitioner.transitionToMainStoryboard(false)
+
         window?.makeKeyAndVisible()
         
 //        for family: String in UIFont.familyNames()

@@ -2,12 +2,22 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4bM-Ke-uco">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="Oxygen-Bold.ttf">
+            <string>Oxygen-Bold</string>
+            <string>Oxygen-Bold</string>
+        </mutableArray>
+        <mutableArray key="Oxygen-Regular.ttf">
+            <string>Oxygen-Regular</string>
+        </mutableArray>
+    </customFonts>
     <scenes>
-        <!--View Controller-->
+        <!--Get Started View Controller-->
         <scene sceneID="DMT-Hx-0Xe">
             <objects>
-                <viewController id="4bM-Ke-uco" sceneMemberID="viewController">
+                <viewController id="4bM-Ke-uco" customClass="GetStartedViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Vxn-Ka-nHa"/>
                         <viewControllerLayoutGuide type="bottom" id="6YJ-Q7-aB6"/>
@@ -16,22 +26,91 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kdb-rk-KmF">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="modern-logo" translatesAutoresizingMaskIntoConstraints="NO" id="gAw-gp-0yb">
+                                <rect key="frame" x="252" y="72" width="96" height="96"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="96" id="UUd-Fx-REs"/>
+                                    <constraint firstAttribute="height" constant="96" id="oda-0o-YHx"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finding clothes you like just got easier." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HUu-Md-VCL">
+                                <rect key="frame" x="72" y="289.5" width="456" height="21.5"/>
+                                <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDY-WP-stc">
+                                <rect key="frame" x="24" y="424" width="552" height="50"/>
+                                <color key="backgroundColor" red="0.44313725490196076" green="0.59215686274509804" blue="0.85098039215686272" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="AfP-47-tMg"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="18"/>
+                                <state key="normal" title="GET STARTED"/>
+                                <connections>
+                                    <action selector="getStarted:" destination="4bM-Ke-uco" eventType="touchUpInside" id="VUx-8G-okr"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ftk-AZ-MfL">
+                                <rect key="frame" x="204" y="490" width="192" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="192" id="Ajw-1y-exg"/>
+                                </constraints>
+                                <state key="normal" title="Already have an account?">
+                                    <color key="titleColor" red="0.78431372549019607" green="0.78431372549019607" blue="0.78431372549019607" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="alreadyHasAccount:" destination="4bM-Ke-uco" eventType="touchUpInside" id="XFS-iw-tY4"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LAYERS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GAL-Zl-dcr">
+                                <rect key="frame" x="236" y="192" width="128" height="36"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="1cj-v8-R0j"/>
+                                    <constraint firstAttribute="width" constant="128" id="7j0-6r-sbH"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="30"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hero-image" translatesAutoresizingMaskIntoConstraints="NO" id="kdb-rk-KmF">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="6YJ-Q7-aB6" firstAttribute="top" secondItem="kdb-rk-KmF" secondAttribute="bottom" id="8mW-6O-XHx"/>
-                            <constraint firstItem="kdb-rk-KmF" firstAttribute="top" secondItem="zQT-tU-KJd" secondAttribute="top" id="B3c-mN-pZ4"/>
-                            <constraint firstItem="kdb-rk-KmF" firstAttribute="leading" secondItem="zQT-tU-KJd" secondAttribute="leading" id="YF7-8b-NOX"/>
-                            <constraint firstAttribute="trailing" secondItem="kdb-rk-KmF" secondAttribute="trailing" id="jxL-b1-CMD"/>
+                            <constraint firstItem="gAw-gp-0yb" firstAttribute="centerY" secondItem="zQT-tU-KJd" secondAttribute="centerY" multiplier="0.4" id="2e0-B9-Fdp"/>
+                            <constraint firstItem="HUu-Md-VCL" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="7Pk-zS-1Kf"/>
+                            <constraint firstItem="TDY-WP-stc" firstAttribute="leading" secondItem="zQT-tU-KJd" secondAttribute="leading" constant="24" id="IrE-Ts-PXh"/>
+                            <constraint firstItem="GAL-Zl-dcr" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="Nae-Oe-Z7F"/>
+                            <constraint firstAttribute="trailing" secondItem="HUu-Md-VCL" secondAttribute="trailing" constant="72" id="OS3-Kl-sZA"/>
+                            <constraint firstItem="6YJ-Q7-aB6" firstAttribute="top" secondItem="ftk-AZ-MfL" secondAttribute="bottom" constant="80" id="R6c-3k-2Q2"/>
+                            <constraint firstItem="ftk-AZ-MfL" firstAttribute="top" secondItem="TDY-WP-stc" secondAttribute="bottom" constant="16" id="SSU-JX-jgd"/>
+                            <constraint firstItem="gAw-gp-0yb" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="X1f-sm-yD6"/>
+                            <constraint firstItem="TDY-WP-stc" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="cmn-Qc-T3g"/>
+                            <constraint firstItem="ftk-AZ-MfL" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="cr6-8u-CsJ"/>
+                            <constraint firstItem="kdb-rk-KmF" firstAttribute="top" secondItem="zQT-tU-KJd" secondAttribute="top" id="gr1-Ps-2Yv"/>
+                            <constraint firstItem="6YJ-Q7-aB6" firstAttribute="top" secondItem="kdb-rk-KmF" secondAttribute="bottom" id="if2-Ln-DTp"/>
+                            <constraint firstAttribute="trailing" secondItem="kdb-rk-KmF" secondAttribute="trailing" id="juS-Nc-3Qc"/>
+                            <constraint firstItem="HUu-Md-VCL" firstAttribute="leading" secondItem="zQT-tU-KJd" secondAttribute="leading" constant="72" id="mZg-IK-3vv"/>
+                            <constraint firstItem="HUu-Md-VCL" firstAttribute="centerY" secondItem="zQT-tU-KJd" secondAttribute="centerY" id="oKQ-Zb-m23"/>
+                            <constraint firstItem="kdb-rk-KmF" firstAttribute="leading" secondItem="zQT-tU-KJd" secondAttribute="leading" id="qOM-Ll-aSQ"/>
+                            <constraint firstItem="GAL-Zl-dcr" firstAttribute="top" secondItem="gAw-gp-0yb" secondAttribute="bottom" constant="24" id="uSt-pi-5Fd"/>
+                            <constraint firstAttribute="trailing" secondItem="TDY-WP-stc" secondAttribute="trailing" constant="24" id="wdK-yW-7nv"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="heroImage" destination="kdb-rk-KmF" id="7XK-2B-l5a"/>
+                        <outlet property="logoLabel" destination="GAL-Zl-dcr" id="luB-bh-ZpO"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ryS-QK-sVr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="98" y="446"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="hero-image" width="375" height="667"/>
+        <image name="modern-logo" width="104" height="104"/>
+    </resources>
 </document>
