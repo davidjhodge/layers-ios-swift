@@ -21,6 +21,18 @@ class GetStartedViewController: UIViewController
         view.sendSubviewToBack(heroImage)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
     @IBAction func getStarted(sender: AnyObject)
     {
         AppStateTransitioner.transitionToMainStoryboard(true)
@@ -28,6 +40,6 @@ class GetStartedViewController: UIViewController
     
     @IBAction func alreadyHasAccount(sender: AnyObject)
     {
-        print("Already Has Account tapped")
+        performSegueWithIdentifier("ShowLoginViewController", sender: self)
     }
 }
