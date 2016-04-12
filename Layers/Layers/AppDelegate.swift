@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = LRWindow(frame: UIScreen.mainScreen().bounds)
         window?.tintColor = Color.DarkNavyColor
         
+        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).translucent = false
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).barTintColor = Color.DarkNavyColor
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.whiteColor()
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).titleTextAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),

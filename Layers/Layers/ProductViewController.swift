@@ -14,6 +14,11 @@ private enum TableSection: Int
     case ProductHeader = 0, Variant, Reviews, PriceHistory, Description, _Count
 }
 
+private enum Variant: Int
+{
+    case Style = 0, Size, _Count
+}
+
 class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
 {
     @IBOutlet weak var tableView: UITableView!
@@ -39,6 +44,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
         
+        tableView.separatorColor = Color.clearColor()
+
         tableView.backgroundColor = Color.BackgroundGrayColor
     }
     
@@ -90,9 +97,38 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 cell.selectionStyle = .None
                 
                 return cell
-                //
-                //        case .Variant:
-                //            return 2
+                
+            case .Variant:
+                
+                if let variant: Variant = Variant(rawValue: indexPath.row)
+                {
+                    switch variant {
+                    case .Style:
+                        
+                        let cell: StyleCell = tableView.dequeueReusableCellWithIdentifier("StyleCell") as! StyleCell
+                        
+                        cell.styleNameLabel.text = "Navy Blue"
+                        
+                        cell.selectionStyle = .None
+                        
+                        return cell
+
+                    case .Size:
+                        
+                        let cell: SizeCell = tableView.dequeueReusableCellWithIdentifier("SizeCell") as! SizeCell
+                        
+                        cell.sizeLabel.text = "Large"
+                        
+                        cell.selectionStyle = .None
+                        
+                        return cell
+                        
+                    default:
+                        log.debug("cellForRowAtIndexPath Error")
+                        
+                    }
+                }
+
                 //
                 //        case .Reviews:
                 //            return 2
@@ -127,8 +163,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             case .ProductHeader:
                 return 409.0
                 
-                //            case .Variant:
-                //                return 2
+            case .Variant:
+                return 48.0
                 //
                 //            case .Reviews:
                 //                return 2

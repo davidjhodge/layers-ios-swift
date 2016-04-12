@@ -54,7 +54,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
 
         let product = Product()
         product.imageURL = "http://i.imgur.com/DqZZiou.png?1"
-        product.title = "Kicking Horse Coffee"
+        product.title = "Big Pony Polo"
         product.retailPrice = 8950
         product.salePrice = 4950
         products?.append(product)

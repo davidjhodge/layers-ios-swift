@@ -118,6 +118,7 @@
                     <navigationItem key="navigationItem" id="3a6-n5-FOa"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="alreadyHasAccountButton" destination="ftk-AZ-MfL" id="rX6-Cr-XUk"/>
                         <outlet property="heroImage" destination="kdb-rk-KmF" id="7XK-2B-l5a"/>
                         <outlet property="logoLabel" destination="GAL-Zl-dcr" id="luB-bh-ZpO"/>
                         <segue destination="WF6-w5-fkn" kind="show" identifier="ShowLoginViewController" id="svZ-9K-RkL"/>
@@ -148,7 +149,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="F2d-gW-umV"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="16"/>
                                 <state key="normal" title="LOGIN WITH EMAIL"/>
                                 <connections>
                                     <action selector="loginWithEmail:" destination="WF6-w5-fkn" eventType="touchUpInside" id="gpr-ju-mbK"/>
@@ -177,7 +178,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="x3p-Tz-JO6"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="16"/>
                                 <state key="normal" title="LOGIN WITH GOOGLE"/>
                                 <connections>
                                     <action selector="loginWithGoogle:" destination="WF6-w5-fkn" eventType="touchUpInside" id="9lv-RV-s3R"/>
@@ -203,6 +204,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="emailLoginButton" destination="o8G-YB-7Z5" id="uhd-db-PYh"/>
+                        <outlet property="googleLoginButton" destination="r2h-ho-rzE" id="jil-jM-Xxz"/>
                         <outlet property="logoLabel" destination="cxD-ep-Vre" id="nVO-0k-FVL"/>
                         <segue destination="8D7-xr-Bul" kind="show" identifier="ShowEmailLoginViewController" id="dHh-RR-eqW"/>
                     </connections>
@@ -229,10 +232,10 @@
                                 <color key="sectionIndexBackgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TextFieldCell" rowHeight="48" id="982-pF-Grb" customClass="TextFieldCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="600" height="48"/>
+                                        <rect key="frame" x="0.0" y="49.5" width="600" height="48"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="982-pF-Grb" id="57w-hv-naa">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="48"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="47.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="x2j-u1-57e">
