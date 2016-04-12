@@ -11,6 +11,7 @@ import Foundation
 class GetStartedViewController: UIViewController
 {
     
+    @IBOutlet weak var alreadyHasAccountButton: UIButton!
     @IBOutlet weak var logoLabel: UILabel!
     @IBOutlet weak var heroImage: UIImageView!
     
@@ -24,6 +25,7 @@ class GetStartedViewController: UIViewController
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        alreadyHasAccountButton.userInteractionEnabled = true
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
@@ -40,6 +42,7 @@ class GetStartedViewController: UIViewController
     
     @IBAction func alreadyHasAccount(sender: AnyObject)
     {
+        alreadyHasAccountButton.userInteractionEnabled = false
         performSegueWithIdentifier("ShowLoginViewController", sender: self)
     }
 }

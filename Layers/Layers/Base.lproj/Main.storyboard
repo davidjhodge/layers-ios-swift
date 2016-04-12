@@ -2,13 +2,18 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="jn1-61-q0Q">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="Oxygen-Bold.ttf">
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
+            <string>Oxygen-Bold</string>
+            <string>Oxygen-Bold</string>
         </mutableArray>
         <mutableArray key="Oxygen-Regular.ttf">
+            <string>Oxygen-Regular</string>
+            <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
@@ -152,7 +157,7 @@
                                 <color key="sectionIndexTrackingBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ProductHeaderCell" rowHeight="409" id="cd5-GB-Q0Q" customClass="ProductHeaderCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="113.5" width="584" height="409"/>
+                                        <rect key="frame" x="0.0" y="114" width="584" height="409"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cd5-GB-Q0Q" id="nd5-i7-KSw">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="408.5"/>
@@ -205,8 +210,104 @@
                                             <outlet property="nameLabel" destination="MD0-im-jaP" id="qUw-gk-xZ9"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StyleCell" rowHeight="44" id="ddo-Uu-Zxs" customClass="StyleCell" customModule="Layers" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="523" width="584" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ddo-Uu-Zxs" id="EjI-KJ-Xex">
+                                            <rect key="frame" x="0.0" y="0.0" width="584" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sdw-Pj-5u4">
+                                                    <rect key="frame" x="80" y="11" width="441" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="u4z-Zz-QYr"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="14"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dropdown-chevron" translatesAutoresizingMaskIntoConstraints="NO" id="GHH-LF-JdV">
+                                                    <rect key="frame" x="537" y="18" width="15" height="9"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="9" id="Hc1-EE-5yE"/>
+                                                        <constraint firstAttribute="width" constant="15" id="kl7-QJ-TuQ"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="STYLE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p5F-hX-c9V">
+                                                    <rect key="frame" x="24" y="12" width="40" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="40" id="0Y0-da-hE3"/>
+                                                        <constraint firstAttribute="height" constant="21" id="JbG-Ux-zkP"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="14"/>
+                                                    <color key="textColor" red="0.14117647059999999" green="0.15686274510000001" blue="0.1529411765" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="p5F-hX-c9V" firstAttribute="leading" secondItem="EjI-KJ-Xex" secondAttribute="leading" constant="24" id="06E-vf-5hV"/>
+                                                <constraint firstItem="GHH-LF-JdV" firstAttribute="leading" secondItem="sdw-Pj-5u4" secondAttribute="trailing" constant="16" id="Aa8-vg-qTs"/>
+                                                <constraint firstItem="p5F-hX-c9V" firstAttribute="centerY" secondItem="EjI-KJ-Xex" secondAttribute="centerY" id="VAv-9b-M2L"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="GHH-LF-JdV" secondAttribute="trailing" constant="24" id="Yyd-DD-5dv"/>
+                                                <constraint firstItem="GHH-LF-JdV" firstAttribute="centerY" secondItem="EjI-KJ-Xex" secondAttribute="centerY" id="bR5-kQ-SI4"/>
+                                                <constraint firstItem="sdw-Pj-5u4" firstAttribute="centerY" secondItem="EjI-KJ-Xex" secondAttribute="centerY" id="jTt-fI-pxO"/>
+                                                <constraint firstItem="sdw-Pj-5u4" firstAttribute="leading" secondItem="p5F-hX-c9V" secondAttribute="trailing" constant="16" id="y77-Q3-d4E"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="styleNameLabel" destination="sdw-Pj-5u4" id="uKJ-1m-faM"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SizeCell" rowHeight="44" id="4X7-nF-41r" customClass="SizeCell" customModule="Layers" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="567" width="584" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4X7-nF-41r" id="nHh-US-KD7">
+                                            <rect key="frame" x="0.0" y="0.0" width="584" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vaz-FF-JZD">
+                                                    <rect key="frame" x="80" y="11" width="441" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="FFy-NN-o2F"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="14"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dropdown-chevron" translatesAutoresizingMaskIntoConstraints="NO" id="9sy-oP-bEJ">
+                                                    <rect key="frame" x="537" y="18" width="15" height="9"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="9" id="492-u6-yek"/>
+                                                        <constraint firstAttribute="width" constant="15" id="aho-PM-rEg"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SIZE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jgn-aM-iJU">
+                                                    <rect key="frame" x="24" y="12" width="40" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="40" id="BVi-w6-Tq0"/>
+                                                        <constraint firstAttribute="height" constant="21" id="lhU-E8-ugQ"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="14"/>
+                                                    <color key="textColor" red="0.14117647059999999" green="0.15686274510000001" blue="0.1529411765" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Vaz-FF-JZD" firstAttribute="leading" secondItem="Jgn-aM-iJU" secondAttribute="trailing" constant="16" id="9Ad-1U-Pwb"/>
+                                                <constraint firstItem="Jgn-aM-iJU" firstAttribute="leading" secondItem="nHh-US-KD7" secondAttribute="leading" constant="24" id="S6m-Rb-KqY"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="9sy-oP-bEJ" secondAttribute="trailing" constant="24" id="eLR-7q-0oK"/>
+                                                <constraint firstItem="9sy-oP-bEJ" firstAttribute="centerY" secondItem="nHh-US-KD7" secondAttribute="centerY" id="eU3-QP-pAf"/>
+                                                <constraint firstItem="Jgn-aM-iJU" firstAttribute="centerY" secondItem="nHh-US-KD7" secondAttribute="centerY" id="ebb-dK-MRA"/>
+                                                <constraint firstItem="Vaz-FF-JZD" firstAttribute="centerY" secondItem="nHh-US-KD7" secondAttribute="centerY" id="s8C-iO-eTr"/>
+                                                <constraint firstItem="9sy-oP-bEJ" firstAttribute="leading" secondItem="Vaz-FF-JZD" secondAttribute="trailing" constant="16" id="u9i-6t-g5t"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="sizeLabel" destination="Vaz-FF-JZD" id="ybn-PA-Ng1"/>
+                                        </connections>
+                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UITableViewCell" rowHeight="44" id="Wo3-YF-z4t">
-                                        <rect key="frame" x="0.0" y="522.5" width="584" height="44"/>
+                                        <rect key="frame" x="0.0" y="611" width="584" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Wo3-YF-z4t" id="elO-Rv-Ye7">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="43.5"/>
@@ -254,4 +355,7 @@
             <point key="canvasLocation" x="3600" y="475"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="dropdown-chevron" width="15" height="9"/>
+    </resources>
 </document>
