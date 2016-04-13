@@ -18,6 +18,9 @@
 		706FF8981CBD6E3E007B26AD /* OverallReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8971CBD6E3E007B26AD /* OverallReviewCell.swift */; };
 		706FF89A1CBD6E7A007B26AD /* AlternateReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8991CBD6E7A007B26AD /* AlternateReviewCell.swift */; };
 		706FF89C1CBD6E96007B26AD /* FeaturesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF89B1CBD6E96007B26AD /* FeaturesCell.swift */; };
+		706FF89E1CBD82D2007B26AD /* ReviewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF89D1CBD82D2007B26AD /* ReviewsViewController.swift */; };
+		706FF8A11CBD84EE007B26AD /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8A01CBD84EE007B26AD /* ReviewCell.swift */; };
+		706FF8A31CBDF771007B26AD /* SimpleProductHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8A21CBDF771007B26AD /* SimpleProductHeaderCell.swift */; };
 		70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */; };
 		70987BEA1CB95F1900D86FBA /* ProductCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */; };
 		70987BEC1CB9657900D86FBA /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BEB1CB9657900D86FBA /* Product.swift */; };
@@ -63,6 +66,9 @@
 		706FF8971CBD6E3E007B26AD /* OverallReviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverallReviewCell.swift; sourceTree = "<group>"; };
 		706FF8991CBD6E7A007B26AD /* AlternateReviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlternateReviewCell.swift; sourceTree = "<group>"; };
 		706FF89B1CBD6E96007B26AD /* FeaturesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturesCell.swift; sourceTree = "<group>"; };
+		706FF89D1CBD82D2007B26AD /* ReviewsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewsViewController.swift; sourceTree = "<group>"; };
+		706FF8A01CBD84EE007B26AD /* ReviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
+		706FF8A21CBDF771007B26AD /* SimpleProductHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleProductHeaderCell.swift; sourceTree = "<group>"; };
 		70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStateTransitioner.swift; sourceTree = "<group>"; };
 		70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewController.swift; sourceTree = "<group>"; };
 		70987BEB1CB9657900D86FBA /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
@@ -132,6 +138,16 @@
 				706FF89B1CBD6E96007B26AD /* FeaturesCell.swift */,
 			);
 			name = Cells;
+			sourceTree = "<group>";
+		};
+		706FF89F1CBD84DA007B26AD /* Reviews */ = {
+			isa = PBXGroup;
+			children = (
+				706FF89D1CBD82D2007B26AD /* ReviewsViewController.swift */,
+				706FF8A21CBDF771007B26AD /* SimpleProductHeaderCell.swift */,
+				706FF8A01CBD84EE007B26AD /* ReviewCell.swift */,
+			);
+			name = Reviews;
 			sourceTree = "<group>";
 		};
 		70987BE61CB95E9E00D86FBA /* App State Transitioner */ = {
@@ -289,6 +305,7 @@
 			children = (
 				70987C2F1CB9B4E400D86FBA /* ProductViewController.swift */,
 				706FF88F1CBD6A02007B26AD /* Cells */,
+				706FF89F1CBD84DA007B26AD /* Reviews */,
 			);
 			name = "Product Detail";
 			sourceTree = "<group>";
@@ -496,6 +513,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				706FF89A1CBD6E7A007B26AD /* AlternateReviewCell.swift in Sources */,
+				706FF8A11CBD84EE007B26AD /* ReviewCell.swift in Sources */,
 				70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */,
 				70987BF51CB970CA00D86FBA /* LRSessionManager.swift in Sources */,
 				70987C2A1CB9A4BF00D86FBA /* AccountViewController.swift in Sources */,
@@ -515,7 +533,9 @@
 				70987BF11CB9672200D86FBA /* ProductCell.swift in Sources */,
 				706FF8911CBD6B6C007B26AD /* SizeCell.swift in Sources */,
 				70987C2E1CB9A81C00D86FBA /* LRNavigationBar.swift in Sources */,
+				706FF89E1CBD82D2007B26AD /* ReviewsViewController.swift in Sources */,
 				706FF89C1CBD6E96007B26AD /* FeaturesCell.swift in Sources */,
+				706FF8A31CBDF771007B26AD /* SimpleProductHeaderCell.swift in Sources */,
 				706FF8981CBD6E3E007B26AD /* OverallReviewCell.swift in Sources */,
 				70987BFA1CB9749700D86FBA /* Color.swift in Sources */,
 				70987C331CB9CA1300D86FBA /* ProductHeaderCell.swift in Sources */,
