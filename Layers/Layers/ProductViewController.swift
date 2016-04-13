@@ -129,9 +129,28 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                 }
 
-                //
-                //        case .Reviews:
-                //            return 2
+                
+            case .Reviews:
+                
+                if indexPath.row == 0
+                {
+                    // Header Cell
+                    let cell: OverallReviewCell = tableView.dequeueReusableCellWithIdentifier("OverallReviewCell") as! OverallReviewCell
+                    
+                    let rating: Float = 4.5
+                    
+                    cell.ratingLabel.text = String(rating)
+                    
+                    cell.starView.rating = Double(rating)
+                    
+                    let reviewCount: Int = 25
+                    
+                    cell.rightLabel.text = "See all \(reviewCount) reviews".uppercaseString
+                    
+                    return cell
+                }
+                
+                
                 //
                 //        case .PriceHistory:
                 //            return 1
@@ -155,6 +174,28 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     // MARK: UITableView Delegate
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
+        {
+            switch tableSection {
+            case .Reviews:
+                
+                if indexPath.row == 0
+                {
+                    // Header Cell
+                    tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                    performSegueWithIdentifier("ShowReviewsViewController", sender: self)
+                }
+                
+            default:
+                
+                log.debug("didSelectRowAtIndexPath Error")
+            }
+        }
+    }
+    
+    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
