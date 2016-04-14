@@ -168,7 +168,20 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     return cell
                 }
-                
+                else
+                {
+                    let cell: AlternateReviewCell = tableView.dequeueReusableCellWithIdentifier("AlternateReviewCell") as! AlternateReviewCell
+                    
+                    let rating: Float = 4.5
+                    
+                    cell.titleLabel.text = "Durability".uppercaseString
+                    
+                    cell.ratingLabel.text = String(rating)
+                    
+                    cell.starView.rating = Double(rating)
+                    
+                    return cell
+                }
                 
                 //
                 //        case .PriceHistory:
@@ -239,9 +252,16 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .Variant:
                 return 48.0
-                //
-                //            case .Reviews:
-                //                return 2
+                
+            case .Reviews:
+                if indexPath.row == 0
+                {
+                    return 48.0
+                }
+                else
+                {
+                    return 32.0
+                }
                 //
                 //            case .PriceHistory:
                 //                return 1
