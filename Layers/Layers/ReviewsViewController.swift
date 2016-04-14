@@ -112,6 +112,17 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     // MARK: Table View Delegate
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
+        {
+            if tableSection == TableSection.ProductHeader
+            {
+                performSegueWithIdentifier("ShowProductWebViewController", sender: self)
+            }
+        }
+    }
+    
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if let tableSection: TableSection = TableSection(rawValue: section)
         {

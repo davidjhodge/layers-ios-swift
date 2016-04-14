@@ -8,8 +8,13 @@
 
 import Foundation
 import UIKit
+import Cosmos
 
 class AlternateReviewCell: UITableViewCell
 {
+    @IBOutlet weak var titleLabel: UILabel!
     
+    @IBOutlet weak var ratingLabel: UILabel!
+    
+    @IBOutlet weak var starView: CosmosView!
 }
