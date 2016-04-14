@@ -27,6 +27,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var product: Product?
     
+    var tempProductImages: Array<UIImage> = [UIImage(named: "blue-polo")!, UIImage(named: "blue-polo")!, UIImage(named: "blue-polo")!]
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -47,6 +49,12 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.separatorColor = Color.clearColor()
 
         tableView.backgroundColor = Color.BackgroundGrayColor
+    }
+    
+    // MARK: Actions
+    @IBAction func buy(sender: AnyObject)
+    {
+        performSegueWithIdentifier("ShowProductWebViewController", sender: self)
     }
     
     // MARK: UITableView Data Source
@@ -91,8 +99,18 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 let cell: ProductHeaderCell = tableView.dequeueReusableCellWithIdentifier("ProductHeaderCell") as! ProductHeaderCell
                 
+                cell.setImageElements(tempProductImages)
+                
                 cell.brandLabel.text = "POLO RALPH LAUREN".uppercaseString
                 cell.nameLabel.text = "Big Pony Polo"
+                
+                // Needs to handle if no sale price exists
+                cell.largePriceLabel.attributedText = NSAttributedString(string: "$49.50", attributes: [NSForegroundColorAttributeName: Color.RedColor,
+                    NSFontAttributeName: Font.OxygenBold(size: 17.0)])
+                
+                cell.smallPriceLabel.attributedText = NSAttributedString(string: "$89.50", attributes: [NSForegroundColorAttributeName: Color.DarkTextColor,
+                    NSFontAttributeName: Font.OxygenRegular(size: 12.0),
+                    NSStrikethroughStyleAttributeName: NSNumber(integer: NSUnderlineStyle.StyleSingle.rawValue)])
                 
                 cell.selectionStyle = .None
                 
@@ -110,6 +128,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         cell.styleNameLabel.text = "Navy Blue"
                         
                         cell.selectionStyle = .None
+                        
                         
                         return cell
 
@@ -165,6 +184,20 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         return tableView.dequeueReusableCellWithIdentifier("UITableViewCell")!
     }
     
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
+        {
+           if tableSection == TableSection.ProductHeader
+           {
+                if cell is ProductHeaderCell
+                {
+                    cell.layoutIfNeeded()
+                }
+            }
+        }
+    }
+    
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int)
     {
         if let headerView: UITableViewHeaderFooterView = view as? UITableViewHeaderFooterView
@@ -202,7 +235,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             switch tableSection {
             case .ProductHeader:
-                return 409.0
+                return 403.0
                 
             case .Variant:
                 return 48.0

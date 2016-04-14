@@ -29,8 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                                                             NSFontAttributeName: Font.CharterBold(size: 20.0),
                                                                                                             NSKernAttributeName: 3.0]
 
-        AppStateTransitioner.transitionToLoginStoryboard(false)
-//        AppStateTransitioner.transitionToMainStoryboard(false)
+//        AppStateTransitioner.transitionToLoginStoryboard(false)
+        AppStateTransitioner.transitionToMainStoryboard(false)
 
         window?.makeKeyAndVisible()
         

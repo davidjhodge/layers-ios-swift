@@ -83,6 +83,8 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 cell.rightLabel.text = "Showing 1-8 of 25"
                 
+                cell.selectionStyle = .None
+                
                 return cell
                 
             case .Reviews:
@@ -96,6 +98,8 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 cell.reviewContentLabel.text = "I was really impressed with how this shirt fit. I've never tried anything that fit this good. Especially not for the price. I'd definitely recommend this item to a friend."
                 
                 cell.sourceDomainLabel.text = "ralphlauren.com"
+                
+                cell.selectionStyle = .None
                 
                 return cell
                 
