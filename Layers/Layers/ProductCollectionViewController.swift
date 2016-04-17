@@ -162,6 +162,8 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         {
             if segue.destinationViewController is ProductViewController
             {
+//                navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: self, action: nil)
+
 //                let destinationVC: ProductViewController = segue.destinationViewController as! ProductViewController
 //                destinationVC.productIdentifier = product.identifier
 

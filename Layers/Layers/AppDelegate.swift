@@ -8,8 +8,12 @@
 
 import UIKit
 import SwiftyBeaver
+import FBSDKCoreKit
 
 let log = SwiftyBeaver.self
+
+private let facebookScheme: String = "fb982100215236828"
+//private let facebookAuthScheme: String = "fbauth2"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -28,20 +32,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).titleTextAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),
                                                                                                             NSFontAttributeName: Font.CharterBold(size: 20.0),
                                                                                                             NSKernAttributeName: 3.0]
-
+        
 //        AppStateTransitioner.transitionToLoginStoryboard(false)
         AppStateTransitioner.transitionToMainStoryboard(false)
 
         window?.makeKeyAndVisible()
         
-//        for family: String in UIFont.familyNames()
-//        {
-//            print("\(family)")
-//            for names: String in UIFont.fontNamesForFamilyName(family)
-//            {
-//                print("== \(names)")
-//            }
-//        }
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        return true
+    }
+    
+//    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+//        <#code#>
+//    }
+    
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+       
+        if url.scheme == facebookScheme
+        {
+            return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+        }
         
         return true
     }
@@ -62,6 +73,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
+        FBSDKAppEvents.activateApp()
     }
 
     func applicationWillTerminate(application: UIApplication) {

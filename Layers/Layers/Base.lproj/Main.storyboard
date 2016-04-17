@@ -18,8 +18,13 @@
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
+            <string>Oxygen-Bold</string>
         </mutableArray>
         <mutableArray key="Oxygen-Regular.ttf">
+            <string>Oxygen-Regular</string>
+            <string>Oxygen-Regular</string>
+            <string>Oxygen-Regular</string>
+            <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
@@ -214,7 +219,7 @@
                                                     <attributedString key="attributedText">
                                                         <fragment content="$0.00">
                                                             <attributes>
-                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <font key="NSFont" size="12" name="Oxygen-Regular"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="right" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                             </attributes>
@@ -364,13 +369,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SEE ALL 0 REVIEWS" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UJW-zL-xNU">
-                                                    <rect key="frame" x="432" y="11" width="128" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SEE ALL 0 REVIEWS" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="UJW-zL-xNU">
+                                                    <rect key="frame" x="416" y="11" width="144" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="CUu-Nb-meq"/>
-                                                        <constraint firstAttribute="width" priority="999" constant="128" id="V9U-2d-tNy"/>
+                                                        <constraint firstAttribute="width" priority="750" constant="144" id="jrH-kG-bao"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="12"/>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="15"/>
                                                     <color key="textColor" red="0.054901960780000002" green="0.14117647059999999" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -385,10 +390,10 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="smj-rI-ntw" customClass="CosmosView" customModule="Cosmos">
-                                                    <rect key="frame" x="64" y="14" width="192" height="16"/>
+                                                    <rect key="frame" x="64" y="14" width="96" height="16"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="192" id="qwb-PK-nm8"/>
+                                                        <constraint firstAttribute="width" constant="96" id="qwb-PK-nm8"/>
                                                         <constraint firstAttribute="height" constant="16" id="rdC-IP-hJB"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
@@ -422,7 +427,7 @@
                                             <constraints>
                                                 <constraint firstItem="UJW-zL-xNU" firstAttribute="centerY" secondItem="VIW-fY-dcr" secondAttribute="centerY" id="8nd-d5-TkT"/>
                                                 <constraint firstItem="fZV-CN-C63" firstAttribute="centerY" secondItem="VIW-fY-dcr" secondAttribute="centerY" id="Xj6-Ea-Vsm"/>
-                                                <constraint firstItem="UJW-zL-xNU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="smj-rI-ntw" secondAttribute="trailing" constant="32" id="am6-z5-1Ff"/>
+                                                <constraint firstItem="UJW-zL-xNU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="smj-rI-ntw" secondAttribute="trailing" constant="16" id="am6-z5-1Ff"/>
                                                 <constraint firstItem="fZV-CN-C63" firstAttribute="leading" secondItem="VIW-fY-dcr" secondAttribute="leading" constant="24" id="rm1-i9-GxY"/>
                                                 <constraint firstItem="smj-rI-ntw" firstAttribute="centerY" secondItem="VIW-fY-dcr" secondAttribute="centerY" id="uzu-Sl-1AI"/>
                                                 <constraint firstItem="smj-rI-ntw" firstAttribute="leading" secondItem="fZV-CN-C63" secondAttribute="trailing" constant="12" id="y5G-3G-efH"/>
@@ -449,7 +454,7 @@
                                                         <constraint firstAttribute="height" constant="21" id="tPb-zF-Eji"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="14"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nom-nx-Nvi">
@@ -459,7 +464,7 @@
                                                         <constraint firstAttribute="height" constant="21" id="qug-gF-NT8"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="14"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VrM-DT-i31" customClass="CosmosView" customModule="Cosmos">
@@ -511,8 +516,120 @@
                                             <outlet property="titleLabel" destination="CB8-cE-QDj" id="Ec0-d7-cIz"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PriceGraphCell" rowHeight="308" id="Fo9-NN-dEN" customClass="PriceGraphCell" customModule="Layers" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="680.5" width="584" height="308"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Fo9-NN-dEN" id="YLb-cT-iWP">
+                                            <rect key="frame" x="0.0" y="0.0" width="584" height="307.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRICE HISTORY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Og-cw-hxW">
+                                                    <rect key="frame" x="24" y="16" width="99" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="99" id="QYi-kN-7SL"/>
+                                                        <constraint firstAttribute="height" constant="21" id="xpL-n2-ffk"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="14"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="04E-3h-33v">
+                                                    <rect key="frame" x="432" y="16" width="128" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="URI-kq-tEz"/>
+                                                        <constraint firstAttribute="width" constant="128" id="hYq-td-v6O"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="14"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xgi-wb-IuD">
+                                                    <rect key="frame" x="0.0" y="264" width="584" height="44"/>
+                                                    <color key="backgroundColor" red="0.90588235294117647" green="0.90588235294117647" blue="0.90588235294117647" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="44" id="0nK-cC-Rpz"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="16"/>
+                                                    <state key="normal" title="CREATE A PRICE ALERT">
+                                                        <color key="titleColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                </button>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Th4-Rc-fXj" customClass="LineChartView" customModule="Charts">
+                                                    <rect key="frame" x="24" y="45" width="536" height="174"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ADVICE: BUY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7KR-Ag-nCR">
+                                                    <rect key="frame" x="24" y="227" width="175" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="175" id="99W-K4-9Jj"/>
+                                                        <constraint firstAttribute="height" constant="21" id="yRJ-yC-j2I"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="16"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="xgi-wb-IuD" firstAttribute="top" secondItem="7KR-Ag-nCR" secondAttribute="bottom" constant="16" id="8wm-yz-eES"/>
+                                                <constraint firstAttribute="bottom" secondItem="xgi-wb-IuD" secondAttribute="bottom" id="Dpq-L0-rSn"/>
+                                                <constraint firstItem="7KR-Ag-nCR" firstAttribute="top" secondItem="Th4-Rc-fXj" secondAttribute="bottom" constant="8" id="Efo-n6-3yX"/>
+                                                <constraint firstItem="1Og-cw-hxW" firstAttribute="leading" secondItem="YLb-cT-iWP" secondAttribute="leading" constant="24" id="QH4-nQ-dLy"/>
+                                                <constraint firstItem="1Og-cw-hxW" firstAttribute="top" secondItem="YLb-cT-iWP" secondAttribute="top" constant="16" id="RhB-jR-obN"/>
+                                                <constraint firstItem="Th4-Rc-fXj" firstAttribute="leading" secondItem="YLb-cT-iWP" secondAttribute="leading" constant="24" id="ack-KB-hJM"/>
+                                                <constraint firstItem="xgi-wb-IuD" firstAttribute="leading" secondItem="YLb-cT-iWP" secondAttribute="leading" id="dSz-dC-0QT"/>
+                                                <constraint firstItem="7KR-Ag-nCR" firstAttribute="leading" secondItem="YLb-cT-iWP" secondAttribute="leading" constant="24" id="hSX-OI-CKo"/>
+                                                <constraint firstAttribute="trailing" secondItem="Th4-Rc-fXj" secondAttribute="trailing" constant="24" id="haZ-kr-BvV"/>
+                                                <constraint firstItem="Th4-Rc-fXj" firstAttribute="top" secondItem="04E-3h-33v" secondAttribute="bottom" constant="8" id="kjR-AY-fFq"/>
+                                                <constraint firstItem="04E-3h-33v" firstAttribute="top" secondItem="YLb-cT-iWP" secondAttribute="top" constant="16" id="npC-Fh-Wjw"/>
+                                                <constraint firstAttribute="trailing" secondItem="xgi-wb-IuD" secondAttribute="trailing" id="sB9-zZ-IPv"/>
+                                                <constraint firstAttribute="trailing" secondItem="04E-3h-33v" secondAttribute="trailing" constant="24" id="tQL-D0-OGZ"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="adviceLabel" destination="7KR-Ag-nCR" id="wD7-qE-KCZ"/>
+                                            <outlet property="chart" destination="Th4-Rc-fXj" id="BHt-wQ-TRj"/>
+                                            <outlet property="createPriceAlertButton" destination="xgi-wb-IuD" id="5Eb-of-WbK"/>
+                                            <outlet property="priceLabel" destination="04E-3h-33v" id="OV8-Zi-Oyj"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeaturesCell" rowHeight="178" id="2X2-km-8tW" customClass="FeaturesCell" customModule="Layers" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="988.5" width="584" height="178"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2X2-km-8tW" id="ztg-vJ-9dH">
+                                            <rect key="frame" x="0.0" y="0.0" width="584" height="177.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Description" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="fhP-bC-ZD1">
+                                                    <rect key="frame" x="24" y="64" width="536" height="98"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                </textView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8vJ-64-JFm">
+                                                    <rect key="frame" x="0.0" y="16" width="584" height="32"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="32" id="vdd-Lh-Wt6"/>
+                                                    </constraints>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="8vJ-64-JFm" firstAttribute="leading" secondItem="ztg-vJ-9dH" secondAttribute="leading" id="57r-FB-RMO"/>
+                                                <constraint firstAttribute="bottom" secondItem="fhP-bC-ZD1" secondAttribute="bottom" constant="16" id="EvA-as-mDQ"/>
+                                                <constraint firstItem="fhP-bC-ZD1" firstAttribute="leading" secondItem="ztg-vJ-9dH" secondAttribute="leading" constant="24" id="HY7-Fg-vqs"/>
+                                                <constraint firstAttribute="trailing" secondItem="8vJ-64-JFm" secondAttribute="trailing" id="fGL-HO-bL2"/>
+                                                <constraint firstItem="8vJ-64-JFm" firstAttribute="top" secondItem="ztg-vJ-9dH" secondAttribute="top" constant="16" id="igt-bM-WoK"/>
+                                                <constraint firstAttribute="trailing" secondItem="fhP-bC-ZD1" secondAttribute="trailing" constant="24" id="xpy-uO-sy2"/>
+                                                <constraint firstItem="fhP-bC-ZD1" firstAttribute="top" secondItem="8vJ-64-JFm" secondAttribute="bottom" constant="16" id="y69-tS-MXy"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="segmentedControlContainer" destination="8vJ-64-JFm" id="50k-Z5-C5v"/>
+                                            <outlet property="textView" destination="fhP-bC-ZD1" id="N87-IK-r1z"/>
+                                        </connections>
+                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UITableViewCell" rowHeight="44" id="Wo3-YF-z4t">
-                                        <rect key="frame" x="0.0" y="680.5" width="584" height="44"/>
+                                        <rect key="frame" x="0.0" y="1166.5" width="584" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Wo3-YF-z4t" id="elO-Rv-Ye7">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="43.5"/>
@@ -581,10 +698,10 @@
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SimpleProductHeaderCell" rowHeight="96" id="CcX-nR-QZE" customClass="SimpleProductHeaderCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="114" width="600" height="96"/>
+                                        <rect key="frame" x="0.0" y="113.5" width="600" height="96"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CcX-nR-QZE" id="7O4-QN-3qF">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="96"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="95.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue-polo" translatesAutoresizingMaskIntoConstraints="NO" id="AAC-0Q-wgV">
@@ -641,10 +758,10 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="OverallReviewCell" rowHeight="44" id="Nbg-Ia-Crp" customClass="OverallReviewCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="210" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="209.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Nbg-Ia-Crp" id="bl6-9y-yTl">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SEE ALL 0 REVIEWS" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wCG-Pj-oLU">
@@ -718,10 +835,10 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ReviewCell" rowHeight="92" id="cln-RT-lle" customClass="ReviewCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="254" width="600" height="92"/>
+                                        <rect key="frame" x="0.0" y="253.5" width="600" height="92"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cln-RT-lle" id="4bI-zk-bK8">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="92"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="91.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y9g-fb-fPN" customClass="CosmosView" customModule="Cosmos">
@@ -759,23 +876,23 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LVW-c8-pbM">
-                                                    <rect key="frame" x="24" y="36" width="552" height="16"/>
-                                                    <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="12"/>
+                                                    <rect key="frame" x="24" y="36" width="552" height="18"/>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="14"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uKh-tY-t8C">
-                                                    <rect key="frame" x="24" y="60" width="552" height="15"/>
-                                                    <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="12"/>
+                                                    <rect key="frame" x="24" y="62" width="552" height="13"/>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="14"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="website" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BKr-AW-ZTi">
-                                                    <rect key="frame" x="539" y="16" width="37" height="12"/>
+                                                    <rect key="frame" x="531" y="16" width="45" height="12"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="12" id="UDw-ps-96L"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="10"/>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="12"/>
                                                     <color key="textColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -802,10 +919,10 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UITableViewCell" id="JeN-8V-qNw">
-                                        <rect key="frame" x="0.0" y="346" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="345.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JeN-8V-qNw" id="Mx0-b4-lqT">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -872,6 +989,6 @@
         <image name="dropdown-chevron" width="15" height="9"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="E1j-L3-Nh8"/>
+        <segue reference="Oev-VQ-CAY"/>
     </inferredMetricsTieBreakers>
 </document>

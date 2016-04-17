@@ -20,6 +20,8 @@ class Color: UIColor
     static let DarkTextColor: UIColor = ColorCode(36, green: 40, blue: 49, alpha: 1.0)
     
     static let RedColor: UIColor = ColorCode(244, green: 67, blue: 54, alpha: 1.0)
+    
+    static let GreenColor: UIColor = ColorCode(90, green: 182, blue: 94, alpha: 1.0)
 
     static let BackgroundGrayColor: UIColor = ColorCode(246, green: 246, blue: 246, alpha: 1.0)
 }
