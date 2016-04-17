@@ -12,4 +12,6 @@
 #import "NSAttributedString+Pricing.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
+#import <HMSegmentedControl/HMSegmentedControl.h>
+
 #endif /* Layers_BridgingHeader_h */

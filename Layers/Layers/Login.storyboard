@@ -174,14 +174,14 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r2h-ho-rzE">
                                 <rect key="frame" x="24" y="456" width="552" height="48"/>
-                                <color key="backgroundColor" red="0.87450980392156863" green="0.33725490196078434" blue="0.27450980392156865" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.23137254901960785" green="0.34901960784313724" blue="0.59607843137254901" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="x3p-Tz-JO6"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="16"/>
-                                <state key="normal" title="LOGIN WITH GOOGLE"/>
+                                <state key="normal" title="LOGIN WITH FACEBOOK"/>
                                 <connections>
-                                    <action selector="loginWithGoogle:" destination="WF6-w5-fkn" eventType="touchUpInside" id="9lv-RV-s3R"/>
+                                    <action selector="loginWithFacebook:" destination="WF6-w5-fkn" eventType="touchUpInside" id="bX3-Cz-d77"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -205,7 +205,7 @@
                     </view>
                     <connections>
                         <outlet property="emailLoginButton" destination="o8G-YB-7Z5" id="uhd-db-PYh"/>
-                        <outlet property="googleLoginButton" destination="r2h-ho-rzE" id="jil-jM-Xxz"/>
+                        <outlet property="facebookLoginButton" destination="r2h-ho-rzE" id="cMq-l3-Bu3"/>
                         <outlet property="logoLabel" destination="cxD-ep-Vre" id="nVO-0k-FVL"/>
                         <segue destination="8D7-xr-Bul" kind="show" identifier="ShowEmailLoginViewController" id="dHh-RR-eqW"/>
                     </connections>
@@ -228,14 +228,14 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="54" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Ke2-Gb-LwA">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TextFieldCell" rowHeight="48" id="982-pF-Grb" customClass="TextFieldCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="49.5" width="600" height="48"/>
+                                        <rect key="frame" x="0.0" y="50" width="600" height="48"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="982-pF-Grb" id="57w-hv-naa">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="47.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="48"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="x2j-u1-57e">

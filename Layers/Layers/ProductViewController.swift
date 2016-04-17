@@ -19,7 +19,12 @@ private enum Variant: Int
     case Style = 0, Size, _Count
 }
 
-class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
+private enum InfoType: Int
+{
+    case Features = 0, Description
+}
+
+class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SegmentedControlDelegate
 {
     @IBOutlet weak var tableView: UITableView!
     
@@ -28,6 +33,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     var product: Product?
     
     var tempProductImages: Array<UIImage> = [UIImage(named: "blue-polo")!, UIImage(named: "blue-polo")!, UIImage(named: "blue-polo")!]
+    
+    var selectedSegmentIndex: Int?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -42,13 +49,20 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
         
         tableView.separatorColor = Color.clearColor()
 
         tableView.backgroundColor = Color.BackgroundGrayColor
+        
+        reloadData()
+    }
+    
+    func reloadData()
+    {
+        title = "Big Pony Polo"
     }
     
     // MARK: Actions
@@ -183,12 +197,28 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     return cell
                 }
                 
-                //
-                //        case .PriceHistory:
-                //            return 1
-                //            
-                //        case .Description:
-            //            return 1
+            case .PriceHistory:
+                
+                let cell: PriceGraphCell = tableView.dequeueReusableCellWithIdentifier("PriceGraphCell") as! PriceGraphCell
+                
+                cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(8950, salePrice: 4950)
+                
+                cell.adviceLabel.text = "ADVICE: WATCH"
+                
+                cell.selectionStyle = .None
+                
+                return cell
+                
+            case .Description:
+            
+                let cell: FeaturesCell = tableView.dequeueReusableCellWithIdentifier("FeaturesCell") as! FeaturesCell
+                
+                cell.textView.text = "This is a sample description of a completely random product that I don't quite now of yet."
+                
+                cell.selectionStyle = .None
+                
+                return cell
+                
             default:
                 return tableView.dequeueReusableCellWithIdentifier("UITableViewCell")!
             }
@@ -262,12 +292,14 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 {
                     return 32.0
                 }
-                //
-                //            case .PriceHistory:
-                //                return 1
-                //
-                //            case .Description:
-            //                return 1
+                
+            case .PriceHistory:
+                return 326.0
+                
+            case .Description:
+                return 178.0
+//                return UITableViewAutomaticDimension
+                
             default:
                 return 44.0
             }
@@ -333,5 +365,30 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         return 8.0
     }
     
+    // MARK: Segmented Control Delegate
+    func segmentedControlValueChanged(index: Int) {
+        
+        if let infoType = InfoType(rawValue: index)
+        {
+            if infoType == InfoType.Features
+            {
+                
+            }
+            else if infoType == InfoType.Description
+            {
+                
+            }
+        }
+        
+    }
+    
+    // MARK: Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "ShowReviewsViewController"
+        {
+//            navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+        }
+    }
     
 }

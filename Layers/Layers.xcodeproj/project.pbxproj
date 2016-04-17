@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		35D2CA6AC9BC70A0D97C9B38 /* Pods_Layers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29055E7EACEA98F3107E42C /* Pods_Layers.framework */; };
 		70204A611CBF5E9B00868C00 /* ProductWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */; };
+		702FC2F11CC2D8470012969C /* UINavigationItem+BackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2F01CC2D8470012969C /* UINavigationItem+BackButton.m */; };
 		706FF8881CBC4EF8007B26AD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8871CBC4EF8007B26AD /* LoginViewController.swift */; };
 		706FF88A1CBC54F8007B26AD /* EmailLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */; };
 		706FF88C1CBC57D6007B26AD /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */; };
@@ -58,6 +59,8 @@
 		2617CC4AE1CA59B7C7DFB253 /* Pods-Layers.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Layers.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Layers/Pods-Layers.debug.xcconfig"; sourceTree = "<group>"; };
 		3FCE59FA6B494AAB3C36EE8C /* Pods-Layers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Layers.release.xcconfig"; path = "Pods/Target Support Files/Pods-Layers/Pods-Layers.release.xcconfig"; sourceTree = "<group>"; };
 		70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWebViewController.swift; sourceTree = "<group>"; };
+		702FC2EF1CC2D8470012969C /* UINavigationItem+BackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+BackButton.h"; sourceTree = "<group>"; };
+		702FC2F01CC2D8470012969C /* UINavigationItem+BackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationItem+BackButton.m"; sourceTree = "<group>"; };
 		706FF8871CBC4EF8007B26AD /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailLoginViewController.swift; sourceTree = "<group>"; };
 		706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldCell.swift; sourceTree = "<group>"; };
@@ -134,6 +137,15 @@
 				70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */,
 			);
 			name = Web;
+			sourceTree = "<group>";
+		};
+		702FC2F21CC2D8720012969C /* UINavigationItem+BackButton */ = {
+			isa = PBXGroup;
+			children = (
+				702FC2EF1CC2D8470012969C /* UINavigationItem+BackButton.h */,
+				702FC2F01CC2D8470012969C /* UINavigationItem+BackButton.m */,
+			);
+			name = "UINavigationItem+BackButton";
 			sourceTree = "<group>";
 		};
 		706FF88F1CBD6A02007B26AD /* Cells */ = {
@@ -224,6 +236,7 @@
 			children = (
 				70987C1C1CB98A7B00D86FBA /* NSAttributedString+Pricing */,
 				70987BFD1CB97ABE00D86FBA /* LRWindow */,
+				702FC2F21CC2D8720012969C /* UINavigationItem+BackButton */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -545,6 +558,7 @@
 				706FF8911CBD6B6C007B26AD /* SizeCell.swift in Sources */,
 				70987C2E1CB9A81C00D86FBA /* LRNavigationBar.swift in Sources */,
 				706FF89E1CBD82D2007B26AD /* ReviewsViewController.swift in Sources */,
+				702FC2F11CC2D8470012969C /* UINavigationItem+BackButton.m in Sources */,
 				706FF89C1CBD6E96007B26AD /* FeaturesCell.swift in Sources */,
 				70204A611CBF5E9B00868C00 /* ProductWebViewController.swift in Sources */,
 				706FF8A31CBDF771007B26AD /* SimpleProductHeaderCell.swift in Sources */,
