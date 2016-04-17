@@ -23,6 +23,7 @@ PODS:
   - SDWebImage/Core (3.7.5)
   - SwiftyBeaver (0.4.2)
   - SwiftyJSON (2.3.2)
+  - UITextView+Placeholder (1.2.0)
 
 DEPENDENCIES:
   - Alamofire
@@ -37,6 +38,7 @@ DEPENDENCIES:
   - SDWebImage
   - SwiftyBeaver
   - SwiftyJSON
+  - UITextView+Placeholder (~> 1.2)
 
 SPEC CHECKSUMS:
   Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
@@ -52,5 +54,6 @@ SPEC CHECKSUMS:
   SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
   SwiftyBeaver: 3eced9aabe4f10b975453cc1baaa2d523a5eaeae
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+  UITextView+Placeholder: 77680995fcdd07c3f52ec92fe1150874a2ac89ff
 
 COCOAPODS: 0.39.0

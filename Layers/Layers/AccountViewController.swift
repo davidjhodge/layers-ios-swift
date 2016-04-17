@@ -132,7 +132,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             case .Contact:
                 
                 //Show Contact Page
-                performSegueWithIdentifier("ShowSimpleWebViewController", sender: self)
+                performSegueWithIdentifier("ShowContactUsViewController", sender: self)
                 
             case .Legal:
                 
