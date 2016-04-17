@@ -17,6 +17,7 @@ pod 'HMSegmentedControl'
 pod 'Charts'
 pod 'FBSDKCoreKit', '~> 4.11'
 pod 'FBSDKLoginKit', '~> 4.11'
+pod 'UITextView+Placeholder', '~> 1.2'
 
 end
 
