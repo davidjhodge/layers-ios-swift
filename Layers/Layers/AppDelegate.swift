@@ -43,10 +43,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-//    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
-//        <#code#>
-//    }
-    
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
        
         if url.scheme == facebookScheme
