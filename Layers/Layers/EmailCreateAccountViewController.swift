@@ -1,35 +1,34 @@
 //
-//  EmailLoginViewController.swift
+//  EmailCreateAccountViewController.swift
 //  Layers
 //
-//  Created by David Hodge on 4/11/16.
+//  Created by David Hodge on 4/17/16.
 //  Copyright © 2016 Layers. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-class EmailLoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
+class EmailCreateAccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
 {
-    @IBOutlet weak var loginButton: UIButton!
-    
-    @IBOutlet weak var signInButtonBottomConstraint: NSLayoutConstraint!
-    
     @IBOutlet weak var tableView: UITableView!
-
-    var keyboardNotificationObserver: AnyObject?
     
+    @IBOutlet weak var createAccountButton: UIButton!
+    
+    @IBOutlet weak var createAccountButtonBottomConstraint: NSLayoutConstraint!
+    
+    var keyboardNotificationObserver: AnyObject?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        title = "login".uppercaseString
+        title = "sign up".uppercaseString
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loginButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
+        createAccountButton.addTarget(self, action: #selector(createAccount), forControlEvents: .TouchUpInside)
         
         prepareToHandleKeyboard()
     }
@@ -46,7 +45,7 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     // MARK: Actions
-    func login()
+    func createAccount()
     {
         view.endEditing(true)
         
@@ -59,7 +58,7 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -80,11 +79,17 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
             cell.textField.placeholder = "Password"
             cell.textField.secureTextEntry = true
         }
+        //Retype password
+        else if indexPath.row == 2
+        {
+            cell.textField.placeholder = "Retype your password"
+            cell.textField.secureTextEntry = true
+        }
         else
         {
             log.debug("cellForRowAtIndexPath Error")
         }
-        
+
         return cell
     }
     
@@ -120,18 +125,10 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
             
             UIView.animateWithDuration(duration, delay: 0.0, options: animationCurve, animations: { [weak self] () -> Void in
                 
-                self?.signInButtonBottomConstraint.constant = constantModification
+                self?.createAccountButtonBottomConstraint.constant = constantModification
                 
                 self?.view.layoutIfNeeded()
                 }, completion: nil)
-        }
-    }
-    
-    deinit
-    {
-        if let observer = keyboardNotificationObserver
-        {
-            NSNotificationCenter.defaultCenter().removeObserver(observer)
         }
     }
 }

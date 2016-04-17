@@ -71,6 +71,17 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         performSegueWithIdentifier("ShowProductWebViewController", sender: self)
     }
     
+    func createPriceAlert()
+    {
+        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+        
+        if let priceAlertVC: CreatePriceAlertViewController = storyboard.instantiateViewControllerWithIdentifier("CreatePriceAlertViewController") as? CreatePriceAlertViewController
+        {
+            presentViewController(priceAlertVC, animated: false, completion: nil)
+        }
+
+    }
+    
     // MARK: UITableView Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int
     {
@@ -89,7 +100,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 return 2
                 
             case .Reviews:
-                return 2
+                return 1
                 
             case .PriceHistory:
                 return 1
@@ -182,20 +193,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     return cell
                 }
-                else
-                {
-                    let cell: AlternateReviewCell = tableView.dequeueReusableCellWithIdentifier("AlternateReviewCell") as! AlternateReviewCell
-                    
-                    let rating: Float = 4.5
-                    
-                    cell.titleLabel.text = "Durability".uppercaseString
-                    
-                    cell.ratingLabel.text = String(rating)
-                    
-                    cell.starView.rating = Double(rating)
-                    
-                    return cell
-                }
                 
             case .PriceHistory:
                 
@@ -207,17 +204,19 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 cell.selectionStyle = .None
                 
+                cell.createPriceAlertButton.addTarget(self, action: #selector(createPriceAlert), forControlEvents: .TouchUpInside)
+                
                 return cell
                 
-            case .Description:
+//            case .Description:
             
-                let cell: FeaturesCell = tableView.dequeueReusableCellWithIdentifier("FeaturesCell") as! FeaturesCell
-                
-                cell.textView.text = "This is a sample description of a completely random product that I don't quite now of yet."
-                
-                cell.selectionStyle = .None
-                
-                return cell
+//                let cell: FeaturesCell = tableView.dequeueReusableCellWithIdentifier("FeaturesCell") as! FeaturesCell
+//                
+//                cell.textView.text = "This is a sample description of a completely random product that I don't quite now of yet."
+//                
+//                cell.selectionStyle = .None
+//                
+//                return cell
                 
             default:
                 return tableView.dequeueReusableCellWithIdentifier("UITableViewCell")!
@@ -287,10 +286,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 if indexPath.row == 0
                 {
                     return 48.0
-                }
-                else
-                {
-                    return 32.0
                 }
                 
             case .PriceHistory:

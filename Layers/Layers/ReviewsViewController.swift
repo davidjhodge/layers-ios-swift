@@ -11,7 +11,7 @@ import UIKit
 
 private enum TableSection: Int
 {
-    case ProductHeader = 0, OverallReview, Reviews, Count
+    case ProductHeader = 0, OverallReviews, Reviews, Count
 }
 
 class ReviewsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
@@ -42,7 +42,7 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
             case .ProductHeader:
                 return 1
                 
-            case .OverallReview:
+            case .OverallReviews:
                 return 1
                 
             case .Reviews:
@@ -73,7 +73,7 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 return cell
                 
-            case .OverallReview:
+            case .OverallReviews:
                 
                 let cell: OverallReviewCell = tableView.dequeueReusableCellWithIdentifier("OverallReviewCell") as! OverallReviewCell
                 
@@ -89,19 +89,37 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .Reviews:
                 
-                let cell: ReviewCell = tableView.dequeueReusableCellWithIdentifier("ReviewCell") as! ReviewCell
-                
-                cell.starView.rating = 4.5
-                
-                cell.reviewTitleLabel.text = "Best shirt I've ever owned"
-                
-                cell.reviewContentLabel.text = "I was really impressed with how this shirt fit. I've never tried anything that fit this good. Especially not for the price. I'd definitely recommend this item to a friend."
-                
-                cell.sourceDomainLabel.text = "ralphlauren.com"
-                
-                cell.selectionStyle = .None
-                
-                return cell
+                if indexPath.row == 0
+                {
+                    let cell: ReviewCell = tableView.dequeueReusableCellWithIdentifier("ReviewCell") as! ReviewCell
+                    
+                    cell.starView.rating = 4.5
+                    
+                    cell.reviewTitleLabel.text = "Best shirt I've ever owned"
+                    
+                    cell.reviewContentLabel.text = "I was really impressed with how this shirt fit. I've never tried anything that fit this good. Especially not for the price. I'd definitely recommend this item to a friend."
+                    
+                    cell.sourceDomainLabel.text = "ralphlauren.com"
+                    
+                    cell.selectionStyle = .None
+                    
+                    return cell
+                }
+//                else
+//                {
+//                    let cell: AlternateReviewCell = tableView.dequeueReusableCellWithIdentifier("AlternateReviewCell") as! AlternateReviewCell
+//                    
+//                    let rating: Float = 4.5
+//                    
+//                    cell.titleLabel.text = "Durability".uppercaseString
+//                    
+//                    cell.ratingLabel.text = String(rating)
+//                    
+//                    cell.starView.rating = Double(rating)
+//                    
+//                    return cell
+//                }
+
                 
             default:
                 return tableView.dequeueReusableCellWithIdentifier("UITableViewCell")! as UITableViewCell
@@ -130,7 +148,7 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
             case .ProductHeader:
                 return 0.01
 //                
-//            case .OverallReview:
+//            case .OverallReviews:
 //                return 1
 //                
 //            case .Reviews:

@@ -19,8 +19,12 @@
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
+            <string>Oxygen-Bold</string>
         </mutableArray>
         <mutableArray key="Oxygen-Regular.ttf">
+            <string>Oxygen-Regular</string>
+            <string>Oxygen-Regular</string>
+            <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
@@ -948,7 +952,100 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pxp-tq-zgK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4305" y="607"/>
+            <point key="canvasLocation" x="4288" y="325"/>
+        </scene>
+        <!--Create Price Alert View Controller-->
+        <scene sceneID="1qI-c6-WYA">
+            <objects>
+                <viewController storyboardIdentifier="CreatePriceAlertViewController" id="ba0-hn-xPD" customClass="CreatePriceAlertViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="SlM-Dj-WJb"/>
+                        <viewControllerLayoutGuide type="bottom" id="AEO-2h-0Cf"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="vq2-WN-u4Z">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QYC-lj-S9g">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhp-xK-BUj">
+                                        <rect key="frame" x="527" y="32" width="49" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="49" id="BTa-wC-xSr"/>
+                                            <constraint firstAttribute="height" constant="30" id="Q1e-py-FX5"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="16"/>
+                                        <state key="normal" title="Cancel">
+                                            <color key="titleColor" red="0.054901960780000002" green="0.14117647059999999" blue="0.41568627450000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oCL-Nx-CIT">
+                                        <rect key="frame" x="24" y="504" width="552" height="48"/>
+                                        <color key="backgroundColor" red="0.054901960780000002" green="0.14117647059999999" blue="0.41568627450000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="48" id="YfB-sw-YIB"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="14"/>
+                                        <state key="normal" title="CREATE A PRICE ALERT">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="$0.00" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kfb-GY-QrO">
+                                        <rect key="frame" x="24" y="328" width="552" height="48"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="48" id="Pao-ym-znx"/>
+                                        </constraints>
+                                        <color key="textColor" red="0.15686274509803921" green="0.1764705882352941" blue="0.17254901960784313" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="16"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" returnKeyType="done"/>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notify me when the price drops below" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hZg-7b-wW1">
+                                        <rect key="frame" x="24" y="291" width="277" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="UKf-E2-a2k"/>
+                                            <constraint firstAttribute="width" constant="277" id="yeB-jM-80G"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="16"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="oCL-Nx-CIT" secondAttribute="trailing" constant="24" id="0fw-XW-SNM"/>
+                                    <constraint firstItem="hZg-7b-wW1" firstAttribute="leading" secondItem="kfb-GY-QrO" secondAttribute="leading" id="4Gr-Ft-r4h"/>
+                                    <constraint firstItem="Bhp-xK-BUj" firstAttribute="top" secondItem="QYC-lj-S9g" secondAttribute="top" constant="32" id="HfG-tH-LUw"/>
+                                    <constraint firstItem="oCL-Nx-CIT" firstAttribute="top" secondItem="kfb-GY-QrO" secondAttribute="bottom" priority="750" constant="128" id="WgJ-4D-83N"/>
+                                    <constraint firstItem="kfb-GY-QrO" firstAttribute="top" secondItem="hZg-7b-wW1" secondAttribute="bottom" constant="16" id="bfB-or-Owo"/>
+                                    <constraint firstItem="kfb-GY-QrO" firstAttribute="leading" secondItem="QYC-lj-S9g" secondAttribute="leading" constant="24" id="cjc-fd-uQF"/>
+                                    <constraint firstItem="oCL-Nx-CIT" firstAttribute="leading" secondItem="QYC-lj-S9g" secondAttribute="leading" constant="24" id="fuU-Ff-3fz"/>
+                                    <constraint firstItem="hZg-7b-wW1" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Bhp-xK-BUj" secondAttribute="bottom" constant="8" id="rkh-jk-Pds"/>
+                                    <constraint firstAttribute="bottom" secondItem="oCL-Nx-CIT" secondAttribute="bottom" constant="48" id="vAO-z1-EKO"/>
+                                    <constraint firstAttribute="trailing" secondItem="kfb-GY-QrO" secondAttribute="trailing" constant="24" id="yml-uO-4UF"/>
+                                    <constraint firstAttribute="trailing" secondItem="Bhp-xK-BUj" secondAttribute="trailing" constant="24" id="z5b-hs-3qZ"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="QYC-lj-S9g" firstAttribute="leading" secondItem="vq2-WN-u4Z" secondAttribute="leading" id="6Uh-eC-NOF"/>
+                            <constraint firstItem="QYC-lj-S9g" firstAttribute="top" secondItem="vq2-WN-u4Z" secondAttribute="top" id="R5v-f4-Y4C"/>
+                            <constraint firstAttribute="trailing" secondItem="QYC-lj-S9g" secondAttribute="trailing" id="RhI-65-gq4"/>
+                            <constraint firstItem="AEO-2h-0Cf" firstAttribute="top" secondItem="QYC-lj-S9g" secondAttribute="bottom" id="bzV-nZ-uax"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="cancelButton" destination="Bhp-xK-BUj" id="OLW-T2-8z5"/>
+                        <outlet property="createPriceAlertButton" destination="oCL-Nx-CIT" id="k5F-Km-DiI"/>
+                        <outlet property="priceAlertButtonBottomConstraint" destination="vAO-z1-EKO" id="bFK-2e-Dba"/>
+                        <outlet property="textField" destination="kfb-GY-QrO" id="fYU-EN-kiv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="evK-gl-6aY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4288" y="1246"/>
         </scene>
         <!--Product Web View Controller-->
         <scene sceneID="dSX-N8-WN6">
@@ -989,6 +1086,6 @@
         <image name="dropdown-chevron" width="15" height="9"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Oev-VQ-CAY"/>
+        <segue reference="E1j-L3-Nh8"/>
     </inferredMetricsTieBreakers>
 </document>
