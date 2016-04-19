@@ -24,9 +24,18 @@ private enum InfoType: Int
     case Features = 0, Description
 }
 
-class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SegmentedControlDelegate
+private enum Picker: Int
+{
+    case Style = 0, Size
+}
+
+class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SegmentedControlDelegate, UIPickerViewDataSource, UIPickerViewDelegate
 {
     @IBOutlet weak var tableView: UITableView!
+        
+    @IBOutlet var pickers: [UIPickerView]!
+    
+    @IBOutlet var pickerAccessoryView: PickerAccessoryView!
     
     var productIdentifier: String?
     
@@ -36,6 +45,14 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var selectedSegmentIndex: Int?
     
+    var selectedStyle: String?
+    
+    var selectedSize: String?
+    
+    //Dummy text fields to handle input views
+    let styleTextField: UITextField = UITextField()
+    let sizeTextField: UITextField = UITextField()
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -57,12 +74,49 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
 
         tableView.backgroundColor = Color.BackgroundGrayColor
         
+        setupPickers()
+        
         reloadData()
     }
     
     func reloadData()
     {
         title = "Big Pony Polo"
+    }
+    
+    func setupPickers()
+    {
+//        for (index, imageView) in imageViews.enumerate()
+        for (index, picker) in pickers.enumerate()
+        {
+            if index == Picker.Style.rawValue
+            {
+                picker.tag = Picker.Style.rawValue
+                
+                styleTextField.inputView = picker
+                styleTextField.inputAccessoryView = pickerAccessoryView
+                
+                view.addSubview(styleTextField)
+                styleTextField.hidden = true
+            }
+            else if index == Picker.Size.rawValue
+            {
+                picker.tag = Picker.Size.rawValue
+                
+                sizeTextField.inputView = picker
+                sizeTextField.inputAccessoryView = pickerAccessoryView
+                
+                view.addSubview(sizeTextField)
+                sizeTextField.hidden = true
+            }
+            
+            picker.dataSource = self
+            picker.delegate = self
+        }
+        
+        pickerAccessoryView.doneButton.addTarget(self, action: #selector(pickerDidFinish), forControlEvents: .TouchUpInside)
+        
+        pickerAccessoryView.cancelButton.addTarget(self, action: #selector(pickerDidCancel), forControlEvents: .TouchUpInside)
     }
     
     // MARK: Actions
@@ -80,6 +134,32 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             presentViewController(priceAlertVC, animated: false, completion: nil)
         }
 
+    }
+    
+    func showPicker(textField: UITextField?)
+    {
+        // If an existing picker is already in view, remove it
+        
+        if let textField = textField
+        {
+            if textField.isFirstResponder()
+            {
+                textField.resignFirstResponder()
+            }
+
+            textField.becomeFirstResponder()
+        }
+    }
+    
+    // MARK: Picker Actions
+    func pickerDidFinish()
+    {
+        view.endEditing(true)
+    }
+    
+    func pickerDidCancel()
+    {
+        view.endEditing(true)
     }
     
     // MARK: UITableView Data Source
@@ -150,10 +230,9 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         
                         let cell: StyleCell = tableView.dequeueReusableCellWithIdentifier("StyleCell") as! StyleCell
                         
-                        cell.styleNameLabel.text = "Navy Blue"
+                        cell.styleLabel.text = "Navy Blue"
                         
                         cell.selectionStyle = .None
-                        
                         
                         return cell
 
@@ -162,7 +241,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         let cell: SizeCell = tableView.dequeueReusableCellWithIdentifier("SizeCell") as! SizeCell
                         
                         cell.sizeLabel.text = "Large"
-                        
+                    
                         cell.selectionStyle = .None
                         
                         return cell
@@ -254,6 +333,20 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
         {
             switch tableSection {
+            case .Variant:
+                
+                if let variant = Variant(rawValue: indexPath.row)
+                {
+                    if variant == .Style
+                    {
+                        showPicker(styleTextField)
+                    }
+                    else if variant == .Size
+                    {
+                        showPicker(sizeTextField)
+                    }
+                }
+                
             case .Reviews:
                 
                 if indexPath.row == 0
@@ -359,6 +452,45 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         
         return 8.0
     }
+    
+    // MARK: Picker View Data Source
+    // MARK: Picker View
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return 5
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        if pickerView.tag == Picker.Style.rawValue
+        {
+            return "Navy Blue"
+        }
+        else if pickerView.tag == Picker.Size.rawValue
+        {
+            return "Large"
+        }
+        
+        return ""
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        if pickerView.tag == Picker.Style.rawValue
+        {
+            //Should be index of product.styles
+            selectedStyle = "selectedStyle"
+        }
+        else if pickerView.tag == Picker.Size.rawValue
+        {
+            //Should be index of product.sizes
+            selectedSize = "selectedSize"
+        }
+    }
+
     
     // MARK: Segmented Control Delegate
     func segmentedControlValueChanged(index: Int) {
