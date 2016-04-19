@@ -11,5 +11,5 @@ import UIKit
 
 class StyleCell: UITableViewCell
 {
-    @IBOutlet weak var styleNameLabel: UILabel!
+    @IBOutlet weak var styleLabel: UILabel!
 }

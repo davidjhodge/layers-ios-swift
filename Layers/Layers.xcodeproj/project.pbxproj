@@ -54,6 +54,7 @@
 		70987C371CB9D15100D86FBA /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70987C361CB9D15100D86FBA /* Login.storyboard */; };
 		70987C3B1CBAB4BF00D86FBA /* SimpleWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C3A1CBAB4BF00D86FBA /* SimpleWebViewController.swift */; };
 		70987C3D1CBBF07B00D86FBA /* GetStartedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C3C1CBBF07B00D86FBA /* GetStartedViewController.swift */; };
+		70A71B9C1CC593D800B58B74 /* PickerAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A71B9B1CC593D800B58B74 /* PickerAccessoryView.swift */; };
 		70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D84A9E1CB9557300A70485 /* AppDelegate.swift */; };
 		70D84AA41CB9557300A70485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA21CB9557300A70485 /* Main.storyboard */; };
 		70D84AA61CB9557300A70485 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA51CB9557300A70485 /* Assets.xcassets */; };
@@ -112,6 +113,7 @@
 		70987C361CB9D15100D86FBA /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		70987C3A1CBAB4BF00D86FBA /* SimpleWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleWebViewController.swift; sourceTree = "<group>"; };
 		70987C3C1CBBF07B00D86FBA /* GetStartedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetStartedViewController.swift; sourceTree = "<group>"; };
+		70A71B9B1CC593D800B58B74 /* PickerAccessoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerAccessoryView.swift; sourceTree = "<group>"; };
 		70D84A9B1CB9557200A70485 /* Layers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Layers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70D84A9E1CB9557300A70485 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70D84AA31CB9557300A70485 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -364,6 +366,7 @@
 			isa = PBXGroup;
 			children = (
 				70987C2F1CB9B4E400D86FBA /* ProductViewController.swift */,
+				70A71B9A1CC593A700B58B74 /* Pickers */,
 				702FC2FD1CC36A010012969C /* Price Alert */,
 				706FF88F1CBD6A02007B26AD /* Cells */,
 				706FF89F1CBD84DA007B26AD /* Reviews */,
@@ -382,6 +385,14 @@
 				706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */,
 			);
 			name = Login;
+			sourceTree = "<group>";
+		};
+		70A71B9A1CC593A700B58B74 /* Pickers */ = {
+			isa = PBXGroup;
+			children = (
+				70A71B9B1CC593D800B58B74 /* PickerAccessoryView.swift */,
+			);
+			name = Pickers;
 			sourceTree = "<group>";
 		};
 		70D84A921CB9557200A70485 = {
@@ -612,6 +623,7 @@
 				70987C1B1CB98A7700D86FBA /* NSAttributedString+Pricing.m in Sources */,
 				70987C3D1CBBF07B00D86FBA /* GetStartedViewController.swift in Sources */,
 				70987BEE1CB9658200D86FBA /* User.swift in Sources */,
+				70A71B9C1CC593D800B58B74 /* PickerAccessoryView.swift in Sources */,
 				70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
