@@ -15,8 +15,8 @@ PODS:
   - FBSDKLoginKit (4.11.0):
     - FBSDKCoreKit
   - HidingNavigationBar (0.3.0)
-  - HMSegmentedControl (1.5.2)
   - KeychainAccess (2.3.5)
+  - NMRangeSlider (1.2.1)
   - ObjectMapper (1.2.0)
   - SDWebImage (3.7.5):
     - SDWebImage/Core (= 3.7.5)
@@ -32,8 +32,8 @@ DEPENDENCIES:
   - FBSDKCoreKit (~> 4.11)
   - FBSDKLoginKit (~> 4.11)
   - HidingNavigationBar (~> 0.3)
-  - HMSegmentedControl
   - KeychainAccess
+  - NMRangeSlider
   - ObjectMapper
   - SDWebImage
   - SwiftyBeaver
@@ -48,8 +48,8 @@ SPEC CHECKSUMS:
   FBSDKCoreKit: 686ac982723a14ec9ddb85e2f81235d7706c891b
   FBSDKLoginKit: bade9fc78277764149ccc5bfaadbf13c83175c6a
   HidingNavigationBar: 6378af14cea27bfef8be73470b081a36d45b87c4
-  HMSegmentedControl: 83b9686022d2176fb6457d2bdb61e5d6393fed7d
   KeychainAccess: e283c1981a6c5655e1984cd411c6faf16fa165ae
+  NMRangeSlider: 317ded652431eb90501c8421d9cddc3930d891e6
   ObjectMapper: b1e9c7c8a9f6400b72690c80072c131504caa66f
   SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
   SwiftyBeaver: 3eced9aabe4f10b975453cc1baaa2d523a5eaeae

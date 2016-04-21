@@ -29,7 +29,7 @@ private enum Picker: Int
     case Style = 0, Size
 }
 
-class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SegmentedControlDelegate, UIPickerViewDataSource, UIPickerViewDelegate
+class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate
 {
     @IBOutlet weak var tableView: UITableView!
         
@@ -131,7 +131,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if let priceAlertVC: CreatePriceAlertViewController = storyboard.instantiateViewControllerWithIdentifier("CreatePriceAlertViewController") as? CreatePriceAlertViewController
         {
-            presentViewController(priceAlertVC, animated: false, completion: nil)
+            presentViewController(priceAlertVC, animated: true, completion: nil)
         }
 
     }
@@ -186,7 +186,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 return 1
                 
             case .Description:
-                return 1
+                return 0
             default:
                 return 0
             }
@@ -414,7 +414,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 return 4.0
                 
             case .Description:
-                return 4.0
+                return 0.01
                 
             default:
                 return 8.0
@@ -443,7 +443,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 return 4.0
                 
             case .Description:
-                return 8.0
+                return 4.0
                 
             default:
                 return 8.0
@@ -489,24 +489,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             //Should be index of product.sizes
             selectedSize = "selectedSize"
         }
-    }
-
-    
-    // MARK: Segmented Control Delegate
-    func segmentedControlValueChanged(index: Int) {
-        
-        if let infoType = InfoType(rawValue: index)
-        {
-            if infoType == InfoType.Features
-            {
-                
-            }
-            else if infoType == InfoType.Description
-            {
-                
-            }
-        }
-        
     }
     
     // MARK: Navigation

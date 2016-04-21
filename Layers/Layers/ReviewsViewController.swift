@@ -75,51 +75,51 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .OverallReviews:
                 
-                let cell: OverallReviewCell = tableView.dequeueReusableCellWithIdentifier("OverallReviewCell") as! OverallReviewCell
-                
-                cell.ratingLabel.text = "4.5"
-                
-                cell.starView.rating = 4.5
-                
-                cell.rightLabel.text = "Showing 1-8 of 25"
-                
-                cell.selectionStyle = .None
-                
-                return cell
-                
-            case .Reviews:
-                
                 if indexPath.row == 0
                 {
-                    let cell: ReviewCell = tableView.dequeueReusableCellWithIdentifier("ReviewCell") as! ReviewCell
+                    let cell: OverallReviewCell = tableView.dequeueReusableCellWithIdentifier("OverallReviewCell") as! OverallReviewCell
+                    
+                    cell.ratingLabel.text = "4.5"
                     
                     cell.starView.rating = 4.5
                     
-                    cell.reviewTitleLabel.text = "Best shirt I've ever owned"
-                    
-                    cell.reviewContentLabel.text = "I was really impressed with how this shirt fit. I've never tried anything that fit this good. Especially not for the price. I'd definitely recommend this item to a friend."
-                    
-                    cell.sourceDomainLabel.text = "ralphlauren.com"
+                    cell.rightLabel.text = "Showing 1-8 of 25"
                     
                     cell.selectionStyle = .None
                     
                     return cell
                 }
-//                else
-//                {
-//                    let cell: AlternateReviewCell = tableView.dequeueReusableCellWithIdentifier("AlternateReviewCell") as! AlternateReviewCell
-//                    
-//                    let rating: Float = 4.5
-//                    
-//                    cell.titleLabel.text = "Durability".uppercaseString
-//                    
-//                    cell.ratingLabel.text = String(rating)
-//                    
-//                    cell.starView.rating = Double(rating)
-//                    
-//                    return cell
-//                }
-
+                else
+                {
+                    let cell: AlternateReviewCell = tableView.dequeueReusableCellWithIdentifier("AlternateReviewCell") as! AlternateReviewCell
+                    
+                    let rating: Float = 4.5
+                    
+                    cell.titleLabel.text = "Durability".uppercaseString
+                    
+                    cell.ratingLabel.text = String(rating)
+                    
+                    cell.starView.rating = Double(rating)
+                    
+                    return cell
+                }
+            case .Reviews:
+                
+                let cell: ReviewCell = tableView.dequeueReusableCellWithIdentifier("ReviewCell") as! ReviewCell
+                
+                cell.starView.rating = 4.5
+                
+                cell.reviewTitleLabel.text = "Best shirt I've ever owned"
+                
+                cell.reviewContentLabel.text = "I was really impressed with how this shirt fit. I've never tried anything that fit this good. Especially not for the price. I'd definitely recommend this item to a friend."
+                
+                cell.sourceDomainLabel.text = "ralphlauren.com"
+                
+                cell.selectionStyle = .None
+                
+                return cell
+                
+                
                 
             default:
                 return tableView.dequeueReusableCellWithIdentifier("UITableViewCell")! as UITableViewCell

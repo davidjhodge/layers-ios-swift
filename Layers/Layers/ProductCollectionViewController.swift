@@ -23,7 +23,12 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        title = "LAYERS"
+        let titleLabel = UILabel(frame: CGRectMake(0,0,28,80))
+        titleLabel.attributedText = NSAttributedString(string: "Layers".uppercaseString, attributes: [NSForegroundColorAttributeName: Color.whiteColor(),
+            NSFontAttributeName: Font.CharterBold(size: 20.0),
+            NSKernAttributeName: 1.0]
+        )
+        navigationItem.titleView = titleLabel
         
         tabBarItem.title = "for you".uppercaseString
         tabBarItem.image = UIImage(named: "shirt")
@@ -34,10 +39,12 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         super.viewDidLoad()
         
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "filter".uppercaseString,
-                                                            style: .Plain,
-                                                            target: self,
-                                                            action: #selector(filter))
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "filter".uppercaseString,
+//                                                            style: .Plain,
+//                                                            target: self,
+//                                                            action: #selector(filter))
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter"), style: .Plain, target: self, action: #selector(filter))
         
         collectionView.backgroundColor = Color.BackgroundGrayColor
         collectionView.alwaysBounceVertical = true
@@ -93,7 +100,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     // MARK: Actions
     func filter()
     {
-        print("Filter pressed")
+        performSegueWithIdentifier("PresentModalFilterViewController", sender: self)
     }
     
     // MARK: Collection View Data Source

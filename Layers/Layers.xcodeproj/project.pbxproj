@@ -28,6 +28,11 @@
 		706FF89E1CBD82D2007B26AD /* ReviewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF89D1CBD82D2007B26AD /* ReviewsViewController.swift */; };
 		706FF8A11CBD84EE007B26AD /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8A01CBD84EE007B26AD /* ReviewCell.swift */; };
 		706FF8A31CBDF771007B26AD /* SimpleProductHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8A21CBDF771007B26AD /* SimpleProductHeaderCell.swift */; };
+		70776FC61CC5F881002E6F25 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FC51CC5F881002E6F25 /* FilterViewController.swift */; };
+		70776FC81CC685B0002E6F25 /* SliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FC71CC685B0002E6F25 /* SliderCell.swift */; };
+		70776FCB1CC69506002E6F25 /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FCA1CC69506002E6F25 /* RangeSlider.swift */; };
+		70776FD11CC8A90C002E6F25 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70776FD01CC8A90C002E6F25 /* Localizable.strings */; };
+		70776FD31CC8A9FF002E6F25 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FD21CC8A9FF002E6F25 /* Localization.swift */; };
 		70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */; };
 		70987BEA1CB95F1900D86FBA /* ProductCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */; };
 		70987BEC1CB9657900D86FBA /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BEB1CB9657900D86FBA /* Product.swift */; };
@@ -85,6 +90,11 @@
 		706FF89D1CBD82D2007B26AD /* ReviewsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewsViewController.swift; sourceTree = "<group>"; };
 		706FF8A01CBD84EE007B26AD /* ReviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
 		706FF8A21CBDF771007B26AD /* SimpleProductHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleProductHeaderCell.swift; sourceTree = "<group>"; };
+		70776FC51CC5F881002E6F25 /* FilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		70776FC71CC685B0002E6F25 /* SliderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SliderCell.swift; sourceTree = "<group>"; };
+		70776FCA1CC69506002E6F25 /* RangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
+		70776FD01CC8A90C002E6F25 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		70776FD21CC8A9FF002E6F25 /* Localization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStateTransitioner.swift; sourceTree = "<group>"; };
 		70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewController.swift; sourceTree = "<group>"; };
 		70987BEB1CB9657900D86FBA /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
@@ -209,6 +219,39 @@
 			name = Reviews;
 			sourceTree = "<group>";
 		};
+		70776FC41CC5F872002E6F25 /* Filter */ = {
+			isa = PBXGroup;
+			children = (
+				70776FC51CC5F881002E6F25 /* FilterViewController.swift */,
+				70776FC91CC685B4002E6F25 /* Cells */,
+			);
+			name = Filter;
+			sourceTree = "<group>";
+		};
+		70776FC91CC685B4002E6F25 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				70776FC71CC685B0002E6F25 /* SliderCell.swift */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		70776FCC1CC6950A002E6F25 /* Range Slider */ = {
+			isa = PBXGroup;
+			children = (
+				70776FCA1CC69506002E6F25 /* RangeSlider.swift */,
+			);
+			name = "Range Slider";
+			sourceTree = "<group>";
+		};
+		70776FCD1CC69510002E6F25 /* External Components */ = {
+			isa = PBXGroup;
+			children = (
+				70776FCC1CC6950A002E6F25 /* Range Slider */,
+			);
+			name = "External Components";
+			sourceTree = "<group>";
+		};
 		70987BE61CB95E9E00D86FBA /* App State Transitioner */ = {
 			isa = PBXGroup;
 			children = (
@@ -231,6 +274,7 @@
 			children = (
 				70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */,
 				70987BF01CB9672200D86FBA /* ProductCell.swift */,
+				70776FC41CC5F872002E6F25 /* Filter */,
 				70987C311CB9C9FC00D86FBA /* Product Detail */,
 			);
 			name = "Product Collection";
@@ -271,6 +315,7 @@
 		70987BFE1CB97AC300D86FBA /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				70776FD21CC8A9FF002E6F25 /* Localization.swift */,
 				70987C1C1CB98A7B00D86FBA /* NSAttributedString+Pricing */,
 				70987BFD1CB97ABE00D86FBA /* LRWindow */,
 				702FC2F21CC2D8720012969C /* UINavigationItem+BackButton */,
@@ -357,6 +402,7 @@
 			isa = PBXGroup;
 			children = (
 				70987BF41CB970CA00D86FBA /* LRSessionManager.swift */,
+				70776FD01CC8A90C002E6F25 /* Localizable.strings */,
 				70987BEF1CB9658700D86FBA /* Data Model */,
 			);
 			name = "Session Manager / Data Layer";
@@ -418,6 +464,7 @@
 			children = (
 				70D84A9E1CB9557300A70485 /* AppDelegate.swift */,
 				70987C2D1CB9A81C00D86FBA /* LRNavigationBar.swift */,
+				70776FCD1CC69510002E6F25 /* External Components */,
 				70987BFE1CB97AC300D86FBA /* Utilities */,
 				70987BF61CB9740100D86FBA /* Colors & Fonts */,
 				70987BE61CB95E9E00D86FBA /* App State Transitioner */,
@@ -511,6 +558,7 @@
 				70987C281CB9A4A500D86FBA /* Account.storyboard in Resources */,
 				70987C071CB980B300D86FBA /* Oxygen-Regular.ttf in Resources */,
 				70987C371CB9D15100D86FBA /* Login.storyboard in Resources */,
+				70776FD11CC8A90C002E6F25 /* Localizable.strings in Resources */,
 				70987C051CB980B300D86FBA /* Oxygen-Bold.ttf in Resources */,
 				70987C111CB9832E00D86FBA /* Charter-Bold.ttf in Resources */,
 				70987C061CB980B300D86FBA /* Oxygen-Light.ttf in Resources */,
@@ -612,6 +660,7 @@
 				70987BF11CB9672200D86FBA /* ProductCell.swift in Sources */,
 				706FF8911CBD6B6C007B26AD /* SizeCell.swift in Sources */,
 				70987C2E1CB9A81C00D86FBA /* LRNavigationBar.swift in Sources */,
+				70776FC81CC685B0002E6F25 /* SliderCell.swift in Sources */,
 				706FF89E1CBD82D2007B26AD /* ReviewsViewController.swift in Sources */,
 				702FC2F11CC2D8470012969C /* UINavigationItem+BackButton.m in Sources */,
 				706FF89C1CBD6E96007B26AD /* FeaturesCell.swift in Sources */,
@@ -620,10 +669,13 @@
 				706FF8981CBD6E3E007B26AD /* OverallReviewCell.swift in Sources */,
 				70987BFA1CB9749700D86FBA /* Color.swift in Sources */,
 				70987C331CB9CA1300D86FBA /* ProductHeaderCell.swift in Sources */,
+				70776FC61CC5F881002E6F25 /* FilterViewController.swift in Sources */,
 				70987C1B1CB98A7700D86FBA /* NSAttributedString+Pricing.m in Sources */,
 				70987C3D1CBBF07B00D86FBA /* GetStartedViewController.swift in Sources */,
 				70987BEE1CB9658200D86FBA /* User.swift in Sources */,
 				70A71B9C1CC593D800B58B74 /* PickerAccessoryView.swift in Sources */,
+				70776FCB1CC69506002E6F25 /* RangeSlider.swift in Sources */,
+				70776FD31CC8A9FF002E6F25 /* Localization.swift in Sources */,
 				70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

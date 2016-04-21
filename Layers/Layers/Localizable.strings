@@ -1,0 +1,10 @@
+/* 
+  Localizable.strings
+  Layers
+
+  Created by David Hodge on 4/21/16.
+  Copyright © 2016 Layers. All rights reserved.
+*/
+
+"NETWORK_UNKNOWN_ERROR" = "The server returned an unknown response.";
+"INCOMPLETE_FIELDS" = "Hold up! It doesn't look you've completed all the fields.";
