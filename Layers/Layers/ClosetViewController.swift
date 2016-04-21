@@ -14,7 +14,7 @@ class ClosetViewController: UIViewController, UITableViewDataSource, UITableView
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        title = "LAYERS".uppercaseString
+        title = "My Closet".uppercaseString
         
         tabBarItem.title = "my closet".uppercaseString
         tabBarItem.image = UIImage(named: "coathanger")

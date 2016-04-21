@@ -23,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+        print(UIDevice.currentDevice().identifierForVendor!.UUIDString)
+        
         window = LRWindow(frame: UIScreen.mainScreen().bounds)
         window?.tintColor = Color.DarkNavyColor
         
@@ -30,8 +32,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).barTintColor = Color.DarkNavyColor
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.whiteColor()
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).titleTextAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),
-                                                                                                            NSFontAttributeName: Font.CharterBold(size: 20.0),
-                                                                                                            NSKernAttributeName: 3.0]
+                                                                                                            NSFontAttributeName: Font.OxygenBold(size: 16.0)]
+        UITableViewCell.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.DarkNavyColor
+        
         
 //        AppStateTransitioner.transitionToLoginStoryboard(false)
         AppStateTransitioner.transitionToMainStoryboard(false)

@@ -26,7 +26,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        title = "LAYERS".uppercaseString
+        title = "Account".uppercaseString
         
         tabBarItem.title = "account".uppercaseString
         tabBarItem.image = UIImage(named: "person")
