@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
-        print(UIDevice.currentDevice().identifierForVendor!.UUIDString)
+//        print(UIDevice.currentDevice().identifierForVendor!.UUIDString)
         
         window = LRWindow(frame: UIScreen.mainScreen().bounds)
         window?.tintColor = Color.DarkNavyColor
@@ -35,9 +35,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                                                             NSFontAttributeName: Font.OxygenBold(size: 16.0)]
         UITableViewCell.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.DarkNavyColor
         
-        
-//        AppStateTransitioner.transitionToLoginStoryboard(false)
-        AppStateTransitioner.transitionToMainStoryboard(false)
+        // Determine intial view controller based on login state 
+        if LRSessionManager.sharedManager.isLoggedIn()
+        {
+            AppStateTransitioner.transitionToMainStoryboard(false)
+        }
+        else
+        {
+            AppStateTransitioner.transitionToLoginStoryboard(false)
+        }
 
         window?.makeKeyAndVisible()
         

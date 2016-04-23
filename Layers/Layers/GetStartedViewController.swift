@@ -85,9 +85,12 @@ class GetStartedViewController: UIViewController
                         {
                             let attributes: Dictionary<String,AnyObject> = result as! Dictionary<String,AnyObject>
                             
-                            let response = Mapper<FacebookUserResponse>().map(attributes)
-                            
-                            print(response?.toJSONString())
+                            if let response = Mapper<FacebookUserResponse>().map(attributes)
+                            {
+                                // Send Facebook Login Credentials to the API
+                                
+                                log.debug(response.toJSONString())
+                            }
                             
                             AppStateTransitioner.transitionToMainStoryboard(true)
                         }

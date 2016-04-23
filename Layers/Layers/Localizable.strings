@@ -6,5 +6,7 @@
   Copyright © 2016 Layers. All rights reserved.
 */
 
-"NETWORK_UNKNOWN_ERROR" = "The server returned an unknown response.";
+"NETWORK_ERROR_UNKNOWN" = "The server returned an unknown response.";
 "INCOMPLETE_FIELDS" = "Hold up! It doesn't look you've completed all the fields.";
+"ENTER_VALID_EMAIL" = "Please enter a valid email.";
+"ENTER_VALID_PASSWORD" = "Please enter a valid password.";

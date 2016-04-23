@@ -158,10 +158,11 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .Logout:
                 
-                //Logout
                 //Clear Credentials
-                AppStateTransitioner.transitionToLoginStoryboard(true)
+                LRSessionManager.sharedManager.logout()
                 
+                AppStateTransitioner.transitionToLoginStoryboard(true)
+                 
             default:
                 log.debug("didSelectRowAtIndexPath Error")
             }
