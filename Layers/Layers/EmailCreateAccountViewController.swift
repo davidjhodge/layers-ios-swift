@@ -9,6 +9,11 @@
 import Foundation
 import UIKit
 
+private enum CellType: Int
+{
+    case Email, Password, RetypePassword, Count
+}
+
 class EmailCreateAccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
 {
     @IBOutlet weak var tableView: UITableView!
@@ -47,9 +52,78 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     // MARK: Actions
     func createAccount()
     {
-        view.endEditing(true)
+        let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.Email.rawValue, inSection: 0)) as! TextFieldCell
+        let emailInput = emailCell.textField.text!
         
-        AppStateTransitioner.transitionToMainStoryboard(true)
+        let passwordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.Password.rawValue, inSection: 0)) as! TextFieldCell
+        let passwordInput = passwordCell.textField.text!
+        
+        if isValidEmail(emailInput)
+        {
+            if isValidPassword(passwordInput)
+            {
+                // Email and password are valid. Disable UI and make API Call
+                view.endEditing(true)
+                
+                tableView.userInteractionEnabled = false
+                createAccountButton.userInteractionEnabled = false
+                
+                LRSessionManager.sharedManager.register(emailInput, password: passwordInput, firstName: "", lastName: "", gender: "", age: 0, completion: { (success, error, response) -> Void in
+                    
+                    if success
+                    {
+                        AppStateTransitioner.transitionToMainStoryboard(true)
+                    }
+                    else
+                    {
+                        if error != nil
+                        {
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                              
+                                let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                                self.presentViewController(alert, animated: true, completion: nil)
+                            })
+                        }
+                        
+                        self.tableView.userInteractionEnabled = true
+                        self.createAccountButton.userInteractionEnabled = true
+                    }
+                })
+            }
+            else
+            {
+                // Invalid Password
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    let alert = UIAlertController(title: "ENTER_VALID_PASSWORD".localized, message: nil, preferredStyle: .Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                })
+            }
+        }
+        else
+        {
+            // Invalid Email
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+
+                let alert = UIAlertController(title: "ENTER_VALID_EMAIL".localized, message: nil, preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+            })
+        }
+        
+    }
+    
+    // MARK: Helpers
+    private func isValidEmail(email: String) -> Bool
+    {
+        return (email.containsString("@") && email.containsString("."))
+    }
+    
+    private func isValidPassword(password: String) -> Bool
+    {
+        return password.characters.count > 6
     }
     
     // MARK: Table View Data Source
@@ -58,7 +132,7 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return CellType.Count.rawValue
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -69,18 +143,18 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
         cell.selectionStyle = .None
         
         //Email
-        if indexPath.row == 0
+        if indexPath.row == CellType.Email.rawValue
         {
             cell.textField.placeholder = "Email"
         }
         //Password
-        else if indexPath.row == 1
+        else if indexPath.row == CellType.Password.rawValue
         {
             cell.textField.placeholder = "Password"
             cell.textField.secureTextEntry = true
         }
         //Retype password
-        else if indexPath.row == 2
+        else if indexPath.row == CellType.RetypePassword.rawValue
         {
             cell.textField.placeholder = "Retype your password"
             cell.textField.secureTextEntry = true

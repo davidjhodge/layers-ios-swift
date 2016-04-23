@@ -20,7 +20,7 @@ typealias LRCompletionBlock = ((success: Bool, error: String?, response:JSON?) -
 
 class LRSessionManager
 {
-    // MARK: Public Variables
+    // Static variable to handle all networking and caching activities
     static let sharedManager: LRSessionManager = LRSessionManager()
     
     // Intialized in the init method and is never deallocated. It is assumed to always exist
@@ -54,7 +54,11 @@ class LRSessionManager
         restoreCredentials()
     }
     
-    //MARK: Local Account Access
+    //MARK: Managing Account Credentials
+    
+    /**
+     Restores the current session credentials from keychain.
+    */
     private func restoreCredentials()
     {
         log.debug("Attempting to restore session.")
@@ -74,13 +78,16 @@ class LRSessionManager
         }
     }
     
+    /**
+    Saves the current session credentials to keychain.
+    */
     private func saveCredentials()
     {
         if let userToken = accessToken, user = currentUser
         {
             log.debug("Saving session")
             
-            keychain[kAccessToken] = accessToken
+            keychain[kAccessToken] = userToken
             keychain[kCurrentUser] = Mapper().toJSONString(user, prettyPrint: false)
         }
         else
@@ -99,6 +106,28 @@ class LRSessionManager
         currentUser = nil
         
         saveCredentials()
+    }
+    
+    func logout()
+    {
+        clearCredentials()
+    }
+    
+    func isLoggedIn() -> Bool
+    {
+        if accessToken != nil && currentUser != nil
+        {
+            return true
+        }
+        else
+        {
+            accessToken = nil
+            currentUser = nil
+            
+            log.debug("User is not logged in.")
+        }
+        
+        return false
     }
     
     // MARK: API Access
@@ -259,7 +288,7 @@ class LRSessionManager
                                 if let completionHandler = completion
                                 {
                                     // Need to handle error
-                                    completionHandler(success: false, error: "Unknown Networking Error", response: nil)
+                                    completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
                                 }
                                 
                                 return
@@ -282,8 +311,8 @@ class LRSessionManager
                                 }
                                 else
                                 {
-                                    log.error("Unknown Networking Error")
-                                    completionHandler(success: false, error: "Unknown Networking response", response: nil)
+                                    log.error("NETWORK_ERROR_UNKNOWN".localized)
+                                    completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
                                 }
                             }
                         }
