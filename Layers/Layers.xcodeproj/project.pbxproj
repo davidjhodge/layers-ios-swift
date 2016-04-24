@@ -33,6 +33,10 @@
 		70776FCB1CC69506002E6F25 /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FCA1CC69506002E6F25 /* RangeSlider.swift */; };
 		70776FD11CC8A90C002E6F25 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70776FD01CC8A90C002E6F25 /* Localizable.strings */; };
 		70776FD31CC8A9FF002E6F25 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FD21CC8A9FF002E6F25 /* Localization.swift */; };
+		70776FD51CCC03C1002E6F25 /* OnboardingGenderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FD41CCC03C1002E6F25 /* OnboardingGenderViewController.swift */; };
+		70776FD81CCC1660002E6F25 /* BrandCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FD71CCC1660002E6F25 /* BrandCollectionCell.swift */; };
+		70776FDA1CCC16FA002E6F25 /* OnboardingBrandsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FD91CCC16FA002E6F25 /* OnboardingBrandsViewController.swift */; };
+		70776FDC1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FDB1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift */; };
 		70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */; };
 		70987BEA1CB95F1900D86FBA /* ProductCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */; };
 		70987BEC1CB9657900D86FBA /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BEB1CB9657900D86FBA /* Product.swift */; };
@@ -95,6 +99,10 @@
 		70776FCA1CC69506002E6F25 /* RangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
 		70776FD01CC8A90C002E6F25 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		70776FD21CC8A9FF002E6F25 /* Localization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
+		70776FD41CCC03C1002E6F25 /* OnboardingGenderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingGenderViewController.swift; sourceTree = "<group>"; };
+		70776FD71CCC1660002E6F25 /* BrandCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandCollectionCell.swift; sourceTree = "<group>"; };
+		70776FD91CCC16FA002E6F25 /* OnboardingBrandsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingBrandsViewController.swift; sourceTree = "<group>"; };
+		70776FDB1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingAgeViewController.swift; sourceTree = "<group>"; };
 		70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStateTransitioner.swift; sourceTree = "<group>"; };
 		70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewController.swift; sourceTree = "<group>"; };
 		70987BEB1CB9657900D86FBA /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
@@ -252,6 +260,17 @@
 			name = "External Components";
 			sourceTree = "<group>";
 		};
+		70776FD61CCC03CC002E6F25 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				70776FD41CCC03C1002E6F25 /* OnboardingGenderViewController.swift */,
+				70776FD91CCC16FA002E6F25 /* OnboardingBrandsViewController.swift */,
+				70776FD71CCC1660002E6F25 /* BrandCollectionCell.swift */,
+				70776FDB1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift */,
+			);
+			name = Onboarding;
+			sourceTree = "<group>";
+		};
 		70987BE61CB95E9E00D86FBA /* App State Transitioner */ = {
 			isa = PBXGroup;
 			children = (
@@ -288,6 +307,7 @@
 				70987C201CB9A43F00D86FBA /* Closet.storyboard */,
 				70987C271CB9A4A500D86FBA /* Account.storyboard */,
 				70987C3E1CBBF07F00D86FBA /* Login */,
+				70776FD61CCC03CC002E6F25 /* Onboarding */,
 				70987BF21CB9705C00D86FBA /* Product Collection */,
 				70987C261CB9A49100D86FBA /* Closet */,
 				70987C2B1CB9A4C200D86FBA /* Account */,
@@ -635,10 +655,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				706FF89A1CBD6E7A007B26AD /* AlternateReviewCell.swift in Sources */,
+				70776FDC1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift in Sources */,
 				702FC2FF1CC36A170012969C /* CreatePriceAlertViewController.swift in Sources */,
 				706FF8A11CBD84EE007B26AD /* ReviewCell.swift in Sources */,
 				70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */,
 				70987BF51CB970CA00D86FBA /* LRSessionManager.swift in Sources */,
+				70776FDA1CCC16FA002E6F25 /* OnboardingBrandsViewController.swift in Sources */,
 				70987C2A1CB9A4BF00D86FBA /* AccountViewController.swift in Sources */,
 				70987C301CB9B4E400D86FBA /* ProductViewController.swift in Sources */,
 				702FC2FC1CC344960012969C /* EmailCreateAccountViewController.swift in Sources */,
@@ -648,6 +670,7 @@
 				706FF88A1CBC54F8007B26AD /* EmailLoginViewController.swift in Sources */,
 				70987C251CB9A47600D86FBA /* ClosetViewController.swift in Sources */,
 				70987C171CB985DE00D86FBA /* Font.swift in Sources */,
+				70776FD51CCC03C1002E6F25 /* OnboardingGenderViewController.swift in Sources */,
 				706FF8961CBD6B95007B26AD /* PriceGraphCell.swift in Sources */,
 				702FC3011CC3FE6D0012969C /* ContactUsViewController.swift in Sources */,
 				70987BFC1CB97A9900D86FBA /* LRWindow.swift in Sources */,
@@ -658,6 +681,7 @@
 				70987BEC1CB9657900D86FBA /* Product.swift in Sources */,
 				70987BEA1CB95F1900D86FBA /* ProductCollectionViewController.swift in Sources */,
 				70987BF11CB9672200D86FBA /* ProductCell.swift in Sources */,
+				70776FD81CCC1660002E6F25 /* BrandCollectionCell.swift in Sources */,
 				706FF8911CBD6B6C007B26AD /* SizeCell.swift in Sources */,
 				70987C2E1CB9A81C00D86FBA /* LRNavigationBar.swift in Sources */,
 				70776FC81CC685B0002E6F25 /* SliderCell.swift in Sources */,

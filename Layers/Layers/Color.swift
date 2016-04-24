@@ -24,4 +24,8 @@ class Color: UIColor
     static let GreenColor: UIColor = ColorCode(90, green: 182, blue: 94, alpha: 1.0)
 
     static let BackgroundGrayColor: UIColor = ColorCode(246, green: 246, blue: 246, alpha: 1.0)
+    
+    static let NeonBlueColor: UIColor = ColorCode(76, green: 133, blue: 238, alpha: 1.0)
+    
+    static let LightGray: UIColor = ColorCode(200, green: 200, blue: 200, alpha: 1.0)
 }
