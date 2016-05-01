@@ -14,4 +14,7 @@
 
 #import <NMRangeSlider/NMRangeSlider.h>
 
+#import <AWSCore/AWSCore.h>
+#import <AWSCognitoIdentityProvider/AWSCognitoIdentityProvider.h>
+
 #endif /* Layers_BridgingHeader_h */

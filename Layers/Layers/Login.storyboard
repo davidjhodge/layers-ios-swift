@@ -60,9 +60,6 @@
                                 <state key="normal" title="Already have an account? Login">
                                     <color key="titleColor" red="0.78431372549019607" green="0.78431372549019607" blue="0.78431372549019607" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
-                                <connections>
-                                    <segue destination="8D7-xr-Bul" kind="show" identifier="ShowEmailLoginViewController" id="TyD-1l-dw1"/>
-                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LAYERS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GAL-Zl-dcr">
                                 <rect key="frame" x="236" y="222" width="128" height="36"/>
@@ -132,12 +129,13 @@
                         <outlet property="getStartedButton" destination="TDY-WP-stc" id="Ph2-2z-2vv"/>
                         <outlet property="heroImage" destination="kdb-rk-KmF" id="7XK-2B-l5a"/>
                         <outlet property="logoLabel" destination="GAL-Zl-dcr" id="luB-bh-ZpO"/>
-                        <segue destination="jPG-jr-uhn" kind="show" identifier="ShowOnboardingGenderViewController" id="7M3-gN-LaV"/>
+                        <segue destination="jPG-jr-uhn" kind="show" identifier="ShowOnboardingGenderViewController" id="ed7-GG-Iwk"/>
+                        <segue destination="8D7-xr-Bul" kind="show" identifier="ShowEmailLoginViewController" id="SHk-El-dS7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ryS-QK-sVr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1600" y="431"/>
+            <point key="canvasLocation" x="1296" y="431"/>
         </scene>
         <!--Email Create Account View Controller-->
         <scene sceneID="BBm-qB-C8l">
@@ -309,7 +307,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ULQ-T8-AwK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2318" y="431"/>
+            <point key="canvasLocation" x="2605" y="431"/>
         </scene>
         <!--Onboarding Brands View Controller-->
         <scene sceneID="wLo-jk-wcq">
@@ -448,7 +446,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dgl-il-kJb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2983" y="431"/>
+            <point key="canvasLocation" x="3269" y="431"/>
         </scene>
         <!--Onboarding Age View Controller-->
         <scene sceneID="ao1-Uc-NkB">
@@ -487,7 +485,7 @@ based on your age.</string>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="AGE" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5G5-96-Q9p">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5G5-96-Q9p">
                                         <rect key="frame" x="244" y="271" width="97" height="56"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="97" id="Mkw-pm-hZd"/>
@@ -565,7 +563,7 @@ based on your age.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7lj-ku-vxx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3652" y="431"/>
+            <point key="canvasLocation" x="3960" y="431"/>
         </scene>
         <!--Email Login View Controller-->
         <scene sceneID="2HW-Dp-hVC">
@@ -665,7 +663,7 @@ based on your age.</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UF4-cl-DvJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="925" y="431"/>
+            <point key="canvasLocation" x="733" y="431"/>
         </scene>
     </scenes>
     <resources>
