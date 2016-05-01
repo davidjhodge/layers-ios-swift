@@ -14,6 +14,8 @@ import KeychainAccess
 import AWSCognitoIdentityProvider
 import AWSCore
 
+import FBSDKLoginKit
+
 let kLRAPIBase = "http://52.22.85.12:8000/"
 let kAccessToken = "kAccessToken"
 let kCurrentUser = "kCurrentUser"
@@ -24,7 +26,8 @@ private let kAWSCognitoClientSecret = "5gjvi9e5ikmntbduka8mp0jf9q"
 private let kAWSCognitoPoolId = "us-east-1:c7d2ab80-046f-4b0d-8344-32db54981782"
 private let kAWSUserPoolId = "us-east-1_dHgDcpP9d"
 
-typealias LRCompletionBlock = ((success: Bool, error: String?, response:JSON?) -> Void)
+typealias LRCompletionBlock = ((success: Bool, error: String?, response:AnyObject?) -> Void)
+typealias LRJsonCompletionBlock = ((success: Bool, error: String?, response:JSON?) -> Void)
 
 class LRSessionManager
 {
@@ -50,6 +53,9 @@ class LRSessionManager
     
     var credentialsProvider: AWSCognitoCredentialsProvider!
     
+    var AWSCompletionHandler: AWSContinuationBlock?
+
+    
     // MARK: Initialization
     init ()
     {
@@ -66,6 +72,9 @@ class LRSessionManager
         // Configures AWS Cognito and User Pools
         configureAWS()
         
+        //Detect Change in Identity when an unauthenticated user logs in (if an account for that login already exists)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(identityDidChange), name: AWSCognitoIdentityIdChangedNotification, object: nil)
+                
         // Restore session credentials
         restoreCredentials()
     }
@@ -174,24 +183,36 @@ class LRSessionManager
         if let cognitoId = credentialsProvider.identityId
         {
             cognitoIdentifier = cognitoId
+            
+            log.debug("Cognito Identifier: \(cognitoIdentifier)")
         }
         else
         {
-            credentialsProvider.getIdentityId().continueWithBlock({ (task: AWSTask!) -> AnyObject! in
-                
-                if task.error != nil
-                {
-                    log.debug("Error: \(task.error?.localizedDescription)")
-                }
-                else
-                {
-                    // Success!
-                    cognitoIdentifier = task.result as! String
-                }
-                
-                return nil
-            })
+            refreshIdentityId()
         }
+    }
+    
+    func refreshIdentityId()
+    {
+        credentialsProvider.getIdentityId().continueWithBlock({ (task: AWSTask!) -> AnyObject! in
+            
+            if task.error != nil
+            {
+                log.debug("Error: \(task.error?.localizedDescription)")
+            }
+            else
+            {
+                let logins = self.credentialsProvider.logins
+
+                // Success!
+                let cognitoIdentifier = task.result as! String
+                
+                log.debug("Cognito Identifier: \(cognitoIdentifier)")
+                
+            }
+            
+            return nil
+        })
     }
     
     func registerAuthorized(email: String, password: String)
@@ -211,12 +232,8 @@ class LRSessionManager
                 }
                 else
                 {
-                    if let user: AWSCognitoIdentityUser = task.result as! AWSCognitoIdentityUser
-                    {
-                    
-                    }
-                    
-                    
+                    let user: AWSCognitoIdentityUser = task.result as! AWSCognitoIdentityUser
+
                 }
                 
                 return nil
@@ -290,8 +307,129 @@ class LRSessionManager
                     completionHandler(success: false, error: error, response: nil)
                 }
             }
-            
         })
+    }
+    
+    func registerWithFacebook(completion: LRJsonCompletionBlock?)
+    {
+        // The currentAccessToken() should be retrieved from Facebook in the View Controller that the login dialogue is shown from.
+        if (FBSDKAccessToken.currentAccessToken() != nil)
+        {
+            // Connect this Facebook account with the existing Amazon Cognito Identity
+            let fbToken = FBSDKAccessToken.currentAccessToken().tokenString
+            credentialsProvider.logins = [AWSIdentityProviderFacebook: fbToken]
+            
+            completeLogin(credentialsProvider.logins)
+            // Get user information with Facebook Graph API
+            let request = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, age_range, link, gender, locale, picture, timezone, updated_time, verified, friends, email"], HTTPMethod: "GET")
+            
+            request.startWithCompletionHandler({(connection:FBSDKGraphRequestConnection!, result: AnyObject!, error: NSError!) -> Void in
+                
+                if error == nil
+                {
+                    let attributes: Dictionary<String,AnyObject> = result as! Dictionary<String,AnyObject>
+                    
+                    let response = Mapper<FacebookUserResponse>().map(attributes)
+                    
+                    if let completionBlock = completion
+                    {
+                        completionBlock(success: true, error: nil, response: JSON(response!))
+                    }
+                }
+                else
+                {
+                    if let completionBlock = completion
+                    {
+                        completionBlock(success: true, error: error.localizedDescription, response: nil)
+                    }
+                }
+            })
+        }
+    }
+    
+    func completeLogin(logins: [NSObject: AnyObject]?)
+    {
+        var task: AWSTask?
+        
+        var merge = [NSObject : AnyObject]()
+        
+        //Add existing logins
+        if let previousLogins = self.credentialsProvider?.logins {
+            merge = previousLogins
+        }
+        
+        //Add new logins
+        if let unwrappedLogins = logins {
+            for (key, value) in unwrappedLogins {
+                merge[key] = value
+            }
+            self.credentialsProvider?.logins = merge
+        }
+        
+        task?.continueWithBlock {
+            (task: AWSTask!) -> AnyObject! in
+            if (task.error != nil) {
+                
+            }
+            
+            return task
+            }.continueWithBlock(AWSCompletionHandler!)
+    }
+    
+    
+    // MARK: Fetching Server Data
+    func loadProduct(productId: NSNumber, completionHandler: LRCompletionBlock?)
+    {
+        if productId.integerValue >= 0
+        {
+            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/\(productId.stringValue)"))
+            
+            request.HTTPMethod = "GET"
+            
+            sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+                
+                if success
+                {
+                    if let jsonResponse = response
+                    {
+                        let product = Mapper<ProductResponse>().map(jsonResponse.dictionaryObject)
+                        
+                        if let completion = completionHandler
+                        {
+                            completion(success: success, error: error, response: product)
+                        }
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: success, error: error, response: nil)
+                    }
+                }
+            })
+        }
+        else
+        {
+            if let completion = completionHandler
+            {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    completion(success: false, error: "NO_PRODUCT_ID".localized, response: nil)
+                })
+            }
+            
+            return
+        }
+}
+    
+    // Handle a change in the AWS Cognito Identity, such as when an unauthenticated user creates an account.
+    @objc func identityDidChange(notification: NSNotification!)
+    {
+        if let userInfo = notification.userInfo as? [String: AnyObject]
+        {
+            log.debug("AWSCognito Identity changed from: \(userInfo[AWSCognitoNotificationPreviousId]) to: \(userInfo[AWSCognitoNotificationNewId])")
+        }
     }
     
     // MARK: API Helpers
@@ -332,7 +470,7 @@ class LRSessionManager
  
     This function calls the completion block on the method it was called on. You are responsible for calling completion blocks on the main thread.
     */
-    private func sendAPIRequest(request: NSURLRequest, authorization: Bool, completion: LRCompletionBlock?)
+    private func sendAPIRequest(request: NSURLRequest, authorization: Bool, completion: LRJsonCompletionBlock?)
     {
         let startTime = NSDate().timeIntervalSince1970
         
@@ -360,7 +498,7 @@ class LRSessionManager
                         if let data = responseInfo.result.value?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
                         {
                             var jsonError: NSError?
-                            var jsonObject = JSON(data: data, options: .AllowFragments, error: &jsonError)
+                            let jsonObject = JSON(data: data, options: .AllowFragments, error: &jsonError)
                             
                             // Handle JSON parsing errors
                             if let jsonParsingError = jsonError
@@ -421,5 +559,8 @@ class LRSessionManager
         }
     }
     
-    
+    deinit
+    {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
 }

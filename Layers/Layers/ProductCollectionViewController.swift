@@ -10,6 +10,9 @@ import Foundation
 import UIKit
 import HidingNavigationBar
 
+import FBSDKLoginKit
+import ObjectMapper
+
 class ProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
     private let kProductCellIdentfier = "ProductCell"
@@ -38,6 +41,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Sign Up".uppercaseString, style: .Plain, target: self, action: #selector(createAccount))
         
 //        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "filter".uppercaseString,
 //                                                            style: .Plain,
@@ -100,6 +104,54 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
 //    }
     
     // MARK: Actions
+    
+    //TEMP
+    func createAccount()
+    {
+        let loginManager: FBSDKLoginManager = FBSDKLoginManager()
+        
+        loginManager.logInWithReadPermissions(["public_profile", "user_friends", "email"], fromViewController: self, handler: {(result:FBSDKLoginManagerLoginResult!, error:NSError!) -> Void in
+            
+            if error != nil
+            {
+                log.debug(error.localizedDescription)
+            }
+            else if result.isCancelled
+            {
+                log.debug("User cancelled Facebook Login")
+            }
+            else
+            {
+                log.debug("User successfully logged in with Facebook!")
+                
+//                let fbAccessToken = result.token.tokenString
+                
+                // Facebook token now exists and can be accessed at FBSDKAccessToken.currentAccessToken() 
+                LRSessionManager.sharedManager.registerWithFacebook( { (success, error, result) -> Void in
+                    
+                    if success
+                    {
+                        log.debug("Facebook Registration Integration Complete.")
+                        
+                        let credential = LRSessionManager.sharedManager.credentialsProvider.identityId
+                        
+                        print(credential)
+                    }
+                    else
+                    {
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
+                        })
+                    }
+                })
+                
+            }
+        })
+    }
+    
     func filter()
     {
         performSegueWithIdentifier("PresentModalFilterViewController", sender: self)

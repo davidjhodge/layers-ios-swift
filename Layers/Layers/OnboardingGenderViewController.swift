@@ -18,12 +18,20 @@ class OnboardingGenderViewController: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        
         menButton.setTitle("Men".uppercaseString, forState: .Normal)
         womenButton.setTitle("Women".uppercaseString, forState: .Normal)
 
         menButton.addTarget(self, action: #selector(menSelected), forControlEvents: .TouchUpInside)
         
         womenButton.addTarget(self, action: #selector(womenSelected), forControlEvents: .TouchUpInside)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        
+        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kProgressViewNeedsUpdateNotification, object: nil, userInfo: ["hidden": true]))
     }
     
     // MARK: Actions
@@ -39,5 +47,14 @@ class OnboardingGenderViewController: UIViewController
         LRSessionManager.sharedManager.currentUser?.gender = "female"
         
         performSegueWithIdentifier("ShowOnboardingBrandsViewController", sender: self)
+    }
+    
+    // Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "ShowOnboardingBrandsViewController"
+        {
+
+        }
     }
 }

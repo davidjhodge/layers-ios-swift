@@ -38,6 +38,9 @@ class OnboardingAgeViewController: UIViewController
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kProgressViewNeedsUpdateNotification, object: nil, userInfo: ["hidden": false,
+            "progress": 0.9]))
+        
         ageTextField.becomeFirstResponder()
     }
     
@@ -45,6 +48,9 @@ class OnboardingAgeViewController: UIViewController
     func start()
     {
         view.endEditing(true)
+        
+        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kProgressViewNeedsUpdateNotification, object: nil, userInfo: ["hidden": false,
+            "progress": 1.0]))
         
         AppStateTransitioner.transitionToMainStoryboard(true)
     }

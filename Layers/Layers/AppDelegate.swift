@@ -12,6 +12,8 @@ import FBSDKCoreKit
 
 let log = SwiftyBeaver.self
 
+private let facebookScheme: String = "fb982100215236828"
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -33,14 +35,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITableViewCell.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.DarkNavyColor
         
         // Determine intial view controller based on login state
-        if LRSessionManager.sharedManager.isLoggedIn()
-        {
-            AppStateTransitioner.transitionToMainStoryboard(false)
-        }
-        else
-        {
-            AppStateTransitioner.transitionToLoginStoryboard(false)
-        }
+
+        AppStateTransitioner.transitionToMainStoryboard(false)
+        
+//        if LRSessionManager.sharedManager.isLoggedIn()
+//        {
+//            AppStateTransitioner.transitionToMainStoryboard(false)
+//        }
+//        else
+//        {
+//            AppStateTransitioner.transitionToLoginStoryboard(false)
+//        }
 
         window?.makeKeyAndVisible()
         
@@ -51,10 +56,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
        
-//        if url.scheme == facebookScheme
-//        {
-//            return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
-//        }
+        if url.scheme == facebookScheme
+        {
+            return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+        }
         
         return true
     }
