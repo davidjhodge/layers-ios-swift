@@ -33,9 +33,9 @@ class GetStartedViewController: UIViewController
         alreadyHasAccountButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
         
         //TEMP
-//        LRSessionManager.sharedManager.registerUnauthorized()
+        LRSessionManager.sharedManager.registerUnauthorized()
         
-        LRSessionManager.sharedManager.registerAuthorized("david@trylayers.com", password: "password123")
+//        LRSessionManager.sharedManager.registerAuthorized("david@trylayers.com", password: "password123")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -58,7 +58,7 @@ class GetStartedViewController: UIViewController
     {
         disableButttons()
         
-        performSegueWithIdentifier("ShowOnboardingGenderViewController", sender: self)
+        performSegueWithIdentifier("ShowOnboardingContainerViewController", sender: self)
     }
     
     func login()
@@ -83,12 +83,13 @@ class GetStartedViewController: UIViewController
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "ShowOnboardingGenderViewController"
+        if segue.identifier == "ShowOnboardingContainerViewController"
         {
             navigationController?.setNavigationBarHidden(true, animated: false)
             
             UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .None)
-
+            
+            //Add Child Vie Controller
         }
         else if segue.identifier == "ShowEmailLoginViewController"
         {

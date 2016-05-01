@@ -14,7 +14,7 @@ private enum TableSection: Int
     case ProductHeader = 0, Variant, Reviews, PriceHistory, Description, _Count
 }
 
-private enum Variant: Int
+private enum VariantType: Int
 {
     case Style = 0, Size, _Count
 }
@@ -39,7 +39,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var productIdentifier: String?
     
-    var product: Product?
+    var product: ProductResponse?
     
     var tempProductImages: Array<UIImage> = [UIImage(named: "blue-polo")!, UIImage(named: "blue-polo")!, UIImage(named: "blue-polo")!]
     
@@ -57,11 +57,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         super.init(coder: aDecoder)
         
         hidesBottomBarWhenPushed = true
-        
-        if let item = product
-        {
-            title = item.title
-        }
     }
     
     override func viewDidLoad() {
@@ -82,6 +77,32 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     func reloadData()
     {
         title = "Big Pony Polo"
+        
+        LRSessionManager.sharedManager.loadProduct(17, completionHandler: { (success, error, response) -> Void in
+          
+            if success
+            {
+                if let productResponse = response as? ProductResponse
+                {
+                    self.product = productResponse
+                    
+                    if let productTitle = self.product!.productName
+                    {
+                        self.title = productTitle
+                    }
+                }
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                })
+
+            }
+        })
     }
     
     func setupPickers()
@@ -223,7 +244,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .Variant:
                 
-                if let variant: Variant = Variant(rawValue: indexPath.row)
+                if let variant: VariantType = VariantType(rawValue: indexPath.row)
                 {
                     switch variant {
                     case .Style:
@@ -335,7 +356,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             switch tableSection {
             case .Variant:
                 
-                if let variant = Variant(rawValue: indexPath.row)
+                if let variant = VariantType(rawValue: indexPath.row)
                 {
                     if variant == .Style
                     {

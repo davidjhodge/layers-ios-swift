@@ -129,13 +129,13 @@
                         <outlet property="getStartedButton" destination="TDY-WP-stc" id="Ph2-2z-2vv"/>
                         <outlet property="heroImage" destination="kdb-rk-KmF" id="7XK-2B-l5a"/>
                         <outlet property="logoLabel" destination="GAL-Zl-dcr" id="luB-bh-ZpO"/>
-                        <segue destination="jPG-jr-uhn" kind="show" identifier="ShowOnboardingGenderViewController" id="ed7-GG-Iwk"/>
                         <segue destination="8D7-xr-Bul" kind="show" identifier="ShowEmailLoginViewController" id="SHk-El-dS7"/>
+                        <segue destination="6DD-nu-rNO" kind="show" identifier="ShowOnboardingContainerViewController" id="UKi-as-Q7z"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ryS-QK-sVr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1296" y="431"/>
+            <point key="canvasLocation" x="1227" y="431"/>
         </scene>
         <!--Email Create Account View Controller-->
         <scene sceneID="BBm-qB-C8l">
@@ -215,7 +215,53 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FCs-XM-ROD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2318" y="-286"/>
+            <point key="canvasLocation" x="2850" y="-398"/>
+        </scene>
+        <!--Onboarding Container View Controller-->
+        <scene sceneID="83b-TI-sD1">
+            <objects>
+                <viewController id="6DD-nu-rNO" customClass="OnboardingContainerViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="XpI-C3-AcQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="CEg-3x-lkG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="fVo-Un-exP">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" misplaced="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="fUj-8T-Miw">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="8"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="8" id="0gU-Ba-7C0"/>
+                                </constraints>
+                                <color key="progressTintColor" red="0.054901960780000002" green="0.14117647059999999" blue="0.41568627450000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="trackTintColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                            </progressView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zPS-2g-hjd">
+                                <rect key="frame" x="0.0" y="8" width="600" height="592"/>
+                                <connections>
+                                    <segue destination="Xjj-zb-rPl" kind="embed" id="bPF-Wf-p5T"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="fUj-8T-Miw" firstAttribute="top" secondItem="fVo-Un-exP" secondAttribute="top" id="BEd-yZ-GLO"/>
+                            <constraint firstAttribute="trailing" secondItem="fUj-8T-Miw" secondAttribute="trailing" id="Eys-bs-QXW"/>
+                            <constraint firstItem="zPS-2g-hjd" firstAttribute="leading" secondItem="fVo-Un-exP" secondAttribute="leading" id="XAk-00-YrR"/>
+                            <constraint firstItem="fUj-8T-Miw" firstAttribute="leading" secondItem="fVo-Un-exP" secondAttribute="leading" id="e5K-pT-WH0"/>
+                            <constraint firstItem="zPS-2g-hjd" firstAttribute="top" secondItem="fUj-8T-Miw" secondAttribute="bottom" id="lCB-Ob-jz8"/>
+                            <constraint firstItem="CEg-3x-lkG" firstAttribute="top" secondItem="zPS-2g-hjd" secondAttribute="bottom" id="u2o-oI-BBB"/>
+                            <constraint firstAttribute="trailing" secondItem="zPS-2g-hjd" secondAttribute="trailing" id="zSu-1v-PPR"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="progressView" destination="fUj-8T-Miw" id="d2k-3M-vNu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kH9-LP-qfe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1875" y="437"/>
         </scene>
         <!--Onboarding Gender View Controller-->
         <scene sceneID="Nn8-bv-xYm">
@@ -226,11 +272,11 @@
                         <viewControllerLayoutGuide type="bottom" id="4S1-11-eaE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="KgO-zU-7wj">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="592"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="261-cM-jKy">
-                                <rect key="frame" x="8" y="8" width="584" height="584"/>
+                                <rect key="frame" x="8" y="0.0" width="584" height="584"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I want to see clothes for" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1V5-1I-Or0">
                                         <rect key="frame" x="0.0" y="194" width="584" height="21"/>
@@ -238,7 +284,7 @@
                                             <constraint firstAttribute="height" constant="21" id="AHq-E8-wAe"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="16"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Ry-wk-jYc">
@@ -296,9 +342,13 @@
                             <constraint firstItem="261-cM-jKy" firstAttribute="leading" secondItem="KgO-zU-7wj" secondAttribute="leading" constant="8" id="5Hu-Dy-t8S"/>
                             <constraint firstAttribute="trailing" secondItem="261-cM-jKy" secondAttribute="trailing" constant="8" id="6do-jK-AeK"/>
                             <constraint firstItem="4S1-11-eaE" firstAttribute="top" secondItem="261-cM-jKy" secondAttribute="bottom" constant="8" id="Ev2-vw-ZeK"/>
-                            <constraint firstItem="261-cM-jKy" firstAttribute="top" secondItem="KgO-zU-7wj" secondAttribute="top" constant="8" id="haW-st-EMV"/>
+                            <constraint firstItem="261-cM-jKy" firstAttribute="top" secondItem="KgO-zU-7wj" secondAttribute="top" id="haW-st-EMV"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="nps-9s-W6A"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="600" height="592"/>
                     <connections>
                         <outlet property="menButton" destination="XSw-gt-ZqO" id="TA6-bd-Cfe"/>
                         <outlet property="womenButton" destination="6h4-fK-xt8" id="hSl-9G-kON"/>
@@ -307,7 +357,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ULQ-T8-AwK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2605" y="431"/>
+            <point key="canvasLocation" x="3267" y="427"/>
         </scene>
         <!--Onboarding Brands View Controller-->
         <scene sceneID="wLo-jk-wcq">
@@ -318,7 +368,7 @@
                         <viewControllerLayoutGuide type="bottom" id="cpM-nI-n7E"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="peI-pf-CTT">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="592"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select at least 3 of your favorite brands." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2BQ-c2-jR5">
@@ -327,7 +377,7 @@
                                     <constraint firstAttribute="height" constant="21" id="bK2-qv-Bji"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="14"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o3Q-2i-oGD">
@@ -341,7 +391,7 @@
                                 </state>
                             </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="SBV-kd-3eF">
-                                <rect key="frame" x="168" y="149" width="264" height="403"/>
+                                <rect key="frame" x="168" y="149" width="264" height="395"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="264" id="ddt-zU-3bC"/>
@@ -411,7 +461,7 @@
                                 </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuM-VV-tEv">
-                                <rect key="frame" x="0.0" y="552" width="600" height="48"/>
+                                <rect key="frame" x="0.0" y="544" width="600" height="48"/>
                                 <color key="backgroundColor" red="0.78431372549019607" green="0.78431372549019607" blue="0.78431372549019607" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="HQS-AJ-xNR"/>
@@ -437,6 +487,8 @@
                             <constraint firstItem="cpM-nI-n7E" firstAttribute="top" secondItem="cuM-VV-tEv" secondAttribute="bottom" id="kY6-tm-PxL"/>
                         </constraints>
                     </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="600" height="592"/>
                     <connections>
                         <outlet property="collectionView" destination="SBV-kd-3eF" id="6sW-1b-NiY"/>
                         <outlet property="nextButton" destination="cuM-VV-tEv" id="tkc-mC-Ljk"/>
@@ -446,7 +498,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dgl-il-kJb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3269" y="431"/>
+            <point key="canvasLocation" x="3977" y="427"/>
         </scene>
         <!--Onboarding Age View Controller-->
         <scene sceneID="ao1-Uc-NkB">
@@ -457,11 +509,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Dvh-V7-USu"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="CxF-r5-ei1">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="592"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R67-um-GFR">
-                                <rect key="frame" x="8" y="8" width="584" height="584"/>
+                                <rect key="frame" x="8" y="0.0" width="584" height="584"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z4u-qm-Pus">
                                         <rect key="frame" x="173" y="122" width="239" height="48"/>
@@ -472,7 +524,7 @@
                                         <string key="text">We personalize your account
 based on your age.</string>
                                         <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="18"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't worry, none of our content is age-restricted." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="GMw-Rc-NoM">
@@ -529,7 +581,7 @@ based on your age.</string>
                                 </state>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8VU-W0-soe">
-                                <rect key="frame" x="0.0" y="552" width="600" height="48"/>
+                                <rect key="frame" x="0.0" y="544" width="600" height="48"/>
                                 <color key="backgroundColor" red="0.78431372549019607" green="0.78431372549019607" blue="0.78431372549019607" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="zPV-4X-el5"/>
@@ -551,9 +603,11 @@ based on your age.</string>
                             <constraint firstItem="8VU-W0-soe" firstAttribute="leading" secondItem="CxF-r5-ei1" secondAttribute="leading" id="kGT-kY-xj7"/>
                             <constraint firstAttribute="trailing" secondItem="8VU-W0-soe" secondAttribute="trailing" id="mlC-cu-5em"/>
                             <constraint firstItem="R67-um-GFR" firstAttribute="leading" secondItem="CxF-r5-ei1" secondAttribute="leading" constant="8" id="q3M-cB-YS9"/>
-                            <constraint firstItem="R67-um-GFR" firstAttribute="top" secondItem="CxF-r5-ei1" secondAttribute="top" constant="8" id="tP8-zD-SgM"/>
+                            <constraint firstItem="R67-um-GFR" firstAttribute="top" secondItem="CxF-r5-ei1" secondAttribute="top" id="tP8-zD-SgM"/>
                         </constraints>
                     </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="600" height="592"/>
                     <connections>
                         <outlet property="ageTextField" destination="5G5-96-Q9p" id="qs4-cN-agX"/>
                         <outlet property="bottomStartButtonConstraint" destination="FIe-dW-Vq1" id="pBI-Bf-caE"/>
@@ -563,7 +617,7 @@ based on your age.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7lj-ku-vxx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3960" y="431"/>
+            <point key="canvasLocation" x="4688" y="427"/>
         </scene>
         <!--Email Login View Controller-->
         <scene sceneID="2HW-Dp-hVC">
@@ -645,7 +699,7 @@ based on your age.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lIT-gT-NQ5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2377" y="1130"/>
+            <point key="canvasLocation" x="1915" y="1129"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ECZ-HI-ApJ">
@@ -663,7 +717,25 @@ based on your age.</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UF4-cl-DvJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="733" y="431"/>
+            <point key="canvasLocation" x="546" y="431"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="pau-jM-J0a">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Xjj-zb-rPl" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="shJ-TW-Bae">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="jPG-jr-uhn" kind="relationship" relationship="rootViewController" id="gDg-Cn-v1i"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="45X-aR-Crs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2581" y="431"/>
         </scene>
     </scenes>
     <resources>

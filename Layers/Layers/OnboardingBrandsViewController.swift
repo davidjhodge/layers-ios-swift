@@ -52,6 +52,13 @@ class OnboardingBrandsViewController: UIViewController, UICollectionViewDataSour
         nextButton.addTarget(self, action: #selector(next), forControlEvents: .TouchUpInside)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kProgressViewNeedsUpdateNotification, object: nil, userInfo: ["hidden": false,
+            "progress": 0.6]))
+    }
+    
     // MARK: Actions
     func skip()
     {
