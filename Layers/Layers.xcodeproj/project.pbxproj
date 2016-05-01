@@ -10,7 +10,6 @@
 		35D2CA6AC9BC70A0D97C9B38 /* Pods_Layers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29055E7EACEA98F3107E42C /* Pods_Layers.framework */; };
 		70204A611CBF5E9B00868C00 /* ProductWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */; };
 		702FC2F11CC2D8470012969C /* UINavigationItem+BackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2F01CC2D8470012969C /* UINavigationItem+BackButton.m */; };
-		702FC2F91CC336FE0012969C /* FacebookUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2F81CC336FE0012969C /* FacebookUserResponse.swift */; };
 		702FC2FC1CC344960012969C /* EmailCreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */; };
 		702FC2FF1CC36A170012969C /* CreatePriceAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2FE1CC36A170012969C /* CreatePriceAlertViewController.swift */; };
 		702FC3011CC3FE6D0012969C /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */; };
@@ -37,6 +36,7 @@
 		70776FD81CCC1660002E6F25 /* BrandCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FD71CCC1660002E6F25 /* BrandCollectionCell.swift */; };
 		70776FDA1CCC16FA002E6F25 /* OnboardingBrandsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FD91CCC16FA002E6F25 /* OnboardingBrandsViewController.swift */; };
 		70776FDC1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FDB1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift */; };
+		70776FDE1CD64516002E6F25 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 70776FDD1CD64516002E6F25 /* GoogleService-Info.plist */; };
 		70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */; };
 		70987BEA1CB95F1900D86FBA /* ProductCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */; };
 		70987BEC1CB9657900D86FBA /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BEB1CB9657900D86FBA /* Product.swift */; };
@@ -76,7 +76,6 @@
 		70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWebViewController.swift; sourceTree = "<group>"; };
 		702FC2EF1CC2D8470012969C /* UINavigationItem+BackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+BackButton.h"; sourceTree = "<group>"; };
 		702FC2F01CC2D8470012969C /* UINavigationItem+BackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationItem+BackButton.m"; sourceTree = "<group>"; };
-		702FC2F81CC336FE0012969C /* FacebookUserResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookUserResponse.swift; sourceTree = "<group>"; };
 		702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailCreateAccountViewController.swift; sourceTree = "<group>"; };
 		702FC2FE1CC36A170012969C /* CreatePriceAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePriceAlertViewController.swift; sourceTree = "<group>"; };
 		702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
@@ -103,6 +102,7 @@
 		70776FD71CCC1660002E6F25 /* BrandCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandCollectionCell.swift; sourceTree = "<group>"; };
 		70776FD91CCC16FA002E6F25 /* OnboardingBrandsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingBrandsViewController.swift; sourceTree = "<group>"; };
 		70776FDB1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingAgeViewController.swift; sourceTree = "<group>"; };
+		70776FDD1CD64516002E6F25 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStateTransitioner.swift; sourceTree = "<group>"; };
 		70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewController.swift; sourceTree = "<group>"; };
 		70987BEB1CB9657900D86FBA /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
@@ -190,7 +190,6 @@
 		702FC2FA1CC337020012969C /* Responses */ = {
 			isa = PBXGroup;
 			children = (
-				702FC2F81CC336FE0012969C /* FacebookUserResponse.swift */,
 			);
 			name = Responses;
 			sourceTree = "<group>";
@@ -492,6 +491,7 @@
 				70987BF31CB9706200D86FBA /* View Controllers */,
 				70D84AA51CB9557300A70485 /* Assets.xcassets */,
 				70D84AA71CB9557300A70485 /* LaunchScreen.storyboard */,
+				70776FDD1CD64516002E6F25 /* GoogleService-Info.plist */,
 				70D84AAA1CB9557300A70485 /* Info.plist */,
 				70987C181CB98A3300D86FBA /* Layers-BridgingHeader.h */,
 			);
@@ -582,6 +582,7 @@
 				70987C051CB980B300D86FBA /* Oxygen-Bold.ttf in Resources */,
 				70987C111CB9832E00D86FBA /* Charter-Bold.ttf in Resources */,
 				70987C061CB980B300D86FBA /* Oxygen-Light.ttf in Resources */,
+				70776FDE1CD64516002E6F25 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,7 +675,6 @@
 				706FF8961CBD6B95007B26AD /* PriceGraphCell.swift in Sources */,
 				702FC3011CC3FE6D0012969C /* ContactUsViewController.swift in Sources */,
 				70987BFC1CB97A9900D86FBA /* LRWindow.swift in Sources */,
-				702FC2F91CC336FE0012969C /* FacebookUserResponse.swift in Sources */,
 				70987C3B1CBAB4BF00D86FBA /* SimpleWebViewController.swift in Sources */,
 				706FF8941CBD6B83007B26AD /* StyleCell.swift in Sources */,
 				706FF88E1CBCBFC9007B26AD /* ClosetCell.swift in Sources */,

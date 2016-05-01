@@ -44,6 +44,8 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
 //                                                            target: self,
 //                                                            action: #selector(filter))
         
+        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .None)
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter"), style: .Plain, target: self, action: #selector(filter))
         
         collectionView.backgroundColor = Color.BackgroundGrayColor

@@ -35,6 +35,12 @@ class OnboardingAgeViewController: UIViewController
         prepareToHandleKeyboard()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        ageTextField.becomeFirstResponder()
+    }
+    
     // MARK: Actions
     func start()
     {

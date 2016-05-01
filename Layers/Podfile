@@ -18,5 +18,8 @@ pod 'FBSDKCoreKit', '~> 4.11'
 pod 'FBSDKLoginKit', '~> 4.11'
 pod 'UITextView+Placeholder', '~> 1.2'
 pod 'NMRangeSlider'
+pod 'AWSCore'
+pod 'AWSCognitoIdentityProvider'
+
 end
 

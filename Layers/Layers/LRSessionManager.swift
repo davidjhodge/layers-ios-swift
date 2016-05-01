@@ -11,10 +11,18 @@ import Alamofire
 import SwiftyJSON
 import ObjectMapper
 import KeychainAccess
+import AWSCognitoIdentityProvider
+import AWSCore
 
 let kLRAPIBase = "http://52.22.85.12:8000/"
 let kAccessToken = "kAccessToken"
 let kCurrentUser = "kCurrentUser"
+
+//AWS
+private let kAWSCognitoClientId = "5gjvi9e5ikmntbduka8mp0jf9q"
+private let kAWSCognitoClientSecret = "5gjvi9e5ikmntbduka8mp0jf9q"
+private let kAWSCognitoPoolId = "us-east-1:c7d2ab80-046f-4b0d-8344-32db54981782"
+private let kAWSUserPoolId = "us-east-1_dHgDcpP9d"
 
 typealias LRCompletionBlock = ((success: Bool, error: String?, response:JSON?) -> Void)
 
@@ -37,6 +45,11 @@ class LRSessionManager
     var accessToken: String?
     var secretToken: String?
     
+    //AWS Cognito User Pool
+    var pool: AWSCognitoIdentityUserPool!
+    
+    var credentialsProvider: AWSCognitoCredentialsProvider!
+    
     // MARK: Initialization
     init ()
     {
@@ -50,8 +63,27 @@ class LRSessionManager
         
         networkManager = Alamofire.Manager(configuration: configuration)
         
+        // Configures AWS Cognito and User Pools
+        configureAWS()
+        
         // Restore session credentials
         restoreCredentials()
+    }
+    
+    private func configureAWS()
+    {
+        //AWS
+        AWSLogger.defaultLogger().logLevel = .Verbose
+        
+        credentialsProvider = AWSCognitoCredentialsProvider(regionType: .USEast1, identityPoolId: kAWSCognitoPoolId)
+        let defaultServiceConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: credentialsProvider)
+        AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration
+        
+        let userPoolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: kAWSCognitoClientId, clientSecret: kAWSCognitoClientSecret, poolId: kAWSUserPoolId)
+        
+        AWSCognitoIdentityUserPool.registerCognitoIdentityUserPoolWithUserPoolConfiguration(userPoolConfiguration, forKey: "AmazonCognitoIdentityProvider")
+        
+        pool = AWSCognitoIdentityUserPool(forKey: "AmazonCognitoIdentityProvider")
     }
     
     //MARK: Managing Account Credentials
@@ -131,6 +163,67 @@ class LRSessionManager
     }
     
     // MARK: API Access
+    
+    /**
+    *   Register using AWSCognito
+    */
+    func registerUnauthorized()
+    {
+        var cognitoIdentifier = ""
+        
+        if let cognitoId = credentialsProvider.identityId
+        {
+            cognitoIdentifier = cognitoId
+        }
+        else
+        {
+            credentialsProvider.getIdentityId().continueWithBlock({ (task: AWSTask!) -> AnyObject! in
+                
+                if task.error != nil
+                {
+                    log.debug("Error: \(task.error?.localizedDescription)")
+                }
+                else
+                {
+                    // Success!
+                    cognitoIdentifier = task.result as! String
+                }
+                
+                return nil
+            })
+        }
+    }
+    
+    func registerAuthorized(email: String, password: String)
+    {
+        if email.characters.count > 0 && password.characters.count > 0
+        {
+            pool.signUp(email, password: password, userAttributes: nil, validationData: nil).continueWithBlock( { (task: AWSTask) -> AnyObject! in
+              
+                if task.cancelled
+                {
+                    // Task Cancelled
+                    log.debug("Sign up task cancelled.")
+                }
+                else if task.error != nil
+                {
+                    log.error(task.error?.localizedDescription)
+                }
+                else
+                {
+                    if let user: AWSCognitoIdentityUser = task.result as! AWSCognitoIdentityUser
+                    {
+                    
+                    }
+                    
+                    
+                }
+                
+                return nil
+            })
+
+        }
+    }
     
     /**
      *  Register a new user.

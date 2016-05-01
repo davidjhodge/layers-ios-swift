@@ -28,18 +28,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>471</string>
-	<key>FacebookAppID</key>
-	<string>982100215236828</string>
-	<key>FacebookDisplayName</key>
-	<string>Layers</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbapi</string>
-		<string>fb-messenger-api</string>
-		<string>fbauth2</string>
-		<string>fbshareextension</string>
-	</array>
+	<string>494</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>

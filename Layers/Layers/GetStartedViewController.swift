@@ -31,6 +31,11 @@ class GetStartedViewController: UIViewController
         getStartedButton.addTarget(self, action: #selector(startOnboarding), forControlEvents: .TouchUpInside)
 
         alreadyHasAccountButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
+        
+        //TEMP
+//        LRSessionManager.sharedManager.registerUnauthorized()
+        
+        LRSessionManager.sharedManager.registerAuthorized("david@trylayers.com", password: "password123")
     }
     
     override func viewWillAppear(animated: Bool) {
