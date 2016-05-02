@@ -11,3 +11,6 @@
 "ENTER_VALID_EMAIL" = "Please enter a valid email.";
 "ENTER_VALID_PASSWORD" = "Please enter a valid password.";
 "NO_PRODUCT_ID" = "We coudn't locate this product in our database.";
+"NO_SHARE_URL" = "Whoops. We can't locate an item URL for you to share.";
+"NO_PRODUCT_REVIEWS" = "Could not locate any reviews for this product.";
+"NO_PRODUCT_ID" = "Product ID does not exist.";

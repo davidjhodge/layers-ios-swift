@@ -18,6 +18,10 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
 {
     @IBOutlet weak var tableView: UITableView!
     
+    var productId: NSNumber?
+    
+    var reviews: Array<Review>?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,6 +29,43 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
         
         tableView.estimatedRowHeight = 128.0
         tableView.rowHeight = UITableViewAutomaticDimension
+        
+        reloadData()
+    }
+    
+    // MARK: Networking
+    func reloadData()
+    {
+        if let productIdentifier = productId
+        {
+            LRSessionManager.sharedManager.loadReviewsForProduct(productIdentifier, completionHandler: { (success, error , response) -> Void in
+             
+                if success
+                {
+                    if let productReviews = response as? Array<Review>
+                    {
+                        self.reviews = productReviews
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.tableView.reloadData()
+                        })
+                    }
+                }
+                else
+                {
+                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
+            })
+        }
+        else
+        {
+            let alert = UIAlertController(title: "NO_PRODUCT_ID".localized, message: nil, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
     
     // MARK: Table View Data Source

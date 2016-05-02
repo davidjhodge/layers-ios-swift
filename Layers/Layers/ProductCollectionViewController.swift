@@ -21,7 +21,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     
     var hidingNavBarManager: HidingNavigationBarManager?
 
-    var products: Array<Product>?
+    var products: Array<ProductResponse>?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -62,15 +62,14 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
             hidingNavBarManager?.manageBottomBar(tabBar)
         }
         
-        //TEMP
-        products = Array<Product>()
-
-        let product = Product()
-        product.imageURL = "http://i.imgur.com/DqZZiou.png?1"
-        product.title = "Big Pony Polo"
-        product.retailPrice = 8950
-        product.salePrice = 4950
-        products?.append(product)
+//        let product = Product()
+//        product.imageURL = "http://i.imgur.com/DqZZiou.png?1"
+//        product.title = "Big Pony Polo"
+//        product.retailPrice = 8950
+//        product.salePrice = 4950
+//        products?.append(product)
+        
+        reloadData()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -102,6 +101,35 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
 //        return UIStatusBarStyle.LightContent
 //        
 //    }
+    
+    // MARK: Networking
+    func reloadData()
+    {
+        LRSessionManager.sharedManager.loadProductCollection({ (success, error, response) -> Void in
+            
+            if success
+            {
+                if let productsResponse = response as? Array<ProductResponse>
+                {
+                    self.products = productsResponse
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                     
+                        self.collectionView.reloadData()
+                    })
+                }
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                })
+            }
+        })
+    }
     
     // MARK: Actions
     
@@ -166,8 +194,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         if let items = products
         {
-//            return items.count
-            return 20
+            return items.count
         }
         
         return 0
@@ -177,24 +204,59 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         if let items = products
         {
-//            let product: Product = items[indexPath.row]
-            let product: Product = items[0]
+            let product: ProductResponse = items[indexPath.row]
             
             let cell: ProductCell = collectionView.dequeueReusableCellWithReuseIdentifier(kProductCellIdentfier, forIndexPath: indexPath) as! ProductCell
             
-            cell.productImageView.image = nil
-            cell.titleLabel.text = nil
-            cell.priceLabel.text = nil
+            // Use the first variant
+            if let variant = product.variants?[0]
+            {
+                //Set Image View with first image
+                if let firstImage = variant.images?[0]
+                {
+                    if let thumbnailUrl = firstImage.thumbnailUrl
+                    {
+                        cell.productImageView.sd_setImageWithURL(thumbnailUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                          
+                            if image != nil && cacheType == .None
+                            {
+                                cell.productImageView.alpha = 0.0
+                                
+                                UIView.animateWithDuration(0.5, animations: {
+                                    cell.productImageView.alpha = 1.0
+                                })
+                            }
+                        })
+                    }
+                }
+                
+                //Set Price for first size
+                if let firstSize = variant.sizes?[0]
+                {
+                    if let priceInfo = firstSize.prices?[0]
+                    {
+                        var currentPrice: NSNumber?
+                        var retailPrice: NSNumber?
+                        
+                        if let currPrice = priceInfo.price
+                        {
+                            currentPrice = currPrice
+                        }
+                        
+                        if let retail = priceInfo.retailPrice
+                        {
+                            retailPrice = retail
+                        }
+                        
+                        cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(retailPrice, salePrice: currentPrice)
+                    }
+                }
+            }
             
-//            if let url = product.imageURL
-//            {
-//                cell.productImageView.sd_setImageWithURL(NSURL(string: url))
-//            }
-            cell.productImageView.image = UIImage(named: "blue-polo.png")
-            
-            cell.titleLabel.text = product.title
-            
-            cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(product.retailPrice, salePrice: product.salePrice)
+            if let productTitle = product.productName, brand = product.brandName
+            {
+                cell.titleLabel.text = "\(brand) \(productTitle)"
+            }
             
             return cell
         }

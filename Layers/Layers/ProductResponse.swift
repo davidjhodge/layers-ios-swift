@@ -15,6 +15,8 @@ class ProductResponse: Mappable
 {
     var productName: String?
     
+    var brandName: String?
+    
     var outboundUrl: String?
     
     var reviews: Array<Review>?
@@ -45,6 +47,7 @@ class ProductResponse: Mappable
     
     func mapping(map: Map) {
         productName              <-  map["product_name"]
+        brandName                <-  map["brand_name"]
         outboundUrl              <-  map["outbound_url"]
         reviews                  <-  map["reviews"]
         sizeRatings              <-  map["size_ratings"]
