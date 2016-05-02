@@ -421,7 +421,77 @@ class LRSessionManager
             
             return
         }
-}
+    }
+    
+    func loadProductCollection(completionHandler: LRCompletionBlock?)
+    {
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/"))
+        
+        request.HTTPMethod = "GET"
+        
+        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+            
+            if success
+            {
+                if let jsonResponse = response
+                {
+                    let products = Mapper<ProductResponse>().mapArray(jsonResponse.arrayObject)
+                    
+                    if let completion = completionHandler
+                    {
+                        completion(success: success, error: error, response: products)
+                    }
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: success, error: error, response: nil)
+                }
+            }
+        })
+    }
+    
+    func loadReviewsForProduct(productId: NSNumber, completionHandler: LRCompletionBlock?)
+    {
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/\(productId.stringValue)"))
+        
+        request.HTTPMethod = "GET"
+        
+        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+            
+            if success
+            {
+                if let jsonResponse = response
+                {
+                    let product = Mapper<ProductResponse>().map(jsonResponse.dictionaryObject)
+                    
+                    if let reviews = product?.reviews
+                    {
+                        if let completion = completionHandler
+                        {
+                            completion(success: success, error: error, response: reviews)
+                        }
+                    }
+                    else
+                    {
+                        if let completion = completionHandler
+                        {
+                            completion(success: false, error: "NO_PRODUCT_REVIEWS".localized, response: nil)
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: success, error: error, response: nil)
+                }
+            }
+        })
+    }
     
     // Handle a change in the AWS Cognito Identity, such as when an unauthenticated user creates an account.
     @objc func identityDidChange(notification: NSNotification!)

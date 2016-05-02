@@ -45,9 +45,9 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var selectedSegmentIndex: Int?
     
-    var selectedStyle: String?
+    var selectedVariant: Variant?
     
-    var selectedSize: String?
+    var selectedSize: Size?
     
     //Dummy text fields to handle input views
     let styleTextField: UITextField = UITextField()
@@ -76,8 +76,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func reloadData()
     {
-        title = "Big Pony Polo"
-        
         LRSessionManager.sharedManager.loadProduct(17, completionHandler: { (success, error, response) -> Void in
           
             if success
@@ -86,10 +84,21 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 {
                     self.product = productResponse
                     
-                    if let productTitle = self.product!.productName
+                    // Set current Variant and size to the first index of each array by default
+                    if let firstVariant = self.product?.variants?[0]
                     {
-                        self.title = productTitle
+                        self.selectedVariant = firstVariant
+                        
+                        if let firstSize = firstVariant.sizes?[0]
+                        {
+                            self.selectedSize = firstSize
+                        }
                     }
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.refreshUI()
+                    })
                 }
             }
             else
@@ -100,9 +109,22 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
                     self.presentViewController(alert, animated: true, completion: nil)
                 })
-
             }
         })
+    }
+    
+    func refreshUI()
+    {
+        // Product Title
+        if let product = self.product
+        {
+            if let productTitle = product.productName
+            {
+                self.title = productTitle
+            }
+        }
+        
+        tableView.reloadData()
     }
     
     func setupPickers()
@@ -141,9 +163,29 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     // MARK: Actions
-    @IBAction func buy(sender: AnyObject)
+    func buy()
     {
         performSegueWithIdentifier("ShowProductWebViewController", sender: self)
+    }
+    
+    func like()
+    {
+        
+    }
+    
+    func share()
+    {
+        if let url = product?.outboundUrl
+        {
+            let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            presentViewController(activityViewController, animated: true, completion: {})
+        }
+        else
+        {
+            let alert = UIAlertController(title: "NO_SHARE_URL".localized, message: nil, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
     
     func createPriceAlert()
@@ -218,108 +260,144 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
-        if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
+        if let product = self.product
         {
-            switch tableSection {
-            case .ProductHeader:
-                
-                let cell: ProductHeaderCell = tableView.dequeueReusableCellWithIdentifier("ProductHeaderCell") as! ProductHeaderCell
-                
-                cell.setImageElements(tempProductImages)
-                
-                cell.brandLabel.text = "POLO RALPH LAUREN".uppercaseString
-                cell.nameLabel.text = "Big Pony Polo"
-                
-                // Needs to handle if no sale price exists
-                cell.largePriceLabel.attributedText = NSAttributedString(string: "$49.50", attributes: [NSForegroundColorAttributeName: Color.RedColor,
-                    NSFontAttributeName: Font.OxygenBold(size: 17.0)])
-                
-                cell.smallPriceLabel.attributedText = NSAttributedString(string: "$89.50", attributes: [NSForegroundColorAttributeName: Color.DarkTextColor,
-                    NSFontAttributeName: Font.OxygenRegular(size: 12.0),
-                    NSStrikethroughStyleAttributeName: NSNumber(integer: NSUnderlineStyle.StyleSingle.rawValue)])
-                
-                cell.selectionStyle = .None
-                
-                return cell
-                
-            case .Variant:
-                
-                if let variant: VariantType = VariantType(rawValue: indexPath.row)
-                {
-                    switch variant {
-                    case .Style:
-                        
-                        let cell: StyleCell = tableView.dequeueReusableCellWithIdentifier("StyleCell") as! StyleCell
-                        
-                        cell.styleLabel.text = "Navy Blue"
-                        
-                        cell.selectionStyle = .None
-                        
-                        return cell
-
-                    case .Size:
-                        
-                        let cell: SizeCell = tableView.dequeueReusableCellWithIdentifier("SizeCell") as! SizeCell
-                        
-                        cell.sizeLabel.text = "Large"
+            if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
+            {
+                switch tableSection {
+                case .ProductHeader:
                     
-                        cell.selectionStyle = .None
-                        
-                        return cell
-                        
-                    default:
-                        log.debug("cellForRowAtIndexPath Error")
-                        
+                    let cell: ProductHeaderCell = tableView.dequeueReusableCellWithIdentifier("ProductHeaderCell") as! ProductHeaderCell
+                    
+                    cell.setImageElements(tempProductImages)
+                    
+                    if let brandName = product.brandName
+                    {
+                        cell.brandLabel.text = brandName.uppercaseString
                     }
-                }
+                    
+                    if let productName = product.productName
+                    {
+                        cell.nameLabel.text = productName
+                    }
+                    
+                    // Price
+                    let numberFormatter: NSNumberFormatter = NSNumberFormatter()
+                    numberFormatter.numberStyle = .CurrencyStyle
+                    
+                    if let currentPrice = selectedSize?.prices?[0].price
+                    {
+                        let priceString = numberFormatter.stringFromNumber(currentPrice)!
+                        
+                        cell.largePriceLabel.attributedText = NSAttributedString(string: "\(priceString)", attributes: [NSForegroundColorAttributeName: Color.RedColor,
+                            NSFontAttributeName: Font.OxygenBold(size: 17.0)])
+                    }
 
-                
-            case .Reviews:
-                
-                if indexPath.row == 0
-                {
-                    // Header Cell
-                    let cell: OverallReviewCell = tableView.dequeueReusableCellWithIdentifier("OverallReviewCell") as! OverallReviewCell
+                    if let retailPrice = selectedSize?.prices?[0].retailPrice
+                    {
+                        let priceString = numberFormatter.stringFromNumber(retailPrice)!
+
+                        cell.smallPriceLabel.attributedText = NSAttributedString(string: "\(priceString)", attributes: [NSForegroundColorAttributeName: Color.DarkTextColor,
+                            NSFontAttributeName: Font.OxygenRegular(size: 12.0),
+                            NSStrikethroughStyleAttributeName: NSNumber(integer: NSUnderlineStyle.StyleSingle.rawValue)])
+                    }
                     
-                    let rating: Float = 4.5
+                    cell.ctaButton.addTarget(self, action: #selector(buy), forControlEvents: .TouchUpInside)
                     
-                    cell.ratingLabel.text = String(rating)
+                    cell.shareButton.setImage(UIImage(named: "share.png"), forState: .Normal)
+                    cell.shareButton.setImage(UIImage(named: "share-filled.png"), forState: .Selected)
                     
-                    cell.starView.rating = Double(rating)
-                    
-                    let reviewCount: Int = 25
-                    
-                    cell.rightLabel.text = "See all \(reviewCount) reviews".uppercaseString
+                    cell.likeButton.setImage(UIImage(named: "like.png"), forState: .Normal)
+                    cell.likeButton.setImage(UIImage(named: "like-filled.png"), forState: .Selected)
+
+                    cell.selectionStyle = .None
                     
                     return cell
+                    
+                case .Variant:
+                    
+                    if let variant: VariantType = VariantType(rawValue: indexPath.row)
+                    {
+                        switch variant {
+                        case .Style:
+                            
+                            let cell: StyleCell = tableView.dequeueReusableCellWithIdentifier("StyleCell") as! StyleCell
+                            
+                            if let variantName = selectedVariant?.styleName
+                            {
+                                cell.styleLabel.text = variantName
+                            }
+                            
+                            cell.selectionStyle = .None
+                            
+                            return cell
+                            
+                        case .Size:
+                            
+                            let cell: SizeCell = tableView.dequeueReusableCellWithIdentifier("SizeCell") as! SizeCell
+                            
+                            if let sizeName = selectedSize?.sizeTitle
+                            {
+                                cell.sizeLabel.text = sizeName
+                            }
+                            
+                            cell.selectionStyle = .None
+                            
+                            return cell
+                            
+                        default:
+                            log.debug("cellForRowAtIndexPath Error")
+                            
+                        }
+                    }
+                    
+                    
+                case .Reviews:
+                    
+                    if indexPath.row == 0
+                    {
+                        // Header Cell
+                        let cell: OverallReviewCell = tableView.dequeueReusableCellWithIdentifier("OverallReviewCell") as! OverallReviewCell
+                        
+                        if let rating = product.rating?[0].score, ratingTotal = product.rating?[0].total
+                        {
+                            cell.ratingLabel.text = String(rating)
+                        }
+                        
+                        if let reviewCount = product.reviews?.count
+                        {
+                            cell.rightLabel.text = "See all \(reviewCount) reviews".uppercaseString
+                        }
+                        
+                        return cell
+                    }
+                    
+                case .PriceHistory:
+                    
+                    let cell: PriceGraphCell = tableView.dequeueReusableCellWithIdentifier("PriceGraphCell") as! PriceGraphCell
+                    
+                    //Temp
+                    cell.setPercentChange(-7)
+                    
+                    cell.selectionStyle = .None
+                    
+                    cell.createPriceAlertButton.addTarget(self, action: #selector(createPriceAlert), forControlEvents: .TouchUpInside)
+                    
+                    return cell
+                    
+                    //            case .Description:
+                    
+                    //                let cell: FeaturesCell = tableView.dequeueReusableCellWithIdentifier("FeaturesCell") as! FeaturesCell
+                    //                
+                    //                cell.textView.text = "This is a sample description of a completely random product that I don't quite now of yet."
+                    //                
+                    //                cell.selectionStyle = .None
+                    //                
+                    //                return cell
+                    
+                default:
+                    return tableView.dequeueReusableCellWithIdentifier("UITableViewCell")!
                 }
-                
-            case .PriceHistory:
-                
-                let cell: PriceGraphCell = tableView.dequeueReusableCellWithIdentifier("PriceGraphCell") as! PriceGraphCell
-                
-                cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(8950, salePrice: 4950)
-                
-                cell.adviceLabel.text = "ADVICE: WATCH"
-                
-                cell.selectionStyle = .None
-                
-                cell.createPriceAlertButton.addTarget(self, action: #selector(createPriceAlert), forControlEvents: .TouchUpInside)
-                
-                return cell
-                
-//            case .Description:
-            
-//                let cell: FeaturesCell = tableView.dequeueReusableCellWithIdentifier("FeaturesCell") as! FeaturesCell
-//                
-//                cell.textView.text = "This is a sample description of a completely random product that I don't quite now of yet."
-//                
-//                cell.selectionStyle = .None
-//                
-//                return cell
-                
-            default:
-                return tableView.dequeueReusableCellWithIdentifier("UITableViewCell")!
             }
         }
         
@@ -391,7 +469,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             switch tableSection {
             case .ProductHeader:
-                return 403.0
+                return 451.0
                 
             case .Variant:
                 return 48.0
@@ -403,7 +481,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
                 
             case .PriceHistory:
-                return 326.0
+                return 142.0
                 
             case .Description:
                 return 178.0
@@ -481,18 +559,58 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 5
+        
+        if pickerView.tag == Picker.Style.rawValue
+        {
+            if let product = self.product
+            {
+                if let variants = product.variants
+                {
+                    return variants.count
+                }
+            }
+        }
+        else if pickerView.tag == Picker.Size.rawValue
+        {
+            if let currentVariant = selectedVariant
+            {
+                if let sizes = currentVariant.sizes
+                {
+                    return sizes.count
+                }
+            }
+        }
+        
+        return 0
     }
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
         if pickerView.tag == Picker.Style.rawValue
         {
-            return "Navy Blue"
+            if let product = self.product
+            {
+                if let variant = product.variants?[row]
+                {
+                    if let variantName = variant.styleName
+                    {
+                        return variantName
+                    }
+                }
+            }
         }
         else if pickerView.tag == Picker.Size.rawValue
         {
-            return "Large"
+            if let currentVariant = selectedVariant
+            {
+                if let size = currentVariant.sizes?[row]
+                {
+                    if let sizeName = size.sizeTitle
+                    {
+                        return sizeName
+                    }
+                }
+            }
         }
         
         return ""
@@ -503,12 +621,24 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         if pickerView.tag == Picker.Style.rawValue
         {
             //Should be index of product.styles
-            selectedStyle = "selectedStyle"
+            if let product = self.product
+            {
+                if let variant = product.variants?[0]
+                {
+                    selectedVariant = variant
+                }
+            }
         }
         else if pickerView.tag == Picker.Size.rawValue
         {
             //Should be index of product.sizes
-            selectedSize = "selectedSize"
+            if let currentVariant = selectedVariant
+            {
+                if let size = currentVariant.sizes?[row]
+                {
+                    selectedSize = size
+                }
+            }
         }
     }
     
@@ -517,6 +647,14 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if segue.identifier == "ShowReviewsViewController"
         {
+            if let currentProduct = self.product
+            {
+                if let destinationViewController = segue.destinationViewController as? ReviewsViewController
+                {
+                    destinationViewController.productId = currentProduct.productId
+                }
+            }
+            
 //            navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
         }
     }

@@ -142,17 +142,17 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                     case .Terms:
                         
                         //Show Terms
-                        performSegueWithIdentifier("ShowSimpleWebViewController", sender: self)
+                        performSegueWithIdentifier("ShowSimpleWebViewController", sender: indexPath)
                         
                     case .Privacy:
                         
                         // Show Privacy
-                        performSegueWithIdentifier("ShowSimpleWebViewController", sender: self)
+                        performSegueWithIdentifier("ShowSimpleWebViewController", sender: indexPath)
                         
                     case .OpenSource:
                         
                         //Show Open Source
-                        performSegueWithIdentifier("ShowSimpleWebViewController", sender: self)
+                        performSegueWithIdentifier("ShowSimpleWebViewController", sender: indexPath)
                     }
                 }
                 
@@ -202,10 +202,36 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if segue.identifier == "ShowSimpleWebViewController"
         {
+            var webUrlString: NSString?
+            
+            if let indexPath = sender as? NSIndexPath
+            {
+                if let legalTableRow: LegalTableRow = LegalTableRow(rawValue: indexPath.row)
+                {
+                    switch legalTableRow {
+                    case .Terms:
+                        
+                        webUrlString = "https://www.google.com/?gfe_rd=ssl"
+                        
+                    case .Privacy:
+                        
+                        webUrlString = "http://trylayers.com/privacy-policy/"
+                        
+                    case .OpenSource:
+                        
+                        webUrlString = "https://www.google.com/?gfe_rd=ssl"
+                    default:
+                        log.debug("Invalid Table Row Accessed in prepareForSegue")
+                    }
+                }
+            }
             //Currently sends the same url for everything
             if let destinationVC = segue.destinationViewController as? SimpleWebViewController
             {
-                destinationVC.webURL = NSURL(string: "https://www.google.com/?gfe_rd=ssl")
+                if let urlString = webUrlString as? String
+                {
+                    destinationVC.webURL = NSURL(string: urlString)
+                }
             }
         }
     }

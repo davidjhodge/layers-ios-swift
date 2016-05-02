@@ -12,13 +12,17 @@ import Charts
 
 class PriceGraphCell: UITableViewCell, ChartViewDelegate
 {
-    @IBOutlet weak var priceLabel: UILabel!
-    
-    @IBOutlet weak var adviceLabel: UILabel!
-    
     @IBOutlet weak var createPriceAlertButton: UIButton!
     
     @IBOutlet weak var chart: LineChartView!
+    
+    @IBOutlet weak var percentChangeLabel: UILabel!
+    
+    @IBOutlet weak var timeframeLabel: UILabel!
+    
+    @IBOutlet weak var oldPrice: UILabel!
+    
+    @IBOutlet weak var newPrice: UILabel!
     
     override func awakeFromNib() {
         
@@ -69,6 +73,22 @@ class PriceGraphCell: UITableViewCell, ChartViewDelegate
     func reloadData()
     {
         
+    }
+    
+    func setPercentChange(delta: Int)
+    {
+       if delta > 0
+       {
+        percentChangeLabel.attributedText = NSAttributedString(string: "+\(String(delta))", attributes: [NSForegroundColorAttributeName: Color.RedColor, NSFontAttributeName: Font.OxygenBold(size: 20.0)])
+        }
+        else if (delta == 0)
+       {
+        percentChangeLabel.attributedText = NSAttributedString(string: String(delta), attributes: [NSForegroundColorAttributeName: Color.DarkTextColor, NSFontAttributeName: Font.OxygenBold(size: 20.0)])
+        }
+        else if delta < 0
+       {
+        percentChangeLabel.attributedText = NSAttributedString(string: "\(String(delta))", attributes: [NSForegroundColorAttributeName: Color.GreenColor, NSFontAttributeName: Font.OxygenBold(size: 20.0)])
+        }
     }
     
     func tempCreateData()

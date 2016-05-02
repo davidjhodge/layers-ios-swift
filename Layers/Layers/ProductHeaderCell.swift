@@ -20,6 +20,11 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
     @IBOutlet weak var largePriceLabel: UILabel!
     @IBOutlet weak var smallPriceLabel: UILabel!
     
+    @IBOutlet weak var ctaButton: UIButton!
+    
+    @IBOutlet weak var shareButton: UIButton!
+    @IBOutlet weak var likeButton: UIButton!
+    
     var imageViews: Array<UIImageView> = Array<UIImageView>()
     
     override var frame: CGRect
