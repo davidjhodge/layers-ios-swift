@@ -40,7 +40,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Sign Up".uppercaseString, style: .Plain, target: self, action: #selector(createAccount))
         
 //        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "filter".uppercaseString,
@@ -253,9 +253,9 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 }
             }
             
-            if let productTitle = product.productName, brand = product.brandName
+            if let brand = product.brandName
             {
-                cell.titleLabel.text = "\(brand) \(productTitle)"
+                cell.brandLabel.text = brand.uppercaseString
             }
             
             return cell
@@ -267,7 +267,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     // MARK: Collection View Delegate
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        performSegueWithIdentifier("ShowProductViewController", sender: self)
+        performSegueWithIdentifier("ShowProductViewController", sender: indexPath)
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
@@ -287,12 +287,21 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
             {
 //                navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: self, action: nil)
 
-//                let destinationVC: ProductViewController = segue.destinationViewController as! ProductViewController
-//                destinationVC.productIdentifier = product.identifier
-
+                //Selected Product Index
+                if let indexPath = sender as? NSIndexPath
+                {
+                    if let productCollection = products
+                    {
+                        if let product = productCollection[indexPath.row] as ProductResponse?
+                        {
+                            if let destinationVC = segue.destinationViewController as? ProductViewController
+                            {
+                                destinationVC.productIdentifier = product.productId
+                            }
+                        }
+                    }
+                }
             }
-            
-            
         }
     }
 }

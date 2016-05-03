@@ -68,28 +68,28 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
                 tableView.userInteractionEnabled = false
                 createAccountButton.userInteractionEnabled = false
                 
-                LRSessionManager.sharedManager.register(emailInput, password: passwordInput, firstName: "", lastName: "", gender: "", age: 0, completion: { (success, error, response) -> Void in
-                    
-                    if success
-                    {
-                        AppStateTransitioner.transitionToMainStoryboard(true)
-                    }
-                    else
-                    {
-                        if error != nil
-                        {
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                              
-                                let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                                self.presentViewController(alert, animated: true, completion: nil)
-                            })
-                        }
-                        
-                        self.tableView.userInteractionEnabled = true
-                        self.createAccountButton.userInteractionEnabled = true
-                    }
-                })
+//                LRSessionManager.sharedManager.register(emailInput, password: passwordInput, firstName: "", lastName: "", gender: "", age: 0, completion: { (success, error, response) -> Void in
+//                    
+//                    if success
+//                    {
+//                        AppStateTransitioner.transitionToMainStoryboard(true)
+//                    }
+//                    else
+//                    {
+//                        if error != nil
+//                        {
+//                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                              
+//                                let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+//                                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+//                                self.presentViewController(alert, animated: true, completion: nil)
+//                            })
+//                        }
+//                        
+//                        self.tableView.userInteractionEnabled = true
+//                        self.createAccountButton.userInteractionEnabled = true
+//                    }
+//                })
             }
             else
             {
