@@ -32,7 +32,7 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
         
         tableView.backgroundColor = Color.BackgroundGrayColor
         
-        tableView.separatorColor = Color(red: 237.0, green: 237.0, blue: 237.0, alpha: 1.0)
+//        tableView.separatorColor = Color(red: 237.0, green: 237.0, blue: 237.0, alpha: 1.0)
     }
     
     func send()

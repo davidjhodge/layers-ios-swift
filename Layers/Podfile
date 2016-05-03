@@ -19,7 +19,9 @@ pod 'FBSDKLoginKit', '~> 4.11'
 pod 'UITextView+Placeholder', '~> 1.2'
 pod 'NMRangeSlider'
 pod 'AWSCore'
+pod 'AWSCognito', '~> 2.4'
 pod 'AWSCognitoIdentityProvider'
+pod 'MBProgressHUD'
 
 end
 

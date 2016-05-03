@@ -19,7 +19,7 @@
     NSMutableAttributedString *finalString = [[NSMutableAttributedString alloc] init];
     
     //Retail String
-    NSString *retailRawString = [NSString stringWithFormat:@"%.02f", [retailPrice floatValue] * 0.01];
+    NSString *retailRawString = [NSString stringWithFormat:@"%.02f", [retailPrice floatValue]];
     
     NSAttributedString *retailString = [[NSAttributedString alloc] initWithString:retailRawString attributes:@{
                                                                                                            NSFontAttributeName: [UIFont systemFontOfSize:10.0],
@@ -32,7 +32,7 @@
     if (salePrice)
     {
         //Sale String
-        NSString *saleRawString = [NSString stringWithFormat:@"%.02f ", [salePrice floatValue] * 0.01];
+        NSString *saleRawString = [NSString stringWithFormat:@"%.02f ", [salePrice floatValue]];
         
         NSAttributedString *saleString = [[NSAttributedString alloc] initWithString:saleRawString attributes:@{
                                                                                                                NSFontAttributeName: [UIFont boldSystemFontOfSize:15.0],

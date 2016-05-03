@@ -37,7 +37,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     @IBOutlet var pickerAccessoryView: PickerAccessoryView!
     
-    var productIdentifier: String?
+    var productIdentifier: NSNumber?
     
     var product: ProductResponse?
     
@@ -53,6 +53,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     let styleTextField: UITextField = UITextField()
     let sizeTextField: UITextField = UITextField()
 
+    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .White)
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -69,6 +71,9 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
 
         tableView.backgroundColor = Color.BackgroundGrayColor
         
+        spinner.hidesWhenStopped = true
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
+        
         setupPickers()
         
         reloadData()
@@ -76,41 +81,57 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func reloadData()
     {
-        LRSessionManager.sharedManager.loadProduct(17, completionHandler: { (success, error, response) -> Void in
-          
-            if success
-            {
-                if let productResponse = response as? ProductResponse
-                {
-                    self.product = productResponse
-                    
-                    // Set current Variant and size to the first index of each array by default
-                    if let firstVariant = self.product?.variants?[0]
-                    {
-                        self.selectedVariant = firstVariant
-                        
-                        if let firstSize = firstVariant.sizes?[0]
-                        {
-                            self.selectedSize = firstSize
-                        }
-                    }
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        self.refreshUI()
-                    })
-                }
-            }
-            else
-            {
+        if let productId = productIdentifier
+        {
+            startNetworkActivitySpinners()
+            
+            LRSessionManager.sharedManager.loadProduct(productId, completionHandler: { (success, error, response) -> Void in
+                
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     
-                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
-                })
-            }
-        })
+                    self.stopNetworkActivitySpinners()
+                    })
+                
+                if success
+                {
+                    if let productResponse = response as? ProductResponse
+                    {
+                        self.product = productResponse
+                        
+                        // Set current Variant and size to the first index of each array by default
+                        if let firstVariant = self.product?.variants?[0]
+                        {
+                            self.selectedVariant = firstVariant
+                            
+                            if let firstSize = firstVariant.sizes?[0]
+                            {
+                                self.selectedSize = firstSize
+                            }
+                        }
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.refreshUI()
+                        })
+                    }
+                }
+                else
+                {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                        self.presentViewController(alert, animated: true, completion: nil)
+                    })
+                }
+            })
+        }
+        else
+        {
+            let alert = UIAlertController(title: "NO_PRODUCT_ID".localized, message: nil, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
     
     func refreshUI()
@@ -162,15 +183,44 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         pickerAccessoryView.cancelButton.addTarget(self, action: #selector(pickerDidCancel), forControlEvents: .TouchUpInside)
     }
     
+    // MARK: Spinners
+    func startNetworkActivitySpinners()
+    {
+        spinner.startAnimating()
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    }
+    
+    func stopNetworkActivitySpinners()
+    {
+        spinner.stopAnimating()
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+    }
+    
     // MARK: Actions
-    func buy()
+    func buy(sender: AnyObject)
     {
         performSegueWithIdentifier("ShowProductWebViewController", sender: self)
     }
     
-    func like()
+    func like(sender: AnyObject)
     {
-        
+        // Like API Call
+        if sender is UIButton
+        {
+            let button = sender as! UIButton
+            
+            //This should be controlled by the model, not UI
+            if button.selected == true
+            {
+                // User unliked item
+                button.selected = false
+            }
+            else
+            {
+                // User liked item
+                button.selected = true
+            }
+        }
     }
     
     func share()
@@ -228,30 +278,47 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: UITableView Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int
     {
-        return TableSection._Count.rawValue
+        if product != nil
+        {
+            return TableSection._Count.rawValue
+        }
+        
+        return 0
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        if let tableSection: TableSection = TableSection(rawValue: section)
+        if let product = product
         {
-            switch tableSection {
-            case .ProductHeader:
-                return 1
-                
-            case .Variant:
-                return 2
-                
-            case .Reviews:
-                return 1
-                
-            case .PriceHistory:
-                return 1
-                
-            case .Description:
-                return 0
-            default:
-                return 0
+            if let tableSection: TableSection = TableSection(rawValue: section)
+            {
+                switch tableSection {
+                case .ProductHeader:
+                    return 1
+                    
+                case .Variant:
+                    return 2
+                    
+                case .Reviews:
+                    
+                    if let reviews = product.reviews
+                    {
+                        if reviews.count > 0
+                        {
+                            return 1
+                        }
+                    }
+                    
+                    return 0
+                    
+                case .PriceHistory:
+                    return 1
+                    
+                case .Description:
+                    return 0
+                default:
+                    return 0
+                }
             }
         }
         
@@ -302,13 +369,22 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             NSStrikethroughStyleAttributeName: NSNumber(integer: NSUnderlineStyle.StyleSingle.rawValue)])
                     }
                     
+                    // CTA
                     cell.ctaButton.addTarget(self, action: #selector(buy), forControlEvents: .TouchUpInside)
                     
+                    // Share
                     cell.shareButton.setImage(UIImage(named: "share.png"), forState: .Normal)
                     cell.shareButton.setImage(UIImage(named: "share-filled.png"), forState: .Selected)
+                    cell.shareButton.setImage(UIImage(named: "share-filled.png"), forState: .Highlighted)
+
+                    cell.shareButton.addTarget(self, action: #selector(share), forControlEvents: .TouchUpInside)
                     
+                    // Like
                     cell.likeButton.setImage(UIImage(named: "like.png"), forState: .Normal)
                     cell.likeButton.setImage(UIImage(named: "like-filled.png"), forState: .Selected)
+                    cell.likeButton.setImage(UIImage(named: "like-filled.png"), forState: .Highlighted)
+
+                    cell.likeButton.addTarget(self, action: #selector(like), forControlEvents: .TouchUpInside)
 
                     cell.selectionStyle = .None
                     
@@ -359,14 +435,17 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         // Header Cell
                         let cell: OverallReviewCell = tableView.dequeueReusableCellWithIdentifier("OverallReviewCell") as! OverallReviewCell
                         
-                        if let rating = product.rating?[0].score, ratingTotal = product.rating?[0].total
+                        if let firstRating = product.rating?[safe: 0]
                         {
-                            cell.ratingLabel.text = String(rating)
-                        }
-                        
-                        if let reviewCount = product.reviews?.count
-                        {
-                            cell.rightLabel.text = "See all \(reviewCount) reviews".uppercaseString
+                            if let ratingScore = firstRating.score, ratingTotal = firstRating.total
+                            {
+                                cell.ratingLabel.text = String(ratingScore)
+                            }
+                            
+                            if let reviewCount = product.reviews?.count
+                            {
+                                cell.rightLabel.text = "See all \(reviewCount) reviews".uppercaseString
+                            }
                         }
                         
                         return cell
@@ -507,7 +586,16 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 return 4.0
                 
             case .Reviews:
-                return 4.0
+                
+                if let reviews = product?.reviews
+                {
+                    if reviews.count > 0
+                    {
+                        return 4.0
+                    }
+                }
+                
+                return 0.01
                 
             case .PriceHistory:
                 return 4.0
@@ -536,7 +624,16 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 return 4.0
                 
             case .Reviews:
-                return 4.0
+                
+                if let reviews = product?.reviews
+                {
+                    if reviews.count > 0
+                    {
+                        return 4.0
+                    }
+                }
+                
+                return 0.01
                 
             case .PriceHistory:
                 return 4.0
@@ -656,6 +753,26 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             }
             
 //            navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+        }
+        
+        if segue.identifier == "ShowProductWebViewController"
+        {
+            if let currentProduct = self.product
+            {
+                if let destinationViewController = segue.destinationViewController as? ProductWebViewController
+                {
+                    if let url = currentProduct.outboundUrl
+                    {
+                        destinationViewController.webURL = NSURL(string: url)
+                    }
+                    
+                    if let brand = currentProduct.brandName
+                    {
+                        destinationViewController.brandName = brand
+
+                    }
+                }
+            }
         }
     }
     

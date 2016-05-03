@@ -15,15 +15,19 @@ class ProductWebViewController: UIViewController, UIWebViewDelegate
     
     var webURL: NSURL?
 
+    var brandName: String?
+    
     let spinner: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .White)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        webView.delegate = self
+        if let brand = brandName
+        {
+            title = brand
+        }
         
-        //TEMP
-        webURL = NSURL(string: "https://www.jcrew.com/mens_feature/NewArrivals/shirts/PRDOVR~E7999/E7999.jsp")
+        webView.delegate = self
         
         if let url = webURL
         {
@@ -32,7 +36,8 @@ class ProductWebViewController: UIViewController, UIWebViewDelegate
         }
         
         spinner.hidesWhenStopped = true
-        navigationItem.rightBarButtonItem?.customView = spinner
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
     }
 
     // MARK: Actions
@@ -41,22 +46,39 @@ class ProductWebViewController: UIViewController, UIWebViewDelegate
         navigationController?.popViewControllerAnimated(true)
     }
     
+    func startNetworkActivitySpinners()
+    {
+        spinner.startAnimating()
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    }
+    
+    func stopNetworkActivitySpinners()
+    {
+        spinner.stopAnimating()
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+    }
+    
     // MARK: Web View Delegate
     func webViewDidStartLoad(webView: UIWebView) {
 //        spinner.hidden = false
-        spinner.startAnimating()
+        startNetworkActivitySpinners()
     }
     
     func webViewDidFinishLoad(webView: UIWebView) {
-        spinner.stopAnimating()
+        stopNetworkActivitySpinners()
     }
     
     func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
         log.debug(error?.localizedDescription)
         
+        stopNetworkActivitySpinners()
+        
         let alert: UIAlertController = UIAlertController(title: error?.localizedDescription, message: nil, preferredStyle: .Alert)
         alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-        presentViewController(alert, animated: true, completion: nil)
+        presentViewController(alert, animated: true, completion: { () -> Void in
+         
+            
+        })
 
     }
 }

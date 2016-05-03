@@ -11,8 +11,10 @@ import Alamofire
 import SwiftyJSON
 import ObjectMapper
 import KeychainAccess
+
 import AWSCognitoIdentityProvider
 import AWSCore
+import AWSCognito
 
 import FBSDKLoginKit
 
@@ -48,9 +50,6 @@ class LRSessionManager
     var accessToken: String?
     var secretToken: String?
     
-    //AWS Cognito User Pool
-    var pool: AWSCognitoIdentityUserPool!
-    
     var credentialsProvider: AWSCognitoCredentialsProvider!
     
     var AWSCompletionHandler: AWSContinuationBlock?
@@ -76,7 +75,7 @@ class LRSessionManager
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(identityDidChange), name: AWSCognitoIdentityIdChangedNotification, object: nil)
                 
         // Restore session credentials
-        restoreCredentials()
+        resumeSession()
     }
     
     private func configureAWS()
@@ -87,89 +86,128 @@ class LRSessionManager
         credentialsProvider = AWSCognitoCredentialsProvider(regionType: .USEast1, identityPoolId: kAWSCognitoPoolId)
         let defaultServiceConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: credentialsProvider)
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration
-        
-        let userPoolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: kAWSCognitoClientId, clientSecret: kAWSCognitoClientSecret, poolId: kAWSUserPoolId)
-        
-        AWSCognitoIdentityUserPool.registerCognitoIdentityUserPoolWithUserPoolConfiguration(userPoolConfiguration, forKey: "AmazonCognitoIdentityProvider")
-        
-        pool = AWSCognitoIdentityUserPool(forKey: "AmazonCognitoIdentityProvider")
     }
     
     //MARK: Managing Account Credentials
     
-    /**
-     Restores the current session credentials from keychain.
-    */
-    private func restoreCredentials()
+    func resumeSession()
     {
-        log.debug("Attempting to restore session.")
+        // Retrieves cognito identity locally if one is cached, and from the AWS Cognito Remote service if none exists
+        refreshIdentityId()
         
-        if let token = keychain[kAccessToken], userJson = keychain[kCurrentUser]
+        if FBSDKAccessToken.currentAccessToken() != nil
         {
-            currentUser = Mapper<User>().map(userJson)
-            accessToken = token
-            
-            log.debug("Successfully restored session.")
-        }
-        else
-        {
-            log.warning("Failed to restore session.")
-            
-            clearCredentials()
+            syncCredentials([AWSIdentityProviderFacebook: FBSDKAccessToken.currentAccessToken().tokenString])
         }
     }
     
-    /**
-    Saves the current session credentials to keychain.
-    */
-    private func saveCredentials()
+    func syncCredentials(logins: [NSObject: AnyObject]?)
     {
-        if let userToken = accessToken, user = currentUser
-        {
-            log.debug("Saving session")
-            
-            keychain[kAccessToken] = userToken
-            keychain[kCurrentUser] = Mapper().toJSONString(user, prettyPrint: false)
-        }
-        else
-        {
-            log.error("Invalid Credentials. Session Cleared")
-            
-            keychain[kAccessToken] = nil
-            keychain[kCurrentUser] = nil
-        }
-    }
-    
-    private func clearCredentials()
-    {
-        accessToken = nil
+        var merge = [NSObject : AnyObject]()
         
-        currentUser = nil
+        //Add existing logins
+        if let previousLogins = self.credentialsProvider?.logins {
+            merge = previousLogins
+        }
         
-        saveCredentials()
+        //Add new logins
+        if let unwrappedLogins = logins {
+            for (key, value) in unwrappedLogins {
+                merge[key] = value
+            }
+            self.credentialsProvider?.logins = merge
+        }
     }
     
     func logout()
     {
-        clearCredentials()
-    }
-    
-    func isLoggedIn() -> Bool
-    {
-        if accessToken != nil && currentUser != nil
+        // Clear Facebook Token if needed
+        if FBSDKAccessToken.currentAccessToken() != nil
         {
-            return true
-        }
-        else
-        {
-            accessToken = nil
-            currentUser = nil
-            
-            log.debug("User is not logged in.")
+            FBSDKLoginManager().logOut()
         }
         
-        return false
+        // Clear AWS Datasets
+        AWSCognito.defaultCognito().wipe()
+        
+        // Clear AWS Cognito Credentials
+        credentialsProvider.logins = nil
+        credentialsProvider.clearKeychain()
     }
+    
+//    /**
+//     Restores the current session credentials from keychain.
+//    */
+//    private func restoreCredentials()
+//    {
+//        log.debug("Attempting to restore session.")
+//        
+//        if let token = keychain[kAccessToken], userJson = keychain[kCurrentUser]
+//        {
+//            currentUser = Mapper<User>().map(userJson)
+//            accessToken = token
+//            
+//            log.debug("Successfully restored session.")
+//        }
+//        else
+//        {
+//            log.warning("Failed to restore session.")
+//            
+//            clearCredentials()
+//        }
+//    }
+//    
+//    /**
+//    Saves the current session credentials to keychain.
+//    */
+//    private func saveCredentials()
+//    {
+//        if let userToken = accessToken, user = currentUser
+//        {
+//            log.debug("Saving session")
+//            
+//            keychain[kAccessToken] = userToken
+//            keychain[kCurrentUser] = Mapper().toJSONString(user, prettyPrint: false)
+//        }
+//        else
+//        {
+//            log.error("Invalid Credentials. Session Cleared")
+//            
+//            keychain[kAccessToken] = nil
+//            keychain[kCurrentUser] = nil
+//        }
+//    }
+//    
+//    private func clearCredentials()
+//    {
+//        accessToken = nil
+//        
+//        currentUser = nil
+//        
+//        saveCredentials()
+//    }
+//    
+//    func logout()
+//    {
+//        clearCredentials()
+//    }
+//    
+//    func isLoggedIn() -> Bool
+//    {
+//        if accessToken != nil && currentUser != nil
+//        {
+//            return true
+//        }
+//        else
+//        {
+//            accessToken = nil
+//            currentUser = nil
+//            
+//            log.debug("User is not logged in.")
+//        }
+//        
+//        return false
+//    }
     
     // MARK: API Access
     
@@ -178,6 +216,7 @@ class LRSessionManager
     */
     func registerUnauthorized()
     {
+        // If no identity token is cached, retreive one from AWS Cognito
         var cognitoIdentifier = ""
         
         if let cognitoId = credentialsProvider.identityId
@@ -194,6 +233,7 @@ class LRSessionManager
     
     func refreshIdentityId()
     {
+        // Retreives an existing cognito Id if one exists. If not, a new one is created
         credentialsProvider.getIdentityId().continueWithBlock({ (task: AWSTask!) -> AnyObject! in
             
             if task.error != nil
@@ -202,10 +242,10 @@ class LRSessionManager
             }
             else
             {
-                let logins = self.credentialsProvider.logins
-
                 // Success!
                 let cognitoIdentifier = task.result as! String
+                
+                let logins = self.credentialsProvider.identityProvider.logins()
                 
                 log.debug("Cognito Identifier: \(cognitoIdentifier)")
                 
@@ -219,25 +259,25 @@ class LRSessionManager
     {
         if email.characters.count > 0 && password.characters.count > 0
         {
-            pool.signUp(email, password: password, userAttributes: nil, validationData: nil).continueWithBlock( { (task: AWSTask) -> AnyObject! in
-              
-                if task.cancelled
-                {
-                    // Task Cancelled
-                    log.debug("Sign up task cancelled.")
-                }
-                else if task.error != nil
-                {
-                    log.error(task.error?.localizedDescription)
-                }
-                else
-                {
-                    let user: AWSCognitoIdentityUser = task.result as! AWSCognitoIdentityUser
-
-                }
-                
-                return nil
-            })
+//            pool.signUp(email, password: password, userAttributes: nil, validationData: nil).continueWithBlock( { (task: AWSTask) -> AnyObject! in
+//              
+//                if task.cancelled
+//                {
+//                    // Task Cancelled
+//                    log.debug("Sign up task cancelled.")
+//                }
+//                else if task.error != nil
+//                {
+//                    log.error(task.error?.localizedDescription)
+//                }
+//                else
+//                {
+//                    let user: AWSCognitoIdentityUser = task.result as! AWSCognitoIdentityUser
+//
+//                }
+//                
+//                return nil
+//            })
 
         }
     }
@@ -245,70 +285,70 @@ class LRSessionManager
     /**
      *  Register a new user.
      */
-    func register(email: String, password: String, firstName: String, lastName: String, gender: String, age: Int, completion: LRCompletionBlock?)
-    {
-        // Error check each param
-        if email.characters.count == 0 || password.characters.count == 0
-        {
-            if let completionHandler = completion
-            {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                    completionHandler(success: false, error: "INCOMPLETE_FIELDS".localized, response: nil)
-                })
-            }
-            
-            return
-        }
-        
-        //Send API
-        let postBody = ["email":        email,
-                        "password":     password,
-                        "first_name":   firstName,
-                        "last_name":    lastName,
-                        "gender":       gender,
-                        "age":          age]
-        
-        sendAPIRequest(jsonRequest(APIUrlAtEndpoint("user/register"), HTTPMethod: "POST", json: postBody), authorization: false, completion: { (success, error, response) -> Void in
-            
-            if success
-            {
-                if let userJson = response?["user"]
-                {
-                    self.currentUser = Mapper<User>().map(userJson.dictionaryObject)
-                    
-                    self.accessToken = response?["token"].string
-                    
-                    self.saveCredentials()
-                    
-                    //Success
-                    if let completionHandler = completion
-                    {
-                        completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
-                    }
-                    
-                }
-                else
-                {
-                    self.clearCredentials()
-                    
-                    if let completionHandler = completion
-                    {
-                        completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
-                    }
-                }
-            }
-            else
-            {
-                self.clearCredentials()
-                
-                if let completionHandler = completion
-                {
-                    completionHandler(success: false, error: error, response: nil)
-                }
-            }
-        })
-    }
+//    func register(email: String, password: String, firstName: String, lastName: String, gender: String, age: Int, completion: LRCompletionBlock?)
+//    {
+//        // Error check each param
+//        if email.characters.count == 0 || password.characters.count == 0
+//        {
+//            if let completionHandler = completion
+//            {
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    
+//                    completionHandler(success: false, error: "INCOMPLETE_FIELDS".localized, response: nil)
+//                })
+//            }
+//            
+//            return
+//        }
+//        
+//        //Send API
+//        let postBody = ["email":        email,
+//                        "password":     password,
+//                        "first_name":   firstName,
+//                        "last_name":    lastName,
+//                        "gender":       gender,
+//                        "age":          age]
+//        
+//        sendAPIRequest(jsonRequest(APIUrlAtEndpoint("user/register"), HTTPMethod: "POST", json: postBody), authorization: false, completion: { (success, error, response) -> Void in
+//            
+//            if success
+//            {
+//                if let userJson = response?["user"]
+//                {
+//                    self.currentUser = Mapper<User>().map(userJson.dictionaryObject)
+//                    
+//                    self.accessToken = response?["token"].string
+//                    
+//                    self.saveCredentials()
+//                    
+//                    //Success
+//                    if let completionHandler = completion
+//                    {
+//                        completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
+//                    }
+//                    
+//                }
+//                else
+//                {
+//                    self.clearCredentials()
+//                    
+//                    if let completionHandler = completion
+//                    {
+//                        completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
+//                    }
+//                }
+//            }
+//            else
+//            {
+//                self.clearCredentials()
+//                
+//                if let completionHandler = completion
+//                {
+//                    completionHandler(success: false, error: error, response: nil)
+//                }
+//            }
+//        })
+//    }
     
     func registerWithFacebook(completion: LRJsonCompletionBlock?)
     {
@@ -316,10 +356,17 @@ class LRSessionManager
         if (FBSDKAccessToken.currentAccessToken() != nil)
         {
             // Connect this Facebook account with the existing Amazon Cognito Identity
-            let fbToken = FBSDKAccessToken.currentAccessToken().tokenString
-            credentialsProvider.logins = [AWSIdentityProviderFacebook: fbToken]
+            self.credentialsProvider?.identityProvider.logins().continueWithBlock({ (task: AWSTask!) -> AnyObject! in
+                
+                if task.error != nil
+                {
+                    [AWSIdentityProviderFacebook: FBSDKAccessToken.currentAccessToken().tokenString]
+                }
             
-            completeLogin(credentialsProvider.logins)
+                return [AWSIdentityProviderFacebook: FBSDKAccessToken.currentAccessToken().tokenString]
+
+            })
+
             // Get user information with Facebook Graph API
             let request = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, age_range, link, gender, locale, picture, timezone, updated_time, verified, friends, email"], HTTPMethod: "GET")
             
@@ -346,36 +393,6 @@ class LRSessionManager
             })
         }
     }
-    
-    func completeLogin(logins: [NSObject: AnyObject]?)
-    {
-        var task: AWSTask?
-        
-        var merge = [NSObject : AnyObject]()
-        
-        //Add existing logins
-        if let previousLogins = self.credentialsProvider?.logins {
-            merge = previousLogins
-        }
-        
-        //Add new logins
-        if let unwrappedLogins = logins {
-            for (key, value) in unwrappedLogins {
-                merge[key] = value
-            }
-            self.credentialsProvider?.logins = merge
-        }
-        
-        task?.continueWithBlock {
-            (task: AWSTask!) -> AnyObject! in
-            if (task.error != nil) {
-                
-            }
-            
-            return task
-            }.continueWithBlock(AWSCompletionHandler!)
-    }
-    
     
     // MARK: Fetching Server Data
     func loadProduct(productId: NSNumber, completionHandler: LRCompletionBlock?)
@@ -494,11 +511,14 @@ class LRSessionManager
     }
     
     // Handle a change in the AWS Cognito Identity, such as when an unauthenticated user creates an account.
-    @objc func identityDidChange(notification: NSNotification!)
+    @objc func identityDidChange(notification: NSNotification?)
     {
-        if let userInfo = notification.userInfo as? [String: AnyObject]
+        if let notification = notification
         {
-            log.debug("AWSCognito Identity changed from: \(userInfo[AWSCognitoNotificationPreviousId]) to: \(userInfo[AWSCognitoNotificationNewId])")
+            if let userInfo = notification.userInfo as? [String: AnyObject]
+            {
+                print("AWSCognito Identity changed from: \(userInfo[AWSCognitoNotificationPreviousId]) to: \(userInfo[AWSCognitoNotificationNewId])")
+            }
         }
     }
     
@@ -629,8 +649,8 @@ class LRSessionManager
         }
     }
     
-    deinit
-    {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
+//    deinit
+//    {
+//        NSNotificationCenter.defaultCenter().removeObserver(self)
+//    }
 }

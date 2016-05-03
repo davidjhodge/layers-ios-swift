@@ -13,7 +13,7 @@ class ProductCell: UICollectionViewCell
 {
     @IBOutlet weak var productImageView: UIImageView!
 
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var brandLabel: UILabel!
     
     @IBOutlet weak var priceLabel: UILabel!
 }

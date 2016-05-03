@@ -54,7 +54,7 @@ class ProductResponse: Mappable
         variants                 <-  map["variants"]
         sku                      <-  map["sku"]
         categoryName             <-  map["category_name"]
-        productId                <-  map["sku"]
+        productId                <-  map["id"]
         rating                   <-  map["rating"]
         isInStock                <-  map["product_in_stock"]
         retailerId               <-  map["retailer_id"]

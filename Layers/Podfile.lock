@@ -1,5 +1,7 @@
 PODS:
   - Alamofire (3.3.1)
+  - AWSCognito (2.4.0):
+    - AWSCore (= 2.4.0)
   - AWSCognitoIdentityProvider (2.4.0):
     - AWSCore (= 2.4.0)
   - AWSCore (2.4.0)
@@ -19,6 +21,7 @@ PODS:
     - FBSDKCoreKit
   - HidingNavigationBar (0.3.0)
   - KeychainAccess (2.3.5)
+  - MBProgressHUD (0.9.2)
   - NMRangeSlider (1.2.1)
   - ObjectMapper (1.2.0)
   - SDWebImage (3.7.5):
@@ -30,6 +33,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - AWSCognito (~> 2.4)
   - AWSCognitoIdentityProvider
   - AWSCore
   - Charts
@@ -38,6 +42,7 @@ DEPENDENCIES:
   - FBSDKLoginKit (~> 4.11)
   - HidingNavigationBar (~> 0.3)
   - KeychainAccess
+  - MBProgressHUD
   - NMRangeSlider
   - ObjectMapper
   - SDWebImage
@@ -47,6 +52,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
+  AWSCognito: 1d96bd3ccda48918b00862895561dcb2a6080acf
   AWSCognitoIdentityProvider: 64410d394f6ea498c6741cd4dc7488f85b0f82c7
   AWSCore: 7e0da755786280a76ed4ab4ed8c1d38ced09b460
   Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
@@ -56,6 +62,7 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: bade9fc78277764149ccc5bfaadbf13c83175c6a
   HidingNavigationBar: 6378af14cea27bfef8be73470b081a36d45b87c4
   KeychainAccess: e283c1981a6c5655e1984cd411c6faf16fa165ae
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   NMRangeSlider: 317ded652431eb90501c8421d9cddc3930d891e6
   ObjectMapper: b1e9c7c8a9f6400b72690c80072c131504caa66f
   SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461

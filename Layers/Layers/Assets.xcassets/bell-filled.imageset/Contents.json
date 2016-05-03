@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "coathanger.png",
+      "filename" : "Bell Filled.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "coathanger@2x.png",
+      "filename" : "Bell Filled@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "coathanger@3x.png",
+      "filename" : "Bell Filled@3x.png",
       "scale" : "3x"
     }
   ],

@@ -669,7 +669,7 @@ based on your age.</string>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bqb-SN-el3">
                                 <rect key="frame" x="0.0" y="488" width="600" height="48"/>
-                                <color key="backgroundColor" red="0.054901960784313725" green="0.14117647058823529" blue="0.41176470588235292" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.5725490196078431" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="2Te-ve-XgX"/>
                                 </constraints>

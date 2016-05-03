@@ -55,15 +55,15 @@ class AppStateTransitioner
     static func transitionToMainStoryboard(animated: Bool)
     {
         let mainStoryboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-        let closetStoryboard = UIStoryboard(name: "Closet", bundle: NSBundle.mainBundle())
+        let priceAlertsStoryboard = UIStoryboard(name: "PriceAlerts", bundle: NSBundle.mainBundle())
         let accountStoryboard = UIStoryboard(name: "Account", bundle: NSBundle.mainBundle())
 
         let mainVC: UIViewController = mainStoryboard.instantiateInitialViewController()!
-        let closetVC: UIViewController = closetStoryboard.instantiateInitialViewController()!
+        let priceAlertsVC: UIViewController = priceAlertsStoryboard.instantiateInitialViewController()!
         let accountVC: UIViewController = accountStoryboard.instantiateInitialViewController()!
 
         let tabBarController: UITabBarController = UITabBarController()
-        tabBarController.viewControllers = [mainVC, closetVC, accountVC]
+        tabBarController.viewControllers = [mainVC, priceAlertsVC, accountVC]
         tabBarController.tabBar.translucent = false
         tabBarController.delegate = UIApplication.sharedApplication().delegate as? UITabBarControllerDelegate
         
