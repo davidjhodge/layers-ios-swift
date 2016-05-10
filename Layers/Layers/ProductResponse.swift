@@ -31,7 +31,7 @@ class ProductResponse: Mappable
     
     var productId: NSNumber?
     
-    var rating: Array<Rating>?
+    var rating: Rating?
     
     var isInStock: Bool?
     
@@ -55,7 +55,7 @@ class ProductResponse: Mappable
         sku                      <-  map["sku"]
         categoryName             <-  map["category_name"]
         productId                <-  map["id"]
-        rating                   <-  map["rating"]
+        rating                   <-  map["rating.0"]
         isInStock                <-  map["product_in_stock"]
         retailerId               <-  map["retailer_id"]
         description              <-  map["description"]

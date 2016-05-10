@@ -41,7 +41,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     var selectedVariant: Variant?
     
     var selectedSize: Size?
-    
+        
     //Dummy text fields to handle input views
     let styleTextField: UITextField = UITextField()
     let sizeTextField: UITextField = UITextField()
@@ -68,8 +68,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
         
 //        [self.tableView registerNib:[UINib nibWithNibName:@"SongCell" bundle:nil] forCellReuseIdentifier:@"SongCell"];
-
-        
         
         setupPickers()
         
@@ -459,7 +457,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         // Header Cell
                         let cell: OverallReviewCell = tableView.dequeueReusableCellWithIdentifier("OverallReviewCell") as! OverallReviewCell
                         
-                        if let firstRating = product.rating?[safe: 0]
+                        if let firstRating = product.rating
                         {
                             if let ratingScore = firstRating.score, ratingTotal = firstRating.total
                             {

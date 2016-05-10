@@ -28,6 +28,8 @@ private let kAWSCognitoClientSecret = "5gjvi9e5ikmntbduka8mp0jf9q"
 private let kAWSCognitoPoolId = "us-east-1:c7d2ab80-046f-4b0d-8344-32db54981782"
 private let kAWSUserPoolId = "us-east-1_dHgDcpP9d"
 
+let productCollectionPageSize = 20
+
 typealias LRCompletionBlock = ((success: Bool, error: String?, response:AnyObject?) -> Void)
 typealias LRJsonCompletionBlock = ((success: Bool, error: String?, response:JSON?) -> Void)
 
@@ -364,7 +366,6 @@ class LRSessionManager
                 }
             
                 return [AWSIdentityProviderFacebook: FBSDKAccessToken.currentAccessToken().tokenString]
-
             })
 
             // Get user information with Facebook Graph API
@@ -444,9 +445,7 @@ class LRSessionManager
     {
         if page >= 0
         {
-            let count = 20
-            
-            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/?page=\(page)&per_page=\(count)"))
+            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/?page=\(page)&per_page=\(productCollectionPageSize)"))
             
             request.HTTPMethod = "GET"
             
@@ -497,19 +496,10 @@ class LRSessionManager
                 {
                     let product = Mapper<ProductResponse>().map(jsonResponse.dictionaryObject)
                     
-                    if let reviews = product?.reviews
+                    
+                    if let completion = completionHandler
                     {
-                        if let completion = completionHandler
-                        {
-                            completion(success: success, error: error, response: reviews)
-                        }
-                    }
-                    else
-                    {
-                        if let completion = completionHandler
-                        {
-                            completion(success: false, error: "NO_PRODUCT_REVIEWS".localized, response: nil)
-                        }
+                        completion(success: success, error: error, response: product)
                     }
                 }
             }

@@ -20,7 +20,7 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var productId: NSNumber?
     
-    var reviews: Array<Review>?
+    var product: ProductResponse?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,9 +42,9 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
              
                 if success
                 {
-                    if let productReviews = response as? Array<Review>
+                    if let product = response as? ProductResponse
                     {
-                        self.reviews = productReviews
+                        self.product = product
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
@@ -87,7 +87,11 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 return 1
                 
             case .Reviews:
-                return 8
+                
+                if let reviews = product?.reviews
+                {
+                    return reviews.count
+                }
                 
             default:
                 return 0
@@ -106,12 +110,38 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 let cell: SimpleProductHeaderCell = tableView.dequeueReusableCellWithIdentifier("SimpleProductHeaderCell") as! SimpleProductHeaderCell
                 
-//                cell.productImageView.image = UIImage(named: "blue-polo.png")
-               
-                cell.brandLabel.text = "Polo Ralph Lauren".uppercaseString
-                
-                cell.productNameLabel.text = "Big Pony Polo"
-                
+                if let product = product
+                {
+                    cell.productImageView.image = UIImage()
+                    cell.brandLabel.text = ""
+                    cell.productNameLabel.text = ""
+                    
+                    if let imageUrl = product.variants?[safe: 0]?.images?[safe: 0]?.primaryUrl
+                    {
+                        cell.productImageView.sd_setImageWithURL(imageUrl, completed: { (image, error, cacheType, url) -> Void in
+                            
+                            if image != nil && cacheType != .Memory
+                            {
+                                cell.productImageView.alpha = 0.0
+                                
+                                UIView.animateWithDuration(0.3, animations: {
+                                    cell.productImageView.alpha = 1.0
+                                })
+                            }
+                        })
+                    }
+                    
+                    if let brand = product.brandName
+                    {
+                        cell.brandLabel.text = brand
+                    }
+                    
+                    if let productName = product.productName
+                    {
+                        cell.productNameLabel.text = productName
+                    }
+                }
+
                 return cell
                 
             case .OverallReviews:
@@ -120,11 +150,18 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 {
                     let cell: OverallReviewCell = tableView.dequeueReusableCellWithIdentifier("OverallReviewCell") as! OverallReviewCell
                     
-                    cell.ratingLabel.text = "4.5"
+                    cell.ratingLabel.text = ""
+                    cell.starView.rating = 0.0
+                    cell.rightLabel.text = ""
                     
-                    cell.starView.rating = 4.5
-                    
-                    cell.rightLabel.text = "Showing 1-8 of 25"
+                    if let rating = product?.rating?.score, reviews = product?.reviews
+                    {
+                        cell.ratingLabel.text = rating.stringValue
+                        
+                        cell.starView.rating = rating.doubleValue
+                        
+                        cell.rightLabel.text = "\(reviews.count) Reviews"
+                    }
                     
                     cell.selectionStyle = .None
                     
@@ -146,21 +183,41 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
             case .Reviews:
                 
-                let cell: ReviewCell = tableView.dequeueReusableCellWithIdentifier("ReviewCell") as! ReviewCell
-                
-                cell.starView.rating = 4.5
-                
-                cell.reviewTitleLabel.text = "Best shirt I've ever owned"
-                
-                cell.reviewContentLabel.text = "I was really impressed with how this shirt fit. I've never tried anything that fit this good. Especially not for the price. I'd definitely recommend this item to a friend."
-                
-                cell.sourceDomainLabel.text = "ralphlauren.com"
-                
-                cell.selectionStyle = .None
-                
-                return cell
-                
-                
+                if let reviews = product?.reviews
+                {
+                    let review = reviews[indexPath.row] as Review
+                    
+                    let cell: ReviewCell = tableView.dequeueReusableCellWithIdentifier("ReviewCell") as! ReviewCell
+                    
+                    cell.starView.rating = 0.0
+                    cell.reviewTitleLabel.text = ""
+                    cell.reviewContentLabel.text = ""
+                    cell.sourceDomainLabel.text = ""
+                    
+                    if let rating = review.rating?.score?.doubleValue
+                    {
+                        cell.starView.rating = rating
+                    }
+                    
+                    if let reviewTitle = review.title
+                    {
+                        cell.reviewTitleLabel.text = reviewTitle
+                    }
+                    
+                    if let reviewDescription = review.description
+                    {
+                        cell.reviewContentLabel.text = reviewDescription
+                    }
+                    
+                    if let author = review.author
+                    {
+                        cell.sourceDomainLabel.text = author
+                    }
+                    
+                    cell.selectionStyle = .None
+                    
+                    return cell
+                }
                 
             default:
                 return tableView.dequeueReusableCellWithIdentifier("UITableViewCell")! as UITableViewCell
@@ -180,6 +237,29 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 performSegueWithIdentifier("ShowProductWebViewController", sender: self)
             }
         }
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
+        {
+            switch tableSection {
+            case .ProductHeader:
+                return 96.0
+                
+            case .OverallReviews:
+                return 44.0
+                
+            case .Reviews:
+                return UITableViewAutomaticDimension
+                
+            default:
+                return 0.0
+            }
+        }
+        
+        return 0.0
+
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
