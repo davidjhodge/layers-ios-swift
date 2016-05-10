@@ -544,7 +544,7 @@ based on your age.</string>
                                             <constraint firstAttribute="height" constant="56" id="kTS-zg-QFf"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="48"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad" returnKeyType="done"/>
                                     </textField>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FlX-do-bAD">
                                         <rect key="frame" x="228" y="327" width="128" height="1"/>

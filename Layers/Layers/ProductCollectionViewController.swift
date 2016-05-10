@@ -140,7 +140,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     // MARK: Actions
     func search()
     {
-        print("Search")
+        performSegueWithIdentifier("ShowSearchViewController", sender: self)
     }
     
     func filter()

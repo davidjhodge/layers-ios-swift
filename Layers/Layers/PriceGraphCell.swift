@@ -12,7 +12,7 @@ import Charts
 
 class PriceGraphCell: UITableViewCell, ChartViewDelegate
 {
-    @IBOutlet weak var createPriceAlertButton: UIButton!
+    @IBOutlet weak var createSaleAlertButton: UIButton!
     
     @IBOutlet weak var chart: LineChartView!
     

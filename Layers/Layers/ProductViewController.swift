@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import MBProgressHUD
 
 private enum TableSection: Int
 {
@@ -68,6 +69,11 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
         
 //        [self.tableView registerNib:[UINib nibWithNibName:@"SongCell" bundle:nil] forCellReuseIdentifier:@"SongCell"];
+        
+        if navigationController?.navigationBarHidden == true
+        {
+            navigationController?.setNavigationBarHidden(false, animated: true)
+        }
         
         setupPickers()
         
@@ -235,15 +241,19 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func createPriceAlert()
+    func createSaleAlert()
     {
-        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+        // Send API call to create Price alert
         
-        if let priceAlertVC: CreatePriceAlertViewController = storyboard.instantiateViewControllerWithIdentifier("CreatePriceAlertViewController") as? CreatePriceAlertViewController
-        {
-            presentViewController(priceAlertVC, animated: true, completion: nil)
-        }
+        //On success
+        
+        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        hud.mode = .CustomView
+        hud.customView = UIImageView(image: UIImage(named: "checkmark"))
 
+        hud.labelText = "Sale Alert Created"
+        hud.labelFont = Font.OxygenBold(size: 17.0)
+        hud.hide(true, afterDelay: 1.5)
     }
     
     func showPicker(textField: UITextField?)
@@ -482,7 +492,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     cell.selectionStyle = .None
                     
-                    cell.createPriceAlertButton.addTarget(self, action: #selector(createPriceAlert), forControlEvents: .TouchUpInside)
+                    cell.createSaleAlertButton.addTarget(self, action: #selector(createSaleAlert), forControlEvents: .TouchUpInside)
                     
                     return cell
                     
