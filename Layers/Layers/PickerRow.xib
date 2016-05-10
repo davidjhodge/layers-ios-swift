@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" placeholderIntrinsicWidth="600" placeholderIntrinsicHeight="600" id="iN0-l3-epB" userLabel="Picker Row" customClass="PickerRow" customModule="Layers" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="48"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="rwq-qp-Pi3">
+                    <rect key="frame" x="272" y="4" width="40" height="40"/>
+                    <color key="backgroundColor" red="1" green="0.090196078430000007" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="40" id="GJL-lD-aKZ"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PFw-u0-lw8">
+                    <rect key="frame" x="56" y="13" width="208" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="JNR-Un-GVv"/>
+                    </constraints>
+                    <attributedString key="attributedText">
+                        <fragment content="Style">
+                            <attributes>
+                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <font key="NSFont" size="17" name="Oxygen-Regular"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="rwq-qp-Pi3" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="4" id="L4f-56-WIb"/>
+                <constraint firstItem="PFw-u0-lw8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="56" id="Omm-Qn-XIW"/>
+                <constraint firstItem="rwq-qp-Pi3" firstAttribute="leading" secondItem="PFw-u0-lw8" secondAttribute="trailing" constant="8" id="gbV-HC-9aA"/>
+                <constraint firstAttribute="bottom" secondItem="rwq-qp-Pi3" secondAttribute="bottom" constant="4" id="p75-eu-vG8"/>
+                <constraint firstAttribute="trailing" secondItem="rwq-qp-Pi3" secondAttribute="trailing" constant="8" id="wdr-H8-XO3"/>
+                <constraint firstItem="PFw-u0-lw8" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="xSE-Gt-8nt"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="colorSwatchView" destination="rwq-qp-Pi3" id="orQ-Rs-gtM"/>
+                <outlet property="textLabel" destination="PFw-u0-lw8" id="DVr-b4-wFQ"/>
+            </connections>
+            <point key="canvasLocation" x="259" y="560"/>
+        </view>
+    </objects>
+</document>

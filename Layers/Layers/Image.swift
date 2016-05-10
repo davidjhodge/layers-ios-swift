@@ -11,11 +11,9 @@ import ObjectMapper
 
 class Image: Mappable
 {
-    var thumbnailUrl: NSURL?
+    var primaryUrl: NSURL?
     
-    var mediumUrl: NSURL?
-    
-    var largeUrl: NSURL?
+    var alternateUrls: Array<NSURL>?
     
     required init?(_ map: Map) {
         
@@ -23,9 +21,8 @@ class Image: Mappable
     
     func mapping(map: Map)
     {
-        thumbnailUrl                <- (map["thumbnail_url"], URLTransform())
-        mediumUrl                   <- (map["medium_url"], URLTransform())
-        largeUrl                    <- (map["large_url"], URLTransform())
+        primaryUrl                <- (map["primary_url"], URLTransform())
+        alternateUrls             <- (map["alternate_urls"], URLTransform())
     }
     
 }

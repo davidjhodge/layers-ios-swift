@@ -39,6 +39,18 @@ class ProductWebViewController: UIViewController, UIWebViewDelegate
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.interactivePopGestureRecognizer?.enabled = false
+}
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        navigationController?.interactivePopGestureRecognizer?.enabled = true
+    }
 
     // MARK: Actions
     @IBAction func back(sender: AnyObject)

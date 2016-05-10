@@ -11,17 +11,12 @@ import UIKit
 
 private enum TableSection: Int
 {
-    case ProductHeader = 0, Variant, Reviews, PriceHistory, Description, _Count
+    case ProductHeader = 0, Variant, Reviews, PriceHistory, _Count
 }
 
 private enum VariantType: Int
 {
     case Style = 0, Size, _Count
-}
-
-private enum InfoType: Int
-{
-    case Features = 0, Description
 }
 
 private enum Picker: Int
@@ -40,8 +35,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     var productIdentifier: NSNumber?
     
     var product: ProductResponse?
-    
-    var tempProductImages: Array<UIImage> = [UIImage(named: "blue-polo")!, UIImage(named: "blue-polo")!, UIImage(named: "blue-polo")!]
     
     var selectedSegmentIndex: Int?
     
@@ -73,6 +66,10 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         
         spinner.hidesWhenStopped = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
+        
+//        [self.tableView registerNib:[UINib nibWithNibName:@"SongCell" bundle:nil] forCellReuseIdentifier:@"SongCell"];
+
+        
         
         setupPickers()
         
@@ -153,6 +150,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
 //        for (index, imageView) in imageViews.enumerate()
         for (index, picker) in pickers.enumerate()
         {
+            picker.backgroundColor = Color.BackgroundGrayColor
+            
             if index == Picker.Style.rawValue
             {
                 picker.tag = Picker.Style.rawValue
@@ -267,6 +266,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: Picker Actions
     func pickerDidFinish()
     {
+        tableView.reloadData()
+        
         view.endEditing(true)
     }
     
@@ -313,9 +314,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                 case .PriceHistory:
                     return 1
-                    
-                case .Description:
-                    return 0
+
                 default:
                     return 0
                 }
@@ -336,7 +335,30 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     let cell: ProductHeaderCell = tableView.dequeueReusableCellWithIdentifier("ProductHeaderCell") as! ProductHeaderCell
                     
-                    cell.setImageElements(tempProductImages)
+                    var productImages: Array<NSURL> = Array<NSURL>()
+                    
+                    if let imageDict = selectedVariant?.images?[0]
+                    {
+                        if let primaryUrl = imageDict.primaryUrl
+                        {
+                            
+                            let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize112)
+                            
+                            productImages.append(resizedPrimaryUrl)
+                            
+                            if let alternateUrls = imageDict.alternateUrls
+                            {
+                                for alternateUrl in alternateUrls
+                                {
+                                    let resizedAlternateUrl = NSURL.imageAtUrl(alternateUrl, imageSize: ImageSize.kImageSize112)
+                                    
+                                    productImages.append(resizedAlternateUrl)
+                                }
+                            }
+                        }
+                    }
+                    
+                    cell.setImageElements(productImages)
                     
                     if let brandName = product.brandName
                     {
@@ -348,25 +370,28 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         cell.nameLabel.text = productName
                     }
                     
-                    // Price
-                    let numberFormatter: NSNumberFormatter = NSNumberFormatter()
-                    numberFormatter.numberStyle = .CurrencyStyle
+                    cell.largePriceLabel.text = ""
+                    cell.smallPriceLabel.text = ""
                     
                     if let currentPrice = selectedSize?.prices?[0].price
                     {
-                        let priceString = numberFormatter.stringFromNumber(currentPrice)!
-                        
-                        cell.largePriceLabel.attributedText = NSAttributedString(string: "\(priceString)", attributes: [NSForegroundColorAttributeName: Color.RedColor,
-                            NSFontAttributeName: Font.OxygenBold(size: 17.0)])
-                    }
-
-                    if let retailPrice = selectedSize?.prices?[0].retailPrice
-                    {
-                        let priceString = numberFormatter.stringFromNumber(retailPrice)!
-
-                        cell.smallPriceLabel.attributedText = NSAttributedString(string: "\(priceString)", attributes: [NSForegroundColorAttributeName: Color.DarkTextColor,
-                            NSFontAttributeName: Font.OxygenRegular(size: 12.0),
-                            NSStrikethroughStyleAttributeName: NSNumber(integer: NSUnderlineStyle.StyleSingle.rawValue)])
+                        if let retailPrice = selectedSize?.prices?[0].retailPrice
+                        {
+                            if (currentPrice.floatValue != retailPrice.floatValue)
+                            {
+                                cell.largePriceLabel.attributedText = NSAttributedString.priceStringWithSalePrice(currentPrice, size: 17.0)
+                                
+                                cell.smallPriceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(retailPrice, size: 12.0, strikethrough: true)
+                            }
+                            else
+                            {
+                                cell.largePriceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(currentPrice, size: 17.0, strikethrough: false)
+                            }
+                        }
+                        else
+                        {
+                            cell.largePriceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(currentPrice, size: 17.0, strikethrough: false)
+                        }
                     }
                     
                     // CTA
@@ -401,7 +426,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             
                             if let variantName = selectedVariant?.styleName
                             {
-                                cell.styleLabel.text = variantName
+                                cell.styleLabel.text = variantName.capitalizedString
                             }
                             
                             cell.selectionStyle = .None
@@ -426,7 +451,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             
                         }
                     }
-                    
                     
                 case .Reviews:
                     
@@ -463,16 +487,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     cell.createPriceAlertButton.addTarget(self, action: #selector(createPriceAlert), forControlEvents: .TouchUpInside)
                     
                     return cell
-                    
-                    //            case .Description:
-                    
-                    //                let cell: FeaturesCell = tableView.dequeueReusableCellWithIdentifier("FeaturesCell") as! FeaturesCell
-                    //                
-                    //                cell.textView.text = "This is a sample description of a completely random product that I don't quite now of yet."
-                    //                
-                    //                cell.selectionStyle = .None
-                    //                
-                    //                return cell
                     
                 default:
                     return tableView.dequeueReusableCellWithIdentifier("UITableViewCell")!
@@ -562,10 +576,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             case .PriceHistory:
                 return 142.0
                 
-            case .Description:
-                return 178.0
-//                return UITableViewAutomaticDimension
-                
             default:
                 return 44.0
             }
@@ -599,9 +609,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .PriceHistory:
                 return 4.0
-                
-            case .Description:
-                return 0.01
                 
             default:
                 return 8.0
@@ -637,10 +644,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .PriceHistory:
                 return 4.0
-                
-            case .Description:
-                return 4.0
-                
+
             default:
                 return 8.0
             }
@@ -681,6 +685,78 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         return 0
     }
     
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+        
+        if view == nil
+        {
+            // Remove selection indicators
+            pickerView.subviews[1].hidden = true
+            pickerView.subviews[2].hidden = true
+            
+            if let pickerRow: PickerRow = NSBundle.mainBundle().loadNibNamed("PickerRow", owner: self, options: nil)[0] as? PickerRow
+            {
+                if pickerView.tag == Picker.Style.rawValue
+                {
+                    if let product = self.product
+                    {
+                        if let variant = product.variants?[row]
+                        {
+                            if let variantName = variant.styleName
+                            {
+                                pickerRow.textLabel.text = variantName.capitalizedString
+                            }
+                            
+                            if let color = variant.color
+                            {
+                                pickerRow.colorSwatchView.backgroundColor = color
+                            }
+                        }
+                    }
+                }
+                else if pickerView.tag == Picker.Size.rawValue
+                {
+                    if let currentVariant = selectedVariant
+                    {
+                        if let size = currentVariant.sizes?[row]
+                        {
+                            if let sizeName = size.sizeTitle
+                            {
+                                pickerRow.textLabel.text = sizeName.capitalizedString
+                            }
+                            
+                            pickerRow.colorSwatchView.hidden = true
+                        }
+                    }
+                }
+                
+                pickerRow.bounds = CGRectMake(pickerRow.bounds.origin.x, pickerRow.bounds.origin.y, UIScreen .mainScreen().bounds.width, pickerRow.bounds.size.height)
+                
+                return pickerRow
+            }
+            
+            return UIView()
+        }
+        else
+        {
+            if let reuseView = view
+            {
+                return reuseView
+            }
+        }
+
+        return UIView()
+    }
+    
+    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+        
+        return view.bounds.size.width
+    }
+    
+    func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        
+        return 48.0
+    }
+    
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
         if pickerView.tag == Picker.Style.rawValue
@@ -691,7 +767,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 {
                     if let variantName = variant.styleName
                     {
-                        return variantName
+                        return variantName.capitalizedString
                     }
                 }
             }
@@ -709,7 +785,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
             }
         }
-        
+    
         return ""
     }
     
@@ -720,7 +796,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             //Should be index of product.styles
             if let product = self.product
             {
-                if let variant = product.variants?[0]
+                if let variant = product.variants?[row]
                 {
                     selectedVariant = variant
                 }

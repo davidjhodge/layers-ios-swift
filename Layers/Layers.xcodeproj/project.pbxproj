@@ -75,6 +75,9 @@
 		70A410051CD6AB1600CB515B /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A410041CD6AB1600CB515B /* Image.swift */; };
 		70A410071CD6B0C400CB515B /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A410061CD6B0C400CB515B /* Review.swift */; };
 		70A71B9C1CC593D800B58B74 /* PickerAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A71B9B1CC593D800B58B74 /* PickerAccessoryView.swift */; };
+		70AF1A1F1CE1479200C0518C /* NSURLImageSIze.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A1E1CE1479200C0518C /* NSURLImageSIze.swift */; };
+		70AF1A211CE1651A00C0518C /* PickerRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70AF1A201CE1651A00C0518C /* PickerRow.xib */; };
+		70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A221CE1676200C0518C /* PickerRow.swift */; };
 		70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D84A9E1CB9557300A70485 /* AppDelegate.swift */; };
 		70D84AA41CB9557300A70485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA21CB9557300A70485 /* Main.storyboard */; };
 		70D84AA61CB9557300A70485 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA51CB9557300A70485 /* Assets.xcassets */; };
@@ -154,6 +157,9 @@
 		70A410041CD6AB1600CB515B /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		70A410061CD6B0C400CB515B /* Review.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		70A71B9B1CC593D800B58B74 /* PickerAccessoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerAccessoryView.swift; sourceTree = "<group>"; };
+		70AF1A1E1CE1479200C0518C /* NSURLImageSIze.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLImageSIze.swift; sourceTree = "<group>"; };
+		70AF1A201CE1651A00C0518C /* PickerRow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PickerRow.xib; sourceTree = "<group>"; };
+		70AF1A221CE1676200C0518C /* PickerRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerRow.swift; sourceTree = "<group>"; };
 		70D84A9B1CB9557200A70485 /* Layers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Layers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70D84A9E1CB9557300A70485 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70D84AA31CB9557300A70485 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -388,6 +394,7 @@
 				70987BFD1CB97ABE00D86FBA /* LRWindow */,
 				702FC2F21CC2D8720012969C /* UINavigationItem+BackButton */,
 				705390391CD7ED9100DA8E15 /* SafeIndex.swift */,
+				70AF1A1E1CE1479200C0518C /* NSURLImageSIze.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -497,6 +504,8 @@
 			isa = PBXGroup;
 			children = (
 				70A71B9B1CC593D800B58B74 /* PickerAccessoryView.swift */,
+				70AF1A221CE1676200C0518C /* PickerRow.swift */,
+				70AF1A201CE1651A00C0518C /* PickerRow.xib */,
 			);
 			name = Pickers;
 			sourceTree = "<group>";
@@ -615,6 +624,7 @@
 				70D84AA61CB9557300A70485 /* Assets.xcassets in Resources */,
 				70D84AA41CB9557300A70485 /* Main.storyboard in Resources */,
 				70987C0F1CB9832E00D86FBA /* Charter-Black.ttf in Resources */,
+				70AF1A211CE1651A00C0518C /* PickerRow.xib in Resources */,
 				705390341CD7D3C700DA8E15 /* PriceAlerts.storyboard in Resources */,
 				70987C281CB9A4A500D86FBA /* Account.storyboard in Resources */,
 				70987C071CB980B300D86FBA /* Oxygen-Regular.ttf in Resources */,
@@ -696,6 +706,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */,
 				706FF89A1CBD6E7A007B26AD /* AlternateReviewCell.swift in Sources */,
 				70776FDC1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift in Sources */,
 				702FC2FF1CC36A170012969C /* CreatePriceAlertViewController.swift in Sources */,
@@ -735,6 +746,7 @@
 				70776FC81CC685B0002E6F25 /* SliderCell.swift in Sources */,
 				706FF89E1CBD82D2007B26AD /* ReviewsViewController.swift in Sources */,
 				702FC2F11CC2D8470012969C /* UINavigationItem+BackButton.m in Sources */,
+				70AF1A1F1CE1479200C0518C /* NSURLImageSIze.swift in Sources */,
 				70A40FFF1CD6A4FD00CB515B /* Size.swift in Sources */,
 				706FF89C1CBD6E96007B26AD /* FeaturesCell.swift in Sources */,
 				70A40FF91CD6A16300CB515B /* Rating.swift in Sources */,
@@ -868,6 +880,7 @@
 			baseConfigurationReference = 2617CC4AE1CA59B7C7DFB253 /* Pods-Layers.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = Layers/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -882,6 +895,7 @@
 			baseConfigurationReference = 3FCE59FA6B494AAB3C36EE8C /* Pods-Layers.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = Layers/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

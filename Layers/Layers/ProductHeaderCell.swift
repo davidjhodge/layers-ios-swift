@@ -35,7 +35,7 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
         }
     }
     
-    var productImages: Array<UIImage>?
+    var productImages: Array<NSURL>?
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -46,7 +46,7 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
         layoutImageViews(false)
     }
     
-    func setImageElements(elements: Array<UIImage>)
+    func setImageElements(elements: Array<NSURL>)
     {
         productImages = elements
         
@@ -76,14 +76,16 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
             // New Image Views
             if let images = productImages
             {
-                for image in images
+                for imageUrl in images
                 {
                     let imageView = UIImageView()
                     imageView.clipsToBounds = true
                     imageView.contentMode = UIViewContentMode.ScaleAspectFit
                     
                     // Set Image
-                    imageView.image = image
+                    imageView.sd_setImageWithURL(imageUrl, completed: { (image, error, cacheType, url) -> Void in
+                        
+                    })
                     
                     scrollView.addSubview(imageView)
                     self.imageViews.append(imageView)
