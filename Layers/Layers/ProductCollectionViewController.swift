@@ -10,9 +10,6 @@ import Foundation
 import UIKit
 import HidingNavigationBar
 
-import FBSDKLoginKit
-import ObjectMapper
-
 class ProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
     private let kProductCellIdentfier = "ProductCell"
@@ -44,17 +41,12 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
 
     override func viewDidLoad() {
         super.viewDidLoad()
-                
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Sign Up".uppercaseString, style: .Plain, target: self, action: #selector(createAccount))
-        
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "filter".uppercaseString,
-//                                                            style: .Plain,
-//                                                            target: self,
-//                                                            action: #selector(filter))
         
         UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .None)
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter"), style: .Plain, target: self, action: #selector(filter))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Search, target: self, action: #selector(search))
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter"), style: .Plain, target: self, action: #selector(filter))
         
         collectionView.backgroundColor = Color.BackgroundGrayColor
         collectionView.alwaysBounceVertical = true
@@ -146,52 +138,9 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     }
     
     // MARK: Actions
-    
-    //TEMP
-    func createAccount()
+    func search()
     {
-        let loginManager: FBSDKLoginManager = FBSDKLoginManager()
-        
-        loginManager.logInWithReadPermissions(["public_profile", "user_friends", "email"], fromViewController: self, handler: {(result:FBSDKLoginManagerLoginResult!, error:NSError!) -> Void in
-            
-            if error != nil
-            {
-                log.debug(error.localizedDescription)
-            }
-            else if result.isCancelled
-            {
-                log.debug("User cancelled Facebook Login")
-            }
-            else
-            {
-                log.debug("User successfully logged in with Facebook!")
-                
-//                let fbAccessToken = result.token.tokenString
-                
-                // Facebook token now exists and can be accessed at FBSDKAccessToken.currentAccessToken() 
-                LRSessionManager.sharedManager.registerWithFacebook( { (success, error, result) -> Void in
-                    
-                    if success
-                    {
-                        log.debug("Facebook Registration Integration Complete.")
-                        
-                        let credential = LRSessionManager.sharedManager.credentialsProvider.identityId
-                        
-                        print(credential)
-                    }
-                    else
-                    {
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                            self.presentViewController(alert, animated: true, completion: nil)
-                        })
-                    }
-                })
-                
-            }
-        })
+        print("Search")
     }
     
     func filter()
@@ -290,15 +239,6 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         if let products = products
         {
-            if indexPath.row == products.count
-            {
-                // Start Spinner on Loading Cell
-                if let loadingCell = collectionView.cellForItemAtIndexPath(                        NSIndexPath(forItem: products.count, inSection: 0)) as? LoadingCell
-                {
-                    loadingCell.spinner.startAnimating()
-                }
-            }
-            
             // Insert next page of items as we near the end of the current list
             if indexPath.row == products.count - 2
             {
@@ -307,8 +247,12 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 {
                     currentPage = page + 1
                     
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+                    
                     LRSessionManager.sharedManager.loadProductCollection(currentPage!, completionHandler: { (success, error, response) -> Void in
                         
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+
                         if success
                         {
                             if let newProducts: Array<ProductResponse> = response as? Array<ProductResponse>
@@ -348,6 +292,21 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                             self.presentViewController(alert, animated: true, completion: nil)
                         }
                     })
+                }
+            }
+        }
+    }
+    
+    func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        
+        if let products = products
+        {
+            if indexPath.row == products.count
+            {
+                // Start Spinner on Loading Cell
+                if let loadingCell = cell as? LoadingCell
+                {
+                    loadingCell.spinner.startAnimating()
                 }
             }
         }

@@ -79,15 +79,15 @@ class PriceGraphCell: UITableViewCell, ChartViewDelegate
     {
        if delta > 0
        {
-        percentChangeLabel.attributedText = NSAttributedString(string: "+\(String(delta))", attributes: [NSForegroundColorAttributeName: Color.RedColor, NSFontAttributeName: Font.OxygenBold(size: 20.0)])
+        percentChangeLabel.attributedText = NSAttributedString(string: "+\(String(delta))%", attributes: [NSForegroundColorAttributeName: Color.RedColor, NSFontAttributeName: Font.OxygenBold(size: 20.0)])
         }
         else if (delta == 0)
        {
-        percentChangeLabel.attributedText = NSAttributedString(string: String(delta), attributes: [NSForegroundColorAttributeName: Color.DarkTextColor, NSFontAttributeName: Font.OxygenBold(size: 20.0)])
+        percentChangeLabel.attributedText = NSAttributedString(string: "\(String(delta))%", attributes: [NSForegroundColorAttributeName: Color.DarkTextColor, NSFontAttributeName: Font.OxygenBold(size: 20.0)])
         }
         else if delta < 0
        {
-        percentChangeLabel.attributedText = NSAttributedString(string: "\(String(delta))", attributes: [NSForegroundColorAttributeName: Color.GreenColor, NSFontAttributeName: Font.OxygenBold(size: 20.0)])
+        percentChangeLabel.attributedText = NSAttributedString(string: "\(String(delta))%", attributes: [NSForegroundColorAttributeName: Color.GreenColor, NSFontAttributeName: Font.OxygenBold(size: 20.0)])
         }
     }
     

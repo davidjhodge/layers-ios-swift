@@ -459,7 +459,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         
                         if let firstRating = product.rating
                         {
-                            if let ratingScore = firstRating.score, ratingTotal = firstRating.total
+                            if let ratingScore = firstRating.score
                             {
                                 cell.ratingLabel.text = String(ratingScore)
                             }
