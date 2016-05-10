@@ -78,6 +78,7 @@
 		70AF1A1F1CE1479200C0518C /* NSURLImageSIze.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A1E1CE1479200C0518C /* NSURLImageSIze.swift */; };
 		70AF1A211CE1651A00C0518C /* PickerRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70AF1A201CE1651A00C0518C /* PickerRow.xib */; };
 		70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A221CE1676200C0518C /* PickerRow.swift */; };
+		70AF1A261CE199BF00C0518C /* LoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A251CE199BF00C0518C /* LoadingCell.swift */; };
 		70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D84A9E1CB9557300A70485 /* AppDelegate.swift */; };
 		70D84AA41CB9557300A70485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA21CB9557300A70485 /* Main.storyboard */; };
 		70D84AA61CB9557300A70485 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA51CB9557300A70485 /* Assets.xcassets */; };
@@ -160,6 +161,7 @@
 		70AF1A1E1CE1479200C0518C /* NSURLImageSIze.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLImageSIze.swift; sourceTree = "<group>"; };
 		70AF1A201CE1651A00C0518C /* PickerRow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PickerRow.xib; sourceTree = "<group>"; };
 		70AF1A221CE1676200C0518C /* PickerRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerRow.swift; sourceTree = "<group>"; };
+		70AF1A251CE199BF00C0518C /* LoadingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingCell.swift; sourceTree = "<group>"; };
 		70D84A9B1CB9557200A70485 /* Layers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Layers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70D84A9E1CB9557300A70485 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70D84AA31CB9557300A70485 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -346,7 +348,7 @@
 			isa = PBXGroup;
 			children = (
 				70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */,
-				70987BF01CB9672200D86FBA /* ProductCell.swift */,
+				70AF1A241CE199B400C0518C /* Cells */,
 				70776FC41CC5F872002E6F25 /* Filter */,
 				70987C311CB9C9FC00D86FBA /* Product Detail */,
 			);
@@ -508,6 +510,15 @@
 				70AF1A201CE1651A00C0518C /* PickerRow.xib */,
 			);
 			name = Pickers;
+			sourceTree = "<group>";
+		};
+		70AF1A241CE199B400C0518C /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				70987BF01CB9672200D86FBA /* ProductCell.swift */,
+				70AF1A251CE199BF00C0518C /* LoadingCell.swift */,
+			);
+			name = Cells;
 			sourceTree = "<group>";
 		};
 		70D84A921CB9557200A70485 = {
@@ -760,6 +771,7 @@
 				70987C1B1CB98A7700D86FBA /* NSAttributedString+Pricing.m in Sources */,
 				70A410051CD6AB1600CB515B /* Image.swift in Sources */,
 				70987C3D1CBBF07B00D86FBA /* GetStartedViewController.swift in Sources */,
+				70AF1A261CE199BF00C0518C /* LoadingCell.swift in Sources */,
 				70987BEE1CB9658200D86FBA /* User.swift in Sources */,
 				70A71B9C1CC593D800B58B74 /* PickerAccessoryView.swift in Sources */,
 				70776FCB1CC69506002E6F25 /* RangeSlider.swift in Sources */,

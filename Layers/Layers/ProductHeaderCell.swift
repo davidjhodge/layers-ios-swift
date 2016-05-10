@@ -85,6 +85,14 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
                     // Set Image
                     imageView.sd_setImageWithURL(imageUrl, completed: { (image, error, cacheType, url) -> Void in
                         
+                        if image != nil && cacheType != .Memory
+                        {
+                            imageView.alpha = 0.0
+                            
+                            UIView.animateWithDuration(0.3, animations: {
+                                imageView.alpha = 1.0
+                            })
+                        }
                     })
                     
                     scrollView.addSubview(imageView)

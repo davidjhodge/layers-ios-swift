@@ -58,6 +58,8 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         collectionView.backgroundColor = Color.BackgroundGrayColor
         collectionView.alwaysBounceVertical = true
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
         
         hidingNavBarManager = HidingNavigationBarManager(viewController: self, scrollView: collectionView)
         hidingNavBarManager?.expansionResistance = 150
@@ -66,9 +68,9 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
             hidingNavBarManager?.manageBottomBar(tabBar)
         }
         
-        currentPage = 0
+        currentPage = 1
         
-        reloadData()
+        reloadData(currentPage!)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -106,9 +108,9 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
 //    }
     
     // MARK: Networking
-    func reloadData()
+    func reloadData(page: Int)
     {
-        if let page = currentPage
+        if page == 0 || page > 0
         {
             LRSessionManager.sharedManager.loadProductCollection(page, completionHandler: { (success, error, response) -> Void in
                 
@@ -134,6 +136,12 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                     })
                 }
             })
+        }
+        else
+        {
+            let alert = UIAlertController(title: "Page not specified.", message: nil, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
         }
     }
     
@@ -200,7 +208,8 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         if let items = products
         {
-            return items.count
+            // + 1 for Spinner
+            return items.count + 1
         }
         
         return 0
@@ -210,6 +219,13 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         if let items = products
         {
+            if indexPath.row == items.count
+            {
+                let loadingCell = collectionView.dequeueReusableCellWithReuseIdentifier("LoadingCell", forIndexPath: indexPath) as! LoadingCell
+                
+                return loadingCell
+            }
+            
             let product: ProductResponse = items[indexPath.row]
             
             let cell: ProductCell = collectionView.dequeueReusableCellWithReuseIdentifier(kProductCellIdentfier, forIndexPath: indexPath) as! ProductCell
@@ -218,17 +234,17 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
             if let variant = product.variants?[0]
             {
                 //Set Image View with first image
-                if let firstImage = variant.images?[0]
+                if let firstImage = variant.images?[safe: 0]
                 {
                     if let primaryUrl = firstImage.primaryUrl
                     {
                         cell.productImageView.sd_setImageWithURL(primaryUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
                           
-                            if image != nil && cacheType == .None
+                            if image != nil && cacheType != .Memory
                             {
                                 cell.productImageView.alpha = 0.0
                                 
-                                UIView.animateWithDuration(0.5, animations: {
+                                UIView.animateWithDuration(0.3, animations: {
                                     cell.productImageView.alpha = 1.0
                                 })
                             }
@@ -270,6 +286,73 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         return collectionView.dequeueReusableCellWithReuseIdentifier(kProductCellIdentfier, forIndexPath: indexPath)
     }
     
+    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        
+        if let products = products
+        {
+            if indexPath.row == products.count
+            {
+                // Start Spinner on Loading Cell
+                if let loadingCell = collectionView.cellForItemAtIndexPath(                        NSIndexPath(forItem: products.count, inSection: 0)) as? LoadingCell
+                {
+                    loadingCell.spinner.startAnimating()
+                }
+            }
+            
+            // Insert next page of items as we near the end of the current list
+            if indexPath.row == products.count - 2
+            {
+                // Get next page of results
+                if let page = currentPage
+                {
+                    currentPage = page + 1
+                    
+                    LRSessionManager.sharedManager.loadProductCollection(currentPage!, completionHandler: { (success, error, response) -> Void in
+                        
+                        if success
+                        {
+                            if let newProducts: Array<ProductResponse> = response as? Array<ProductResponse>
+                            {
+                                self.products?.appendContentsOf(newProducts)
+                                
+                                // Update UI
+                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                  
+                                    //Insert new products
+                                    collectionView.performBatchUpdates({ () -> Void in
+                                        
+                                        var indexPaths = Array<NSIndexPath>()
+
+                                        let index: Int = page * productCollectionPageSize
+                                        
+                                        for i in index...index+productCollectionPageSize-1
+                                        {
+                                            indexPaths.append(NSIndexPath(forRow: i, inSection: 0))
+                                        }
+                                        
+                                        collectionView.insertItemsAtIndexPaths(indexPaths)
+                                        
+                                        }, completion: nil)
+                                })
+                            }
+                        }
+                        else
+                        {
+                            if let loadingCell = collectionView.cellForItemAtIndexPath(                        NSIndexPath(forItem: products.count, inSection: 0)) as? LoadingCell
+                            {
+                                loadingCell.spinner.stopAnimating()
+                            }
+                            
+                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
+                        }
+                    })
+                }
+            }
+        }
+    }
+    
     // MARK: Collection View Delegate
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
@@ -278,11 +361,20 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
-        let flowLayout: UICollectionViewFlowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        
-        let width: CGFloat = (collectionView.bounds.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right - 8) * 0.5
-        
-        return CGSizeMake(width, 226.0)
+        if indexPath.row == products?.count
+        {
+            // Size for Loading Cell
+            return CGSizeMake(collectionView.bounds.size.width - 16, 40.0)
+        }
+        else
+        {
+            // Size for Product Cell
+            let flowLayout: UICollectionViewFlowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+            
+            let width: CGFloat = (collectionView.bounds.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right - 8) * 0.5
+            
+            return CGSizeMake(width, 226.0)
+        }
     }
     
     // MARK: Navigation
