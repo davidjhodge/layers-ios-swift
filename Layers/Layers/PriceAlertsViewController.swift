@@ -59,7 +59,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         spinny.startAnimating()
         
         // SHOULD LOAD ONLY PRICE ALERT ITEMS FOR USER
-        LRSessionManager.sharedManager.loadProductCollection({ (success, error, response) -> Void in
+        LRSessionManager.sharedManager.loadProductCollection(0, completionHandler: { (success, error, response) -> Void in
             
             self.spinny.stopAnimating()
 

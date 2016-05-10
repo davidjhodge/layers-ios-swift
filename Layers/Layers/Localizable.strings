@@ -14,3 +14,4 @@
 "NO_SHARE_URL" = "Whoops. We can't locate an item URL for you to share.";
 "NO_PRODUCT_REVIEWS" = "Could not locate any reviews for this product.";
 "NO_PRODUCT_ID" = "Product ID does not exist.";
+"INVALID_PARAMETERS" = "Invalid parameters.";

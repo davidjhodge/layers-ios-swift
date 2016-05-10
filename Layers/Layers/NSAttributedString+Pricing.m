@@ -7,8 +7,14 @@
 //
 
 #import "NSAttributedString+Pricing.h"
-#import <UIKit/UIKit.h>
 #import "Layers-Swift.h"
+
+CGFloat const kRetailStringSizeStrikethroughSmall = 10.0;
+CGFloat const kRetailStringSizeMedium = 15.0;
+CGFloat const kRetailStringSizeLarge = 17.0;
+
+CGFloat const kSaleStringSizeMedium = 15.0;
+CGFloat const kSaleStringSizeLarge = 17.0;
 
 @implementation NSAttributedString (Pricing)
 
@@ -19,31 +25,117 @@
     NSMutableAttributedString *finalString = [[NSMutableAttributedString alloc] init];
     
     //Retail String
-    NSString *retailRawString = [NSString stringWithFormat:@"%.02f", [retailPrice floatValue]];
+    NSString *retailRawString = @"";
+    
+    if ([retailPrice floatValue] == [retailPrice integerValue])
+    {
+        retailRawString = [NSString stringWithFormat:@"%ld", (long)[retailPrice integerValue]];
+    }
+    else
+    {
+        retailRawString = [NSString stringWithFormat:@"%.02f ", [retailPrice floatValue]];
+    }
+    
+    // If sale price is the same as the retail price, just show the retail price
+    if ([retailPrice floatValue] == [salePrice floatValue])
+    {
+        return [[NSAttributedString alloc] initWithString:retailRawString attributes:@{NSFontAttributeName: [Font OxygenRegularWithSize:kRetailStringSizeMedium],
+            NSForegroundColorAttributeName: [UIColor blackColor]}];
+    }
     
     NSAttributedString *retailString = [[NSAttributedString alloc] initWithString:retailRawString attributes:@{
-                                                                                                           NSFontAttributeName: [UIFont systemFontOfSize:10.0],
+                                                                                                                                            NSFontAttributeName: [Font OxygenBoldWithSize:kRetailStringSizeStrikethroughSmall],
                                                                                                            NSForegroundColorAttributeName:[Color DarkTextColor],
                                                                                                            NSStrikethroughStyleAttributeName:
                                                                                                                [NSNumber numberWithInteger:NSUnderlineStyleSingle]}
                                         ];
     
-    
     if (salePrice)
     {
         //Sale String
-        NSString *saleRawString = [NSString stringWithFormat:@"%.02f ", [salePrice floatValue]];
+        NSString *saleRawString = @"";
+        
+        if ([salePrice floatValue] == [salePrice integerValue])
+        {
+            saleRawString = [NSString stringWithFormat:@"%ld", (long)[salePrice integerValue]];
+        }
+        else
+        {
+            saleRawString = [NSString stringWithFormat:@"%.02f ", [salePrice floatValue]];
+        }
         
         NSAttributedString *saleString = [[NSAttributedString alloc] initWithString:saleRawString attributes:@{
-                                                                                                               NSFontAttributeName: [UIFont boldSystemFontOfSize:15.0],
+                                                                                                               NSFontAttributeName: [Font OxygenBoldWithSize:kSaleStringSizeMedium],
                                                                                                                NSForegroundColorAttributeName:[Color RedColor]}];
         
+        NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" " attributes:@{NSFontAttributeName: [Font OxygenBoldWithSize:15.0]}];
+        [finalString appendAttributedString:space];
         [finalString appendAttributedString:saleString];
     }
     
     [finalString appendAttributedString:retailString];
     
     return finalString;
+}
+
++ (NSAttributedString *)priceStringWithRetailPrice:(NSNumber *)retailPrice size:(CGFloat)size strikethrough:(BOOL)strikethrough
+{
+    if (!retailPrice) return [[NSAttributedString alloc] init];
+    
+    CGFloat textSize = size;
+    
+    if (!size || textSize == 0 || textSize < 0)
+    {
+        textSize = kRetailStringSizeMedium;
+    }
+    
+    NSString *retailString = @"";
+    if ([retailPrice floatValue] == [retailPrice integerValue])
+    {
+        retailString = [NSString stringWithFormat:@"%ld", (long)[retailPrice integerValue]];
+    }
+    else
+    {
+        retailString = [NSString stringWithFormat:@"%.02f ", [retailPrice floatValue]];
+    }
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:retailString attributes:@{
+                                                                                                                NSFontAttributeName: [Font OxygenBoldWithSize:size],
+                                                                                                                NSForegroundColorAttributeName:[Color DarkTextColor]
+                                                                                                                }];
+    
+    if (strikethrough == YES)
+    {
+        [attributedString addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, retailString.length)];
+    }
+    
+    return (NSAttributedString *)attributedString;
+}
+
++ (NSAttributedString *)priceStringWithSalePrice:(NSNumber *)salePrice size:(CGFloat)size
+{
+    if (!salePrice) return [[NSAttributedString alloc] init];
+    
+    CGFloat textSize = size;
+    
+    if (!size || textSize == 0 || textSize < 0)
+    {
+        textSize = kRetailStringSizeMedium;
+    }
+    
+    NSString *saleString = @"";
+    if ([salePrice floatValue] == [salePrice integerValue])
+    {
+        saleString = [NSString stringWithFormat:@"%ld", (long)[salePrice integerValue]];
+    }
+    else
+    {
+        saleString = [NSString stringWithFormat:@"%.02f ", [salePrice floatValue]];
+    }
+    
+    return [[NSAttributedString alloc] initWithString:saleString attributes:@{
+                                                                                 NSFontAttributeName: [Font OxygenBoldWithSize:kSaleStringSizeMedium],
+                                                                                 NSForegroundColorAttributeName:[Color RedColor]}];
 }
 
 @end

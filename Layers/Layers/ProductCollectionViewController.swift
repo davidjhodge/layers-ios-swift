@@ -19,9 +19,13 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
 
     @IBOutlet weak var collectionView: UICollectionView!
     
+    @IBOutlet weak var collectionViewBottomLayoutConstraint: NSLayoutConstraint!
+    
     var hidingNavBarManager: HidingNavigationBarManager?
 
     var products: Array<ProductResponse>?
+    
+    var currentPage: Int?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -62,12 +66,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
             hidingNavBarManager?.manageBottomBar(tabBar)
         }
         
-//        let product = Product()
-//        product.imageURL = "http://i.imgur.com/DqZZiou.png?1"
-//        product.title = "Big Pony Polo"
-//        product.retailPrice = 8950
-//        product.salePrice = 4950
-//        products?.append(product)
+        currentPage = 0
         
         reloadData()
     }
@@ -82,6 +81,10 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         super.viewDidLayoutSubviews()
         
         hidingNavBarManager?.viewDidLayoutSubviews()
+        
+        if let tabBar = navigationController?.tabBarController?.tabBar {
+        collectionViewBottomLayoutConstraint.constant = (-1 * tabBar.bounds.size.height) + 8
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -105,30 +108,33 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     // MARK: Networking
     func reloadData()
     {
-        LRSessionManager.sharedManager.loadProductCollection({ (success, error, response) -> Void in
-            
-            if success
-            {
-                if let productsResponse = response as? Array<ProductResponse>
+        if let page = currentPage
+        {
+            LRSessionManager.sharedManager.loadProductCollection(page, completionHandler: { (success, error, response) -> Void in
+                
+                if success
                 {
-                    self.products = productsResponse
-                    
+                    if let productsResponse = response as? Array<ProductResponse>
+                    {
+                        self.products = productsResponse
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.collectionView.reloadData()
+                        })
+                    }
+                }
+                else
+                {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                     
-                        self.collectionView.reloadData()
+                        
+                        let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                        self.presentViewController(alert, animated: true, completion: nil)
                     })
                 }
-            }
-            else
-            {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
-                })
-            }
-        })
+            })
+        }
     }
     
     // MARK: Actions
@@ -214,9 +220,9 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 //Set Image View with first image
                 if let firstImage = variant.images?[0]
                 {
-                    if let thumbnailUrl = firstImage.thumbnailUrl
+                    if let primaryUrl = firstImage.primaryUrl
                     {
-                        cell.productImageView.sd_setImageWithURL(thumbnailUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                        cell.productImageView.sd_setImageWithURL(primaryUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
                           
                             if image != nil && cacheType == .None
                             {

@@ -13,7 +13,7 @@ func ColorCode(red:CGFloat, green:CGFloat, blue:CGFloat, alpha:CGFloat) -> UICol
     return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: alpha)
 }
 
-class Color: UIColor
+public class Color: UIColor
 {
     static let DarkNavyColor: UIColor = ColorCode(14, green: 36, blue: 106, alpha: 1.0)
     

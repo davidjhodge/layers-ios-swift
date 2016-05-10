@@ -440,34 +440,47 @@ class LRSessionManager
         }
     }
     
-    func loadProductCollection(completionHandler: LRCompletionBlock?)
+    func loadProductCollection(page: Int, completionHandler: LRCompletionBlock?)
     {
-        let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/"))
-        
-        request.HTTPMethod = "GET"
-        
-        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+        if page >= 0
+        {
+            let count = 20
             
-            if success
-            {
-                if let jsonResponse = response
+            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/?page=\(page)&per_page=\(count)"))
+            
+            request.HTTPMethod = "GET"
+            
+            sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+                
+                if success
                 {
-                    let products = Mapper<ProductResponse>().mapArray(jsonResponse.arrayObject)
-                    
-                    if let completion = completionHandler
+                    if let jsonResponse = response
                     {
-                        completion(success: success, error: error, response: products)
+                        let products = Mapper<ProductResponse>().mapArray(jsonResponse.arrayObject)
+                        
+                        if let completion = completionHandler
+                        {
+                            completion(success: success, error: error, response: products)
+                        }
                     }
                 }
-            }
-            else
-            {
-                if let completion = completionHandler
+                else
                 {
-                    completion(success: success, error: error, response: nil)
+                    if let completion = completionHandler
+                    {
+                        completion(success: success, error: error, response: nil)
+                    }
                 }
+            })
+        }
+        else
+        {
+            if let completion = completionHandler
+            {
+                completion(success: false, error: "INVALID_PARAMETERS".localized, response: nil)
             }
-        })
+        }
+
     }
     
     func loadReviewsForProduct(productId: NSNumber, completionHandler: LRCompletionBlock?)
