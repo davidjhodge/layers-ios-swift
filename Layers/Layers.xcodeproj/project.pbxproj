@@ -79,6 +79,9 @@
 		70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A221CE1676200C0518C /* PickerRow.swift */; };
 		70AF1A261CE199BF00C0518C /* LoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A251CE199BF00C0518C /* LoadingCell.swift */; };
 		70AF1A291CE255BF00C0518C /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A281CE255BF00C0518C /* SearchViewController.swift */; };
+		70AF1A2B1CE2D17B00C0518C /* RetailerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2A1CE2D17B00C0518C /* RetailerResponse.swift */; };
+		70AF1A2D1CE3C57500C0518C /* TextFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2C1CE3C57500C0518C /* TextFilterViewController.swift */; };
+		70AF1A2F1CE3C6A800C0518C /* SubtitleFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2E1CE3C6A800C0518C /* SubtitleFilterCell.swift */; };
 		70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D84A9E1CB9557300A70485 /* AppDelegate.swift */; };
 		70D84AA41CB9557300A70485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA21CB9557300A70485 /* Main.storyboard */; };
 		70D84AA61CB9557300A70485 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA51CB9557300A70485 /* Assets.xcassets */; };
@@ -162,6 +165,9 @@
 		70AF1A221CE1676200C0518C /* PickerRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerRow.swift; sourceTree = "<group>"; };
 		70AF1A251CE199BF00C0518C /* LoadingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingCell.swift; sourceTree = "<group>"; };
 		70AF1A281CE255BF00C0518C /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		70AF1A2A1CE2D17B00C0518C /* RetailerResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetailerResponse.swift; sourceTree = "<group>"; };
+		70AF1A2C1CE3C57500C0518C /* TextFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFilterViewController.swift; sourceTree = "<group>"; };
+		70AF1A2E1CE3C6A800C0518C /* SubtitleFilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubtitleFilterCell.swift; sourceTree = "<group>"; };
 		70D84A9B1CB9557200A70485 /* Layers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Layers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70D84A9E1CB9557300A70485 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70D84AA31CB9557300A70485 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -229,6 +235,7 @@
 			children = (
 				70059C941CD672990094B454 /* FacebookUserResponse.swift */,
 				70A40FF41CD69C4F00CB515B /* ProductResponse.swift */,
+				70AF1A2A1CE2D17B00C0518C /* RetailerResponse.swift */,
 			);
 			name = Responses;
 			sourceTree = "<group>";
@@ -277,6 +284,7 @@
 			isa = PBXGroup;
 			children = (
 				70776FC51CC5F881002E6F25 /* FilterViewController.swift */,
+				70AF1A2C1CE3C57500C0518C /* TextFilterViewController.swift */,
 				70776FC91CC685B4002E6F25 /* Cells */,
 			);
 			name = Filter;
@@ -286,6 +294,7 @@
 			isa = PBXGroup;
 			children = (
 				70776FC71CC685B0002E6F25 /* SliderCell.swift */,
+				70AF1A2E1CE3C6A800C0518C /* SubtitleFilterCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -758,9 +767,11 @@
 				706FF89E1CBD82D2007B26AD /* ReviewsViewController.swift in Sources */,
 				702FC2F11CC2D8470012969C /* UINavigationItem+BackButton.m in Sources */,
 				70AF1A1F1CE1479200C0518C /* NSURLImageSIze.swift in Sources */,
+				70AF1A2B1CE2D17B00C0518C /* RetailerResponse.swift in Sources */,
 				70A40FFF1CD6A4FD00CB515B /* Size.swift in Sources */,
 				706FF89C1CBD6E96007B26AD /* FeaturesCell.swift in Sources */,
 				70A40FF91CD6A16300CB515B /* Rating.swift in Sources */,
+				70AF1A2F1CE3C6A800C0518C /* SubtitleFilterCell.swift in Sources */,
 				70204A611CBF5E9B00868C00 /* ProductWebViewController.swift in Sources */,
 				70A410011CD6A8FB00CB515B /* Price.swift in Sources */,
 				706FF8A31CBDF771007B26AD /* SimpleProductHeaderCell.swift in Sources */,
@@ -771,6 +782,7 @@
 				70987C1B1CB98A7700D86FBA /* NSAttributedString+Pricing.m in Sources */,
 				70A410051CD6AB1600CB515B /* Image.swift in Sources */,
 				70987C3D1CBBF07B00D86FBA /* GetStartedViewController.swift in Sources */,
+				70AF1A2D1CE3C57500C0518C /* TextFilterViewController.swift in Sources */,
 				70AF1A261CE199BF00C0518C /* LoadingCell.swift in Sources */,
 				70987BEE1CB9658200D86FBA /* User.swift in Sources */,
 				70A71B9C1CC593D800B58B74 /* PickerAccessoryView.swift in Sources */,
