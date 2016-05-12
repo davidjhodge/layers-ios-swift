@@ -513,6 +513,36 @@ class LRSessionManager
         })
     }
     
+    func loadRetailers(completionHandler: LRCompletionBlock?)
+    {
+        let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("retailers"))
+        
+        request.HTTPMethod = "GET"
+        
+        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+            
+            if success
+            {
+                if let jsonResponse = response
+                {
+                    let retailers = Mapper<RetailerResponse>().mapArray(jsonResponse.arrayObject)
+                        
+                    if let completion = completionHandler
+                    {
+                            completion(success: true, error: error, response: retailers)
+                    }
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: false, error: error, response: nil)
+                }
+            }
+        })
+    }
+    
     // Handle a change in the AWS Cognito Identity, such as when an unauthenticated user creates an account.
     @objc func identityDidChange(notification: NSNotification?)
     {

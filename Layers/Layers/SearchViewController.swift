@@ -112,6 +112,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         cell.textLabel?.text = ""
         
+        cell.textLabel?.font = Font.OxygenRegular(size: 14.0)
+        
         if let products = searchResults
         {
             let product = products[indexPath.row]
