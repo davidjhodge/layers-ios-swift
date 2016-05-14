@@ -15,6 +15,8 @@
 		702FC2FC1CC344960012969C /* EmailCreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */; };
 		702FC3011CC3FE6D0012969C /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */; };
 		702FC3031CC408FC0012969C /* TextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC3021CC408FC0012969C /* TextViewCell.swift */; };
+		70488C521CE63C3E0085BAE9 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70488C511CE63C3E0085BAE9 /* ColorCell.swift */; };
+		70488C541CE63C640085BAE9 /* ColorFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70488C531CE63C640085BAE9 /* ColorFilterViewController.swift */; };
 		705390311CD7D38600DA8E15 /* PriceAlertsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705390301CD7D38600DA8E15 /* PriceAlertsViewController.swift */; };
 		705390341CD7D3C700DA8E15 /* PriceAlerts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 705390331CD7D3C700DA8E15 /* PriceAlerts.storyboard */; };
 		705390361CD7D49500DA8E15 /* PriceAlertCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705390351CD7D49500DA8E15 /* PriceAlertCell.swift */; };
@@ -99,6 +101,8 @@
 		702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailCreateAccountViewController.swift; sourceTree = "<group>"; };
 		702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
 		702FC3021CC408FC0012969C /* TextViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViewCell.swift; sourceTree = "<group>"; };
+		70488C511CE63C3E0085BAE9 /* ColorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
+		70488C531CE63C640085BAE9 /* ColorFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorFilterViewController.swift; sourceTree = "<group>"; };
 		705390301CD7D38600DA8E15 /* PriceAlertsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceAlertsViewController.swift; sourceTree = "<group>"; };
 		705390331CD7D3C700DA8E15 /* PriceAlerts.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PriceAlerts.storyboard; sourceTree = "<group>"; };
 		705390351CD7D49500DA8E15 /* PriceAlertCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceAlertCell.swift; sourceTree = "<group>"; };
@@ -285,6 +289,7 @@
 			children = (
 				70776FC51CC5F881002E6F25 /* FilterViewController.swift */,
 				70AF1A2C1CE3C57500C0518C /* TextFilterViewController.swift */,
+				70488C531CE63C640085BAE9 /* ColorFilterViewController.swift */,
 				70776FC91CC685B4002E6F25 /* Cells */,
 			);
 			name = Filter;
@@ -295,6 +300,7 @@
 			children = (
 				70776FC71CC685B0002E6F25 /* SliderCell.swift */,
 				70AF1A2E1CE3C6A800C0518C /* SubtitleFilterCell.swift */,
+				70488C511CE63C3E0085BAE9 /* ColorCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -348,10 +354,10 @@
 		70987BF21CB9705C00D86FBA /* Product Collection */ = {
 			isa = PBXGroup;
 			children = (
-				70AF1A271CE255AC00C0518C /* Search */,
 				70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */,
 				70AF1A241CE199B400C0518C /* Cells */,
 				70776FC41CC5F872002E6F25 /* Filter */,
+				70AF1A271CE255AC00C0518C /* Search */,
 				70987C311CB9C9FC00D86FBA /* Product Detail */,
 			);
 			name = "Product Collection";
@@ -767,6 +773,7 @@
 				706FF89E1CBD82D2007B26AD /* ReviewsViewController.swift in Sources */,
 				702FC2F11CC2D8470012969C /* UINavigationItem+BackButton.m in Sources */,
 				70AF1A1F1CE1479200C0518C /* NSURLImageSIze.swift in Sources */,
+				70488C521CE63C3E0085BAE9 /* ColorCell.swift in Sources */,
 				70AF1A2B1CE2D17B00C0518C /* RetailerResponse.swift in Sources */,
 				70A40FFF1CD6A4FD00CB515B /* Size.swift in Sources */,
 				706FF89C1CBD6E96007B26AD /* FeaturesCell.swift in Sources */,
@@ -785,6 +792,7 @@
 				70AF1A2D1CE3C57500C0518C /* TextFilterViewController.swift in Sources */,
 				70AF1A261CE199BF00C0518C /* LoadingCell.swift in Sources */,
 				70987BEE1CB9658200D86FBA /* User.swift in Sources */,
+				70488C541CE63C640085BAE9 /* ColorFilterViewController.swift in Sources */,
 				70A71B9C1CC593D800B58B74 /* PickerAccessoryView.swift in Sources */,
 				70776FCB1CC69506002E6F25 /* RangeSlider.swift in Sources */,
 				70776FD31CC8A9FF002E6F25 /* Localization.swift in Sources */,

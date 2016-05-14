@@ -24,6 +24,8 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
 {
     var delegate: FitlerDelegate?
     
+    @IBOutlet weak var applyButton: UIButton!
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -35,7 +37,9 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercaseString, style: .Plain, target: self, action: #selector(cancel))
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done".uppercaseString, style: .Done, target: self, action: #selector(done))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercaseString, style: .Plain, target: self, action: #selector(reset))
+        
+        applyButton.addTarget(self, action: #selector(applyFilter), forControlEvents: .TouchUpInside)
     }
     
     // MARK: Actions
@@ -44,7 +48,12 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func done()
+    func reset()
+    {
+        // Clear filter
+    }
+    
+    func applyFilter()
     {
         delegate?.didUpdateFilter()
         
@@ -188,9 +197,19 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
 //        {
 //            
 //        }
-//        else if segue.identifier == "ShowColorFilterViewController"
-//        {
-//            
-//        }
+        else if segue.identifier == "ShowColorFilterViewController"
+        {
+            if let destinationVc = segue.destinationViewController as? ColorFilterViewController
+            {
+                if let senderRawValue = sender as? Int
+                {
+                    if let type = FilterType(rawValue: senderRawValue)
+                    {
+                        destinationVc.filterType = type
+                    }
+                }
+            }
+
+        }
     }
 }
