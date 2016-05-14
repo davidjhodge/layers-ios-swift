@@ -49,6 +49,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter"), style: .Plain, target: self, action: #selector(filter))
         
         collectionView.backgroundColor = Color.BackgroundGrayColor
+        
         collectionView.alwaysBounceVertical = true
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
