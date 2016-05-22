@@ -16,13 +16,28 @@ struct FilterItem
     var isSelected: Bool = false
 }
 
+protocol FilterTypeDelegate
+{
+    func textFilterChanged(filters: Array<FilterObject>?, filterType: FilterType?)
+    
+    func sliderFilterChanged(filter: (minValue: Int, maxValue: Int)?, filterType: FilterType?)
+}
+
 class TextFilterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
 {
+    var filterTypeDelegate: FilterTypeDelegate?
+    
     @IBOutlet weak var tableView: UITableView!
     
     var filterType: FilterType?
     
-    var items: Array<FilterItem>?
+    var items: Array<FilterObject>?
+    
+    var selectedItems: Array<FilterObject>?
+    
+    var minPrice: Int?
+    
+    var maxPrice: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +47,67 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         // Set the Navigation Title
         setNavTitle()
         
-        setFilterItems()
+        reloadData()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if let selections = selectedItems
+        {
+            var filterArray = Array<FilterObject>()
+            
+            for selection in selections
+            {
+                var newFilter = FilterObject()
+                
+                if let filterText = selection.name
+                {
+                    newFilter.name = filterText
+                }
+                
+                if let filterKey = selection.key
+                {
+                    newFilter.key = filterKey
+                }
+                
+                if newFilter.name != nil && newFilter.key != nil
+                {
+                    filterArray.append(newFilter)
+                }
+            }
+            
+            // Pass filterArray to delegate
+            if let delegate = filterTypeDelegate
+            {
+                if let type = filterType
+                {
+                    switch type {
+                    case .Category:
+                        
+                        delegate.textFilterChanged(filterArray, filterType: FilterType.Category)
+                        
+                    case .Brand:
+                        
+                        delegate.textFilterChanged(filterArray, filterType: FilterType.Brand)
+                        
+                    case .Retailer:
+                        
+                        delegate.textFilterChanged(filterArray, filterType: FilterType.Retailer)
+                        
+                    case .Price:
+                        
+                        if let priceMin = minPrice, priceMax = maxPrice
+                        {
+                            delegate.sliderFilterChanged((minValue: priceMin, maxValue: priceMax), filterType: FilterType.Price)
+                        }
+                        
+                    default:
+                        break
+                    }
+                }
+            }
+        }
     }
     
     // MARK: Initialization Helper Methods
@@ -64,42 +139,68 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         }
     }
     
-    func setFilterItems()
+    func reloadData()
     {
-        // TEMP. Instead we should import the categories, retailers, etc from the network
-        var item1 = FilterItem()
-        item1.itemText = "Ralph Lauren"
-        
-        var item2 = FilterItem()
-        item2.itemText = "J. Crew"
-        
-        var item3 = FilterItem()
-        item3.itemText = "Gucci"
-        
-        var item4 = FilterItem()
-        item4.itemText = "Mane"
-        
-        items = [item1, item2, item3, item4]
-        
-//        if let type = filterType
-//        {
-//            switch type {
-//            case .Category:
-//                
-//                LRSessionManager.sharedManager.loadItemsForFilter
-//                
+        if let type = filterType
+        {
+            switch type {
+            case .Category:
+                
+                FilterManager.defaultManager.fetchCategories( { (success, results) -> Void in
+                    
+                    if success
+                    {
+                        if let categories = results
+                        {
+                            self.items = categories
+                            
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                self.tableView.reloadData()
+                            })
+                        }
+                    }
+                })
+                
 //            case .Brand:
 //                
-//
+//                //Need to fetch brands
+//                FilterManager.defaultManager.fetchBrands( { (success, results) -> Void in
+//                    
+//                    if success
+//                    {
+//                        if let categories = results
+//                        {
+//                            self.items = categories
+//                            
+//                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                                self.tableView.reloadData()
+//                            })
+//                        }
+//                    }
+//                })
 //                
 //            case .Retailer:
 //                
-//
-//
-//            default:
-//                break
-//            }
-//        }
+//                // Need to fetch retailers
+//                FilterManager.defaultManager.fetchRetailers( { (success, results) -> Void in
+//                    
+//                    if success
+//                    {
+//                        if let categories = results
+//                        {
+//                            self.items = categories
+//                            
+//                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                                self.tableView.reloadData()
+//                            })
+//                        }
+//                    }
+//                })
+                
+            default:
+                break
+            }
+        }
     }
     
     // MARK: Add/Remove Actions
@@ -109,20 +210,46 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         {            
             if filterItems[safe: index] != nil
             {
-                items![index].isSelected = true
+                if selectedItems == nil
+                {
+                    selectedItems = Array<FilterObject>()
+                }
+                
+                selectedItems!.append(items![index])
                 
                 updateRowAtIndex(index)
             }
         }
     }
-    
+
     func deleteSelection(index: Int)
     {
         if let filterItems = items
         {
             if filterItems[safe: index] != nil
             {
-                items![index].isSelected = false
+                if let selections = selectedItems
+                {
+                    if let desiredKey = filterItems[index].key
+                    {
+                        selectedItems = selections.filter() { $0.key != desiredKey }
+                    }
+                    
+//                    for (i,selection) in selections.enumerate()
+//                    {
+//                        let index = selections.indexOf(<#T##predicate: (FilterObject) throws -> Bool##(FilterObject) throws -> Bool#>)
+//                        
+//                        if let itemText = selection.name
+//                        {
+//                            if let comparisonItemText = items![index].itemText
+//                            {
+//                                if itemText == comparisonItemText
+//                                {
+//                                    selectedItems!.removeAtIndex(i)
+//                                }
+//                            }
+//                        }
+                }
                 
                 updateRowAtIndex(index)
             }
@@ -202,16 +329,23 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
                 
                 if let filterItems = items
                 {
-                    if let item: FilterItem = filterItems[indexPath.row]
+                    if let item: FilterObject = filterItems[indexPath.row]
                     {
-                        if let itemText = item.itemText
+                        if let itemText = item.name
                         {
                             cell.textLabel?.text = itemText
                         }
                         
-                        if item.isSelected
+                        if let selections = selectedItems
                         {
-                            cell.accessoryType = .Checkmark
+                            if selections.contains({ $0.name == item.name })
+                            {
+                                cell.accessoryType = .Checkmark
+                            }
+                            else
+                            {
+                                cell.accessoryType = .None
+                            }
                         }
                         else
                         {
@@ -236,13 +370,19 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         {
             if let selectedItem = filterItems[safe: indexPath.row]
             {
-                if selectedItem.isSelected
+                if let desiredKey = selectedItem.key
                 {
-                    // Item is already selected. Clear the selection
-                    deleteSelection(indexPath.row)
-                }
-                else
-                {
+                    if let selections = selectedItems
+                    {
+                        if selections.contains( { $0.key == desiredKey } )
+                        {
+                            // Item is already selected. Clear the selection
+                            deleteSelection(indexPath.row)
+                            
+                            return
+                        }
+                    }
+                    
                     // Select the item
                     addSelection(indexPath.row)
                 }

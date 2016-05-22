@@ -15,16 +15,21 @@ enum FilterType: Int
     case Category = 0, Brand, Retailer, Price, Color, Count
 }
 
-protocol FitlerDelegate {
+protocol FilterDelegate {
     
     func didUpdateFilter()
 }
 
-class FilterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
+class FilterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FilterTypeDelegate
 {
-    var delegate: FitlerDelegate?
+    var delegate: FilterDelegate?
+    
+    @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var applyButton: UIButton!
+    
+    // Get current filter, which is a default Filter object if no filter has been set
+    var newFilter = FilterManager.defaultManager.getCurrentFilter()
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -51,10 +56,15 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     func reset()
     {
         // Clear filter
+        newFilter = Filter()
+        
+        tableView.reloadData()
     }
     
     func applyFilter()
     {
+        FilterManager.defaultManager.setNewFilter(newFilter)
+        
         delegate?.didUpdateFilter()
         
         dismissViewControllerAnimated(true, completion: nil)
@@ -64,6 +74,56 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     func sliderValueChanged(sender: UISlider)
     {
 
+    }
+    
+    // MARK: FilterDelegate
+    func didUpdateFilter()
+    {
+        
+    }
+    
+    // MARK: FilterTypeDelegate
+    func textFilterChanged(filters: Array<FilterObject>?, filterType: FilterType?)
+    {
+        if let newFilters = filters
+        {
+            if let type = filterType
+            {
+                switch type {
+                case .Category:
+                    
+                    newFilter.categories = newFilters
+                    
+                case .Brand:
+                    
+                    newFilter.brands = newFilters
+                    
+                case .Retailer:
+                    
+                    newFilter.retailers = newFilters
+                    
+                default:
+                    break
+                }
+            }
+            
+            // Would be better practice to only reload the cell we updated
+            tableView.reloadData()
+        }
+    }
+    
+    func sliderFilterChanged(filter: (minValue: Int, maxValue: Int)?, filterType: FilterType?)
+    {
+        if let sliderFilter = filter
+        {
+            if sliderFilter.minValue > 0 && sliderFilter.maxValue > 0
+            {
+                if filterType == .Price
+                {
+                    newFilter.priceRange = (minPrice: sliderFilter.minValue, maxPrice: sliderFilter.maxValue)
+                }
+            }
+        }
     }
     
     // MARK: Table View Data Source
@@ -96,6 +156,16 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 
                 cell.filterSelectionLabel.text = "T-Shirts"
                 
+                // If filter selected, show blue dot
+                if newFilter.categories != nil
+                {
+                    cell.selectedCircleView.hidden = false
+                }
+                else
+                {
+                    cell.selectedCircleView.hidden = true
+                }
+                
             case .Brand:
                 
                 cell.filterTypeLabel.text = "Brand".uppercaseString
@@ -103,20 +173,47 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 // If J. Crew Filter Selected
                 cell.filterSelectionLabel.text = "J. Crew"
                 
-                cell.selectedCircleView.hidden = false
-
+                // If filter selected, show blue dot
+                if newFilter.brands != nil
+                {
+                    cell.selectedCircleView.hidden = false
+                }
+                else
+                {
+                    cell.selectedCircleView.hidden = true
+                }
+                
             case .Retailer:
                 
                 cell.filterTypeLabel.text = "Retailer".uppercaseString
                 
                 cell.filterSelectionLabel.text = "Many Retailers"
 
+                // If filter selected, show blue dot
+                if newFilter.retailers != nil
+                {
+                    cell.selectedCircleView.hidden = false
+                }
+                else
+                {
+                    cell.selectedCircleView.hidden = true
+                }
+                
             case .Price:
                 
                 cell.filterTypeLabel.text = "Price".uppercaseString
 
                 cell.filterSelectionLabel.text = "25 - 50"
                 
+                // If filter selected, show blue dot
+                if newFilter.priceRange != nil
+                {
+                    cell.selectedCircleView.hidden = false
+                }
+                else
+                {
+                    cell.selectedCircleView.hidden = true
+                }
             
             case .Color:
                 
@@ -126,6 +223,16 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 cell.filterSelectionLabel.text = "Red"
                 
                 cell.filterSelectionLabel.textColor = Color.RedColor
+                
+                // If filter selected, show blue dot
+                if newFilter.color != nil
+                {
+                    cell.selectedCircleView.hidden = false
+                }
+                else
+                {
+                    cell.selectedCircleView.hidden = true
+                }
                 
             default:
                 return cell
@@ -189,6 +296,54 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                     if let type = FilterType(rawValue: senderRawValue)
                     {
                         destinationVc.filterType = type
+                        destinationVc.filterTypeDelegate = self
+
+                        switch type {
+                        case .Category:
+                            
+                            if let currentFilters = newFilter.categories
+                            {
+                                var array = Array<FilterObject>()
+                                
+                                for currFilter in currentFilters
+                                {
+                                    array.append(currFilter)
+                                }
+                                
+                                destinationVc.selectedItems = array
+                            }
+                            
+                        case .Brand:
+                            
+                            if let currentFilters = newFilter.brands
+                            {
+                                var array = Array<FilterObject>()
+                                
+                                for currFilter in currentFilters
+                                {
+                                    array.append(currFilter)
+                                }
+                                
+                                destinationVc.selectedItems = array
+                            }
+                            
+                        case .Retailer:
+                            
+                            if let currentFilters = newFilter.retailers
+                            {
+                                var array = Array<FilterObject>()
+                                
+                                for currFilter in currentFilters
+                                {
+                                    array.append(currFilter)
+                                }
+                                
+                                destinationVc.selectedItems = array
+                            }
+                            
+                        default:
+                            break
+                        }
                     }
                 }
             }
