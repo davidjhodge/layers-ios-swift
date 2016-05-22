@@ -169,6 +169,7 @@
                     <navigationItem key="navigationItem" id="p6S-hX-62i"/>
                     <connections>
                         <outlet property="applyButton" destination="6Yf-1b-Afq" id="Im5-AR-lbR"/>
+                        <outlet property="tableView" destination="0jo-pF-HO9" id="Q5w-FC-EaP"/>
                         <segue destination="OPb-Xj-Deh" kind="show" identifier="ShowTextFilterViewController" id="DAm-hs-LqO"/>
                         <segue destination="Mio-sj-82B" kind="show" identifier="ShowColorFilterViewController" id="yiI-MZ-3nW"/>
                     </connections>
