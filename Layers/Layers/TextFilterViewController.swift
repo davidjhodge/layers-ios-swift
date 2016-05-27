@@ -47,6 +47,8 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         // Set the Navigation Title
         setNavTitle()
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "SELECT", style: .Plain, target: self, action:#selector(confirmSelection))
+        
         reloadData()
     }
     
@@ -179,23 +181,23 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
 //                    }
 //                })
 //                
-//            case .Retailer:
-//                
-//                // Need to fetch retailers
-//                FilterManager.defaultManager.fetchRetailers( { (success, results) -> Void in
-//                    
-//                    if success
-//                    {
-//                        if let categories = results
-//                        {
-//                            self.items = categories
-//                            
-//                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                                self.tableView.reloadData()
-//                            })
-//                        }
-//                    }
-//                })
+            case .Retailer:
+                
+                // Need to fetch retailers
+                FilterManager.defaultManager.fetchRetailers( { (success, results) -> Void in
+                    
+                    if success
+                    {
+                        if let categories = results
+                        {
+                            self.items = categories
+                            
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                self.tableView.reloadData()
+                            })
+                        }
+                    }
+                })
                 
             default:
                 break
@@ -203,7 +205,13 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         }
     }
     
-    // MARK: Add/Remove Actions
+    // MARK: UI Actions
+    func confirmSelection()
+    {
+        navigationController?.popViewControllerAnimated(true)
+    }
+    
+    // MARK: Add/Remove
     func addSelection(index: Int)
     {
         if let filterItems = items

@@ -76,12 +76,6 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
 
     }
     
-    // MARK: FilterDelegate
-    func didUpdateFilter()
-    {
-        
-    }
-    
     // MARK: FilterTypeDelegate
     func textFilterChanged(filters: Array<FilterObject>?, filterType: FilterType?)
     {

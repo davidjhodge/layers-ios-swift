@@ -10,6 +10,8 @@ import UIKit
 import SwiftyBeaver
 import FBSDKCoreKit
 
+import AWSSNS
+
 let log = SwiftyBeaver.self
 
 private let facebookScheme: String = "fb982100215236828"
@@ -48,10 +50,95 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
 
         window?.makeKeyAndVisible()
-        
+                
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
+        tempRegisterForNotifications()
+        
         return true
+    }
+    
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        
+        if let cognitoId = LRSessionManager.sharedManager.credentialsProvider.identityId
+        {
+            let kAWSSNSApplicationARN = "arn:aws:sns:us-west-2:520777401565:app/APNS_SANDBOX/Layers"
+            
+            let platformEndpointRequest = AWSSNSCreatePlatformEndpointInput()
+            platformEndpointRequest.customUserData = "need to add user data"
+            platformEndpointRequest.token = deviceTokenAsString(deviceToken)
+            platformEndpointRequest.platformApplicationArn = kAWSSNSApplicationARN
+            
+            let snsManager = AWSSNS.defaultSNS()
+            
+            snsManager.createPlatformEndpoint(platformEndpointRequest)
+        }
+    }
+    
+    func deviceTokenAsString(tokenData: NSData) -> String
+    {
+        let rawDeviceString: String = "\(tokenData)"
+        
+        let noSpaces = rawDeviceString.stringByReplacingOccurrencesOfString(" ", withString: "")
+        
+        let temp: String = noSpaces.stringByReplacingOccurrencesOfString("<", withString: "")
+        
+        return temp.stringByReplacingOccurrencesOfString(">", withString: "")
+    }
+    
+    func tempRegisterForNotifications()
+    {
+                let readAction: UIMutableUserNotificationAction = UIMutableUserNotificationAction()
+                readAction.identifier = "READ_IDENTIFIER"
+                readAction.title = "Read"
+                readAction.activationMode = .Foreground
+                readAction.destructive = false
+        readAction.authenticationRequired = true
+        
+        let messageCategory = UIMutableUserNotificationCategory()
+        messageCategory.identifier = "MESSAGE_CATEGORY"
+        messageCategory.setActions([readAction], forContext: .Default)
+        messageCategory.setActions([readAction], forContext: .Minimal)
+        
+        let categories: Set<UIUserNotificationCategory> = NSSet(object: messageCategory) as! Set<UIUserNotificationCategory>
+        
+        let settings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [.Badge, .Sound, .Alert], categories: categories)
+        
+        UIApplication.sharedApplication().registerForRemoteNotifications()
+        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+
+//                UIMutableUserNotificationAction *readAction = [[UIMutableUserNotificationAction alloc] init];
+//                readAction.identifier = @"READ_IDENTIFIER";
+//                readAction.title = @"Read";
+//                readAction.activationMode = UIUserNotificationActivationModeForeground;
+//                readAction.destructive = NO;
+//                readAction.authenticationRequired = YES;
+//                
+//                UIMutableUserNotificationCategory *messageCategory = [[UIMutableUserNotificationCategory alloc] init];
+//                messageCategory.identifier = @"MESSAGE_CATEGORY";
+//                [messageCategory setActions:@[readAction] forContext:UIUserNotificationActionContextDefault];
+//                [messageCategory setActions:@[readAction] forContext:UIUserNotificationActionContextMinimal];
+//                
+//                NSSet *categories = [NSSet setWithObject:messageCategory];
+//                
+//                UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+//                UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
+//                
+//                [[UIApplication sharedApplication] registerForRemoteNotifications];
+//                [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+    }
+//    
+//    - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+//    {
+//    application.applicationIconBadgeNumber = 0;
+//    NSString *msg = [NSString stringWithFormat:@"%@", userInfo];
+//    NSLog(@"%@",msg);
+//    [self createAlert:msg];
+//    }
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        application.applicationIconBadgeNumber = 0
+        let message = userInfo
+        print(message)
     }
     
     func appAlication(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
