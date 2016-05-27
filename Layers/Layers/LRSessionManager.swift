@@ -28,12 +28,15 @@ private let kAWSCognitoClientSecret = "5gjvi9e5ikmntbduka8mp0jf9q"
 private let kAWSCognitoPoolId = "us-east-1:c7d2ab80-046f-4b0d-8344-32db54981782"
 private let kAWSUserPoolId = "us-east-1_dHgDcpP9d"
 
+private let kAWSCognitoRoleAuthorized = "arn:aws:iam::520777401565:role/Cognito_AWSCognitoAuthAuth_Role"
+private let kAWSCognitoRoleUnauthorized = "arn:aws:iam::520777401565:role/Cognito_AWSCognitoAuthUnauth_Role"
+
 let productCollectionPageSize = 20
 
 typealias LRCompletionBlock = ((success: Bool, error: String?, response:AnyObject?) -> Void)
 typealias LRJsonCompletionBlock = ((success: Bool, error: String?, response:JSON?) -> Void)
 
-class LRSessionManager
+class LRSessionManager: NSObject, AWSIdentityProviderManager
 {
     // Static variable to handle all networking and caching activities
     static let sharedManager: LRSessionManager = LRSessionManager()
@@ -58,8 +61,10 @@ class LRSessionManager
 
     
     // MARK: Initialization
-    init ()
+    override init ()
     {
+        super.init()
+        
         //Log debugging
         log.debug("Initializing Session")
         
@@ -83,11 +88,11 @@ class LRSessionManager
     private func configureAWS()
     {
         //AWS
-        AWSLogger.defaultLogger().logLevel = .Verbose
-        
-        credentialsProvider = AWSCognitoCredentialsProvider(regionType: .USEast1, identityPoolId: kAWSCognitoPoolId)
+        credentialsProvider = AWSCognitoCredentialsProvider(regionType: .USEast1, identityPoolId: kAWSCognitoPoolId, unauthRoleArn: kAWSCognitoRoleUnauthorized, authRoleArn: kAWSCognitoRoleAuthorized, identityProviderManager: self)
         let defaultServiceConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: credentialsProvider)
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration
+        
+        AWSLogger.defaultLogger().logLevel = .Verbose
     }
     
     //MARK: Managing Account Credentials
@@ -96,7 +101,7 @@ class LRSessionManager
     {
         // Retrieves cognito identity locally if one is cached, and from the AWS Cognito Remote service if none exists
         refreshIdentityId()
-        
+
         if FBSDKAccessToken.currentAccessToken() != nil
         {
             syncCredentials([AWSIdentityProviderFacebook: FBSDKAccessToken.currentAccessToken().tokenString])
@@ -135,6 +140,12 @@ class LRSessionManager
         // Clear AWS Cognito Credentials
         credentialsProvider.logins = nil
         credentialsProvider.clearKeychain()
+    }
+    
+    // AWSIdentityProviderManager
+    func logins() -> AWSTask
+    {
+        return AWSTask(result: nil)
     }
     
 //    /**
@@ -445,7 +456,16 @@ class LRSessionManager
     {
         if page >= 0
         {
-            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/?page=\(page)&per_page=\(productCollectionPageSize)"))
+            var requestString = "products/?page=\(page)&per_page=\(productCollectionPageSize)"
+            
+            if FilterManager.defaultManager.hasActiveFilters()
+            {
+                let paramsString = FilterManager.defaultManager.filterParamsAsString()
+                
+                requestString = requestString.stringByAppendingString("&\(paramsString)")
+            }
+            
+            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint(requestString))
             
             request.HTTPMethod = "GET"
             

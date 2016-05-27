@@ -8,8 +8,22 @@
 
 import Foundation
 
-struct FilterObject
+public struct FilterObject
 {
+    init()
+    {
+        self.name = nil
+        
+        self.key = nil
+    }
+    
+    init(name: String?, key: Int?)
+    {
+        if (name != nil) { self.name = name }
+        
+        if (key != nil) { self.key = key }
+    }
+    
     var name: String?
     
     var key: Int?
@@ -50,6 +64,97 @@ class FilterManager
     func setNewFilter(newFilter: Filter)
     {
         filter = newFilter
+    }
+    
+    func hasActiveFilters() -> Bool
+    {
+        if filter.categories != nil || filter.brands != nil || filter.retailers != nil || filter.priceRange != nil || filter.color != nil
+        {
+            return true
+        }
+        
+        return false
+    }
+    
+    // To be used in networking
+    func filterParamsAsString() -> String
+    {
+        var paramsString = ""
+        
+        // Categories
+        if let categories = filter.categories
+        {
+            var categoryParams = ""
+            
+            for category in categories
+            {
+                if let categoryKey = category.key
+                {
+                    categoryParams = categoryParams.stringByAppendingString("category=\(categoryKey)&")
+                }
+            }
+            
+            paramsString = paramsString.stringByAppendingString(categoryParams)
+        }
+        
+        // Brands
+        if let brands = filter.brands
+        {
+            var brandParams = ""
+            
+            for brand in brands
+            {
+                if let brandKey = brand.key
+                {
+                    brandParams = brandParams.stringByAppendingString("brand=\(brandKey)&")
+                }
+            }
+            
+            paramsString = paramsString.stringByAppendingString(brandParams)
+        }
+        
+        // Retailers
+        if let retailers = filter.retailers
+        {
+            var retailerParams = ""
+            
+            for retailer in retailers
+            {
+                if let retailerKey = retailer.key
+                {
+                    retailerParams = retailerParams.stringByAppendingString("retailer=\(retailerKey)&")
+                }
+            }
+            
+            paramsString = paramsString.stringByAppendingString(retailerParams)
+        }
+        
+        // Price
+        if let priceMin = filter.priceRange?.minPrice
+        {
+            let priceParam = "price_min=\(priceMin)&"
+            
+            paramsString = paramsString.stringByAppendingString(priceParam)
+
+        }
+        
+        if let priceMax = filter.priceRange?.maxPrice
+        {
+            let priceParam = "price_min=\(priceMax)&"
+            
+            paramsString = paramsString.stringByAppendingString(priceParam)
+        }
+        
+        // Color
+        // Not currently being handled
+        
+        
+        if paramsString.containsString("&")
+        {
+            paramsString = String(paramsString.characters.dropLast())
+        }
+        
+        return paramsString
     }
     
     func fetchCategories(completionHandler: FilterCompletionBlock?)
@@ -94,9 +199,41 @@ class FilterManager
         
     }
     
-    func fetchRetailers()
+    func fetchRetailers(completionHandler: FilterCompletionBlock?)
     {
-        
+        if let retailers = filter.retailers
+        {
+            if let completion = completionHandler
+            {
+                completion(success: true, response: retailers)
+            }
+        }
+        else
+        {
+            LRSessionManager.sharedManager.loadRetailers( { (success, error, retailers) -> Void in
+                
+                if success
+                {
+                    if let completion = completionHandler
+                    {
+                        if let retailerArray = retailers as? Array<RetailerResponse>
+                        {
+                            if let filters = FilterObjectConverter.filterObjectArray(retailerArray)
+                            {
+                                completion(success: true, response: filters)
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, response: nil)
+                    }
+                }
+            })
+        }
     }
     
 }

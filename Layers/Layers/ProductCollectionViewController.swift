@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import HidingNavigationBar
 
-class ProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
+class ProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FilterDelegate
 {
     private let kProductCellIdentfier = "ProductCell"
 
@@ -149,6 +149,14 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         performSegueWithIdentifier("PresentModalFilterViewController", sender: self)
     }
     
+    // MARK: Filter Delegate
+    func didUpdateFilter()
+    {
+        currentPage = 0
+        
+        reloadData(currentPage!)
+    }
+    
     // MARK: Collection View Data Source
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
@@ -156,7 +164,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if let items = products
+        if let items = products where items.count > 0
         {
             // + 1 for Spinner
             return items.count + 1
@@ -355,11 +363,23 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                             if let destinationVC = segue.destinationViewController as? ProductViewController
                             {
                                 destinationVC.productIdentifier = product.productId
+                
                             }
                         }
                     }
                 }
             }
+        }
+        else if segue.identifier == "PresentModalFilterViewController"
+        {
+            if let destinationNav = segue.destinationViewController as? UINavigationController
+            {
+                if let destinationVc = destinationNav.viewControllers[safe: 0] as? FilterViewController
+                {
+                    destinationVc.delegate = self
+                }
+            }
+
         }
     }
 }
