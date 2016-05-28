@@ -42,8 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UITableViewCell.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.DarkNavyColor
         
-        LRSessionManager.sharedManager.resumeSession()
-        
         // Determine intial view controller based on login state
         
         AppStateTransitioner.transitionToMainStoryboard(false)

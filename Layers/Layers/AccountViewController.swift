@@ -86,6 +86,34 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         })
     }
     
+    func signUpToUserPool()
+    {
+        LRSessionManager.sharedManager.registerToUserPool("dhodge416@gmail.com", password: "password123", completionHandler: { (success, error, response) -> Void in
+            
+            if success
+            {
+                // Login to user pool succeeded
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                })
+            }
+        })
+    }
+    
+    func signInToUserPool()
+    {
+        LRSessionManager.sharedManager.signInToUserPool("dhodge416@gmail.com", password: "password123", completionHandler: { (success, error, response) -> Void in
+         
+            
+        })
+    }
+    
     // MARK: Table View Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int
     {
@@ -105,7 +133,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 return 3
                 
             case .Logout:
-                return 1 + 1
+                return 1 + 1 + 1 + 1
                 
             default:
                 return 0
@@ -154,9 +182,24 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 if indexPath.row == 0
                 {
+                    // Connect with Facebook
                     cell.textLabel?.text = "Sign Up"
                     cell.textLabel?.textAlignment = .Center
                     cell.textLabel?.textColor = Color.DarkNavyColor
+                }
+                    else if indexPath.row == 1
+                {
+                    // Sign up to user pool
+                    cell.textLabel?.text = "User Pool"
+                    cell.textLabel?.textAlignment = .Center
+                    cell.textLabel?.textColor = Color.DarkTextColor
+                }
+                    else if indexPath.row == 2
+                {
+                    // Sign in (to user pool)
+                    cell.textLabel?.text = "Sign In"
+                    cell.textLabel?.textAlignment = .Center
+                    cell.textLabel?.textColor = Color.DarkTextColor
                 }
                 else
                 {
@@ -214,7 +257,18 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 if indexPath.row == 0
                 {
+                    // Connect with Facebook
                     signUp()
+                }
+                else if indexPath.row == 1
+                {
+                    // Sign up to user pool
+                    signUpToUserPool()
+                }
+                    else if indexPath.row == 2
+                {
+                    // Sign in to user pool
+                    signInToUserPool()
                 }
                 else
                 {
