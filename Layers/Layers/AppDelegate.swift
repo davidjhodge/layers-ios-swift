@@ -29,15 +29,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = LRWindow(frame: UIScreen.mainScreen().bounds)
         window?.tintColor = Color.DarkNavyColor
         
+        // Swifty Beaver
+        log.addDestination(ConsoleDestination())
+        
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).translucent = false
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).barTintColor = Color.DarkNavyColor
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.whiteColor()
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).titleTextAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),
                                                                                                             NSFontAttributeName: Font.OxygenBold(size: 16.0)]
+        UIBarButtonItem.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).setTitleTextAttributes([NSForegroundColorAttributeName: Color.whiteColor(),
+            NSFontAttributeName: Font.OxygenRegular(size: 16.0)], forState: .Normal)
+        
         UITableViewCell.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.DarkNavyColor
         
+        LRSessionManager.sharedManager.resumeSession()
+        
         // Determine intial view controller based on login state
-
+        
         AppStateTransitioner.transitionToMainStoryboard(false)
         
 //        if LRSessionManager.sharedManager.isLoggedIn()
@@ -60,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         
-        if let cognitoId = LRSessionManager.sharedManager.credentialsProvider.identityId
+        if let cognitoId = LRSessionManager.sharedManager.credentialsProvider?.identityId
         {
             let kAWSSNSApplicationARN = "arn:aws:sns:us-west-2:520777401565:app/APNS_SANDBOX/Layers"
             
@@ -106,42 +114,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIApplication.sharedApplication().registerForRemoteNotifications()
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
-
-//                UIMutableUserNotificationAction *readAction = [[UIMutableUserNotificationAction alloc] init];
-//                readAction.identifier = @"READ_IDENTIFIER";
-//                readAction.title = @"Read";
-//                readAction.activationMode = UIUserNotificationActivationModeForeground;
-//                readAction.destructive = NO;
-//                readAction.authenticationRequired = YES;
-//                
-//                UIMutableUserNotificationCategory *messageCategory = [[UIMutableUserNotificationCategory alloc] init];
-//                messageCategory.identifier = @"MESSAGE_CATEGORY";
-//                [messageCategory setActions:@[readAction] forContext:UIUserNotificationActionContextDefault];
-//                [messageCategory setActions:@[readAction] forContext:UIUserNotificationActionContextMinimal];
-//                
-//                NSSet *categories = [NSSet setWithObject:messageCategory];
-//                
-//                UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-//                UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
-//                
-//                [[UIApplication sharedApplication] registerForRemoteNotifications];
-//                [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
     }
-//    
-//    - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-//    {
-//    application.applicationIconBadgeNumber = 0;
-//    NSString *msg = [NSString stringWithFormat:@"%@", userInfo];
-//    NSLog(@"%@",msg);
-//    [self createAlert:msg];
-//    }
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+
+        func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         application.applicationIconBadgeNumber = 0
         let message = userInfo
         print(message)
     }
     
-    func appAlication(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
        
         if url.scheme == facebookScheme
         {

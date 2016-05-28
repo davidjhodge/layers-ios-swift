@@ -152,7 +152,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     // MARK: Filter Delegate
     func didUpdateFilter()
     {
-        currentPage = 0
+        currentPage = 1
         
         reloadData(currentPage!)
     }

@@ -71,10 +71,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                     if success
                     {
                         log.debug("Facebook Registration Integration Complete.")
-                        
-                        let credential = LRSessionManager.sharedManager.credentialsProvider.identityId
-                        
-                        print(credential)
                     }
                     else
                     {

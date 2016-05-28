@@ -32,9 +32,6 @@ class GetStartedViewController: UIViewController
 
         alreadyHasAccountButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
         
-        //TEMP
-        LRSessionManager.sharedManager.registerUnauthorized()
-        
 //        LRSessionManager.sharedManager.registerAuthorized("david@trylayers.com", password: "password123")
     }
     

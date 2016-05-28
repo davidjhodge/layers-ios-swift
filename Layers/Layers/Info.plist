@@ -21,6 +21,10 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Layers</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>fb982100215236828</string>
@@ -28,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>878</string>
+	<string>950</string>
 	<key>FacebookAppID</key>
 	<string>982100215236828</string>
 	<key>FacebookDisplayName</key>

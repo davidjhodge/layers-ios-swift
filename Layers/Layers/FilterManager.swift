@@ -35,7 +35,7 @@ struct Filter
     
     var brands: Array<FilterObject>?
     
-    var retailers: Array<FilterObject>?
+    var retailers: (selections: Array<FilterObject>?, all: Array<FilterObject>?)
     
     var priceRange: (minPrice: Int, maxPrice: Int)?
     
@@ -54,7 +54,12 @@ class FilterManager
     // Static variable to handle all filtering manipulations
     static let defaultManager = FilterManager()
     
-    private var filter = Filter()
+    private var filter: Filter!
+    
+    init()
+    {
+        setNewFilter(Filter())
+    }
     
     func getCurrentFilter() -> Filter
     {
@@ -66,9 +71,16 @@ class FilterManager
         filter = newFilter
     }
     
+    func resetFilter()
+    {
+        filter = Filter()
+        
+        filter.retailers = (selections: nil, all: nil)
+    }
+    
     func hasActiveFilters() -> Bool
     {
-        if filter.categories != nil || filter.brands != nil || filter.retailers != nil || filter.priceRange != nil || filter.color != nil
+        if filter.categories != nil || filter.brands != nil || filter.retailers.selections != nil || filter.priceRange != nil || filter.color != nil
         {
             return true
         }
@@ -114,7 +126,7 @@ class FilterManager
         }
         
         // Retailers
-        if let retailers = filter.retailers
+        if let retailers = filter.retailers.selections
         {
             var retailerParams = ""
             
@@ -201,7 +213,7 @@ class FilterManager
     
     func fetchRetailers(completionHandler: FilterCompletionBlock?)
     {
-        if let retailers = filter.retailers
+        if let retailers = filter.retailers.all
         {
             if let completion = completionHandler
             {
@@ -220,6 +232,8 @@ class FilterManager
                         {
                             if let filters = FilterObjectConverter.filterObjectArray(retailerArray)
                             {
+                                self.filter.retailers.all = filters
+                                
                                 completion(success: true, response: filters)
                             }
                         }

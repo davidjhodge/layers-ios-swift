@@ -242,21 +242,6 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
                     {
                         selectedItems = selections.filter() { $0.key != desiredKey }
                     }
-                    
-//                    for (i,selection) in selections.enumerate()
-//                    {
-//                        let index = selections.indexOf(<#T##predicate: (FilterObject) throws -> Bool##(FilterObject) throws -> Bool#>)
-//                        
-//                        if let itemText = selection.name
-//                        {
-//                            if let comparisonItemText = items![index].itemText
-//                            {
-//                                if itemText == comparisonItemText
-//                                {
-//                                    selectedItems!.removeAtIndex(i)
-//                                }
-//                            }
-//                        }
                 }
                 
                 updateRowAtIndex(index)

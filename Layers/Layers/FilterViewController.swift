@@ -94,7 +94,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                     
                 case .Retailer:
                     
-                    newFilter.retailers = newFilters
+                    newFilter.retailers.selections = newFilters
                     
                 default:
                     break
@@ -184,7 +184,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 cell.filterSelectionLabel.text = "Many Retailers"
 
                 // If filter selected, show blue dot
-                if newFilter.retailers != nil
+                if newFilter.retailers.selections != nil
                 {
                     cell.selectedCircleView.hidden = false
                 }
@@ -323,7 +323,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                             
                         case .Retailer:
                             
-                            if let currentFilters = newFilter.retailers
+                            if let currentFilters = newFilter.retailers.selections
                             {
                                 var array = Array<FilterObject>()
                                 

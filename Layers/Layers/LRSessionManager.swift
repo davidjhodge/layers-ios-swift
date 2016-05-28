@@ -23,13 +23,13 @@ let kAccessToken = "kAccessToken"
 let kCurrentUser = "kCurrentUser"
 
 //AWS
-private let kAWSCognitoClientId = "5gjvi9e5ikmntbduka8mp0jf9q"
-private let kAWSCognitoClientSecret = "5gjvi9e5ikmntbduka8mp0jf9q"
-private let kAWSCognitoPoolId = "us-east-1:c7d2ab80-046f-4b0d-8344-32db54981782"
-private let kAWSUserPoolId = "us-east-1_dHgDcpP9d"
+private let kAWSCognitoClientId = "7i6ivdpa5oh5mvgo097i3ca17u"
+//private let kAWSCognitoPoolId = "us-east-1:c7d2ab80-046f-4b0d-8344-32db54981782"
+private let kAWSCognitoPoolId = "us-east-1:cf0934de-5e7b-4aef-b1d4-e0f4a849cc55"
+private let kAWSUserPoolId = "us-east-1_jEKsn6S9s"
 
-private let kAWSCognitoRoleAuthorized = "arn:aws:iam::520777401565:role/Cognito_AWSCognitoAuthAuth_Role"
-private let kAWSCognitoRoleUnauthorized = "arn:aws:iam::520777401565:role/Cognito_AWSCognitoAuthUnauth_Role"
+//private let kAWSCognitoRoleAuthorized = "arn:aws:iam::520777401565:role/Cognito_AWSCognitoAuthAuth_Role"
+//private let kAWSCognitoRoleUnauthorized = "arn:aws:iam::520777401565:role/Cognito_AWSCognitoAuthUnauth_Role"
 
 let productCollectionPageSize = 20
 
@@ -59,6 +59,7 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
     
     var AWSCompletionHandler: AWSContinuationBlock?
 
+    var socialLoginDict: Dictionary<String,String>?
     
     // MARK: Initialization
     override init ()
@@ -76,23 +77,14 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
         networkManager = Alamofire.Manager(configuration: configuration)
         
         // Configures AWS Cognito and User Pools
-        configureAWS()
-        
-        //Detect Change in Identity when an unauthenticated user logs in (if an account for that login already exists)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(identityDidChange), name: AWSCognitoIdentityIdChangedNotification, object: nil)
-                
-        // Restore session credentials
-        resumeSession()
-    }
-    
-    private func configureAWS()
-    {
-        //AWS
-        credentialsProvider = AWSCognitoCredentialsProvider(regionType: .USEast1, identityPoolId: kAWSCognitoPoolId, unauthRoleArn: kAWSCognitoRoleUnauthorized, authRoleArn: kAWSCognitoRoleAuthorized, identityProviderManager: self)
+        credentialsProvider = AWSCognitoCredentialsProvider(regionType: .USEast1, identityPoolId: kAWSCognitoPoolId, identityProviderManager: self)
         let defaultServiceConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: credentialsProvider)
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration
         
         AWSLogger.defaultLogger().logLevel = .Verbose
+        
+        //Detect Change in Identity when an unauthenticated user logs in (if an account for that login already exists)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(identityDidChange), name: AWSCognitoIdentityIdChangedNotification, object: nil)
     }
     
     //MARK: Managing Account Credentials
@@ -100,31 +92,82 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
     func resumeSession()
     {
         // Retrieves cognito identity locally if one is cached, and from the AWS Cognito Remote service if none exists
-        refreshIdentityId()
-
-        if FBSDKAccessToken.currentAccessToken() != nil
-        {
-            syncCredentials([AWSIdentityProviderFacebook: FBSDKAccessToken.currentAccessToken().tokenString])
-        }
+        credentialsProvider.getIdentityId().continueWithBlock({ (task) -> AnyObject! in
+            
+            if task.cancelled
+            {
+                // Cancelled
+            }
+            else if task.error != nil
+            {
+                log.debug("Error: \(task.error?.localizedDescription)")
+            }
+            else
+            {
+                // Success!
+                let cognitoIdentifier = task.result as! String
+                
+                log.debug("Cognito Identifier: \(cognitoIdentifier)")
+                
+                // If facebook token exists, use it to login
+                if FBSDKAccessToken.currentAccessToken() != nil
+                {
+                    self.syncCredentials([AWSIdentityProviderFacebook: FBSDKAccessToken.currentAccessToken().tokenString])
+                }
+            }
+            
+            return nil
+            
+        })
     }
     
-    func syncCredentials(logins: [NSObject: AnyObject]?)
+    func syncCredentials(logins: [String: String]?)
     {
-        var merge = [NSObject : AnyObject]()
+//        var merge = [NSObject : AnyObject]()
         
         //Add existing logins
-        if let previousLogins = self.credentialsProvider?.logins {
-            merge = previousLogins
-        }
+        socialLoginDict = logins
         
-        //Add new logins
-        if let unwrappedLogins = logins {
-            for (key, value) in unwrappedLogins {
-                merge[key] = value
+        credentialsProvider.identityProvider.logins().continueWithBlock( { (task: AWSTask!) -> AnyObject! in
+            
+            if task.error != nil
+            {
+                log.debug("Error: \(task.error?.localizedDescription)")
             }
-            self.credentialsProvider?.logins = merge
-        }
+            else if task.cancelled
+            {
+                // User cancelled task
+            }
+            else
+            {
+                log.debug("Social Login successfully added.")
+            }
+            
+            return nil
+        })
     }
+//        credentialsProvider.identityProvider.logins().continueWithBlock({ (task: AWSTask!) -> AnyObject! in
+//            
+//            print("Logins")
+//            if let result = task.result
+//            {
+//                log.info(result)
+//            }
+//            
+//            return nil
+//        })
+        
+//        if let previousLogins = self.credentialsProvider?.logins {
+//            merge = previousLogins
+//        }
+//        
+//        //Add new logins
+//        if let unwrappedLogins = logins {
+//            for (key, value) in unwrappedLogins {
+//                merge[key] = value
+//            }
+//            self.credentialsProvider?.logins = merge
+//        }
     
     func logout()
     {
@@ -145,6 +188,14 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
     // AWSIdentityProviderManager
     func logins() -> AWSTask
     {
+        if credentialsProvider != nil
+        {
+            if let socialLogins = socialLoginDict
+            {
+                return AWSTask(result: socialLogins)
+            }
+        }
+       
         return AWSTask(result: nil)
     }
     
@@ -223,50 +274,6 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
 //    }
     
     // MARK: API Access
-    
-    /**
-    *   Register using AWSCognito
-    */
-    func registerUnauthorized()
-    {
-        // If no identity token is cached, retreive one from AWS Cognito
-        var cognitoIdentifier = ""
-        
-        if let cognitoId = credentialsProvider.identityId
-        {
-            cognitoIdentifier = cognitoId
-            
-            log.debug("Cognito Identifier: \(cognitoIdentifier)")
-        }
-        else
-        {
-            refreshIdentityId()
-        }
-    }
-    
-    func refreshIdentityId()
-    {
-        // Retreives an existing cognito Id if one exists. If not, a new one is created
-        credentialsProvider.getIdentityId().continueWithBlock({ (task: AWSTask!) -> AnyObject! in
-            
-            if task.error != nil
-            {
-                log.debug("Error: \(task.error?.localizedDescription)")
-            }
-            else
-            {
-                // Success!
-                let cognitoIdentifier = task.result as! String
-                
-                let logins = self.credentialsProvider.identityProvider.logins()
-                
-                log.debug("Cognito Identifier: \(cognitoIdentifier)")
-                
-            }
-            
-            return nil
-        })
-    }
     
     func registerAuthorized(email: String, password: String)
     {
@@ -368,17 +375,8 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
         // The currentAccessToken() should be retrieved from Facebook in the View Controller that the login dialogue is shown from.
         if (FBSDKAccessToken.currentAccessToken() != nil)
         {
-            // Connect this Facebook account with the existing Amazon Cognito Identity
-            self.credentialsProvider?.identityProvider.logins().continueWithBlock({ (task: AWSTask!) -> AnyObject! in
-                
-                if task.error != nil
-                {
-                    [AWSIdentityProviderFacebook: FBSDKAccessToken.currentAccessToken().tokenString]
-                }
+            syncCredentials([AWSIdentityProviderFacebook: FBSDKAccessToken.currentAccessToken().tokenString])
             
-                return [AWSIdentityProviderFacebook: FBSDKAccessToken.currentAccessToken().tokenString]
-            })
-
             // Get user information with Facebook Graph API
             let request = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, age_range, link, gender, locale, picture, timezone, updated_time, verified, friends, email"], HTTPMethod: "GET")
             

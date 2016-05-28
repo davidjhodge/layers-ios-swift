@@ -59,7 +59,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         spinny.startAnimating()
         
         // SHOULD LOAD ONLY PRICE ALERT ITEMS FOR USER
-        LRSessionManager.sharedManager.loadProductCollection(0, completionHandler: { (success, error, response) -> Void in
+        LRSessionManager.sharedManager.loadProductCollection(1, completionHandler: { (success, error, response) -> Void in
             
             self.spinny.stopAnimating()
 
@@ -168,6 +168,21 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                                     }
                                 }
                             }
+                            
+                            if let primaryImageUrl = firstVariant.images?[safe: 0]?.primaryUrl
+                            {
+                                cell.productImageView.sd_setImageWithURL(primaryImageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                                    
+                                    if image != nil && cacheType != .Memory
+                                    {
+                                        cell.productImageView.alpha = 0.0
+                                        
+                                        UIView.animateWithDuration(0.3, animations: {
+                                            cell.productImageView.alpha = 1.0
+                                        })
+                                    }
+                                })
+                            }
                         }
                         
                         return cell
@@ -193,6 +208,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                         // Should be a "lowest price" field
                         if let firstVariant = product.variants?[safe: 0]
                         {
+                            // First Size
                             if let firstSize = firstVariant.sizes?[safe: 0]
                             {
                                 if let priceObject = firstSize.prices?[safe: 0]
@@ -203,6 +219,23 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                                     }
                                 }
                             }
+                            
+                            // Primary Image
+                            if let primaryImageUrl = firstVariant.images?[safe: 0]?.primaryUrl
+                            {
+                                cell.productImageView.sd_setImageWithURL(primaryImageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                                    
+                                    if image != nil && cacheType != .Memory
+                                    {
+                                        cell.productImageView.alpha = 0.0
+                                        
+                                        UIView.animateWithDuration(0.3, animations: {
+                                            cell.productImageView.alpha = 1.0
+                                        })
+                                    }
+                                })
+                            }
+
                         }
                         
                         return cell
