@@ -66,9 +66,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         
-        if let cognitoId = LRSessionManager.sharedManager.credentialsProvider?.identityId
+        if let _ = LRSessionManager.sharedManager.credentialsProvider?.identityId
         {
-            let kAWSSNSApplicationARN = "arn:aws:sns:us-west-2:520777401565:app/APNS_SANDBOX/Layers"
+            let kAWSSNSApplicationARN = "arn:aws:sns:us-east-1:520777401565:app/APNS_SANDBOX/Layers"
             
             let platformEndpointRequest = AWSSNSCreatePlatformEndpointInput()
             platformEndpointRequest.customUserData = "need to add user data"
@@ -77,7 +77,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             let snsManager = AWSSNS.defaultSNS()
             
-            snsManager.createPlatformEndpoint(platformEndpointRequest)
+            snsManager.createPlatformEndpoint(platformEndpointRequest).continueWithBlock({ (task) -> AnyObject! in
+             
+                if task.cancelled
+                {
+                    // Cancelled
+                }
+                else if task.error != nil
+                {
+                    log.error(task.error?.localizedDescription)
+                }
+                else
+                {
+                    // Success
+                    log.debug("SNS Platform Endpoint successfully created.")
+                }
+                
+                return nil
+            })
         }
     }
     
