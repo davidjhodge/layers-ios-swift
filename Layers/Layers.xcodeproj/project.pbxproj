@@ -43,6 +43,7 @@
 		70776FDA1CCC16FA002E6F25 /* OnboardingBrandsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FD91CCC16FA002E6F25 /* OnboardingBrandsViewController.swift */; };
 		70776FDC1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FDB1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift */; };
 		70776FDE1CD64516002E6F25 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 70776FDD1CD64516002E6F25 /* GoogleService-Info.plist */; };
+		70837E6B1CFA4AA500C83045 /* ProductRouteHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70837E6A1CFA4AA500C83045 /* ProductRouteHandler.swift */; };
 		70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */; };
 		70987BEA1CB95F1900D86FBA /* ProductCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */; };
 		70987BEE1CB9658200D86FBA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BED1CB9658200D86FBA /* User.swift */; };
@@ -131,6 +132,7 @@
 		70776FD91CCC16FA002E6F25 /* OnboardingBrandsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingBrandsViewController.swift; sourceTree = "<group>"; };
 		70776FDB1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingAgeViewController.swift; sourceTree = "<group>"; };
 		70776FDD1CD64516002E6F25 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		70837E6A1CFA4AA500C83045 /* ProductRouteHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductRouteHandler.swift; sourceTree = "<group>"; };
 		70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStateTransitioner.swift; sourceTree = "<group>"; };
 		70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewController.swift; sourceTree = "<group>"; };
 		70987BED1CB9658200D86FBA /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -336,6 +338,14 @@
 				70776FDB1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift */,
 			);
 			name = Onboarding;
+			sourceTree = "<group>";
+		};
+		70837E691CFA4A9200C83045 /* Deep Linking */ = {
+			isa = PBXGroup;
+			children = (
+				70837E6A1CFA4AA500C83045 /* ProductRouteHandler.swift */,
+			);
+			name = "Deep Linking";
 			sourceTree = "<group>";
 		};
 		70987BE61CB95E9E00D86FBA /* App State Transitioner */ = {
@@ -565,6 +575,7 @@
 			children = (
 				70D84A9E1CB9557300A70485 /* AppDelegate.swift */,
 				70987C2D1CB9A81C00D86FBA /* LRNavigationBar.swift */,
+				70837E691CFA4A9200C83045 /* Deep Linking */,
 				70776FCD1CC69510002E6F25 /* External Components */,
 				70987BFE1CB97AC300D86FBA /* Utilities */,
 				70987BF61CB9740100D86FBA /* Colors & Fonts */,
@@ -764,6 +775,7 @@
 				706FF88C1CBC57D6007B26AD /* TextFieldCell.swift in Sources */,
 				706FF88A1CBC54F8007B26AD /* EmailLoginViewController.swift in Sources */,
 				70987C171CB985DE00D86FBA /* Font.swift in Sources */,
+				70837E6B1CFA4AA500C83045 /* ProductRouteHandler.swift in Sources */,
 				70776FD51CCC03C1002E6F25 /* OnboardingGenderViewController.swift in Sources */,
 				706FF8961CBD6B95007B26AD /* PriceGraphCell.swift in Sources */,
 				702FC3011CC3FE6D0012969C /* ContactUsViewController.swift in Sources */,

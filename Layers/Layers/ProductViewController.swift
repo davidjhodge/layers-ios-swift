@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import MBProgressHUD
+import DeepLinkKit
 
 private enum TableSection: Int
 {
@@ -25,7 +26,7 @@ private enum Picker: Int
     case Style = 0, Size
 }
 
-class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate
+class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, DPLTargetViewController
 {
     @IBOutlet weak var tableView: UITableView!
         
@@ -282,6 +283,19 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     func pickerDidCancel()
     {
         view.endEditing(true)
+    }
+    
+    // MARK: Deep Linking
+    
+    func configureWithDeepLink(deepLink: DPLDeepLink!) {
+        
+        if let key = deepLink.routeParameters["product_id"] as? String
+        {
+            if let productId = Int(key)
+            {
+                productIdentifier = NSNumber(integer: productId)
+            }
+        }
     }
     
     // MARK: UITableView Data Source

@@ -23,6 +23,7 @@ pod 'AWSCognito', '~> 2.4'
 pod 'AWSCognitoIdentityProvider'
 pod 'AWSSNS'
 pod 'MBProgressHUD'
+pod 'DeepLinkKit'
 
 end
 

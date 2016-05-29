@@ -24,15 +24,25 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>Layers</string>
+			<string>Facebook</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>fb982100215236828</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Layers</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>trylayers</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>971</string>
+	<string>1006</string>
 	<key>FacebookAppID</key>
 	<string>982100215236828</string>
 	<key>FacebookDisplayName</key>

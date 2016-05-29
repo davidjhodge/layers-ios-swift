@@ -157,6 +157,18 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         reloadData(currentPage!)
     }
     
+    // MARK: DPLProductDetailViewController
+//    func configureWithDeepLink(deepLink: DPLDeepLink!) {
+//        
+//        if let key = deepLink.routeParameters["product_id"] as? String
+//        {
+//            if let productId = Int(key)
+//            {
+//                performSegueWithIdentifier("ShowProductViewControllerFromDeepLink", sender: productId)
+//            }
+//        }
+//    }
+    
     // MARK: Collection View Data Source
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
@@ -370,6 +382,16 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 }
             }
         }
+//        else if segue.identifier == "ShowProductViewControllerFromDeepLink"
+//        {
+//            if let destinationVC = segue.destinationViewController as? ProductViewController
+//            {
+//                if let productId = sender as? Int
+//                {
+//                    destinationVC.productIdentifier = productId
+//                }
+//            }
+//        }
         else if segue.identifier == "PresentModalFilterViewController"
         {
             if let destinationNav = segue.destinationViewController as? UINavigationController

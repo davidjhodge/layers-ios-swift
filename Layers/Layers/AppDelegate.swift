@@ -9,22 +9,25 @@
 import UIKit
 import SwiftyBeaver
 import FBSDKCoreKit
+import DeepLinkKit
+import ObjectMapper
 
 import AWSSNS
 
 let log = SwiftyBeaver.self
 
 private let facebookScheme: String = "fb982100215236828"
+private let layersScheme: String = "trylayers"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
+    lazy var router = DPLDeepLinkRouter()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
-//        print(UIDevice.currentDevice().identifierForVendor!.UUIDString)
         
         window = LRWindow(frame: UIScreen.mainScreen().bounds)
         window?.tintColor = Color.DarkNavyColor
@@ -41,6 +44,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSFontAttributeName: Font.OxygenRegular(size: 16.0)], forState: .Normal)
         
         UITableViewCell.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.DarkNavyColor
+        
+        // Deep Linking
+        registerRoutes()
         
         // Determine intial view controller based on login state
         
@@ -62,6 +68,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tempRegisterForNotifications()
         
         return true
+    }
+    
+    func registerRoutes()
+    {
+        router["product/:product_id"] = ProductRouteHandler.self
     }
     
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
@@ -132,9 +143,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
         func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        application.applicationIconBadgeNumber = 0
+            application.applicationIconBadgeNumber = 0
+            
+            if let productId = userInfo["product_id"] as? String
+            {
+                // Mimicking an outbound Url to use Routing functionality. This should be improved in the future.
+                router.handleURL(NSURL(string: "trylayers://product/\(productId)"), withCompletion: nil)
+            }
+            
         let message = userInfo
         print(message)
+    }
+    
+    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        
+        if url.scheme == layersScheme
+        {
+            router.handleURL(url, withCompletion: nil)
+        }
+        
+        return true
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
@@ -143,8 +171,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         {
             return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
         }
+        else if url.scheme == layersScheme
+        {
+            // Handle Route
+            AppStateTransitioner.transitionToMainStoryboard(false)
+            
+            router.handleURL(url, withCompletion: nil)
+        }
         
         return true
+    }
+    
+    // For future verisons where universal links are supported
+    func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
+        
+        return router.handleUserActivity(userActivity, withCompletion: nil)
     }
 
     func applicationWillResignActive(application: UIApplication) {
