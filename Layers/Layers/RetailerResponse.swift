@@ -30,8 +30,3 @@ class RetailerResponse: Mappable
         retailerDomain          <- map["retailer_domain"]
     }
 }
-
-//"retailer_url": "factory-jcrew-com",
-//"retailer_name": "J.Crew Factory",
-//"id": 5,
-//"retailer_domain": "factory.jcrew.com"
