@@ -13,6 +13,7 @@
 		70204A611CBF5E9B00868C00 /* ProductWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */; };
 		7022F2F11CFB65120097DDF9 /* ColorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7022F2F01CFB65120097DDF9 /* ColorResponse.swift */; };
 		7022F2F31CFB6A740097DDF9 /* CategoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7022F2F21CFB6A740097DDF9 /* CategoryResponse.swift */; };
+		7022F2F51CFCAD100097DDF9 /* AWSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7022F2F41CFCAD100097DDF9 /* AWSManager.swift */; };
 		702FC2F11CC2D8470012969C /* UINavigationItem+BackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2F01CC2D8470012969C /* UINavigationItem+BackButton.m */; };
 		702FC2FC1CC344960012969C /* EmailCreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */; };
 		702FC3011CC3FE6D0012969C /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */; };
@@ -102,6 +103,7 @@
 		70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWebViewController.swift; sourceTree = "<group>"; };
 		7022F2F01CFB65120097DDF9 /* ColorResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorResponse.swift; sourceTree = "<group>"; };
 		7022F2F21CFB6A740097DDF9 /* CategoryResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryResponse.swift; sourceTree = "<group>"; };
+		7022F2F41CFCAD100097DDF9 /* AWSManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSManager.swift; sourceTree = "<group>"; };
 		702FC2EF1CC2D8470012969C /* UINavigationItem+BackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+BackButton.h"; sourceTree = "<group>"; };
 		702FC2F01CC2D8470012969C /* UINavigationItem+BackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationItem+BackButton.m"; sourceTree = "<group>"; };
 		702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailCreateAccountViewController.swift; sourceTree = "<group>"; };
@@ -497,6 +499,7 @@
 			isa = PBXGroup;
 			children = (
 				70987BF41CB970CA00D86FBA /* LRSessionManager.swift */,
+				7022F2F41CFCAD100097DDF9 /* AWSManager.swift */,
 				70CECA811CEE31E600FF7B8F /* FilterManager.swift */,
 				70776FD01CC8A90C002E6F25 /* Localizable.strings */,
 				70987BEF1CB9658700D86FBA /* Data Model */,
@@ -759,6 +762,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7022F2F11CFB65120097DDF9 /* ColorResponse.swift in Sources */,
+				7022F2F51CFCAD100097DDF9 /* AWSManager.swift in Sources */,
 				70AF1A291CE255BF00C0518C /* SearchViewController.swift in Sources */,
 				70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */,
 				706FF89A1CBD6E7A007B26AD /* AlternateReviewCell.swift in Sources */,

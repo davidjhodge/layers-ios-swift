@@ -88,11 +88,11 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func signUpToUserPool()
     {
-        LRSessionManager.sharedManager.registerToUserPool("dhodge416@gmail.com", password: "password123", completionHandler: { (success, error, response) -> Void in
+        LRSessionManager.sharedManager.register("dhodge416@gmail.com", password: "password123", completionHandler: { (success, error, response) -> Void in
             
             if success
             {
-                // Login to user pool succeeded
+                // Signing up to user pool succeeded
             }
             else
             {
@@ -108,9 +108,21 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func signInToUserPool()
     {
-        LRSessionManager.sharedManager.signInToUserPool("dhodge416@gmail.com", password: "password123", completionHandler: { (success, error, response) -> Void in
+        LRSessionManager.sharedManager.signIn("dhodge416@gmail.com", password: "password123", completionHandler: { (success, error, response) -> Void in
          
-            
+            if success
+            {
+                // Login to user pool succeeded
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                })
+            }
         })
     }
     

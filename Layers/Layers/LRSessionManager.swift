@@ -12,32 +12,18 @@ import SwiftyJSON
 import ObjectMapper
 import KeychainAccess
 
-import AWSCognitoIdentityProvider
-import AWSCore
-import AWSCognito
-
 import FBSDKLoginKit
 
 let kLRAPIBase = "http://52.22.85.12:8000/"
 let kAccessToken = "kAccessToken"
 let kCurrentUser = "kCurrentUser"
 
-//AWS
-private let kAWSCognitoClientId = "7i6ivdpa5oh5mvgo097i3ca17u"
-private let kAWSCognitoClientSecret = "1oi7a878pig00vb0jl25s47gc7uq8g70ca8o36ndrg9ued8tk04e"
-private let kAWSCognitoIdentityPoolId = "us-east-1:cf0934de-5e7b-4aef-b1d4-e0f4a849cc55"
-private let kAWSCognitoUserPoolId = "us-east-1_jEKsn6S9s"
-private let kAWSCognitoUserPoolKey = "kUserPool"
-
-//private let kAWSCognitoRoleAuthorized = "arn:aws:iam::520777401565:role/Cognito_AWSCognitoAuthAuth_Role"
-//private let kAWSCognitoRoleUnauthorized = "arn:aws:iam::520777401565:role/Cognito_AWSCognitoAuthUnauth_Role"
-
 let productCollectionPageSize = 20
 
 typealias LRCompletionBlock = ((success: Bool, error: String?, response:AnyObject?) -> Void)
 typealias LRJsonCompletionBlock = ((success: Bool, error: String?, response:JSON?) -> Void)
 
-class LRSessionManager: NSObject, AWSIdentityProviderManager
+class LRSessionManager: NSObject
 {
     // Static variable to handle all networking and caching activities
     static let sharedManager: LRSessionManager = LRSessionManager()
@@ -50,20 +36,7 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
     
     // Access the Keychain
     private let keychain: Keychain = Keychain(service: "Layers")
-    
-    var currentUser: User?
-    
-    var accessToken: String?
-    var secretToken: String?
-    
-    var credentialsProvider: AWSCognitoCredentialsProvider!
-    
-    var userPool: AWSCognitoIdentityUserPool!
-    
-    var AWSCompletionHandler: AWSContinuationBlock?
-
-    var socialLoginDict: Dictionary<String,String>?
-    
+        
     // MARK: Initialization
     override init ()
     {
@@ -79,21 +52,6 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
         
         networkManager = Alamofire.Manager(configuration: configuration)
         
-        // Configures AWS Cognito
-        credentialsProvider = AWSCognitoCredentialsProvider(regionType: .USEast1, identityPoolId: kAWSCognitoIdentityPoolId, identityProviderManager: self)
-        let defaultServiceConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: credentialsProvider)
-        AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration
-        
-        // AWS User Pools
-        let userPoolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: kAWSCognitoClientId, clientSecret: kAWSCognitoClientSecret, poolId: kAWSCognitoUserPoolId)
-        AWSCognitoIdentityUserPool.registerCognitoIdentityUserPoolWithUserPoolConfiguration(userPoolConfiguration, forKey:kAWSCognitoUserPoolKey)
-        userPool = AWSCognitoIdentityUserPool(forKey: kAWSCognitoUserPoolKey)
-        
-        AWSLogger.defaultLogger().logLevel = .Verbose
-        
-        //Detect Change in Identity when an unauthenticated user logs in (if an account for that login already exists)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(identityDidChange), name: AWSCognitoIdentityIdChangedNotification, object: nil)
-        
         resumeSession()
     }
     
@@ -102,50 +60,29 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
     func resumeSession()
     {
         // Retrieves cognito identity locally if one is cached, and from the AWS Cognito Remote service if none exists
-        credentialsProvider.getIdentityId().continueWithBlock({ (task) -> AnyObject! in
-            
-            if task.cancelled
+        AWSManager.defaultManager.fetchIdentityId({ (success, error, response) -> Void in
+          
+            if success
             {
-                // Cancelled
-            }
-            else if task.error != nil
-            {
-                log.debug("Error: \(task.error?.localizedDescription)")
+                log.debug("Successfully retrieved identity token from AWS.")
             }
             else
             {
-                // Success!
-                let cognitoIdentifier = task.result as! String
-                
-                log.debug("Cognito Identifier: \(cognitoIdentifier)")
+                if let errorMessage = error
+                {
+                    log.debug(errorMessage)
+                    
+                    // If identityId does not exist, clear all existing credentials to avoid an incomplete state
+                    self.logout()
+
+                }
             }
-            
-            return nil
-            
         })
     }
     
-    func syncCredentials(logins: [String: String]?)
+    func isAuthenticated() -> Bool
     {
-        socialLoginDict = logins
-        
-        credentialsProvider.identityProvider.logins().continueWithBlock( { (task: AWSTask!) -> AnyObject! in
-            
-            if task.error != nil
-            {
-                log.debug("Error: \(task.error?.localizedDescription)")
-            }
-            else if task.cancelled
-            {
-                // User cancelled task
-            }
-            else
-            {
-                log.debug("Social Login successfully added.")
-            }
-            
-            return nil
-        })
+        return AWSManager.defaultManager.isAuthorized()
     }
 
     func logout()
@@ -156,25 +93,7 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
             FBSDKLoginManager().logOut()
         }
         
-        // Clear AWS Datasets
-        AWSCognito.defaultCognito().wipe()
-        
-        // Clear AWS Cognito Credentials
-        credentialsProvider.clearKeychain()
-    }
-    
-    // AWSIdentityProviderManager
-    func logins() -> AWSTask
-    {
-        if credentialsProvider != nil
-        {
-            if let socialLogins = socialLoginDict
-            {
-                return AWSTask(result: socialLogins)
-            }
-        }
-       
-        return AWSTask(result: nil)
+        AWSManager.defaultManager.clearAWSCache()
     }
     
 //    /**
@@ -251,98 +170,30 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
 //        return false
 //    }
     
-    // MARK: API Access
+    // MARK: Authorization
     
-    func registerToUserPool(email: String, password: String, completionHandler: LRCompletionBlock?)
+    func register(email: String, password: String, completionHandler: LRCompletionBlock?)
     {
-        if email.characters.count > 0 && password.characters.count > 0
-        {
-            // Email Attribute required by AWS User Pool
-            let requiredEmailAttribute = AWSCognitoIdentityUserAttributeType()
-            requiredEmailAttribute.name = "email"
-            requiredEmailAttribute.value = email
+        AWSManager.defaultManager.registerToUserPool(email, password: password, completionHandler: { (success, error, response) -> Void in
             
-            userPool.signUp(email, password: password, userAttributes: [requiredEmailAttribute], validationData: nil).continueWithBlock( { (task: AWSTask) -> AnyObject! in
-              
-                if task.cancelled
-                {
-                    // Task Cancelled
-                    if let completion = completionHandler
-                    {
-                        completion(success: false, error: "User Pool sign up task cancelled", response: nil)
-                    }
-                    
-                    log.debug("Sign up task cancelled.")
-                }
-                else if task.error != nil
-                {
-                    if let completion = completionHandler
-                    {
-                        completion(success: false, error: task.error?.localizedDescription, response: nil)
-                    }
-                    
-                    log.error(task.error?.localizedDescription)
-                }
-                else
-                {
-                    if let user: AWSCognitoIdentityUser = task.result as? AWSCognitoIdentityUser
-                    {
-                        if let username = user.username
-                        {
-                            log.debug("\(username) added to the User Pool.")
-                        }
-                        
-                        if let username = user.username
-                        {
-                            log.debug("\(username) added to the User Pool.")
-                        }
-                    }
-                }
-                
-                return nil
-            })
-        }
+            if let completion = completionHandler
+            {
+                // Pass completion block returned from AWS Service
+                completion(success: success, error: error, response: response)
+            }
+        })
     }
     
-    func signInToUserPool(email: String, password: String, completionHandler: LRCompletionBlock?)
+    func signIn(email: String, password: String, completionHandler: LRCompletionBlock?)
     {
-        if email.characters.count > 0 && password.characters.count > 0
-        {
-            let user = userPool.getUser()
-            
-            user.getSession(email, password: password, validationData: nil, scopes: nil).continueWithBlock({ (task) -> AnyObject! in
-             
-                if task.cancelled
-                {
-                    // Cancelled
-                }
-                else if task.error != nil
-                {
-                    if let completion = completionHandler
-                    {
-                        completion(success: false, error: task.error?.localizedDescription, response: nil)
-                    }
-                }
-                else
-                {
-                    // Success
-                    if let completion = completionHandler
-                    {
-                        if let session = task.result as? AWSCognitoIdentityUserSession
-                        {
-                            if let token = session.idToken?.tokenString
-                            {
-                                self.syncCredentials(["cognito-idp.us-east-1.amazonaws.com/\(kAWSCognitoUserPoolId)":token])
-                                
-                                completion(success: true, error: nil, response: token)
-                            }
-                        }
-                    }
-                }
-                
-                return nil
-            })
-        }
+        AWSManager.defaultManager.signInToUserPool(email, password: password, completionHandler: { (success, error, response) -> Void in
+         
+            if let completion = completionHandler
+            {
+                // Pass completion block returned from AWS Service
+                completion(success: success, error: error, response: response)
+            }
+        })
     }
     
 //        //Send API
@@ -359,7 +210,8 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
         // The currentAccessToken() should be retrieved from Facebook in the View Controller that the login dialogue is shown from.
         if (FBSDKAccessToken.currentAccessToken() != nil)
         {
-            syncCredentials([AWSIdentityProviderFacebook: FBSDKAccessToken.currentAccessToken().tokenString])
+            // Add this login to an existing cognito identity
+            AWSManager.defaultManager.syncLoginCredentials([AWSIdentityProviderFacebook: FBSDKAccessToken.currentAccessToken().tokenString])
             
             // Get user information with Facebook Graph API
             let request = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, age_range, link, gender, locale, picture, timezone, updated_time, verified, friends, email"], HTTPMethod: "GET")
@@ -386,6 +238,40 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
                 }
             })
         }
+    }
+    
+    // MARK: Push Notifications
+    func registerForPushNotifications(deviceToken: NSData?, completionHandler: LRCompletionBlock?)
+    {
+        AWSManager.defaultManager.registerWithSNS(deviceToken, completionHandler: { (success, error, response) -> Void in
+            
+            if let completion = completionHandler
+            {
+                completion(success: success, error: error, response: response)
+            }
+        })
+    }
+    
+    func registerForRemoteNotifications()
+    {
+        let readAction: UIMutableUserNotificationAction = UIMutableUserNotificationAction()
+        readAction.identifier = "READ_IDENTIFIER"
+        readAction.title = "Read"
+        readAction.activationMode = .Foreground
+        readAction.destructive = false
+        readAction.authenticationRequired = true
+        
+        let messageCategory = UIMutableUserNotificationCategory()
+        messageCategory.identifier = "MESSAGE_CATEGORY"
+        messageCategory.setActions([readAction], forContext: .Default)
+        messageCategory.setActions([readAction], forContext: .Minimal)
+        
+        let categories: Set<UIUserNotificationCategory> = NSSet(object: messageCategory) as! Set<UIUserNotificationCategory>
+        
+        let settings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [.Badge, .Sound, .Alert], categories: categories)
+        
+        UIApplication.sharedApplication().registerForRemoteNotifications()
+        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
     }
     
     // MARK: Fetching Server Data
@@ -636,18 +522,7 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
             }
         })
     }
-    
-    // Handle a change in the AWS Cognito Identity, such as when an unauthenticated user creates an account.
-    @objc func identityDidChange(notification: NSNotification?)
-    {
-        if let notification = notification
-        {
-            if let userInfo = notification.userInfo as? [String: AnyObject]
-            {
-                print("AWSCognito Identity changed from: \(userInfo[AWSCognitoNotificationPreviousId]) to: \(userInfo[AWSCognitoNotificationNewId])")
-            }
-        }
-    }
+
     
     // MARK: API Helpers
     func APIUrlAtEndpoint(endpointPath: String?) -> NSURL
@@ -693,9 +568,23 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
         
         if let networkRequest = request.mutableCopy() as? NSMutableURLRequest
         {
-            if authorization && (accessToken != nil)
+            // If user is authenticated, fetch token and authorize request
+            if authorization && isAuthenticated()
             {
-                networkRequest.setValue(accessToken, forHTTPHeaderField: "Authorization")
+                AWSManager.defaultManager.fetchAccessToken({ (success, error, response) -> Void in
+                    
+                    if success
+                    {
+                        if let accessToken = response as? String
+                        {
+                            networkRequest.setValue(accessToken, forHTTPHeaderField: "Authorization")
+                        }
+                    }
+                    else
+                    {
+                        log.debug(error)
+                    }
+                })
             }
             
             networkRequest.setValue("close", forHTTPHeaderField: "Connection")
