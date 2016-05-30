@@ -49,7 +49,14 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
         
         if let colorSelections = selectedColors
         {
-            delegate?.colorFilterChanged(colorSelections)
+            if colorSelections.count > 0
+            {
+                delegate?.colorFilterChanged(colorSelections)
+            }
+            else
+            {
+                delegate?.colorFilterChanged(nil)
+            }
         }
         else
         {

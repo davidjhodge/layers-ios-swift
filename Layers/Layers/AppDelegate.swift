@@ -11,6 +11,7 @@ import SwiftyBeaver
 import FBSDKCoreKit
 import DeepLinkKit
 import ObjectMapper
+import SwiftyJSON
 
 import AWSSNS
 
@@ -21,7 +22,7 @@ private let layersScheme: String = "trylayers"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
     
     lazy var router = DPLDeepLinkRouter()
@@ -78,19 +79,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         
-        if let _ = LRSessionManager.sharedManager.credentialsProvider?.identityId
+        if let identityId = LRSessionManager.sharedManager.credentialsProvider?.identityId
         {
             let kAWSSNSApplicationARN = "arn:aws:sns:us-east-1:520777401565:app/APNS_SANDBOX/Layers"
             
             let platformEndpointRequest = AWSSNSCreatePlatformEndpointInput()
-            platformEndpointRequest.customUserData = "need to add user data"
             platformEndpointRequest.token = deviceTokenAsString(deviceToken)
             platformEndpointRequest.platformApplicationArn = kAWSSNSApplicationARN
             
+            // Pass user identity id and timezone
+            let userData: Dictionary<String, AnyObject> = ["identity_id": identityId,
+                                                           "timezone_offset": NSTimeZone.localTimeZone().secondsFromGMT]
+            
+            let jsonUserData = JSON(userData).rawString(NSUTF8StringEncoding, options: .PrettyPrinted)
+            
+            platformEndpointRequest.customUserData = jsonUserData
+            
+            // Create platform endpoint
             let snsManager = AWSSNS.defaultSNS()
             
             snsManager.createPlatformEndpoint(platformEndpointRequest).continueWithBlock({ (task) -> AnyObject! in
-             
+                
                 if task.cancelled
                 {
                     // Cancelled

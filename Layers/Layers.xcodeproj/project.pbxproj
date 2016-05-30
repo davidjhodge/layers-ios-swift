@@ -31,7 +31,6 @@
 		706FF8961CBD6B95007B26AD /* PriceGraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8951CBD6B95007B26AD /* PriceGraphCell.swift */; };
 		706FF8981CBD6E3E007B26AD /* OverallReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8971CBD6E3E007B26AD /* OverallReviewCell.swift */; };
 		706FF89A1CBD6E7A007B26AD /* AlternateReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8991CBD6E7A007B26AD /* AlternateReviewCell.swift */; };
-		706FF89C1CBD6E96007B26AD /* FeaturesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF89B1CBD6E96007B26AD /* FeaturesCell.swift */; };
 		706FF89E1CBD82D2007B26AD /* ReviewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF89D1CBD82D2007B26AD /* ReviewsViewController.swift */; };
 		706FF8A11CBD84EE007B26AD /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8A01CBD84EE007B26AD /* ReviewCell.swift */; };
 		706FF8A31CBDF771007B26AD /* SimpleProductHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8A21CBDF771007B26AD /* SimpleProductHeaderCell.swift */; };
@@ -122,7 +121,6 @@
 		706FF8951CBD6B95007B26AD /* PriceGraphCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceGraphCell.swift; sourceTree = "<group>"; };
 		706FF8971CBD6E3E007B26AD /* OverallReviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverallReviewCell.swift; sourceTree = "<group>"; };
 		706FF8991CBD6E7A007B26AD /* AlternateReviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlternateReviewCell.swift; sourceTree = "<group>"; };
-		706FF89B1CBD6E96007B26AD /* FeaturesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturesCell.swift; sourceTree = "<group>"; };
 		706FF89D1CBD82D2007B26AD /* ReviewsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewsViewController.swift; sourceTree = "<group>"; };
 		706FF8A01CBD84EE007B26AD /* ReviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
 		706FF8A21CBDF771007B26AD /* SimpleProductHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleProductHeaderCell.swift; sourceTree = "<group>"; };
@@ -281,7 +279,6 @@
 				706FF8951CBD6B95007B26AD /* PriceGraphCell.swift */,
 				706FF8971CBD6E3E007B26AD /* OverallReviewCell.swift */,
 				706FF8991CBD6E7A007B26AD /* AlternateReviewCell.swift */,
-				706FF89B1CBD6E96007B26AD /* FeaturesCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -376,7 +373,6 @@
 			children = (
 				70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */,
 				70AF1A241CE199B400C0518C /* Cells */,
-				70776FC41CC5F872002E6F25 /* Filter */,
 				70AF1A271CE255AC00C0518C /* Search */,
 				70987C311CB9C9FC00D86FBA /* Product Detail */,
 			);
@@ -392,6 +388,7 @@
 				70987C271CB9A4A500D86FBA /* Account.storyboard */,
 				70987C3E1CBBF07F00D86FBA /* Login */,
 				70776FD61CCC03CC002E6F25 /* Onboarding */,
+				70776FC41CC5F872002E6F25 /* Filter */,
 				70987BF21CB9705C00D86FBA /* Product Collection */,
 				705390321CD7D3A000DA8E15 /* Price Alerts */,
 				70987C2B1CB9A4C200D86FBA /* Account */,
@@ -810,7 +807,6 @@
 				70488C521CE63C3E0085BAE9 /* ColorCell.swift in Sources */,
 				70AF1A2B1CE2D17B00C0518C /* RetailerResponse.swift in Sources */,
 				70A40FFF1CD6A4FD00CB515B /* Size.swift in Sources */,
-				706FF89C1CBD6E96007B26AD /* FeaturesCell.swift in Sources */,
 				70A40FF91CD6A16300CB515B /* Rating.swift in Sources */,
 				70AF1A2F1CE3C6A800C0518C /* SubtitleFilterCell.swift in Sources */,
 				70204A611CBF5E9B00868C00 /* ProductWebViewController.swift in Sources */,
