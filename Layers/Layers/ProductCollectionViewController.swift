@@ -18,7 +18,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     
     @IBOutlet weak var collectionViewBottomLayoutConstraint: NSLayoutConstraint!
     
-    var hidingNavBarManager: HidingNavigationBarManager?
+//    var hidingNavBarManager: HidingNavigationBarManager?
 
     var products: Array<ProductResponse>?
     
@@ -54,45 +54,45 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         
-        hidingNavBarManager = HidingNavigationBarManager(viewController: self, scrollView: collectionView)
-        hidingNavBarManager?.expansionResistance = 150
-
-        if let tabBar = navigationController?.tabBarController?.tabBar {
-            hidingNavBarManager?.manageBottomBar(tabBar)
-        }
+//        hidingNavBarManager = HidingNavigationBarManager(viewController: self, scrollView: collectionView)
+//        hidingNavBarManager?.expansionResistance = 150
+//
+//        if let tabBar = navigationController?.tabBarController?.tabBar {
+//            hidingNavBarManager?.manageBottomBar(tabBar)
+//        }
         
         currentPage = 1
         
         reloadData(currentPage!)
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        hidingNavBarManager?.viewWillAppear(animated)
-    }
+//    override func viewWillAppear(animated: Bool) {
+//        super.viewWillAppear(animated)
+//        
+//        hidingNavBarManager?.viewWillAppear(animated)
+//    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        hidingNavBarManager?.viewDidLayoutSubviews()
+//        hidingNavBarManager?.viewDidLayoutSubviews()
         
         if let tabBar = navigationController?.tabBarController?.tabBar {
         collectionViewBottomLayoutConstraint.constant = (-1 * tabBar.bounds.size.height) + 8
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        hidingNavBarManager?.viewWillDisappear(animated)
-    }
-    
-    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
-        hidingNavBarManager?.shouldScrollToTop()
-
-        return true
-    }
+//    override func viewWillDisappear(animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        
+//        hidingNavBarManager?.viewWillDisappear(animated)
+//    }
+//    
+//    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
+//        hidingNavBarManager?.shouldScrollToTop()
+//
+//        return true
+//    }
     
 //    override func preferredStatusBarStyle() -> UIStatusBarStyle {
 //        

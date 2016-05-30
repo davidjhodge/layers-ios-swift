@@ -31,22 +31,38 @@ public struct FilterObject
 
 struct Filter
 {
-    var categories: Array<FilterObject>?
+    var categories: (selections: Array<FilterObject>?, all: Array<FilterObject>?)
     
-    var brands: Array<FilterObject>?
+    var brands: (selections: Array<FilterObject>?, all: Array<FilterObject>?)
     
     var retailers: (selections: Array<FilterObject>?, all: Array<FilterObject>?)
     
     var priceRange: (minPrice: Int, maxPrice: Int)?
     
-    var color: UIColor?
+    var colors: (selections: Array<ColorResponse>?, all: Array<ColorResponse>?)
 }
 
 typealias FilterCompletionBlock = ((success: Bool, response:Array<FilterObject>?) -> Void)
+typealias ColorCompletionBlock = ((success: Bool, response:Array<ColorResponse>?) -> Void)
 
 // Compare by keys
 func ==(lhs:FilterObject, rhs:FilterObject) -> Bool { // Implement Equatable
     return lhs.key == rhs.key
+}
+
+// Used as a public extension so all Filter objects can access this property.
+// This is accessed on a newFilter object in the FilterViewController
+extension Filter
+{
+    func hasActiveFilters() -> Bool
+    {
+        if categories.selections != nil || brands.selections != nil || retailers.selections != nil || priceRange != nil || colors.selections != nil
+        {
+            return true
+        }
+        
+        return false
+    }
 }
 
 class FilterManager
@@ -78,23 +94,13 @@ class FilterManager
         filter.retailers = (selections: nil, all: nil)
     }
     
-    func hasActiveFilters() -> Bool
-    {
-        if filter.categories != nil || filter.brands != nil || filter.retailers.selections != nil || filter.priceRange != nil || filter.color != nil
-        {
-            return true
-        }
-        
-        return false
-    }
-    
     // To be used in networking
     func filterParamsAsString() -> String
     {
         var paramsString = ""
         
         // Categories
-        if let categories = filter.categories
+        if let categories = filter.categories.selections
         {
             var categoryParams = ""
             
@@ -102,15 +108,29 @@ class FilterManager
             {
                 if let categoryKey = category.key
                 {
-                    categoryParams = categoryParams.stringByAppendingString("category=\(categoryKey)&")
+                    // First category
+                    if categoryParams.characters.count == 0
+                    {
+                        categoryParams = categoryParams.stringByAppendingString("category=\(categoryKey),")
+                    }
+                    // Any additional categories
+                    else
+                    {
+                        categoryParams = categoryParams.stringByAppendingString("\(categoryKey),")
+                    }
                 }
+            }
+            
+            if categoryParams.containsString(",")
+            {
+                categoryParams = String(categoryParams.characters.dropLast())
             }
             
             paramsString = paramsString.stringByAppendingString(categoryParams)
         }
         
         // Brands
-        if let brands = filter.brands
+        if let brands = filter.brands.selections
         {
             var brandParams = ""
             
@@ -118,8 +138,22 @@ class FilterManager
             {
                 if let brandKey = brand.key
                 {
-                    brandParams = brandParams.stringByAppendingString("brand=\(brandKey)&")
+                    // First brand
+                    if brandParams.characters.count == 0
+                    {
+                        brandParams = brandParams.stringByAppendingString("brand=\(brandKey),")
+                    }
+                    // Any additional brands
+                    else
+                    {
+                        brandParams = brandParams.stringByAppendingString("\(brandKey),")
+                    }
                 }
+            }
+            
+            if brandParams.containsString(",")
+            {
+                brandParams = String(brandParams.characters.dropLast())
             }
             
             paramsString = paramsString.stringByAppendingString(brandParams)
@@ -134,8 +168,22 @@ class FilterManager
             {
                 if let retailerKey = retailer.key
                 {
-                    retailerParams = retailerParams.stringByAppendingString("retailer=\(retailerKey)&")
+                    // First brand
+                    if retailerParams.characters.count == 0
+                    {
+                        retailerParams = retailerParams.stringByAppendingString("retailer=\(retailerKey),")
+                    }
+                        // Any additional brands
+                    else
+                    {
+                        retailerParams = retailerParams.stringByAppendingString("\(retailerKey),")
+                    }
                 }
+            }
+            
+            if retailerParams.containsString(",")
+            {
+                retailerParams = String(retailerParams.characters.dropLast())
             }
             
             paramsString = paramsString.stringByAppendingString(retailerParams)
@@ -158,8 +206,34 @@ class FilterManager
         }
         
         // Color
-        // Not currently being handled
-        
+        if let colors = filter.colors.selections
+        {
+            var colorParams = ""
+            
+            for color in colors
+            {
+                if let colorName = color.colorName
+                {
+                    // First brand
+                    if colorParams.characters.count == 0
+                    {
+                        colorParams = colorParams.stringByAppendingString("color=\(colorName),")
+                    }
+                        // Any additional brands
+                    else
+                    {
+                        colorParams = colorParams.stringByAppendingString("\(colorName),")
+                    }
+                }
+            }
+            
+            if colorParams.containsString(",")
+            {
+                colorParams = String(colorParams.characters.dropLast())
+            }
+            
+            paramsString = paramsString.stringByAppendingString(colorParams)
+        }
         
         if paramsString.containsString("&")
         {
@@ -169,13 +243,58 @@ class FilterManager
         return paramsString
     }
     
+    // MARK: Fetch Categories
+    
     func fetchCategories(completionHandler: FilterCompletionBlock?)
     {
-        if let categories = filter.categories
+        if let categories = filter.categories.all
         {
             if let completion = completionHandler
             {
                 completion(success: true, response: categories)
+            }
+        }
+        else
+        {
+            LRSessionManager.sharedManager.loadCategories({ (success, error, response) -> Void in
+             
+                if success
+                {
+                    if let completion = completionHandler
+                    {
+                        if let categoryArray = response as? Array<CategoryResponse>
+                        {
+                            if let filters = FilterObjectConverter.filterObjectArray(categoryArray)
+                            {
+                                self.filter.categories.all = filters
+                                
+                                completion(success: true, response: filters)
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, response: nil)
+                    }
+                }
+
+                
+            })
+        }
+    }
+    
+    // MARK: Fetch Brands
+    
+    func fetchBrands(completionHandler: FilterCompletionBlock?)
+    {
+        if let brands = filter.brands.all
+        {
+            if let completion = completionHandler
+            {
+                completion(success: true, response: brands)
             }
         }
         else
@@ -206,10 +325,7 @@ class FilterManager
         }
     }
     
-    func fetchBrands()
-    {
-        
-    }
+    // MARK: Fetch Retailers
     
     func fetchRetailers(completionHandler: FilterCompletionBlock?)
     {
@@ -222,13 +338,13 @@ class FilterManager
         }
         else
         {
-            LRSessionManager.sharedManager.loadRetailers( { (success, error, retailers) -> Void in
+            LRSessionManager.sharedManager.loadRetailers( { (success, error, response) -> Void in
                 
                 if success
                 {
                     if let completion = completionHandler
                     {
-                        if let retailerArray = retailers as? Array<RetailerResponse>
+                        if let retailerArray = response as? Array<RetailerResponse>
                         {
                             if let filters = FilterObjectConverter.filterObjectArray(retailerArray)
                             {
@@ -236,6 +352,41 @@ class FilterManager
                                 
                                 completion(success: true, response: filters)
                             }
+                        }
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, response: nil)
+                    }
+                }
+            })
+        }
+    }
+    
+    // MARK: Fetch Colors
+    func fetchColors(completionHandler: ColorCompletionBlock?)
+    {
+        if let colors = filter.colors.all
+        {
+            if let completion = completionHandler
+            {
+                completion(success: true, response: colors)
+            }
+        }
+        else
+        {
+            LRSessionManager.sharedManager.loadColors({ (success, error, response) -> Void in
+                
+                if success
+                {
+                    if let completion = completionHandler
+                    {
+                        if let colorArray = response as? Array<ColorResponse>
+                        {
+                            completion(success: true, response: colorArray)
                         }
                     }
                 }
