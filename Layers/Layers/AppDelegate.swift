@@ -11,9 +11,6 @@ import SwiftyBeaver
 import FBSDKCoreKit
 import DeepLinkKit
 import ObjectMapper
-import SwiftyJSON
-
-import AWSSNS
 
 let log = SwiftyBeaver.self
 
@@ -36,19 +33,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Swifty Beaver
         log.addDestination(ConsoleDestination())
         
-        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).translucent = false
-//        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).barTintColor = Color.DarkNavyColor
-        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).setBackgroundImage(UIImage(named: "nav-bar"), forBarMetrics: .Default)
-        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.whiteColor()
-        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).titleTextAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),
-                                                                                                            NSFontAttributeName: Font.OxygenBold(size: 16.0)]
-        UIBarButtonItem.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).setTitleTextAttributes([NSForegroundColorAttributeName: Color.whiteColor(),
-            NSFontAttributeName: Font.OxygenRegular(size: 16.0)], forState: .Normal)
-        
-        UITableViewCell.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.DarkNavyColor
+        // UIApperance
+        configureDefaultAppearances()
         
         // Deep Linking
         registerRoutes()
+        
         
         // Determine intial view controller based on login state
         
@@ -67,9 +57,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
-        tempRegisterForNotifications()
+        // Should only be called at the appropriate time
+        LRSessionManager.sharedManager.registerForRemoteNotifications()
         
         return true
+    }
+    
+    func configureDefaultAppearances()
+    {
+        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).translucent = false
+        //        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).barTintColor = Color.DarkNavyColor
+        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).setBackgroundImage(UIImage(named: "nav-bar"), forBarMetrics: .Default)
+        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.whiteColor()
+        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).titleTextAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),
+                                                                                                            NSFontAttributeName: Font.OxygenBold(size: 16.0)]
+        UIBarButtonItem.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).setTitleTextAttributes([NSForegroundColorAttributeName: Color.whiteColor(),
+            NSFontAttributeName: Font.OxygenRegular(size: 16.0)], forState: .Normal)
+        
+        UITableViewCell.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.DarkNavyColor
     }
     
     func registerRoutes()
@@ -79,77 +84,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         
-        if let identityId = LRSessionManager.sharedManager.credentialsProvider?.identityId
-        {
-            let kAWSSNSApplicationARN = "arn:aws:sns:us-east-1:520777401565:app/APNS_SANDBOX/Layers"
-            
-            let platformEndpointRequest = AWSSNSCreatePlatformEndpointInput()
-            platformEndpointRequest.token = deviceTokenAsString(deviceToken)
-            platformEndpointRequest.platformApplicationArn = kAWSSNSApplicationARN
-            
-            // Pass user identity id and timezone
-            let userData: Dictionary<String, AnyObject> = ["identity_id": identityId,
-                                                           "timezone_offset": NSTimeZone.localTimeZone().secondsFromGMT]
-            
-            let jsonUserData = JSON(userData).rawString(NSUTF8StringEncoding, options: .PrettyPrinted)
-            
-            platformEndpointRequest.customUserData = jsonUserData
-            
-            // Create platform endpoint
-            let snsManager = AWSSNS.defaultSNS()
-            
-            snsManager.createPlatformEndpoint(platformEndpointRequest).continueWithBlock({ (task) -> AnyObject! in
-                
-                if task.cancelled
-                {
-                    // Cancelled
-                }
-                else if task.error != nil
-                {
-                    log.error(task.error?.localizedDescription)
-                }
-                else
-                {
-                    // Success
-                    log.debug("SNS Platform Endpoint successfully created.")
-                }
-                
-                return nil
-            })
-        }
-    }
-    
-    func deviceTokenAsString(tokenData: NSData) -> String
-    {
-        let rawDeviceString: String = "\(tokenData)"
-        
-        let noSpaces = rawDeviceString.stringByReplacingOccurrencesOfString(" ", withString: "")
-        
-        let temp: String = noSpaces.stringByReplacingOccurrencesOfString("<", withString: "")
-        
-        return temp.stringByReplacingOccurrencesOfString(">", withString: "")
-    }
-    
-    func tempRegisterForNotifications()
-    {
-                let readAction: UIMutableUserNotificationAction = UIMutableUserNotificationAction()
-                readAction.identifier = "READ_IDENTIFIER"
-                readAction.title = "Read"
-                readAction.activationMode = .Foreground
-                readAction.destructive = false
-        readAction.authenticationRequired = true
-        
-        let messageCategory = UIMutableUserNotificationCategory()
-        messageCategory.identifier = "MESSAGE_CATEGORY"
-        messageCategory.setActions([readAction], forContext: .Default)
-        messageCategory.setActions([readAction], forContext: .Minimal)
-        
-        let categories: Set<UIUserNotificationCategory> = NSSet(object: messageCategory) as! Set<UIUserNotificationCategory>
-        
-        let settings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [.Badge, .Sound, .Alert], categories: categories)
-        
-        UIApplication.sharedApplication().registerForRemoteNotifications()
-        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+        LRSessionManager.sharedManager.registerForPushNotifications(deviceToken, completionHandler: { (success, error, response) -> Void in
+         
+            if !success
+            {
+                log.error(error)
+            }
+        })
     }
 
         func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {

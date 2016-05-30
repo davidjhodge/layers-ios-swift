@@ -37,14 +37,14 @@ class OnboardingGenderViewController: UIViewController
     // MARK: Actions
     func menSelected()
     {
-        LRSessionManager.sharedManager.currentUser?.gender = "male"
+//        LRSessionManager.sharedManager.currentUser?.gender = "male"
         
         performSegueWithIdentifier("ShowOnboardingBrandsViewController", sender: self)
     }
     
     func womenSelected()
     {
-        LRSessionManager.sharedManager.currentUser?.gender = "female"
+//        LRSessionManager.sharedManager.currentUser?.gender = "female"
         
         performSegueWithIdentifier("ShowOnboardingBrandsViewController", sender: self)
     }
