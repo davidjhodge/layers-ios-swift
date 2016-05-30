@@ -448,9 +448,7 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
             }
             
             let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint(requestString))
-            
-            let requestUrl = request.URL!
-            
+                        
             request.HTTPMethod = "GET"
             
             sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
