@@ -157,6 +157,9 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     func colorFilterChanged(colors: Array<ColorResponse>?) {
         
         newFilter.colors.selections = colors
+        
+        // Should reload just the color row to improve efficiency
+        tableView.reloadData()
     }
     
     // MARK: Table View Data Source
@@ -193,7 +196,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                     {
                         if let firstCategoryName = categorySelections.first?.name
                         {
-                            cell.filterSelectionLabel.text = firstCategoryName
+                            cell.filterSelectionLabel.text = firstCategoryName.capitalizedString
                         }
                     }
                     else
@@ -226,7 +229,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                     {
                         if let firstBrandName = brandSelections.first?.name
                         {
-                            cell.filterSelectionLabel.text = firstBrandName
+                            cell.filterSelectionLabel.text = firstBrandName.capitalizedString
                         }
                     }
                     else
@@ -259,7 +262,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                     {
                         if let firstRetailerName = retailerSelections.first?.name
                         {
-                            cell.filterSelectionLabel.text = firstRetailerName
+                            cell.filterSelectionLabel.text = firstRetailerName.capitalizedString
                         }
                     }
                     else
@@ -308,7 +311,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                     {
                         if let firstColorName = colorSelections.first?.colorName
                         {
-                            cell.filterSelectionLabel.text = firstColorName
+                            cell.filterSelectionLabel.text = firstColorName.capitalizedString
                         }
                     }
                     else
