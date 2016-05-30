@@ -20,7 +20,7 @@ protocol FilterDelegate {
     func didUpdateFilter()
 }
 
-class FilterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FilterTypeDelegate
+class FilterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FilterTypeDelegate, ColorFilterDelegate
 {
     var delegate: FilterDelegate?
     
@@ -45,6 +45,42 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercaseString, style: .Plain, target: self, action: #selector(reset))
         
         applyButton.addTarget(self, action: #selector(applyFilter), forControlEvents: .TouchUpInside)
+        
+        if !newFilter.hasActiveFilters()
+        {
+            applyButton.hidden = true
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if applyButton.hidden == false
+        {
+            if !newFilter.hasActiveFilters()
+            {
+                applyButton.hidden = true
+            }
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if applyButton.hidden == true
+        {
+            if newFilter.hasActiveFilters()
+            {
+                let transition: CATransition = CATransition()
+                transition.duration = 0.2
+                transition.type = kCATransitionPush
+                transition.subtype = kCATransitionFromLeft
+                transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+                applyButton.layer.addAnimation(transition, forKey: nil)
+                
+                applyButton.hidden = false
+            }
+        }
     }
     
     // MARK: Actions
@@ -79,26 +115,23 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: FilterTypeDelegate
     func textFilterChanged(filters: Array<FilterObject>?, filterType: FilterType?)
     {
-        if let newFilters = filters
+        if let type = filterType
         {
-            if let type = filterType
-            {
-                switch type {
-                case .Category:
-                    
-                    newFilter.categories = newFilters
-                    
-                case .Brand:
-                    
-                    newFilter.brands = newFilters
-                    
-                case .Retailer:
-                    
-                    newFilter.retailers.selections = newFilters
-                    
-                default:
-                    break
-                }
+            switch type {
+            case .Category:
+                
+                newFilter.categories.selections = filters
+                
+            case .Brand:
+                
+                newFilter.brands.selections = filters
+                
+            case .Retailer:
+                
+                newFilter.retailers.selections = filters
+                
+            default:
+                break
             }
             
             // Would be better practice to only reload the cell we updated
@@ -118,6 +151,12 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 }
             }
         }
+    }
+    
+    // MARK: Color Filter Delegate
+    func colorFilterChanged(colors: Array<ColorResponse>?) {
+        
+        newFilter.colors.selections = colors
     }
     
     // MARK: Table View Data Source
@@ -148,10 +187,27 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
 
                 cell.filterTypeLabel.text = "Category".uppercaseString
                 
-                cell.filterSelectionLabel.text = "T-Shirts"
+                if let categorySelections = newFilter.categories.selections
+                {
+                    if categorySelections.count == 1
+                    {
+                        if let firstCategoryName = categorySelections.first?.name
+                        {
+                            cell.filterSelectionLabel.text = firstCategoryName
+                        }
+                    }
+                    else
+                    {
+                        cell.filterSelectionLabel.text = "Multiple Categories"
+                    }
+                }
+                else
+                {
+                    cell.filterSelectionLabel.text = "All Categories"
+                }
                 
                 // If filter selected, show blue dot
-                if newFilter.categories != nil
+                if newFilter.categories.selections != nil
                 {
                     cell.selectedCircleView.hidden = false
                 }
@@ -164,11 +220,27 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 
                 cell.filterTypeLabel.text = "Brand".uppercaseString
                 
-                // If J. Crew Filter Selected
-                cell.filterSelectionLabel.text = "J. Crew"
+                if let brandSelections = newFilter.brands.selections
+                {
+                    if brandSelections.count == 1
+                    {
+                        if let firstBrandName = brandSelections.first?.name
+                        {
+                            cell.filterSelectionLabel.text = firstBrandName
+                        }
+                    }
+                    else
+                    {
+                        cell.filterSelectionLabel.text = "Multiple Brands"
+                    }
+                }
+                else
+                {
+                    cell.filterSelectionLabel.text = "All Brands"
+                }
                 
                 // If filter selected, show blue dot
-                if newFilter.brands != nil
+                if newFilter.brands.selections != nil
                 {
                     cell.selectedCircleView.hidden = false
                 }
@@ -181,7 +253,24 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 
                 cell.filterTypeLabel.text = "Retailer".uppercaseString
                 
-                cell.filterSelectionLabel.text = "Many Retailers"
+                if let retailerSelections = newFilter.retailers.selections
+                {
+                    if retailerSelections.count == 1
+                    {
+                        if let firstRetailerName = retailerSelections.first?.name
+                        {
+                            cell.filterSelectionLabel.text = firstRetailerName
+                        }
+                    }
+                    else
+                    {
+                        cell.filterSelectionLabel.text = "Many Retailers"
+                    }
+                }
+                else
+                {
+                    cell.filterSelectionLabel.text = "All Retailers"
+                }
 
                 // If filter selected, show blue dot
                 if newFilter.retailers.selections != nil
@@ -213,13 +302,27 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 
                 cell.filterTypeLabel.text = "Color".uppercaseString
                 
-                // Dynamically assign selected color from stored colorName:UIColor Dict
-                cell.filterSelectionLabel.text = "Red"
-                
-                cell.filterSelectionLabel.textColor = Color.RedColor
+                if let colorSelections = newFilter.colors.selections
+                {
+                    if colorSelections.count == 1
+                    {
+                        if let firstColorName = colorSelections.first?.colorName
+                        {
+                            cell.filterSelectionLabel.text = firstColorName
+                        }
+                    }
+                    else
+                    {
+                        cell.filterSelectionLabel.text = "Multiple Colors"
+                    }
+                }
+                else
+                {
+                    cell.filterSelectionLabel.text = "All Colors"
+                }
                 
                 // If filter selected, show blue dot
-                if newFilter.color != nil
+                if newFilter.colors.selections != nil
                 {
                     cell.selectedCircleView.hidden = false
                 }
@@ -295,7 +398,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                         switch type {
                         case .Category:
                             
-                            if let currentFilters = newFilter.categories
+                            if let currentFilters = newFilter.categories.selections
                             {
                                 var array = Array<FilterObject>()
                                 
@@ -309,7 +412,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                             
                         case .Brand:
                             
-                            if let currentFilters = newFilter.brands
+                            if let currentFilters = newFilter.brands.selections
                             {
                                 var array = Array<FilterObject>()
                                 
@@ -334,7 +437,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                                 
                                 destinationVc.selectedItems = array
                             }
-                            
+                        
                         default:
                             break
                         }
@@ -350,15 +453,20 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         {
             if let destinationVc = segue.destinationViewController as? ColorFilterViewController
             {
-                if let senderRawValue = sender as? Int
+                destinationVc.delegate = self
+                
+                if let currentFilters = newFilter.colors.selections
                 {
-                    if let type = FilterType(rawValue: senderRawValue)
+                    var array = Array<ColorResponse>()
+                    
+                    for currFilter in currentFilters
                     {
-                        destinationVc.filterType = type
+                        array.append(currFilter)
                     }
+                    
+                    destinationVc.selectedColors = array
                 }
             }
-
         }
     }
 }

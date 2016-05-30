@@ -11,6 +11,8 @@
 		70059C931CD65AD50094B454 /* OnboardingContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70059C921CD65AD50094B454 /* OnboardingContainerViewController.swift */; };
 		70059C951CD672990094B454 /* FacebookUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70059C941CD672990094B454 /* FacebookUserResponse.swift */; };
 		70204A611CBF5E9B00868C00 /* ProductWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */; };
+		7022F2F11CFB65120097DDF9 /* ColorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7022F2F01CFB65120097DDF9 /* ColorResponse.swift */; };
+		7022F2F31CFB6A740097DDF9 /* CategoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7022F2F21CFB6A740097DDF9 /* CategoryResponse.swift */; };
 		702FC2F11CC2D8470012969C /* UINavigationItem+BackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2F01CC2D8470012969C /* UINavigationItem+BackButton.m */; };
 		702FC2FC1CC344960012969C /* EmailCreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */; };
 		702FC3011CC3FE6D0012969C /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */; };
@@ -99,6 +101,8 @@
 		70059C921CD65AD50094B454 /* OnboardingContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingContainerViewController.swift; sourceTree = "<group>"; };
 		70059C941CD672990094B454 /* FacebookUserResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookUserResponse.swift; sourceTree = "<group>"; };
 		70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWebViewController.swift; sourceTree = "<group>"; };
+		7022F2F01CFB65120097DDF9 /* ColorResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorResponse.swift; sourceTree = "<group>"; };
+		7022F2F21CFB6A740097DDF9 /* CategoryResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryResponse.swift; sourceTree = "<group>"; };
 		702FC2EF1CC2D8470012969C /* UINavigationItem+BackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+BackButton.h"; sourceTree = "<group>"; };
 		702FC2F01CC2D8470012969C /* UINavigationItem+BackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationItem+BackButton.m"; sourceTree = "<group>"; };
 		702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailCreateAccountViewController.swift; sourceTree = "<group>"; };
@@ -245,7 +249,9 @@
 			children = (
 				70059C941CD672990094B454 /* FacebookUserResponse.swift */,
 				70A40FF41CD69C4F00CB515B /* ProductResponse.swift */,
+				7022F2F21CFB6A740097DDF9 /* CategoryResponse.swift */,
 				70AF1A2A1CE2D17B00C0518C /* RetailerResponse.swift */,
+				7022F2F01CFB65120097DDF9 /* ColorResponse.swift */,
 			);
 			name = Responses;
 			sourceTree = "<group>";
@@ -755,6 +761,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7022F2F11CFB65120097DDF9 /* ColorResponse.swift in Sources */,
 				70AF1A291CE255BF00C0518C /* SearchViewController.swift in Sources */,
 				70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */,
 				706FF89A1CBD6E7A007B26AD /* AlternateReviewCell.swift in Sources */,
@@ -798,6 +805,7 @@
 				70776FC81CC685B0002E6F25 /* SliderCell.swift in Sources */,
 				706FF89E1CBD82D2007B26AD /* ReviewsViewController.swift in Sources */,
 				702FC2F11CC2D8470012969C /* UINavigationItem+BackButton.m in Sources */,
+				7022F2F31CFB6A740097DDF9 /* CategoryResponse.swift in Sources */,
 				70AF1A1F1CE1479200C0518C /* NSURLImageSIze.swift in Sources */,
 				70488C521CE63C3E0085BAE9 /* ColorCell.swift in Sources */,
 				70AF1A2B1CE2D17B00C0518C /* RetailerResponse.swift in Sources */,
@@ -938,6 +946,7 @@
 			baseConfigurationReference = 2617CC4AE1CA59B7C7DFB253 /* Pods-Layers.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = Layers/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -953,6 +962,7 @@
 			baseConfigurationReference = 3FCE59FA6B494AAB3C36EE8C /* Pods-Layers.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = Layers/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

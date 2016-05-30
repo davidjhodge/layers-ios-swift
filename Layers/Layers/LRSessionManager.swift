@@ -440,7 +440,7 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
         {
             var requestString = "products/?page=\(page)&per_page=\(productCollectionPageSize)"
             
-            if FilterManager.defaultManager.hasActiveFilters()
+            if FilterManager.defaultManager.getCurrentFilter().hasActiveFilters()
             {
                 let paramsString = FilterManager.defaultManager.filterParamsAsString()
                 
@@ -448,6 +448,8 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
             }
             
             let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint(requestString))
+            
+            let requestUrl = request.URL!
             
             request.HTTPMethod = "GET"
             
@@ -515,6 +517,68 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
         })
     }
     
+    // MARK: Filtering
+    
+    func loadCategories(completionHandler: LRCompletionBlock?)
+    {
+        let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("categories"))
+        
+        request.HTTPMethod = "GET"
+        
+        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+            
+            if success
+            {
+                if let jsonResponse = response
+                {
+                    let categories = Mapper<CategoryResponse>().mapArray(jsonResponse.arrayObject)
+                    
+                    if let completion = completionHandler
+                    {
+                        completion(success: true, error: error, response: categories)
+                    }
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: false, error: error, response: nil)
+                }
+            }
+        })
+    }
+    
+//    func loadBrands(completionHandler: LRCompletionBlock?)
+//    {
+//        let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("brands"))
+//        
+//        request.HTTPMethod = "GET"
+//        
+//        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+//            
+//            if success
+//            {
+//                if let jsonResponse = response
+//                {
+//                    let brands = Mapper<RetailerResponse>().mapArray(jsonResponse.arrayObject)
+//                    
+//                    if let completion = completionHandler
+//                    {
+//                        completion(success: true, error: error, response: brands)
+//                    }
+//                }
+//            }
+//            else
+//            {
+//                if let completion = completionHandler
+//                {
+//                    completion(success: false, error: error, response: nil)
+//                }
+//            }
+//        })
+//    }
+    
     func loadRetailers(completionHandler: LRCompletionBlock?)
     {
         let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("retailers"))
@@ -532,6 +596,36 @@ class LRSessionManager: NSObject, AWSIdentityProviderManager
                     if let completion = completionHandler
                     {
                             completion(success: true, error: error, response: retailers)
+                    }
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: false, error: error, response: nil)
+                }
+            }
+        })
+    }
+    
+    func loadColors(completionHandler: LRCompletionBlock?)
+    {
+        let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("colors"))
+        
+        request.HTTPMethod = "GET"
+        
+        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+            
+            if success
+            {
+                if let jsonResponse = response
+                {
+                    let colors = Mapper<ColorResponse>().mapArray(jsonResponse.arrayObject)
+                    
+                    if let completion = completionHandler
+                    {
+                        completion(success: true, error: error, response: colors)
                     }
                 }
             }

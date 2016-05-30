@@ -57,7 +57,7 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         
         if let selections = selectedItems
         {
-            var filterArray = Array<FilterObject>()
+            var filterArray: Array<FilterObject>? = Array<FilterObject>()
             
             for selection in selections
             {
@@ -75,8 +75,15 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
                 
                 if newFilter.name != nil && newFilter.key != nil
                 {
-                    filterArray.append(newFilter)
+                    filterArray!.append(newFilter)
                 }
+            }
+            
+            // Set the filter Array to nil if it has no contents.
+            // This is done to maintain the correct filter state.
+            if filterArray!.count == 0
+            {
+                filterArray = nil
             }
             
             // Pass filterArray to delegate
@@ -163,24 +170,24 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
                     }
                 })
                 
-//            case .Brand:
-//                
-//                //Need to fetch brands
-//                FilterManager.defaultManager.fetchBrands( { (success, results) -> Void in
-//                    
-//                    if success
-//                    {
-//                        if let categories = results
-//                        {
-//                            self.items = categories
-//                            
-//                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                                self.tableView.reloadData()
-//                            })
-//                        }
-//                    }
-//                })
-//                
+            case .Brand:
+                
+                //Need to fetch brands
+                FilterManager.defaultManager.fetchBrands( { (success, results) -> Void in
+                    
+                    if success
+                    {
+                        if let categories = results
+                        {
+                            self.items = categories
+                            
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                self.tableView.reloadData()
+                            })
+                        }
+                    }
+                })
+                
             case .Retailer:
                 
                 // Need to fetch retailers

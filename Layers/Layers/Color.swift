@@ -15,6 +15,28 @@ func ColorCode(red:CGFloat, green:CGFloat, blue:CGFloat, alpha:CGFloat) -> UICol
 
 public class Color: UIColor
 {
+    static func colorFromHex(hexString: String?) -> UIColor?
+    {
+        if let hexString = hexString
+        {
+            if ((hexString.characters.count) != 6) {
+                return UIColor.whiteColor()
+            }
+            
+            var rgbValue:UInt32 = 0
+            NSScanner(string: hexString).scanHexInt(&rgbValue)
+            
+            return UIColor(
+                red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+                green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+                blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+                alpha: CGFloat(1.0)
+            )
+        }
+        
+        return UIColor.whiteColor()
+    }
+    
     static let DarkNavyColor: UIColor = ColorCode(14, green: 36, blue: 106, alpha: 1.0)
     
     static let DarkTextColor: UIColor = ColorCode(36, green: 40, blue: 49, alpha: 1.0)

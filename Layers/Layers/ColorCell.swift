@@ -15,9 +15,11 @@ class ColorCell: UICollectionViewCell
     
     @IBOutlet weak var textLabel: UILabel!
     
+    @IBOutlet weak var checkmarkImageView: UIImageView!
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        colorSwatchView.layer.cornerRadius = 2.0
+        colorSwatchView.layer.cornerRadius = 8.0
     }
 }

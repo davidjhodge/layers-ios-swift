@@ -10,37 +10,52 @@ import Foundation
 
 class FilterObjectConverter
 {
-    static func filterObject(retailer: RetailerResponse?) -> FilterObject?
+    // Convert either a category, retailer, or brand to filter object
+    static func filterObject<T>(filterResponse: T?) -> FilterObject?
     {
-        if let retailerResponse = retailer
-        {
             var filter: FilterObject = FilterObject()
             
-            if let name = retailerResponse.retailerName
+            if let categoryResponse = filterResponse as? CategoryResponse
             {
-                filter.name = name
+                if let name = categoryResponse.categoryName
+                {
+                    filter.name = name
+                }
+                
+                if let key = categoryResponse.categoryId?.integerValue
+                {
+                    filter.key = key
+                }
             }
-            
-            if let key = retailerResponse.retailerId?.integerValue
+//            else if let brandResponse = filterResponse as? BrandResponse
+//            {
+//                
+//            }
+            else if let retailerResponse = filterResponse as? RetailerResponse
             {
-                filter.key = key
+                if let name = retailerResponse.retailerName
+                {
+                    filter.name = name
+                }
+                
+                if let key = retailerResponse.retailerId?.integerValue
+                {
+                    filter.key = key
+                }
             }
             
             return filter
-        }
-        
-        return nil
     }
     
-    static func filterObjectArray(retailers: Array<RetailerResponse>?) -> Array<FilterObject>?
+    static func filterObjectArray<T>(responses: Array<T>?) -> Array<FilterObject>?
     {
-        if let retailers = retailers
+        if let responses = responses
         {
             var filters = Array<FilterObject>()
             
-            for retailer in retailers
+            for response in responses
             {
-                if let filter = filterObject(retailer)
+                if let filter = filterObject(response)
                 {
                     filters.append(filter)
                 }
