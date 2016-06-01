@@ -9,6 +9,11 @@
 import Foundation
 import UIKit
 
+private enum TextField: Int
+{
+    case Email, Password, Count
+}
+
 class EmailLoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
 {
     @IBOutlet weak var loginButton: UIButton!
@@ -19,6 +24,7 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
 
     var keyboardNotificationObserver: AnyObject?
     
+    var spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -31,7 +37,19 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
         
         loginButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
         
+        spinner.color = Color.grayColor()
+        spinner.hidesWhenStopped = true
+        spinner.hidden = true
+        
+        view.addSubview(spinner)
+        
         prepareToHandleKeyboard()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        spinner.center = tableView.center
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -50,7 +68,56 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     {
         view.endEditing(true)
         
-        AppStateTransitioner.transitionToMainStoryboard(true)
+        let email = stringFromTextFieldCellAtIndex(TextField.Email.rawValue)
+        
+        let password = stringFromTextFieldCellAtIndex(TextField.Password.rawValue)
+        
+        spinner.startAnimating()
+        
+        LRSessionManager.sharedManager.signIn(email, password: password, completionHandler: { (success, error, response) -> Void in
+            
+            if success
+            {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    AppStateTransitioner.transitionToMainStoryboard(true)
+
+                })
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                    
+                    self.view.endEditing(false)
+
+                })
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.spinner.stopAnimating()
+            })
+        })
+        
+    }
+    
+    // Helper method to access cell text fields
+    func stringFromTextFieldCellAtIndex(index: Int) -> String
+    {
+        let indexPath = NSIndexPath(forRow: index, inSection: 0)
+        
+        if let textFieldCell = tableView.cellForRowAtIndexPath(indexPath) as? TextFieldCell
+        {
+            if let textString = textFieldCell.textField.text
+            {
+                return textString
+            }
+        }
+        
+        return ""
     }
     
     // MARK: Table View Data Source
@@ -70,15 +137,17 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
         cell.selectionStyle = .None
         
         //Email
-        if indexPath.row == 0
+        if indexPath.row == TextField.Email.rawValue
         {
             cell.textField.placeholder = "Email"
+            cell.textField.tag = TextField.Email.rawValue
         }
         //Password
-        else if indexPath.row == 1
+        else if indexPath.row == TextField.Password.rawValue
         {
             cell.textField.placeholder = "Password"
             cell.textField.secureTextEntry = true
+            cell.textField.tag = TextField.Password.rawValue
         }
         else
         {

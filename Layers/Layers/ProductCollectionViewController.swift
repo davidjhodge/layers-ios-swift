@@ -223,9 +223,9 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 }
                 
                 //Set Price for first size
-                if let firstSize = variant.sizes?[0]
+                if let firstSize = variant.sizes?[safe:  0]
                 {
-                    if let priceInfo = firstSize.prices?[0]
+                    if let priceInfo = firstSize.prices?[safe: 0]
                     {
                         var currentPrice: NSNumber?
                         var retailPrice: NSNumber?
@@ -245,9 +245,9 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 }
             }
             
-            if let brand = product.brandName
+            if let brandName = product.brand?.brandName
             {
-                cell.brandLabel.text = brand.uppercaseString
+                cell.brandLabel.text = brandName.uppercaseString
             }
             
             return cell

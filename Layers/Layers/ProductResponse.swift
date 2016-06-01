@@ -15,7 +15,7 @@ class ProductResponse: Mappable
 {
     var productName: String?
     
-    var brandName: String?
+    var brand: BrandResponse?
     
     var outboundUrl: String?
     
@@ -35,7 +35,7 @@ class ProductResponse: Mappable
     
     var isInStock: Bool?
     
-    var retailerId: NSNumber?
+    var retailer: RetailerResponse?
     
     var description: String?
     
@@ -47,7 +47,7 @@ class ProductResponse: Mappable
     
     func mapping(map: Map) {
         productName              <-  map["product_name"]
-        brandName                <-  map["brand_name"]
+        brand                    <-  map["brand"]
         outboundUrl              <-  map["outbound_url"]
         reviews                  <-  map["reviews"]
         sizeRatings              <-  map["size_ratings"]
@@ -57,7 +57,7 @@ class ProductResponse: Mappable
         productId                <-  map["id"]
         rating                   <-  map["rating.0"]
         isInStock                <-  map["product_in_stock"]
-        retailerId               <-  map["retailer_id"]
+        retailer                 <-  map["retailer"]
         description              <-  map["description"]
         features                 <-  map["features"]
 

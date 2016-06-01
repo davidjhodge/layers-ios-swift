@@ -7,3 +7,16 @@
 //
 
 import Foundation
+
+extension NSError
+{
+    func formattedMessage() -> String?
+    {
+        if let errorString = self.userInfo["message"] as? String
+        {
+            return errorString
+        }
+        
+        return self.localizedDescription
+    }
+}

@@ -71,8 +71,13 @@ class AWSManager: NSObject, AWSIdentityProviderManager
             {
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: task.error?.localizedDescription, response: nil)
+                    if let errorMessage = task.error?.formattedMessage()
+                    {
+                        completion(success: false, error: errorMessage, response: nil)
+                    }
                 }
+                
+                log.error(task.error?.localizedDescription)
             }
             else
             {
@@ -121,6 +126,8 @@ class AWSManager: NSObject, AWSIdentityProviderManager
     // MARK: Credential Management
     func isAuthorized() -> Bool
     {
+        return false
+        
         if userPool.currentUser() != nil
         {
             return true
@@ -138,8 +145,13 @@ class AWSManager: NSObject, AWSIdentityProviderManager
             {
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: task.error?.localizedDescription, response: nil)
+                    if let errorMessage = task.error?.formattedMessage()
+                    {
+                        completion(success: false, error: errorMessage, response: nil)
+                    }
                 }
+                
+                log.error(task.error?.localizedDescription)
             }
             else
             {
@@ -193,8 +205,13 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                 {
                     if let completion = completionHandler
                     {
-                        completion(success: false, error: task.error?.localizedDescription, response: nil)
+                        if let errorMessage = task.error?.formattedMessage()
+                        {
+                            completion(success: false, error: errorMessage, response: nil)
+                        }
                     }
+                    
+                    log.error(task.error?.localizedDescription)
                 }
                 else
                 {
@@ -249,7 +266,10 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                 {
                     if let completion = completionHandler
                     {
-                        completion(success: false, error: task.error?.localizedDescription, response: nil)
+                        if let errorMessage = task.error?.formattedMessage()
+                        {
+                            completion(success: false, error: errorMessage, response: nil)
+                        }
                     }
                     
                     log.error(task.error?.localizedDescription)
@@ -281,14 +301,19 @@ class AWSManager: NSObject, AWSIdentityProviderManager
         {
             let user = userPool.getUser()
             
-            user.getSession(email, password: password, validationData: nil, scopes: nil).continueWithBlock({ (task) -> AnyObject! in
+            user.getSession(email, password: password, validationData: nil, scopes: nil).continueWithBlock({ (task: AWSTask) -> AnyObject! in
                 
                 if task.error != nil
                 {
                     if let completion = completionHandler
                     {
-                        completion(success: false, error: task.error?.localizedDescription, response: nil)
+                        if let errorMessage = task.error?.formattedMessage()
+                        {
+                            completion(success: false, error: errorMessage, response: nil)
+                        }
                     }
+                    
+                    log.error(task.error?.localizedDescription)
                 }
                 else
                 {
@@ -328,11 +353,7 @@ class AWSManager: NSObject, AWSIdentityProviderManager
             
             if task.error != nil
             {
-                log.debug("Error: \(task.error?.localizedDescription)")
-            }
-            else if task.cancelled
-            {
-                // User cancelled task
+                log.error(task.error?.localizedDescription)
             }
             else
             {
@@ -348,8 +369,8 @@ class AWSManager: NSObject, AWSIdentityProviderManager
         // Clear AWS Datasets
         AWSCognito.defaultCognito().wipe()
         
-        // Clear All AWS Cognito Credentials
-        credentialsProvider.clearKeychain()
+        // Clear AWS Cognito Temporary Credentials
+        credentialsProvider.clearCredentials()
     }
     
     

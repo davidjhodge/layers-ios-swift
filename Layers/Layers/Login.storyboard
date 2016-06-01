@@ -44,11 +44,11 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hero-image" translatesAutoresizingMaskIntoConstraints="NO" id="kdb-rk-KmF">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="modern-logo" translatesAutoresizingMaskIntoConstraints="NO" id="gAw-gp-0yb">
-                                <rect key="frame" x="252" y="102" width="96" height="96"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="white-logo" translatesAutoresizingMaskIntoConstraints="NO" id="gAw-gp-0yb">
+                                <rect key="frame" x="252" y="118" width="96" height="64"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="96" id="UUd-Fx-REs"/>
-                                    <constraint firstAttribute="height" constant="96" id="oda-0o-YHx"/>
+                                    <constraint firstAttribute="height" constant="64" id="oda-0o-YHx"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ftk-AZ-MfL">
@@ -62,7 +62,7 @@
                                 </state>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LAYERS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GAL-Zl-dcr">
-                                <rect key="frame" x="236" y="222" width="128" height="36"/>
+                                <rect key="frame" x="236" y="206" width="128" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="1cj-v8-R0j"/>
                                     <constraint firstAttribute="width" constant="128" id="7j0-6r-sbH"/>
@@ -72,10 +72,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8p6-DK-9IA" userLabel="Container">
-                                <rect key="frame" x="0.0" y="258" width="600" height="172"/>
+                                <rect key="frame" x="0.0" y="242" width="600" height="188"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finding clothes you like just got easier." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HUu-Md-VCL">
-                                        <rect key="frame" x="72" y="76" width="456" height="21"/>
+                                        <rect key="frame" x="72" y="84" width="456" height="21"/>
                                         <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -95,7 +95,7 @@
                                     <constraint firstAttribute="height" constant="48" id="AfP-47-tMg"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="16"/>
-                                <state key="normal" title="GET STARTED">
+                                <state key="normal" title="START BROWSING">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
@@ -130,7 +130,6 @@
                         <outlet property="heroImage" destination="kdb-rk-KmF" id="7XK-2B-l5a"/>
                         <outlet property="logoLabel" destination="GAL-Zl-dcr" id="luB-bh-ZpO"/>
                         <segue destination="8D7-xr-Bul" kind="show" identifier="ShowEmailLoginViewController" id="SHk-El-dS7"/>
-                        <segue destination="6DD-nu-rNO" kind="show" identifier="ShowOnboardingContainerViewController" id="UKi-as-Q7z"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ryS-QK-sVr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -740,6 +739,6 @@ based on your age.</string>
     </scenes>
     <resources>
         <image name="hero-image" width="375" height="667"/>
-        <image name="modern-logo" width="104" height="104"/>
+        <image name="white-logo" width="65" height="104"/>
     </resources>
 </document>

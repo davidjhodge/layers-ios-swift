@@ -23,16 +23,15 @@ class GetStartedViewController: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Email"
-
-        logoLabel.font = Font.CharterBold(size: 30.0)
+        logoLabel.attributedText = NSAttributedString(string: "LAYERS".uppercaseString, attributes: [NSFontAttributeName:Font.CharterBold(size: 30.0),
+            NSKernAttributeName:3])
+        
         view.sendSubviewToBack(heroImage)
         
-        getStartedButton.addTarget(self, action: #selector(startOnboarding), forControlEvents: .TouchUpInside)
+        getStartedButton.addTarget(self, action: #selector(startBrowsing), forControlEvents: .TouchUpInside)
 
         alreadyHasAccountButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
         
-//        LRSessionManager.sharedManager.registerAuthorized("david@trylayers.com", password: "password123")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -51,11 +50,11 @@ class GetStartedViewController: UIViewController
 
     // MARK: Actions
     
-    func startOnboarding()
+    func startBrowsing()
     {
         disableButttons()
         
-        performSegueWithIdentifier("ShowOnboardingContainerViewController", sender: self)
+        AppStateTransitioner.transitionToMainStoryboard(true)
     }
     
     func login()

@@ -124,6 +124,8 @@ class FilterManager
             if categoryParams.containsString(",")
             {
                 categoryParams = String(categoryParams.characters.dropLast())
+                
+                categoryParams = categoryParams.stringByAppendingString("&")
             }
             
             paramsString = paramsString.stringByAppendingString(categoryParams)
@@ -154,6 +156,8 @@ class FilterManager
             if brandParams.containsString(",")
             {
                 brandParams = String(brandParams.characters.dropLast())
+                
+                brandParams = brandParams.stringByAppendingString("&")
             }
             
             paramsString = paramsString.stringByAppendingString(brandParams)
@@ -184,6 +188,8 @@ class FilterManager
             if retailerParams.containsString(",")
             {
                 retailerParams = String(retailerParams.characters.dropLast())
+                
+                retailerParams = retailerParams.stringByAppendingString("&")
             }
             
             paramsString = paramsString.stringByAppendingString(retailerParams)
@@ -230,6 +236,8 @@ class FilterManager
             if colorParams.containsString(",")
             {
                 colorParams = String(colorParams.characters.dropLast())
+                
+                colorParams = colorParams.stringByAppendingString("&")
             }
             
             paramsString = paramsString.stringByAppendingString(colorParams)
@@ -300,28 +308,31 @@ class FilterManager
         else
         {
             // Fetch categories from network
-            
-            // TEMP
-            var object1 = FilterObject()
-            object1.name = "J. Crew"
-            object1.key = 0
-            
-            var object2 = FilterObject()
-            object2.name = "Ralph Lauren"
-            object2.key = 1
-            
-            var object3 = FilterObject()
-            object3.name = "Gucci"
-            object3.key = 2
-            
-            var object4 = FilterObject()
-            object4.name = "Mane"
-            object4.key = 3
-            
-            if let completion = completionHandler
-            {
-                completion(success: true, response: [object1,object2,object3,object4])
-            }
+            LRSessionManager.sharedManager.loadBrands({ (success, error, response) -> Void in
+                
+                if success
+                {
+                    if let completion = completionHandler
+                    {
+                        if let brandArray = response as? Array<BrandResponse>
+                        {
+                            if let filters = FilterObjectConverter.filterObjectArray(brandArray)
+                            {
+                                self.filter.brands.all = filters
+                                
+                                completion(success: true, response: filters)
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, response: nil)
+                    }
+                }
+            })
         }
     }
     

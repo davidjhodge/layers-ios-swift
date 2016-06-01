@@ -145,9 +145,9 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                 {
                     if let product = alerts[safe: 0] as ProductResponse?
                     {
-                        if let brand = product.brandName
+                        if let brandName = product.brand?.brandName
                         {
-                            cell.brandLabel.text = brand.uppercaseString
+                            cell.brandLabel.text = brandName.uppercaseString
                         }
                         
                         if let productName = product.productName
@@ -195,9 +195,9 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                 {
                     if let product = alerts[0] as ProductResponse?
                     {
-                        if let brand = product.brandName
+                        if let brandName = product.brand?.brandName
                         {
-                            cell.brandLabel.text = brand.uppercaseString
+                            cell.brandLabel.text = brandName.uppercaseString
                         }
                         
                         if let productName = product.productName
@@ -322,7 +322,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                     {
                         if let alertProduct = saleAlerts?[safe: row] as ProductResponse?
                         {
-                            if let brandName = alertProduct.brandName
+                            if let brandName = alertProduct.brand?.brandName
                             {
                                 destinationVC.brandName = brandName
                             }
@@ -337,7 +337,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                     {
                         if let alertProduct = watchAlerts?[safe: row] as ProductResponse?
                         {
-                            if let brandName = alertProduct.brandName
+                            if let brandName = alertProduct.brand?.brandName
                             {
                                 destinationVC.brandName = brandName
                             }
