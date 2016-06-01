@@ -27,10 +27,18 @@ class FilterObjectConverter
                     filter.key = key
                 }
             }
-//            else if let brandResponse = filterResponse as? BrandResponse
-//            {
-//                
-//            }
+            else if let brandResponse = filterResponse as? BrandResponse
+            {
+                if let name = brandResponse.brandName
+                {
+                    filter.name = name
+                }
+                
+                if let key = brandResponse.brandId?.integerValue
+                {
+                    filter.key = key
+                }
+            }
             else if let retailerResponse = filterResponse as? RetailerResponse
             {
                 if let name = retailerResponse.retailerName

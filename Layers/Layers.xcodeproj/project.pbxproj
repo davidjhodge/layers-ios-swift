@@ -87,6 +87,8 @@
 		70AF1A2B1CE2D17B00C0518C /* RetailerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2A1CE2D17B00C0518C /* RetailerResponse.swift */; };
 		70AF1A2D1CE3C57500C0518C /* TextFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2C1CE3C57500C0518C /* TextFilterViewController.swift */; };
 		70AF1A2F1CE3C6A800C0518C /* SubtitleFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2E1CE3C6A800C0518C /* SubtitleFilterCell.swift */; };
+		70BE79BF1CFCFFD200AABE8A /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BE79BE1CFCFFD200AABE8A /* ErrorMessage.swift */; };
+		70BE79C51CFE89D900AABE8A /* BrandResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BE79C41CFE89D900AABE8A /* BrandResponse.swift */; };
 		70CECA821CEE31E600FF7B8F /* FilterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CECA811CEE31E600FF7B8F /* FilterManager.swift */; };
 		70CECA871CF7AD2400FF7B8F /* FilterObjectConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CECA861CF7AD2400FF7B8F /* FilterObjectConverter.swift */; };
 		70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D84A9E1CB9557300A70485 /* AppDelegate.swift */; };
@@ -180,6 +182,8 @@
 		70AF1A2A1CE2D17B00C0518C /* RetailerResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetailerResponse.swift; sourceTree = "<group>"; };
 		70AF1A2C1CE3C57500C0518C /* TextFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFilterViewController.swift; sourceTree = "<group>"; };
 		70AF1A2E1CE3C6A800C0518C /* SubtitleFilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubtitleFilterCell.swift; sourceTree = "<group>"; };
+		70BE79BE1CFCFFD200AABE8A /* ErrorMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
+		70BE79C41CFE89D900AABE8A /* BrandResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandResponse.swift; sourceTree = "<group>"; };
 		70CECA811CEE31E600FF7B8F /* FilterManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterManager.swift; sourceTree = "<group>"; };
 		70CECA861CF7AD2400FF7B8F /* FilterObjectConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterObjectConverter.swift; sourceTree = "<group>"; };
 		70D84A9B1CB9557200A70485 /* Layers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Layers.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -250,6 +254,7 @@
 				70059C941CD672990094B454 /* FacebookUserResponse.swift */,
 				70A40FF41CD69C4F00CB515B /* ProductResponse.swift */,
 				7022F2F21CFB6A740097DDF9 /* CategoryResponse.swift */,
+				70BE79C41CFE89D900AABE8A /* BrandResponse.swift */,
 				70AF1A2A1CE2D17B00C0518C /* RetailerResponse.swift */,
 				7022F2F01CFB65120097DDF9 /* ColorResponse.swift */,
 			);
@@ -425,6 +430,7 @@
 				705390391CD7ED9100DA8E15 /* SafeIndex.swift */,
 				70AF1A1E1CE1479200C0518C /* NSURLImageSIze.swift */,
 				70CECA861CF7AD2400FF7B8F /* FilterObjectConverter.swift */,
+				70BE79BE1CFCFFD200AABE8A /* ErrorMessage.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -821,10 +827,12 @@
 				70987C331CB9CA1300D86FBA /* ProductHeaderCell.swift in Sources */,
 				70776FC61CC5F881002E6F25 /* FilterViewController.swift in Sources */,
 				70987C1B1CB98A7700D86FBA /* NSAttributedString+Pricing.m in Sources */,
+				70BE79C51CFE89D900AABE8A /* BrandResponse.swift in Sources */,
 				70A410051CD6AB1600CB515B /* Image.swift in Sources */,
 				70987C3D1CBBF07B00D86FBA /* GetStartedViewController.swift in Sources */,
 				70AF1A2D1CE3C57500C0518C /* TextFilterViewController.swift in Sources */,
 				70AF1A261CE199BF00C0518C /* LoadingCell.swift in Sources */,
+				70BE79BF1CFCFFD200AABE8A /* ErrorMessage.swift in Sources */,
 				70987BEE1CB9658200D86FBA /* User.swift in Sources */,
 				70488C541CE63C640085BAE9 /* ColorFilterViewController.swift in Sources */,
 				70A71B9C1CC593D800B58B74 /* PickerAccessoryView.swift in Sources */,

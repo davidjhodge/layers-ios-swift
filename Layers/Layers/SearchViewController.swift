@@ -118,7 +118,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         {
             let product = products[indexPath.row]
             
-            if let productName = product.productName, brandName = product.brandName
+            if let productName = product.productName, brandName = product.brand?.brandName
             {
                 cell.textLabel?.text = "\(brandName) \(productName)"
             }

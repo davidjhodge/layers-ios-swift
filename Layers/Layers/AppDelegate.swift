@@ -42,7 +42,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Determine intial view controller based on login state
         
-        AppStateTransitioner.transitionToMainStoryboard(false)
+//        AppStateTransitioner.transitionToMainStoryboard(false)
+        
+        AppStateTransitioner.transitionToLoginStoryboard(false)
         
 //        if LRSessionManager.sharedManager.isLoggedIn()
 //        {

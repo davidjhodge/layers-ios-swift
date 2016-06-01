@@ -131,9 +131,9 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                         })
                     }
                     
-                    if let brand = product.brandName
+                    if let brandName = product.brand?.brandName
                     {
-                        cell.brandLabel.text = brand
+                        cell.brandLabel.text = brandName
                     }
                     
                     if let productName = product.productName

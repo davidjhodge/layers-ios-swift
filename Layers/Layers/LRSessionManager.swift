@@ -433,35 +433,35 @@ class LRSessionManager: NSObject
         })
     }
     
-//    func loadBrands(completionHandler: LRCompletionBlock?)
-//    {
-//        let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("brands"))
-//        
-//        request.HTTPMethod = "GET"
-//        
-//        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
-//            
-//            if success
-//            {
-//                if let jsonResponse = response
-//                {
-//                    let brands = Mapper<RetailerResponse>().mapArray(jsonResponse.arrayObject)
-//                    
-//                    if let completion = completionHandler
-//                    {
-//                        completion(success: true, error: error, response: brands)
-//                    }
-//                }
-//            }
-//            else
-//            {
-//                if let completion = completionHandler
-//                {
-//                    completion(success: false, error: error, response: nil)
-//                }
-//            }
-//        })
-//    }
+    func loadBrands(completionHandler: LRCompletionBlock?)
+    {
+        let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("brands"))
+        
+        request.HTTPMethod = "GET"
+        
+        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+            
+            if success
+            {
+                if let jsonResponse = response
+                {
+                    let brands = Mapper<BrandResponse>().mapArray(jsonResponse.arrayObject)
+                    
+                    if let completion = completionHandler
+                    {
+                        completion(success: true, error: error, response: brands)
+                    }
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: false, error: error, response: nil)
+                }
+            }
+        })
+    }
     
     func loadRetailers(completionHandler: LRCompletionBlock?)
     {

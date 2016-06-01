@@ -382,7 +382,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     cell.setImageElements(productImages)
                     
-                    if let brandName = product.brandName
+                    if let brandName = product.brand?.brandName
                     {
                         cell.brandLabel.text = brandName.uppercaseString
                     }
@@ -864,9 +864,9 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         destinationViewController.webURL = NSURL(string: url)
                     }
                     
-                    if let brand = currentProduct.brandName
+                    if let brandName = currentProduct.brand?.brandName
                     {
-                        destinationViewController.brandName = brand
+                        destinationViewController.brandName = brandName
 
                     }
                 }
