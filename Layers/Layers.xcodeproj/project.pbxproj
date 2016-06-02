@@ -83,7 +83,7 @@
 		70AF1A211CE1651A00C0518C /* PickerRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70AF1A201CE1651A00C0518C /* PickerRow.xib */; };
 		70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A221CE1676200C0518C /* PickerRow.swift */; };
 		70AF1A261CE199BF00C0518C /* LoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A251CE199BF00C0518C /* LoadingCell.swift */; };
-		70AF1A291CE255BF00C0518C /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A281CE255BF00C0518C /* SearchViewController.swift */; };
+		70AF1A291CE255BF00C0518C /* SearchModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A281CE255BF00C0518C /* SearchModalViewController.swift */; };
 		70AF1A2B1CE2D17B00C0518C /* RetailerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2A1CE2D17B00C0518C /* RetailerResponse.swift */; };
 		70AF1A2D1CE3C57500C0518C /* TextFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2C1CE3C57500C0518C /* TextFilterViewController.swift */; };
 		70AF1A2F1CE3C6A800C0518C /* SubtitleFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2E1CE3C6A800C0518C /* SubtitleFilterCell.swift */; };
@@ -95,6 +95,8 @@
 		70D84AA41CB9557300A70485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA21CB9557300A70485 /* Main.storyboard */; };
 		70D84AA61CB9557300A70485 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA51CB9557300A70485 /* Assets.xcassets */; };
 		70D84AA91CB9557300A70485 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA71CB9557300A70485 /* LaunchScreen.storyboard */; };
+		70DD853F1CFFA08F00319716 /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70DD853E1CFFA08F00319716 /* Search.storyboard */; };
+		70DD85411CFFA0C900319716 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DD85401CFFA0C900319716 /* SearchViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -178,7 +180,7 @@
 		70AF1A201CE1651A00C0518C /* PickerRow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PickerRow.xib; sourceTree = "<group>"; };
 		70AF1A221CE1676200C0518C /* PickerRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerRow.swift; sourceTree = "<group>"; };
 		70AF1A251CE199BF00C0518C /* LoadingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingCell.swift; sourceTree = "<group>"; };
-		70AF1A281CE255BF00C0518C /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		70AF1A281CE255BF00C0518C /* SearchModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchModalViewController.swift; sourceTree = "<group>"; };
 		70AF1A2A1CE2D17B00C0518C /* RetailerResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetailerResponse.swift; sourceTree = "<group>"; };
 		70AF1A2C1CE3C57500C0518C /* TextFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFilterViewController.swift; sourceTree = "<group>"; };
 		70AF1A2E1CE3C6A800C0518C /* SubtitleFilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubtitleFilterCell.swift; sourceTree = "<group>"; };
@@ -192,6 +194,8 @@
 		70D84AA51CB9557300A70485 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		70D84AA81CB9557300A70485 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		70D84AAA1CB9557300A70485 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		70DD853E1CFFA08F00319716 /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
+		70DD85401CFFA0C900319716 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		C29055E7EACEA98F3107E42C /* Pods_Layers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Layers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -259,13 +263,6 @@
 				7022F2F01CFB65120097DDF9 /* ColorResponse.swift */,
 			);
 			name = Responses;
-			sourceTree = "<group>";
-		};
-		7053902F1CD7D30700DA8E15 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "New Group";
 			sourceTree = "<group>";
 		};
 		705390321CD7D3A000DA8E15 /* Price Alerts */ = {
@@ -340,7 +337,6 @@
 		70776FD61CCC03CC002E6F25 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				7053902F1CD7D30700DA8E15 /* New Group */,
 				70059C921CD65AD50094B454 /* OnboardingContainerViewController.swift */,
 				70776FD41CCC03C1002E6F25 /* OnboardingGenderViewController.swift */,
 				70776FD91CCC16FA002E6F25 /* OnboardingBrandsViewController.swift */,
@@ -391,12 +387,14 @@
 			children = (
 				70987C361CB9D15100D86FBA /* Login.storyboard */,
 				70D84AA21CB9557300A70485 /* Main.storyboard */,
+				70DD853E1CFFA08F00319716 /* Search.storyboard */,
 				705390331CD7D3C700DA8E15 /* PriceAlerts.storyboard */,
 				70987C271CB9A4A500D86FBA /* Account.storyboard */,
 				70987C3E1CBBF07F00D86FBA /* Login */,
 				70776FD61CCC03CC002E6F25 /* Onboarding */,
 				70776FC41CC5F872002E6F25 /* Filter */,
 				70987BF21CB9705C00D86FBA /* Product Collection */,
+				70DD85421CFFA38800319716 /* Search */,
 				705390321CD7D3A000DA8E15 /* Price Alerts */,
 				70987C2B1CB9A4C200D86FBA /* Account */,
 			);
@@ -559,7 +557,7 @@
 		70AF1A271CE255AC00C0518C /* Search */ = {
 			isa = PBXGroup;
 			children = (
-				70AF1A281CE255BF00C0518C /* SearchViewController.swift */,
+				70AF1A281CE255BF00C0518C /* SearchModalViewController.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -601,6 +599,14 @@
 				70987C181CB98A3300D86FBA /* Layers-BridgingHeader.h */,
 			);
 			path = Layers;
+			sourceTree = "<group>";
+		};
+		70DD85421CFFA38800319716 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				70DD85401CFFA0C900319716 /* SearchViewController.swift */,
+			);
+			name = Search;
 			sourceTree = "<group>";
 		};
 		C4EC2D873913FC477A8BD06D /* Pods */ = {
@@ -694,6 +700,7 @@
 				70987C051CB980B300D86FBA /* Oxygen-Bold.ttf in Resources */,
 				70987C111CB9832E00D86FBA /* Charter-Bold.ttf in Resources */,
 				70987C061CB980B300D86FBA /* Oxygen-Light.ttf in Resources */,
+				70DD853F1CFFA08F00319716 /* Search.storyboard in Resources */,
 				70776FDE1CD64516002E6F25 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -769,13 +776,14 @@
 			files = (
 				7022F2F11CFB65120097DDF9 /* ColorResponse.swift in Sources */,
 				7022F2F51CFCAD100097DDF9 /* AWSManager.swift in Sources */,
-				70AF1A291CE255BF00C0518C /* SearchViewController.swift in Sources */,
+				70AF1A291CE255BF00C0518C /* SearchModalViewController.swift in Sources */,
 				70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */,
 				706FF89A1CBD6E7A007B26AD /* AlternateReviewCell.swift in Sources */,
 				70776FDC1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift in Sources */,
 				70A410031CD6AA5C00CB515B /* AlternatePricing.swift in Sources */,
 				706FF8A11CBD84EE007B26AD /* ReviewCell.swift in Sources */,
 				70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */,
+				70DD85411CFFA0C900319716 /* SearchViewController.swift in Sources */,
 				70987BF51CB970CA00D86FBA /* LRSessionManager.swift in Sources */,
 				70776FDA1CCC16FA002E6F25 /* OnboardingBrandsViewController.swift in Sources */,
 				70987C2A1CB9A4BF00D86FBA /* AccountViewController.swift in Sources */,

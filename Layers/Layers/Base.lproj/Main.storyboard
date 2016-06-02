@@ -496,10 +496,10 @@
             </objects>
             <point key="canvasLocation" x="2885" y="475"/>
         </scene>
-        <!--Search View Controller-->
+        <!--Search Modal View Controller-->
         <scene sceneID="GJs-Mg-DQq">
             <objects>
-                <viewController id="MsZ-hj-vYs" customClass="SearchViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="MsZ-hj-vYs" customClass="SearchModalViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Krv-6l-9ue"/>
                         <viewControllerLayoutGuide type="bottom" id="mFo-Pr-T1d"/>
@@ -613,6 +613,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="434.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZpN-qF-1Os">
+                                                    <rect key="frame" x="0.0" y="24" width="584" height="201"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="201" id="FjY-X0-OA6"/>
+                                                    </constraints>
+                                                </view>
                                                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z0j-ZL-Mtv">
                                                     <rect key="frame" x="0.0" y="24" width="584" height="201"/>
                                                 </scrollView>
@@ -624,11 +631,8 @@
                                                     <color key="pageIndicatorTintColor" red="0.85098039215686272" green="0.85098039215686272" blue="0.85098039215686272" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="currentPageIndicatorTintColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="calibratedRGB"/>
                                                 </pageControl>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MD0-im-jaP">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product Name" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MD0-im-jaP">
                                                     <rect key="frame" x="24" y="286" width="103" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="6c7-Zj-6KA"/>
-                                                    </constraints>
                                                     <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="16"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -676,7 +680,7 @@
                                                         <constraint firstAttribute="height" constant="48" id="F8L-IR-h9f"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="18"/>
-                                                    <state key="normal" title="BUY IT">
+                                                    <state key="normal" title="VIEW ONLINE">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                 </button>
@@ -706,6 +710,8 @@
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="fbb-8D-j2J" secondAttribute="bottom" id="Bcm-Fu-yxw"/>
+                                                        <constraint firstAttribute="bottom" secondItem="Vuj-7f-sYT" secondAttribute="bottom" id="E1j-qx-EfV"/>
                                                         <constraint firstItem="Vuj-7f-sYT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="yIE-px-Tm1" secondAttribute="leading" constant="16" id="EkB-Wf-JsT"/>
                                                         <constraint firstItem="fbb-8D-j2J" firstAttribute="centerY" secondItem="yIE-px-Tm1" secondAttribute="centerY" id="GZd-Y7-I9l"/>
                                                         <constraint firstItem="Vuj-7f-sYT" firstAttribute="centerX" secondItem="yIE-px-Tm1" secondAttribute="centerX" priority="750" constant="-60" id="VAV-LU-gUd"/>
@@ -723,11 +729,13 @@
                                                 <constraint firstItem="Wo5-Jm-B2T" firstAttribute="top" secondItem="MD0-im-jaP" secondAttribute="top" id="Cmc-n6-94t"/>
                                                 <constraint firstAttribute="trailing" secondItem="eUO-54-D0p" secondAttribute="trailing" constant="24" id="G0d-OK-tPV"/>
                                                 <constraint firstItem="yIE-px-Tm1" firstAttribute="leading" secondItem="nd5-i7-KSw" secondAttribute="leading" constant="24" id="HnA-1f-19M"/>
+                                                <constraint firstItem="ZpN-qF-1Os" firstAttribute="top" secondItem="nd5-i7-KSw" secondAttribute="top" constant="24" id="KU8-Je-CX7"/>
                                                 <constraint firstItem="z0j-ZL-Mtv" firstAttribute="leading" secondItem="nd5-i7-KSw" secondAttribute="leading" id="Lx4-9H-lNE"/>
-                                                <constraint firstItem="6Gj-KO-hlH" firstAttribute="top" secondItem="z0j-ZL-Mtv" secondAttribute="bottom" constant="16" id="Mh4-1V-3eP"/>
                                                 <constraint firstItem="zCn-jQ-rkR" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="qFG-5i-5b0" secondAttribute="trailing" constant="16" id="Pac-0B-zC8"/>
                                                 <constraint firstItem="MD0-im-jaP" firstAttribute="top" secondItem="qFG-5i-5b0" secondAttribute="bottom" constant="4" id="R25-kn-PCF"/>
+                                                <constraint firstItem="ZpN-qF-1Os" firstAttribute="leading" secondItem="nd5-i7-KSw" secondAttribute="leading" id="R9c-mk-eea"/>
                                                 <constraint firstItem="qFG-5i-5b0" firstAttribute="top" secondItem="6Gj-KO-hlH" secondAttribute="bottom" constant="16" id="T0L-bK-1ci"/>
+                                                <constraint firstAttribute="trailing" secondItem="ZpN-qF-1Os" secondAttribute="trailing" id="Ta4-EY-xet"/>
                                                 <constraint firstItem="eUO-54-D0p" firstAttribute="leading" secondItem="nd5-i7-KSw" secondAttribute="leading" constant="24" id="W73-b2-ENL"/>
                                                 <constraint firstItem="zCn-jQ-rkR" firstAttribute="bottom" secondItem="qFG-5i-5b0" secondAttribute="bottom" id="X81-NX-roA"/>
                                                 <constraint firstAttribute="trailing" secondItem="Wo5-Jm-B2T" secondAttribute="trailing" constant="24" id="YlM-AY-o5r"/>
@@ -741,7 +749,9 @@
                                                 <constraint firstItem="z0j-ZL-Mtv" firstAttribute="top" secondItem="nd5-i7-KSw" secondAttribute="top" constant="24" id="nw9-vW-R4f"/>
                                                 <constraint firstItem="Wo5-Jm-B2T" firstAttribute="top" relation="greaterThanOrEqual" secondItem="zCn-jQ-rkR" secondAttribute="bottom" id="tME-FR-S5L"/>
                                                 <constraint firstItem="6Gj-KO-hlH" firstAttribute="leading" secondItem="nd5-i7-KSw" secondAttribute="leading" constant="24" id="wJO-o2-XVC"/>
+                                                <constraint firstItem="6Gj-KO-hlH" firstAttribute="top" secondItem="z0j-ZL-Mtv" secondAttribute="bottom" constant="16" id="wSw-ic-yas"/>
                                                 <constraint firstAttribute="trailing" secondItem="yIE-px-Tm1" secondAttribute="trailing" constant="24" id="yu5-Nh-kU9"/>
+                                                <constraint firstItem="6Gj-KO-hlH" firstAttribute="top" secondItem="ZpN-qF-1Os" secondAttribute="bottom" constant="16" id="ziO-nR-Z9p"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
