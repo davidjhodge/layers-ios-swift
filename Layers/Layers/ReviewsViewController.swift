@@ -48,6 +48,7 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
+                            
                             self.tableView.reloadData()
                         })
                     }
@@ -167,20 +168,20 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     return cell
                 }
-                else
-                {
-                    let cell: AlternateReviewCell = tableView.dequeueReusableCellWithIdentifier("AlternateReviewCell") as! AlternateReviewCell
-                    
-                    let rating: Float = 4.5
-                    
-                    cell.titleLabel.text = "Durability".uppercaseString
-                    
-                    cell.ratingLabel.text = String(rating)
-                    
-                    cell.starView.rating = Double(rating)
-                    
-                    return cell
-                }
+//                else
+//                {
+//                    let cell: AlternateReviewCell = tableView.dequeueReusableCellWithIdentifier("AlternateReviewCell") as! AlternateReviewCell
+//                    
+//                    let rating: Float = 4.5
+//                    
+//                    cell.titleLabel.text = "Durability".uppercaseString
+//                    
+//                    cell.ratingLabel.text = String(rating)
+//                    
+//                    cell.starView.rating = Double(rating)
+//                    
+//                    return cell
+//                }
             case .Reviews:
                 
                 if let reviews = product?.reviews

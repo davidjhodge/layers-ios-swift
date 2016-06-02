@@ -1438,9 +1438,9 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="website" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BKr-AW-ZTi">
-                                                    <rect key="frame" x="531" y="16" width="45" height="12"/>
+                                                    <rect key="frame" x="531" y="14" width="45" height="14"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="12" id="UDw-ps-96L"/>
+                                                        <constraint firstAttribute="height" constant="14" id="UDw-ps-96L"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="12"/>
                                                     <color key="textColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
@@ -1458,7 +1458,7 @@
                                                 <constraint firstItem="uKh-tY-t8C" firstAttribute="top" secondItem="LVW-c8-pbM" secondAttribute="bottom" constant="8" id="aQu-Co-zef"/>
                                                 <constraint firstAttribute="bottom" secondItem="uKh-tY-t8C" secondAttribute="bottom" constant="16" id="cGq-Ix-ax7"/>
                                                 <constraint firstItem="Y9g-fb-fPN" firstAttribute="top" secondItem="4bI-zk-bK8" secondAttribute="top" constant="16" id="dsw-U1-6Cl"/>
-                                                <constraint firstItem="BKr-AW-ZTi" firstAttribute="top" secondItem="4bI-zk-bK8" secondAttribute="top" constant="16" id="f3z-HE-AhY"/>
+                                                <constraint firstItem="BKr-AW-ZTi" firstAttribute="top" secondItem="4bI-zk-bK8" secondAttribute="top" constant="14" id="f3z-HE-AhY"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -1579,6 +1579,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="K3r-1i-u5G"/>
-        <segue reference="Oev-VQ-CAY"/>
+        <segue reference="E1j-L3-Nh8"/>
     </inferredMetricsTieBreakers>
 </document>

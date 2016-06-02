@@ -17,6 +17,8 @@ class ColorResponse: Mappable
     
     var colorId: NSNumber?
     
+    var color: UIColor?
+    
     required init?(_ map: Map) {
         
     }

@@ -18,8 +18,6 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     
     @IBOutlet weak var collectionViewBottomLayoutConstraint: NSLayoutConstraint!
     
-//    var hidingNavBarManager: HidingNavigationBarManager?
-
     var products: Array<ProductResponse>?
     
     var currentPage: Int?
@@ -54,51 +52,18 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         
-//        hidingNavBarManager = HidingNavigationBarManager(viewController: self, scrollView: collectionView)
-//        hidingNavBarManager?.expansionResistance = 150
-//
-//        if let tabBar = navigationController?.tabBarController?.tabBar {
-//            hidingNavBarManager?.manageBottomBar(tabBar)
-//        }
-        
         currentPage = 1
         
         reloadData(currentPage!)
     }
     
-//    override func viewWillAppear(animated: Bool) {
-//        super.viewWillAppear(animated)
-//        
-//        hidingNavBarManager?.viewWillAppear(animated)
-//    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-//        hidingNavBarManager?.viewDidLayoutSubviews()
         
         if let tabBar = navigationController?.tabBarController?.tabBar {
         collectionViewBottomLayoutConstraint.constant = (-1 * tabBar.bounds.size.height) + 8
         }
     }
-    
-//    override func viewWillDisappear(animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        
-//        hidingNavBarManager?.viewWillDisappear(animated)
-//    }
-//    
-//    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
-//        hidingNavBarManager?.shouldScrollToTop()
-//
-//        return true
-//    }
-    
-//    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-//        
-//        return UIStatusBarStyle.LightContent
-//        
-//    }
     
     // MARK: Networking
     func reloadData(page: Int)
@@ -200,8 +165,27 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
             
             let cell: ProductCell = collectionView.dequeueReusableCellWithReuseIdentifier(kProductCellIdentfier, forIndexPath: indexPath) as! ProductCell
             
-            // Use the first variant
-            if let variant = product.variants?[0]
+            // If no color filters are activated, use the first variant. Else, use the first variant with a matching color.
+            var variant: Variant?
+            
+            if let variants = product.variants
+            {
+                // Returns a variant that matches the color
+                if let matchingVariant = Variant.variantMatchingFilterColorsInVariants(variants)
+                {
+                    variant = matchingVariant
+                }
+            }
+
+            if variant == nil
+            {
+                if let firstVariant = product.variants?[safe: 0]
+                {
+                    variant = firstVariant
+                }
+            }
+            
+            if let variant = variant
             {
                 //Set Image View with first image
                 if let firstImage = variant.images?[safe: 0]
@@ -209,7 +193,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                     if let primaryUrl = firstImage.primaryUrl
                     {
                         cell.productImageView.sd_setImageWithURL(primaryUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
-                          
+                            
                             if image != nil && cacheType != .Memory
                             {
                                 cell.productImageView.alpha = 0.0
@@ -375,7 +359,6 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                             if let destinationVC = segue.destinationViewController as? ProductViewController
                             {
                                 destinationVC.productIdentifier = product.productId
-                
                             }
                         }
                     }

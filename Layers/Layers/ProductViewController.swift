@@ -101,11 +101,30 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         self.product = productResponse
                         
                         // Set current Variant and size to the first index of each array by default
-                        if let firstVariant = self.product?.variants?[0]
+                        var variant: Variant?
+                        
+                        if let variants = self.product?.variants
                         {
-                            self.selectedVariant = firstVariant
+                            // Returns a variant that matches the color
+                            if let matchingVariant = Variant.variantMatchingFilterColorsInVariants(variants)
+                            {
+                                variant = matchingVariant
+                            }
+                        }
+                        
+                        if variant == nil
+                        {
+                            if let firstVariant = self.product?.variants?[safe: 0]
+                            {
+                                variant = firstVariant
+                            }
+                        }
+                        
+                        if let variant = variant
+                        {
+                            self.selectedVariant = variant
                             
-                            if let firstSize = firstVariant.sizes?[0]
+                            if let firstSize = variant.sizes?[0]
                             {
                                 self.selectedSize = firstSize
                             }
@@ -723,7 +742,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         if view == nil
         {
             // Remove selection indicators
-            pickerView.subviews[0].hidden = true
             pickerView.subviews[1].hidden = true
             pickerView.subviews[2].hidden = true
             
@@ -740,7 +758,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                                 pickerRow.textLabel.text = variantName.capitalizedString
                             }
                             
-                            if let color = variant.color
+                            if let color = variant.color?.color
                             {
                                 pickerRow.colorSwatchView.backgroundColor = color
                             }
