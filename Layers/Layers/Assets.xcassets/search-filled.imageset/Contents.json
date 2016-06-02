@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "bell-filled.png",
+      "filename" : "search-filled.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "bell-filled@2x.png",
+      "filename" : "search-filled@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "bell-filled@3x.png",
+      "filename" : "search-filled@3x.png",
       "scale" : "3x"
     }
   ],

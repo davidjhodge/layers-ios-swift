@@ -362,8 +362,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     if let imageDict = selectedVariant?.images?[0]
                     {
                         if let primaryUrl = imageDict.primaryUrl
-                        {
-                            
+                        {   
                             let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize112)
                             
                             productImages.append(resizedPrimaryUrl)
@@ -416,7 +415,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         }
                     }
                     
-                    // CTA
+                    cell.ctaButton.setTitle("View Online".uppercaseString, forState: .Normal)
                     cell.ctaButton.addTarget(self, action: #selector(buy), forControlEvents: .TouchUpInside)
                     
                     // Share
@@ -584,7 +583,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             switch tableSection {
             case .ProductHeader:
-                return 451.0
+//                return 451.0
+                return UITableViewAutomaticDimension
                 
             case .Variant:
                 return 48.0
@@ -604,6 +604,17 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         return 44.0
+    }
+    
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if indexPath.section == TableSection.ProductHeader.rawValue
+        {
+            return 451.0
+        }
+        else
+        {
+            return 48.0
+        }
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -712,6 +723,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         if view == nil
         {
             // Remove selection indicators
+            pickerView.subviews[0].hidden = true
             pickerView.subviews[1].hidden = true
             pickerView.subviews[2].hidden = true
             

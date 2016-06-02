@@ -2,102 +2,76 @@
 //  SearchViewController.swift
 //  Layers
 //
-//  Created by David Hodge on 5/10/16.
+//  Created by David Hodge on 6/1/16.
 //  Copyright © 2016 Layers. All rights reserved.
 //
 
 import Foundation
-import UIKit
 
 class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate
 {
-    @IBOutlet weak var searchBar: UISearchBar!
-    
     @IBOutlet weak var tableView: UITableView!
     
-    @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var searchResults: Array<ProductResponse>?
+    
+    var categories: Array<FilterObject>?
+    
+    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        tabBarItem.title = "Search".uppercaseString
+        tabBarItem.image = UIImage(named: "search")
+        tabBarItem.image = UIImage(named: "search-filled")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        searchBar.tintColor = Color.clearColor()
+        searchBar.barTintColor = Color.clearColor()
+        searchBar.backgroundImage = UIImage()
+        
         searchBar.delegate = self
         
         tableView.tableFooterView = UIView()
+        tableView.backgroundColor = Color.BackgroundGrayColor
         
-        cancelButton.addTarget(self, action: #selector(cancel), forControlEvents: .TouchUpInside)
+        spinner.color = Color.grayColor()
+        spinner.hidesWhenStopped = true
+        spinner.hidden = true
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: false)
-
-        searchBar.becomeFirstResponder()
-    }
-
-    // MARK: Search Bar Delegate
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String)
-    {
-        if searchText.characters.count == 0
-        {
-            tableView.reloadData()
-        }
-        else
-        {
-            // Send API Query
-            
-            // TEMP
-            let queryString = searchText
-            let page = queryString.characters.count
-            
-            LRSessionManager.sharedManager.loadProductCollection(page, completionHandler: { (success, error, response) -> Void in
-                
-                if success
-                {
-                    if let results = response as? Array<ProductResponse>
-                    {
-                        self.searchResults = results
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                          
-                            self.tableView.reloadData()
-                        })
-                    }
-                }
-                else
-                {
-                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
-                }
-            })
-        }
     }
     
-    func cancel()
-    {
-        view.endEditing(true)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
-        dismissViewControllerAnimated(true, completion: nil)
+        spinner.center = tableView.center
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar)
-    {
-        searchBar.resignFirstResponder()
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        view.endEditing(true)
     }
     
-    
-    
-    // MARK: UITableView Data Source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int
-    {
+    // MARK: Table View Data Source
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
-    {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        
+        
         if let results = searchResults
         {
             return results.count
@@ -106,51 +80,20 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         return 0
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
-    {
-        let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("SearchResultCell")!
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        cell.textLabel?.text = ""
+        let cell = tableView.dequeueReusableCellWithIdentifier("ResultCell")!
         
-        cell.textLabel?.font = Font.OxygenRegular(size: 14.0)
-        
-        if let products = searchResults
-        {
-            let product = products[indexPath.row]
-            
-            if let productName = product.productName, brandName = product.brand?.brandName
-            {
-                cell.textLabel?.text = "\(brandName) \(productName)"
-            }
-        }
+        cell.textLabel!.text = "Result"
         
         return cell
     }
     
-    // MARK: UITableView Delegate
-    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        // didSelectRowAtIndexPath
-
-        performSegueWithIdentifier("ShowProductViewController", sender: indexPath)
+        
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
-    // MARK: Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if segue.identifier == "ShowProductViewController"
-        {
-            if let indexPath = sender as? NSIndexPath
-            {
-                if let selectedProduct: ProductResponse = searchResults?[safe: indexPath.row]
-                {
-                    if let destinationVc = segue.destinationViewController as? ProductViewController
-                    {
-                        destinationVc.productIdentifier = selectedProduct.productId
-                    }
-                }
-
-            }
-        }
-    }
+    
+    // MARK: Table View Delegate
 }

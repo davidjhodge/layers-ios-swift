@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="LOd-S7-glQ">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <scenes>
+        <!--Search View Controller-->
+        <scene sceneID="4Vo-gx-MsX">
+            <objects>
+                <viewController id="1gX-Ib-B4I" customClass="SearchViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="BNj-qo-r3S"/>
+                        <viewControllerLayoutGuide type="bottom" id="Bb6-LI-FPs"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="q4E-5p-nPV">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="abR-fo-ruL">
+                                <rect key="frame" x="0.0" y="84" width="600" height="516"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="j1d-kl-5uh" customClass="ResultCell">
+                                        <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="j1d-kl-5uh" id="CMA-bk-IBz">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="1gX-Ib-B4I" id="QhA-P7-MKP"/>
+                                    <outlet property="delegate" destination="1gX-Ib-B4I" id="WVZ-2x-TX3"/>
+                                </connections>
+                            </tableView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nav-bar" translatesAutoresizingMaskIntoConstraints="NO" id="1Zy-3S-7sS">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="qQu-Q7-Gs3"/>
+                                </constraints>
+                            </imageView>
+                            <searchBar contentMode="redraw" searchBarStyle="prominent" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="PcF-6t-qbc">
+                                <rect key="frame" x="8" y="20" width="584" height="44"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="caN-13-utt"/>
+                                </constraints>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Bb6-LI-FPs" firstAttribute="top" secondItem="abR-fo-ruL" secondAttribute="bottom" id="6JP-iw-cS4"/>
+                            <constraint firstItem="PcF-6t-qbc" firstAttribute="top" secondItem="q4E-5p-nPV" secondAttribute="top" constant="20" id="A5v-4H-HSH"/>
+                            <constraint firstItem="abR-fo-ruL" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" id="VbI-yh-q3D"/>
+                            <constraint firstItem="1Zy-3S-7sS" firstAttribute="top" secondItem="q4E-5p-nPV" secondAttribute="top" id="XFs-HF-GW7"/>
+                            <constraint firstItem="PcF-6t-qbc" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" constant="8" id="d2h-Lz-COO"/>
+                            <constraint firstAttribute="trailing" secondItem="PcF-6t-qbc" secondAttribute="trailing" constant="8" id="fOH-BM-eec"/>
+                            <constraint firstAttribute="trailing" secondItem="abR-fo-ruL" secondAttribute="trailing" id="g5u-4c-oYF"/>
+                            <constraint firstItem="1Zy-3S-7sS" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" id="hK1-6S-oAR"/>
+                            <constraint firstAttribute="trailing" secondItem="1Zy-3S-7sS" secondAttribute="trailing" id="xu4-2M-6bV"/>
+                            <constraint firstItem="abR-fo-ruL" firstAttribute="top" secondItem="1Zy-3S-7sS" secondAttribute="bottom" id="y7f-0B-lVH"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="FZX-Y4-Zc5"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <connections>
+                        <outlet property="searchBar" destination="PcF-6t-qbc" id="aT5-DB-g2A"/>
+                        <outlet property="tableView" destination="abR-fo-ruL" id="1zv-Vv-RKM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="a06-OA-W1R" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1202" y="351"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="t6h-KX-35m">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="LOd-S7-glQ" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="A6M-kq-D5D">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="1gX-Ib-B4I" kind="relationship" relationship="rootViewController" id="vct-4t-IB5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wyd-rx-YRy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="390" y="351"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="nav-bar" width="375" height="64"/>
+    </resources>
+</document>
