@@ -45,6 +45,7 @@
 		70776FDA1CCC16FA002E6F25 /* OnboardingBrandsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FD91CCC16FA002E6F25 /* OnboardingBrandsViewController.swift */; };
 		70776FDC1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FDB1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift */; };
 		70776FDE1CD64516002E6F25 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 70776FDD1CD64516002E6F25 /* GoogleService-Info.plist */; };
+		707F48841D013D9D00E82A4C /* CallToActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707F48831D013D9D00E82A4C /* CallToActionCell.swift */; };
 		70837E6B1CFA4AA500C83045 /* ProductRouteHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70837E6A1CFA4AA500C83045 /* ProductRouteHandler.swift */; };
 		70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */; };
 		70987BEA1CB95F1900D86FBA /* ProductCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */; };
@@ -142,6 +143,7 @@
 		70776FD91CCC16FA002E6F25 /* OnboardingBrandsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingBrandsViewController.swift; sourceTree = "<group>"; };
 		70776FDB1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingAgeViewController.swift; sourceTree = "<group>"; };
 		70776FDD1CD64516002E6F25 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		707F48831D013D9D00E82A4C /* CallToActionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallToActionCell.swift; sourceTree = "<group>"; };
 		70837E6A1CFA4AA500C83045 /* ProductRouteHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductRouteHandler.swift; sourceTree = "<group>"; };
 		70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStateTransitioner.swift; sourceTree = "<group>"; };
 		70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewController.swift; sourceTree = "<group>"; };
@@ -499,6 +501,7 @@
 			children = (
 				70987C291CB9A4BF00D86FBA /* AccountViewController.swift */,
 				702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */,
+				707F48831D013D9D00E82A4C /* CallToActionCell.swift */,
 				702FC3021CC408FC0012969C /* TextViewCell.swift */,
 				70987C3A1CBAB4BF00D86FBA /* SimpleWebViewController.swift */,
 			);
@@ -842,6 +845,7 @@
 				70CC927A1CFFD56A000AD403 /* ColorObject.swift in Sources */,
 				70987C331CB9CA1300D86FBA /* ProductHeaderCell.swift in Sources */,
 				70776FC61CC5F881002E6F25 /* FilterViewController.swift in Sources */,
+				707F48841D013D9D00E82A4C /* CallToActionCell.swift in Sources */,
 				70987C1B1CB98A7700D86FBA /* NSAttributedString+Pricing.m in Sources */,
 				70BE79C51CFE89D900AABE8A /* BrandResponse.swift in Sources */,
 				70A410051CD6AB1600CB515B /* Image.swift in Sources */,

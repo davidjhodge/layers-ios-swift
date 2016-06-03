@@ -42,6 +42,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.tableFooterView = UIView()
         
         tableView.backgroundColor = Color.BackgroundGrayColor
+        
+        tableView.estimatedRowHeight = 44.0
     }
     
     // MARK: Sign Up
@@ -212,11 +214,9 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             {
             case .CallToAction:
                 
-                if let cell: TextViewCell = tableView.dequeueReusableCellWithIdentifier("CallToActionCell") as? TextViewCell
+                if let cell: CallToActionCell = tableView.dequeueReusableCellWithIdentifier("CallToActionCell") as? CallToActionCell
                 {
                     cell.selectionStyle = .None
-                    
-                    cell.textView.textColor = Color.whiteColor()
                     
                     // Attributed Text
                     
@@ -237,7 +237,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
 
                     mutableString.appendAttributedString(NSAttributedString(string: " to get access to sale alerts. You'll never miss a sale again.", attributes: regularAttributes))
 
-                    cell.textView.attributedText = NSAttributedString(attributedString: mutableString)
+                    cell.ctaTextLabel.attributedText = NSAttributedString(attributedString: mutableString)
                     
                     return cell
                 }
@@ -369,7 +369,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if TableSection(rawValue: indexPath.section) == .CallToAction
         {
-            return 96.0
+            return UITableViewAutomaticDimension
         }
 
         return 48.0

@@ -791,7 +791,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="39X-o7-Gt2">
-                                                    <rect key="frame" x="80" y="11" width="441" height="21"/>
+                                                    <rect key="frame" x="80" y="11" width="401" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="tMh-R5-c3u"/>
                                                     </constraints>
@@ -799,18 +799,29 @@
                                                     <color key="textColor" red="0.15686274510000001" green="0.1764705882" blue="0.17254901959999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7dw-aV-5dc">
+                                                    <rect key="frame" x="497" y="10" width="24" height="24"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="24" id="7I5-DV-iSc"/>
+                                                        <constraint firstAttribute="width" constant="24" id="ct6-kK-1oz"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="p5F-hX-c9V" firstAttribute="leading" secondItem="EjI-KJ-Xex" secondAttribute="leading" constant="24" id="06E-vf-5hV"/>
-                                                <constraint firstItem="GHH-LF-JdV" firstAttribute="leading" secondItem="39X-o7-Gt2" secondAttribute="trailing" constant="16" id="3b3-Za-7OU"/>
                                                 <constraint firstItem="39X-o7-Gt2" firstAttribute="leading" secondItem="p5F-hX-c9V" secondAttribute="trailing" constant="16" id="J8e-gw-IeD"/>
                                                 <constraint firstItem="39X-o7-Gt2" firstAttribute="centerY" secondItem="EjI-KJ-Xex" secondAttribute="centerY" id="SjJ-mO-CNG"/>
                                                 <constraint firstItem="p5F-hX-c9V" firstAttribute="centerY" secondItem="EjI-KJ-Xex" secondAttribute="centerY" id="VAv-9b-M2L"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="GHH-LF-JdV" secondAttribute="trailing" constant="24" id="Yyd-DD-5dv"/>
                                                 <constraint firstItem="GHH-LF-JdV" firstAttribute="centerY" secondItem="EjI-KJ-Xex" secondAttribute="centerY" id="bR5-kQ-SI4"/>
+                                                <constraint firstItem="7dw-aV-5dc" firstAttribute="centerY" secondItem="EjI-KJ-Xex" secondAttribute="centerY" id="lNV-oj-1Gq"/>
+                                                <constraint firstItem="GHH-LF-JdV" firstAttribute="leading" secondItem="7dw-aV-5dc" secondAttribute="trailing" constant="16" id="mte-mD-Gwy"/>
+                                                <constraint firstItem="7dw-aV-5dc" firstAttribute="leading" secondItem="39X-o7-Gt2" secondAttribute="trailing" constant="16" id="xA5-Ug-DkM"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="colorSwatchView" destination="7dw-aV-5dc" id="49h-Dd-VTb"/>
                                             <outlet property="styleLabel" destination="39X-o7-Gt2" id="ViD-5T-QKi"/>
                                         </connections>
                                     </tableViewCell>
@@ -1579,6 +1590,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="K3r-1i-u5G"/>
-        <segue reference="E1j-L3-Nh8"/>
+        <segue reference="Oev-VQ-CAY"/>
     </inferredMetricsTieBreakers>
 </document>
