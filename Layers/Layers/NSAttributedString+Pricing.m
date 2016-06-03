@@ -9,7 +9,7 @@
 #import "NSAttributedString+Pricing.h"
 #import "Layers-Swift.h"
 
-CGFloat const kRetailStringSizeStrikethroughSmall = 10.0;
+CGFloat const kRetailStringSizeStrikethroughSmall = 12.0;
 CGFloat const kRetailStringSizeMedium = 15.0;
 CGFloat const kRetailStringSizeLarge = 17.0;
 
@@ -50,6 +50,8 @@ CGFloat const kSaleStringSizeLarge = 17.0;
                                                                                                                [NSNumber numberWithInteger:NSUnderlineStyleSingle]}
                                         ];
     
+    [finalString appendAttributedString:retailString];
+
     if (salePrice)
     {
         //Sale String
@@ -72,8 +74,6 @@ CGFloat const kSaleStringSizeLarge = 17.0;
         [finalString appendAttributedString:space];
         [finalString appendAttributedString:saleString];
     }
-    
-    [finalString appendAttributedString:retailString];
     
     return finalString;
 }

@@ -27,8 +27,6 @@ class ProductResponse: Mappable
     
     var sku: String?
     
-    var categoryName: String?
-    
     var productId: NSNumber?
     
     var rating: Rating?
@@ -53,13 +51,12 @@ class ProductResponse: Mappable
         sizeRatings              <-  map["size_ratings"]
         variants                 <-  map["variants"]
         sku                      <-  map["sku"]
-        categoryName             <-  map["category_name"]
         productId                <-  map["id"]
         rating                   <-  map["rating.0"]
         isInStock                <-  map["product_in_stock"]
         retailer                 <-  map["retailer"]
         description              <-  map["description"]
-        features                 <-  map["features"]
+        features                 <-  map["features.0.features.item"]
 
     }
 }

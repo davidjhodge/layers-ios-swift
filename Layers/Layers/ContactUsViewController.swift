@@ -12,7 +12,7 @@ import UITextView_Placeholder
 
 private enum TableSection: Int
 {
-    case Name = 0, Email, Subject, Description, Count
+    case Email, Description, Count
 }
 
 class ContactUsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
@@ -62,17 +62,10 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
         if let tableSection = TableSection(rawValue: indexPath.section)
         {
             switch tableSection {
-            case .Name:
-                
-                cell.textField.placeholder = "Your Name"
                 
             case .Email:
                 
                 cell.textField.placeholder = "Email"
-
-            case .Subject:
-                
-                cell.textField.placeholder = "Subject"
 
             case.Description:
                 

@@ -12,4 +12,12 @@ import UIKit
 class StyleCell: UITableViewCell
 {
     @IBOutlet weak var styleLabel: UILabel!
+    
+    @IBOutlet weak var colorSwatchView: UIView!
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        colorSwatchView.layer.cornerRadius = colorSwatchView.bounds.size.width * 0.5
+    }
 }

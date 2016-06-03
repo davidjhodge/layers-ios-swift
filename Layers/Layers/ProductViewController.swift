@@ -469,6 +469,14 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                                 cell.styleLabel.text = variantName.capitalizedString
                             }
                             
+                            if let selectedColor = selectedVariant?.color
+                            {
+                                if let red = selectedColor.red?.floatValue, blue = selectedColor.blue?.floatValue, green = selectedColor.green?.floatValue
+                                {
+                                    cell.colorSwatchView.backgroundColor = UIColor(colorLiteralRed: red/255.0, green: green/255.0, blue: blue/255.0, alpha: 1.0)
+                                }
+                            }
+                            
                             cell.selectionStyle = .None
                             
                             return cell
@@ -758,9 +766,12 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                                 pickerRow.textLabel.text = variantName.capitalizedString
                             }
                             
-                            if let color = variant.color?.color
+                            if let color = variant.color
                             {
-                                pickerRow.colorSwatchView.backgroundColor = color
+                                if let red = color.red?.floatValue, blue = color.blue?.floatValue, green = color.green?.floatValue
+                                {
+                                    pickerRow.colorSwatchView.backgroundColor = UIColor(colorLiteralRed: red/255.0, green: green/255.0, blue: blue/255.0, alpha: 1.0)
+                                }
                             }
                         }
                     }
