@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import HidingNavigationBar
 
 class ProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FilterDelegate
 {
@@ -22,13 +21,15 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     
     var currentPage: Int?
     
+    var refreshControl: UIRefreshControl?
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
         let titleLabel = UILabel(frame: CGRectMake(0,0,28,80))
         titleLabel.attributedText = NSAttributedString(string: "Layers".uppercaseString, attributes: [NSForegroundColorAttributeName: Color.whiteColor(),
             NSFontAttributeName: Font.CharterBold(size: 20.0),
-            NSKernAttributeName: 1.0]
+            NSKernAttributeName: 2.0]
         )
         navigationItem.titleView = titleLabel
         
@@ -42,50 +43,135 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .None)
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Search, target: self, action: #selector(search))
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter"), style: .Plain, target: self, action: #selector(filter))
-        
         collectionView.backgroundColor = Color.BackgroundGrayColor
-        
         collectionView.alwaysBounceVertical = true
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         
+        refreshControl = UIRefreshControl()
+        refreshControl?.tintColor = Color.lightGrayColor()
+        refreshControl?.addTarget(self, action: #selector(refresh), forControlEvents: .ValueChanged)
+        refreshControl?.layer.zPosition = -1
+        collectionView.addSubview(refreshControl!)
+        
         currentPage = 1
         
-        reloadData(currentPage!)
+        reloadProducts()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        if let tabBar = navigationController?.tabBarController?.tabBar {
-        collectionViewBottomLayoutConstraint.constant = (-1 * tabBar.bounds.size.height) + 8
-        }
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        
+//        if let tabBar = navigationController?.tabBarController?.tabBar {
+//        collectionViewBottomLayoutConstraint.constant = (-1 * tabBar.bounds.size.height) + 8
+//        }
+//    }
     
     // MARK: Networking
-    func reloadData(page: Int)
+    func reloadProducts()
     {
-        if page == 0 || page > 0
+        // Get next page of results
+        if let page = currentPage where page > 0
         {
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+            
             LRSessionManager.sharedManager.loadProductCollection(page, completionHandler: { (success, error, response) -> Void in
                 
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    
                 if success
                 {
-                    if let productsResponse = response as? Array<ProductResponse>
+                    if let newProducts: Array<ProductResponse> = response as? Array<ProductResponse>
                     {
-                        self.products = productsResponse
+                        self.currentPage = page + 1
                         
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        // If this is the first page of results
+                        if page == 1
+                        {
+                            if newProducts.count > 0
+                            {
+                                // Update products and reload collection
+                                self.products = newProducts
+                                
+                                // If refresh control is active. Reload data after refresh indicator disappears
+                                if let refresh = self.refreshControl
+                                {
+                                    if refresh.refreshing
+                                    {
+                                        CATransaction.begin()
+                                        CATransaction.setCompletionBlock({ () -> Void in
+                                            
+                                            self.hardReloadCollectionView()
+                                        })
+                                        
+                                        refresh.endRefreshing()
+                                        CATransaction.commit()
+                                    }
+                                    else
+                                    {
+                                        // By default, refresh collection view immediately
+                                        self.hardReloadCollectionView()
+                                    }
+                                }
+                                else
+                                {
+                                    // By default, refresh collection view immediately
+                                    self.hardReloadCollectionView()
+                                }
+                            }
+                            else
+                            {
+                                if FilterManager.defaultManager.getCurrentFilter().hasActiveFilters()
+                                {
+                                    // New filter yielded 0 products. Show Alert
+                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                        
+                                        let alert = UIAlertController(title: "NO_RESULTS_FOR_FILTER".localized, message: nil, preferredStyle: .Alert)
+                                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                                        self.presentViewController(alert, animated: true, completion: nil)
+                                    })
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // If this is a response for page 2 or greater
+                            self.products?.appendContentsOf(newProducts)
                             
-                            self.collectionView.reloadData()
-                        })
+                            // Update UI
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                
+                                //Insert new products
+                                self.collectionView.performBatchUpdates({ () -> Void in
+                                    
+                                    var indexPaths = Array<NSIndexPath>()
+                                    
+                                    // (Page - 1) represents the first index we want to insert into
+                                    let index: Int = (page - 1) * productCollectionPageSize
+                                    
+                                    // When less items than the productCollectionPageSize are returned, newProducts.count ensures we only try to insert the number of products we have. This avoids an indexOutOfBounds error
+                                    for i in index...index+newProducts.count-1
+                                    {
+                                        indexPaths.append(NSIndexPath(forRow: i, inSection: 0))
+                                    }
+                                    
+                                    self.collectionView.insertItemsAtIndexPaths(indexPaths)
+                                    
+                                    }, completion: nil)
+                            })
+                        }
                     }
                 }
                 else
                 {
+                    if let products = self.products where self.products?.count > 0
+                    {
+                        if let loadingCell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: products.count, inSection: 0)) as? LoadingCell
+                        {
+                            loadingCell.spinner.stopAnimating()
+                        }
+                    }
+                    
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
@@ -93,6 +179,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                         self.presentViewController(alert, animated: true, completion: nil)
                     })
                 }
+                
             })
         }
         else
@@ -103,37 +190,33 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         }
     }
     
-    // MARK: Actions
-    func search()
+    func hardReloadCollectionView()
     {
-        performSegueWithIdentifier("ShowSearchViewController", sender: self)
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            self.collectionView.reloadData()
+            
+            self.collectionView.setContentOffset(CGPointZero, animated: false)
+        })
     }
     
-    func filter()
+    // MARK: Actions
+    func refresh()
     {
-        performSegueWithIdentifier("PresentModalFilterViewController", sender: self)
+        currentPage = 1
+        
+        reloadProducts()
     }
     
     // MARK: Filter Delegate
     func didUpdateFilter()
     {
+        // Reset current page to 1, because the Filter has changed, which yields a different set of results
         currentPage = 1
         
-        reloadData(currentPage!)
+        reloadProducts()
     }
-    
-    // MARK: DPLProductDetailViewController
-//    func configureWithDeepLink(deepLink: DPLDeepLink!) {
-//        
-//        if let key = deepLink.routeParameters["product_id"] as? String
-//        {
-//            if let productId = Int(key)
-//            {
-//                performSegueWithIdentifier("ShowProductViewControllerFromDeepLink", sender: productId)
-//            }
-//        }
-//    }
-    
+
     // MARK: Collection View Data Source
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
@@ -143,7 +226,6 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         if let items = products where items.count > 0
         {
-            // + 1 for Spinner
             return items.count + 1
         }
         
@@ -245,58 +327,13 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         if let products = products
         {
             // Insert next page of items as we near the end of the current list
-            if indexPath.row == products.count - 2
+            if indexPath.row == products.count - 6
             {
-                // Get next page of results
-                if let page = currentPage
+                // If last page returned a full list of products, it's highly likely the next page is not empty. This is not perfect, but will reduce unnecessary API calls
+                if products.count % productCollectionPageSize == 0
                 {
-                    currentPage = page + 1
-                    
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-                    
-                    LRSessionManager.sharedManager.loadProductCollection(currentPage!, completionHandler: { (success, error, response) -> Void in
-                        
-                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-
-                        if success
-                        {
-                            if let newProducts: Array<ProductResponse> = response as? Array<ProductResponse>
-                            {
-                                self.products?.appendContentsOf(newProducts)
-                                
-                                // Update UI
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                  
-                                    //Insert new products
-                                    collectionView.performBatchUpdates({ () -> Void in
-                                        
-                                        var indexPaths = Array<NSIndexPath>()
-
-                                        let index: Int = page * productCollectionPageSize
-                                        
-                                        for i in index...index+productCollectionPageSize-1
-                                        {
-                                            indexPaths.append(NSIndexPath(forRow: i, inSection: 0))
-                                        }
-                                        
-                                        collectionView.insertItemsAtIndexPaths(indexPaths)
-                                        
-                                        }, completion: nil)
-                                })
-                            }
-                        }
-                        else
-                        {
-                            if let loadingCell = collectionView.cellForItemAtIndexPath(                        NSIndexPath(forItem: products.count, inSection: 0)) as? LoadingCell
-                            {
-                                loadingCell.spinner.stopAnimating()
-                            }
-                            
-                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                            self.presentViewController(alert, animated: true, completion: nil)
-                        }
-                    })
+                    // Auto-increments page, so no <page> parameter is required
+                    reloadProducts()
                 }
             }
         }
@@ -338,6 +375,44 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
             let width: CGFloat = (collectionView.bounds.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right - 8) * 0.5
             
             return CGSizeMake(width, 226.0)
+        }
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+        return UIEdgeInsetsMake(8, 8, 8, 8)
+    }
+    
+    func collectionView(collectionView: UICollectionView, didHighlightItemAtIndexPath indexPath: NSIndexPath) {
+        
+        if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath)
+        {
+            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+                
+                cell.backgroundColor = Color.HighlightedGrayColor
+                
+                if let productCell = cell as? ProductCell
+                {
+                    productCell.productImageView.alpha = 0.5
+                }
+                
+                }, completion: nil)
+        }
+    }
+    
+    func collectionView(collectionView: UICollectionView, didUnhighlightItemAtIndexPath indexPath: NSIndexPath) {
+        
+        if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath)
+        {
+            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+                
+                cell.backgroundColor = Color.whiteColor()
+                
+                if let productCell = cell as? ProductCell
+                {
+                    productCell.productImageView.alpha = 1.0
+                }
+                
+                }, completion: nil)
         }
     }
     

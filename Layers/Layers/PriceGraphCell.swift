@@ -35,6 +35,10 @@ class PriceGraphCell: UITableViewCell, ChartViewDelegate
     {
         chart.delegate = self
         
+        chart.userInteractionEnabled = false
+        
+        chart.tintColor = Color.DarkNavyColor
+        
         chart.rightAxis.enabled = false
         chart.leftAxis.enabled = false
         

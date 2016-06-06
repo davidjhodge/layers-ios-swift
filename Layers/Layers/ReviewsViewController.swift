@@ -113,6 +113,9 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 if let product = product
                 {
+                    
+                    cell.selectionStyle = .None
+                    
                     cell.productImageView.image = UIImage()
                     cell.brandLabel.text = ""
                     cell.productNameLabel.text = ""
@@ -288,5 +291,37 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
         return 0.01
     }
     
+    func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)
+        {
+            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+                
+                cell.backgroundColor = Color.HighlightedGrayColor
+                
+                if let productHeaderCell = cell as? SimpleProductHeaderCell
+                {
+                    productHeaderCell.productImageView.alpha = 0.5
+                }
+                
+                }, completion: nil)
+        }
+    }
     
+    func tableView(tableView: UITableView, didUnhighlightRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)
+        {
+            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+                
+                cell.backgroundColor = Color.whiteColor()
+                
+                if let productHeaderCell = cell as? SimpleProductHeaderCell
+                {
+                    productHeaderCell.productImageView.alpha = 1.0
+                }
+                
+                }, completion: nil)
+        }
+    }
 }

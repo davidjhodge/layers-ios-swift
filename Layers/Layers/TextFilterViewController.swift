@@ -155,13 +155,17 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
             switch type {
             case .Category:
                 
-                FilterManager.defaultManager.fetchCategories( { (success, results) -> Void in
+                FilterManager.defaultManager.fetchOriginalCategories( { (success, results) -> Void in
                     
                     if success
                     {
-                        if let categories = results
+                        if let categories = results as? Array<CategoryResponse>
                         {
-                            self.items = categories
+                            var parentCategories = categories.filter({ $0.parentId == 1 })
+                            
+                            var filterObjects = FilterObjectConverter.filterObjectArray(parentCategories)
+                            
+                            self.items = filterObjects
                             
                             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                 self.tableView.reloadData()
@@ -298,71 +302,43 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        if let type = filterType
+        // Category, Brand, Retailer
+        let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("CheckmarkCell")!
+        
+        cell.textLabel?.font = Font.OxygenRegular(size: 14.0)
+        
+        cell.selectionStyle = .None
+        
+        if let filterItems = items
         {
-            if type == FilterType.Price
+            if let item: FilterObject = filterItems[indexPath.row]
             {
-                // Price
-                let priceCell: SliderCell = tableView.dequeueReusableCellWithIdentifier("SliderCell") as! SliderCell
-                
-                priceCell.minLabel.text = "$0"
-                
-                priceCell.maxLabel.text = "$100"
-                
-//                priceCell.slider.addTarget(self, action: #selector(sliderValueChanged(_:)), forControlEvents: .ValueChanged)
-                
-                //To identify the slider when value changes
-                priceCell.slider.tag = indexPath.row
-                
-                priceCell.selectionStyle = .None
-                
-                return priceCell
-            }
-            else
-            {
-                // Category, Brand, Retailer
-                let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("CheckmarkCell")!
-                
-                cell.textLabel?.font = Font.OxygenRegular(size: 14.0)
-                
-                cell.selectionStyle = .None
-                
-                if let filterItems = items
+                if let itemText = item.name
                 {
-                    if let item: FilterObject = filterItems[indexPath.row]
-                    {
-                        if let itemText = item.name
-                        {
-                            cell.textLabel?.text = itemText
-                        }
-                        
-                        if let selections = selectedItems
-                        {
-                            if selections.contains({ $0.name == item.name })
-                            {
-                                cell.accessoryType = .Checkmark
-                            }
-                            else
-                            {
-                                cell.accessoryType = .None
-                            }
-                        }
-                        else
-                        {
-                            cell.accessoryType = .None
-                        }
-                    }
+                    cell.textLabel?.text = itemText
                 }
                 
-                return cell
+                if let selections = selectedItems
+                {
+                    if selections.contains({ $0.name == item.name })
+                    {
+                        cell.accessoryType = .Checkmark
+                    }
+                    else
+                    {
+                        cell.accessoryType = .None
+                    }
+                }
+                else
+                {
+                    cell.accessoryType = .None
+                }
             }
         }
-        else
-        {
-            return UITableViewCell(style: .Default, reuseIdentifier: "UITableViewCell")
-        }
-    }
-    
+        
+        return cell
+}
+
     // MARK: UITableView Delegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
@@ -392,18 +368,6 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        if let type = filterType
-        {
-            if type == FilterType.Price
-            {
-                return 64.0
-            }
-            else
-            {
-                return 48.0
-            }
-        }
-        
-        return 44.0
+       return 48.0
     }
 }

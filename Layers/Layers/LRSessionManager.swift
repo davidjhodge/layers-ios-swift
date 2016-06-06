@@ -522,6 +522,99 @@ class LRSessionManager: NSObject
             }
         })
     }
+    
+    // MARK: Search
+    func search(query: String, completionHandler: LRCompletionBlock?)
+    {
+        if query.characters.count > 0
+        {
+            let pageSize = 5
+            
+            // Encode string to url format
+            let queryString = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+            
+            let requestString = "search?&q=\(queryString)&per_page=\(pageSize)"
+            
+//            if FilterManager.defaultManager.getCurrentFilter().hasActiveFilters()
+//            {
+//                let paramsString = FilterManager.defaultManager.filterParamsAsString()
+//                
+//                requestString = requestString.stringByAppendingString("&\(paramsString)")
+//            }
+            
+            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint(requestString))
+            
+            request.HTTPMethod = "GET"
+            
+            sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+                
+                if success
+                {
+                    if let jsonResponse = response
+                    {
+                        let searchResponse = Mapper<SearchResponse>().map(jsonResponse.dictionaryObject)
+                        
+                        var results = Array<AnyObject>()
+                        
+                        // Add all brands
+                        if let brands = searchResponse?.brands
+                        {
+                            for brand in brands
+                            {
+                                results.append(brand)
+                            }
+                        }
+                        
+                        // Add 2 categories
+                        if let categories = searchResponse?.categories
+                        {
+                            for (index, category) in categories.enumerate()
+                            {
+                                if index > 1
+                                {
+                                    break
+                                }
+                                
+                                results.append(category)
+                            }
+                        }
+                        
+                        // Add all products
+                        
+                        if let productDicts = searchResponse?.products
+                        {
+                            for (_, productResponse) in productDicts
+                            {
+                                if let product: SimpleProductResponse = productResponse
+                                {
+                                    results.append(product)
+                                }
+                            }
+                        }
+                        
+                        if let completion = completionHandler
+                        {
+                            completion(success: success, error: error, response: results)
+                        }
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: success, error: error, response: nil)
+                    }
+                }
+            })
+        }
+        else
+        {
+            if let completion = completionHandler
+            {
+                completion(success: false, error: "INVALID_PARAMETERS".localized, response: nil)
+            }
+        }
+    }
 
     
     // MARK: API Helpers

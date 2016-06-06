@@ -284,7 +284,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         if indexPath.row % 2 == false
         {
             // Normal Cell
-            return 112.0
+            return UITableViewAutomaticDimension
         }
         else
         {
@@ -293,8 +293,48 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         }
     }
     
+    
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        return 112.0
+    }
+    
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 8.0
+    }
+    
+    func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)
+        {
+            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+                
+                cell.backgroundColor = Color.HighlightedGrayColor
+                
+                if let productCell = cell as? PriceAlertCell
+                {
+                    productCell.productImageView.alpha = 0.5
+                }
+                
+                }, completion: nil)
+        }
+    }
+    
+    func tableView(tableView: UITableView, didUnhighlightRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)
+        {
+            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+                
+                cell.backgroundColor = Color.whiteColor()
+                
+                if let productCell = cell as? PriceAlertCell
+                {
+                    productCell.productImageView.alpha = 1.0
+                }
+                
+                }, completion: nil)
+        }
     }
     
     // MARK: Navigation

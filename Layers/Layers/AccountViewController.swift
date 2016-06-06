@@ -207,7 +207,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
         let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("UITableViewCell")!
-
+        
         if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
         {
             switch tableSection
@@ -217,6 +217,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 if let cell: CallToActionCell = tableView.dequeueReusableCellWithIdentifier("CallToActionCell") as? CallToActionCell
                 {
                     cell.selectionStyle = .None
+                    
+                    cell.backgroundColor = Color.NeonBlueColor
                     
                     // Attributed Text
                     
@@ -235,7 +237,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
 
                     mutableString.appendAttributedString(NSAttributedString(string: "sign in", attributes: boldAttributes))
 
-                    mutableString.appendAttributedString(NSAttributedString(string: " to get access to sale alerts. You'll never miss a sale again.", attributes: regularAttributes))
+                    mutableString.appendAttributedString(NSAttributedString(string: " to get access to sale alerts.", attributes: regularAttributes))
 
                     cell.ctaTextLabel.attributedText = NSAttributedString(attributedString: mutableString)
                     
@@ -386,11 +388,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .Contact:
                 
-                if !LRSessionManager.sharedManager.isAuthenticated()
-                {
-                    return 0.01
-                }
-                
                 return 24.0
                 
             case .Legal:
@@ -409,12 +406,50 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
-        if TableSection(rawValue: section) == .CallToAction
-        {
-            return 0.01
-        }
+//        if TableSection(rawValue: section) == .CallToAction
+//        {
+//            return 0.01
+//        }
         
         return 1.0
+    }
+    
+    func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)
+        {
+            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+                
+                if indexPath.section == TableSection.CallToAction.rawValue
+                {
+                    cell.backgroundColor = Color.NeonBlueHighlightedColor
+                }
+                else
+                {
+                    cell.backgroundColor = Color.HighlightedGrayColor
+                }
+                
+                }, completion: nil)
+        }
+    }
+    
+    func tableView(tableView: UITableView, didUnhighlightRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)
+        {
+            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+                
+                if indexPath.section == TableSection.CallToAction.rawValue
+                {
+                    cell.backgroundColor = Color.NeonBlueColor
+                }
+                else
+                {
+                    cell.backgroundColor = Color.whiteColor()
+                }
+                
+                }, completion: nil)
+        }
     }
     
     // MARK: Navigation
@@ -446,8 +481,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                         vcTitle = "Open Source Libraries"
                         webUrlString = "https://www.google.com/?gfe_rd=ssl"
                         
-                    default:
-                        break
                     }
                 }
             }

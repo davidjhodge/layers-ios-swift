@@ -71,7 +71,7 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
                 
                 let textViewCell: TextViewCell = tableView.dequeueReusableCellWithIdentifier("TextViewCell") as! TextViewCell
                 
-                textViewCell.textView.placeholder = "So...what's up?"
+                textViewCell.textView.placeholder = "Description"
                 
                 textViewCell.selectionStyle = .None
                 

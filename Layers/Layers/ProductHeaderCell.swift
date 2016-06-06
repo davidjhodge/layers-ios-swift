@@ -20,10 +20,7 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
     @IBOutlet weak var largePriceLabel: UILabel!
     @IBOutlet weak var smallPriceLabel: UILabel!
     
-    @IBOutlet weak var ctaButton: UIButton!
-    
-    @IBOutlet weak var shareButton: UIButton!
-    @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var ctaButton: HighlightedButton!
     
     var imageViews: Array<UIImageView> = Array<UIImageView>()
     
@@ -41,6 +38,9 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
         super.layoutSubviews()
         
         scrollView.delegate = self
+        
+        ctaButton.defaultColor = Color.NeonBlueColor
+        ctaButton.highlightedColor = Color.NeonBlueHighlightedColor
         
         // If view changes and must layout again, reset image view layout
         layoutImageViews(false)
