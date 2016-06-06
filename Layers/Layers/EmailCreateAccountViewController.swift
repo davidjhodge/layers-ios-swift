@@ -205,4 +205,9 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
                 }, completion: nil)
         }
     }
+    
+    deinit
+    {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
 }

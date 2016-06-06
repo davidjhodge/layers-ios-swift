@@ -16,3 +16,4 @@
 "NO_PRODUCT_ID" = "Product ID does not exist.";
 "INVALID_PARAMETERS" = "Invalid parameters.";
 "INVALID_AWS_TASK_RESPONSE" = "The AWS Task returned an invalid response.";
+"NO_RESULTS_FOR_FILTER" = "We couldn't find any results that match the current filter.";

@@ -69,8 +69,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         spinner.hidesWhenStopped = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
         
-//        [self.tableView registerNib:[UINib nibWithNibName:@"SongCell" bundle:nil] forCellReuseIdentifier:@"SongCell"];
-        
         if navigationController?.navigationBarHidden == true
         {
             navigationController?.setNavigationBarHidden(false, animated: true)
@@ -96,6 +94,13 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 if success
                 {
+                    // Set Right Item as Share Button
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "share"), style: .Plain, target: self, action: #selector(self.share))
+                    })
+                    
                     if let productResponse = response as? ProductResponse
                     {
                         self.product = productResponse
@@ -248,17 +253,20 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func share()
     {
-        if let url = product?.outboundUrl
-        {
-            let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-            presentViewController(activityViewController, animated: true, completion: {})
-        }
-        else
-        {
-            let alert = UIAlertController(title: "NO_SHARE_URL".localized, message: nil, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            if let url = self.product?.outboundUrl
+            {
+                let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                self.presentViewController(activityViewController, animated: true, completion: {})
+            }
+            else
+            {
+                let alert = UIAlertController(title: "NO_SHARE_URL".localized, message: nil, preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
+        })
     }
     
     func createSaleAlert()
@@ -437,20 +445,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     cell.ctaButton.setTitle("View Online".uppercaseString, forState: .Normal)
                     cell.ctaButton.addTarget(self, action: #selector(buy), forControlEvents: .TouchUpInside)
                     
-                    // Share
-                    cell.shareButton.setImage(UIImage(named: "share.png"), forState: .Normal)
-                    cell.shareButton.setImage(UIImage(named: "share-filled.png"), forState: .Selected)
-                    cell.shareButton.setImage(UIImage(named: "share-filled.png"), forState: .Highlighted)
-
-                    cell.shareButton.addTarget(self, action: #selector(share), forControlEvents: .TouchUpInside)
-                    
-                    // Like
-                    cell.likeButton.setImage(UIImage(named: "like.png"), forState: .Normal)
-                    cell.likeButton.setImage(UIImage(named: "like-filled.png"), forState: .Selected)
-                    cell.likeButton.setImage(UIImage(named: "like-filled.png"), forState: .Highlighted)
-
-                    cell.likeButton.addTarget(self, action: #selector(like), forControlEvents: .TouchUpInside)
-
                     cell.selectionStyle = .None
                     
                     return cell
@@ -623,7 +617,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
                 
             case .PriceHistory:
-                return 142.0
+                return UITableViewAutomaticDimension
                 
             default:
                 return 44.0
@@ -637,6 +631,10 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         if indexPath.section == TableSection.ProductHeader.rawValue
         {
             return 451.0
+        }
+            else if indexPath.section == TableSection.PriceHistory.rawValue
+        {
+            return 142.0
         }
         else
         {
@@ -908,7 +906,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     if let brandName = currentProduct.brand?.brandName
                     {
                         destinationViewController.brandName = brandName
-
                     }
                 }
             }

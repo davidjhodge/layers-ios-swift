@@ -31,9 +31,9 @@ public struct FilterObject
 
 struct Filter
 {
-    var categories: (selections: Array<FilterObject>?, all: Array<FilterObject>?)
+    var categories: (selections: Array<FilterObject>?, all: Array<FilterObject>?, originals: Array<CategoryResponse>?)
     
-    var brands: (selections: Array<FilterObject>?, all: Array<FilterObject>?)
+    var brands: (selections: Array<FilterObject>?, all: Array<FilterObject>?, originals: Array<BrandResponse>?)
     
     var retailers: (selections: Array<FilterObject>?, all: Array<FilterObject>?)
     
@@ -42,6 +42,7 @@ struct Filter
     var colors: (selections: Array<ColorResponse>?, all: Array<ColorResponse>?)
 }
 
+typealias FilterOriginalCompletionBlock = ((success: Bool, response:Array<AnyObject>?) -> Void)
 typealias FilterCompletionBlock = ((success: Bool, response:Array<FilterObject>?) -> Void)
 typealias ColorCompletionBlock = ((success: Bool, response:Array<ColorResponse>?) -> Void)
 
@@ -252,6 +253,33 @@ class FilterManager
     }
     
     // MARK: Fetch Categories
+    // Helper to access the original categories. This architecture should be modified in the future.
+    func fetchOriginalCategories(completionHandler: FilterOriginalCompletionBlock?)
+    {
+        if let originalCategories = filter.categories.originals
+        {
+            if let completion = completionHandler
+            {
+                completion(success: true, response: originalCategories)
+            }
+        }
+        else
+        {
+            fetchCategories({ (success, response) -> Void in
+             
+                if success
+                {
+                    if let originalCategories = self.filter.categories.originals
+                    {
+                        if let completion = completionHandler
+                        {
+                            completion(success: success, response: originalCategories)
+                        }
+                    }
+                }
+            })
+        }
+    }
     
     func fetchCategories(completionHandler: FilterCompletionBlock?)
     {
@@ -272,8 +300,12 @@ class FilterManager
                     {
                         if let categoryArray = response as? Array<CategoryResponse>
                         {
+                            // Store an original copy
+                            self.filter.categories.originals = categoryArray
+                            
                             if let filters = FilterObjectConverter.filterObjectArray(categoryArray)
                             {
+                                // Story a FilterObject copy
                                 self.filter.categories.all = filters
                                 
                                 completion(success: true, response: filters)
@@ -316,8 +348,12 @@ class FilterManager
                     {
                         if let brandArray = response as? Array<BrandResponse>
                         {
+                            // Store an original copy
+                            self.filter.brands.originals = brandArray
+                            
                             if let filters = FilterObjectConverter.filterObjectArray(brandArray)
                             {
+                                // Store a FilterObject copy
                                 self.filter.brands.all = filters
                                 
                                 completion(success: true, response: filters)

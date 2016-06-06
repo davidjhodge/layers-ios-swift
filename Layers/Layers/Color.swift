@@ -48,6 +48,12 @@ public class Color: UIColor
     static let BackgroundGrayColor: UIColor = ColorCode(246, green: 246, blue: 246, alpha: 1.0)
     
     static let NeonBlueColor: UIColor = ColorCode(76, green: 133, blue: 238, alpha: 1.0)
-    
+//    static let NeonBlueColor: UIColor = ColorCode(0, green: 146, blue: 255, alpha: 1.0)
+
+    static let NeonBlueHighlightedColor: UIColor = ColorCode(76, green: 133, blue: 238, alpha: 1.0)
+
     static let LightGray: UIColor = ColorCode(200, green: 200, blue: 200, alpha: 1.0)
+    
+    static let HighlightedGrayColor: UIColor = ColorCode(230, green: 230, blue: 230, alpha: 1.0)
+
 }
