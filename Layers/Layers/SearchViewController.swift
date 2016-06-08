@@ -157,7 +157,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         }
         
     }
-    
+
     func searchBarTextDidEndEditing(searchBar: UISearchBar)
     {
         searchBar.resignFirstResponder()
@@ -179,6 +179,10 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         searchBar.resignFirstResponder()
         
+        searchBar.text = ""
+        
+        tableView.reloadData()
+        
         searchBar.setShowsCancelButton(false, animated: true)
     }
     
@@ -197,11 +201,18 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         if shouldShowCategories()
         {
-            tableView.contentInset = UIEdgeInsets(top: 20, left: tableView.contentInset.left, bottom: tableView.contentInset.bottom, right: tableView.contentInset.right)
+            var tabBarHeight: CGFloat = 0
+            
+            if let tabBar = tabBarController?.tabBar
+            {
+                tabBarHeight = tabBar.bounds.size.height
+            }
+            
+            tableView.contentInset = UIEdgeInsets(top: 24, left: tableView.contentInset.left, bottom: 24, right: tableView.contentInset.right)
         }
         else
         {
-            tableView.contentInset = UIEdgeInsets(top: 0, left: tableView.contentInset.left, bottom: tableView.contentInset.bottom, right: tableView.contentInset.right)
+            tableView.contentInset = UIEdgeInsets(top: 0, left: tableView.contentInset.left, bottom: 0, right: tableView.contentInset.right)
         }
         
         return 1
@@ -295,7 +306,25 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
-        if let results = searchResults
+        if shouldShowCategories()
+        {
+            if let categories = categories
+            {
+                let category = categories[safe: indexPath.row]
+                
+                let searchStoryboard = UIStoryboard(name: "Search", bundle: NSBundle.mainBundle())
+                
+                if let searchProductCollectionVc = searchStoryboard.instantiateViewControllerWithIdentifier("SearchProductCollectionViewController") as? SearchProductCollectionViewController
+                {
+                    searchProductCollectionVc.filterType = FilterType.Category
+                        
+                    searchProductCollectionVc.selectedItem = category
+                    
+                    navigationController?.pushViewController(searchProductCollectionVc, animated: true)
+                }
+            }
+        }
+        else if let results = searchResults
         {
             if results[indexPath.row] is SimpleProductResponse
             {
@@ -303,11 +332,11 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             }
             else if results[indexPath.row] is BrandResponse
             {
-                log.debug("Show Collection for Brand")
+                performSegueWithIdentifier("ShowSearchProductCollectionViewController", sender: ["indexPath": indexPath, "filterTypeValue": FilterType.Brand.rawValue])
             }
             else if results[indexPath.row] is CategoryResponse
             {
-                log.debug("Show Collection for Brand")
+                performSegueWithIdentifier("ShowSearchProductCollectionViewController", sender: ["indexPath": indexPath, "filterTypeValue": FilterType.Category.rawValue])
             }
         }
     }
@@ -365,16 +394,38 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                 }
             }
         }
-        else if segue.identifier == "ShowProductCollectionViewController"
+        else if segue.identifier == "ShowSearchProductCollectionViewController"
         {
-            if let destinationVc = segue.destinationViewController as? ProductCollectionViewController,
-                let indexPath = sender as? NSIndexPath,
-                let searchResults = searchResults,
-                let product = searchResults[indexPath.row] as? SimpleProductResponse
+            if let destinationVc = segue.destinationViewController as? SearchProductCollectionViewController,
+            let senderDict = sender as? Dictionary<String,AnyObject>,
+                let searchResults = searchResults
             {
-                if let productId = product.productId
+                if let indexPath = senderDict["indexPath"]
                 {
-//                    destinationVc.product = productId
+                    if let filterTypeValue = senderDict["filterTypeValue"] as? Int
+                    {
+                        if let filterType = FilterType(rawValue: filterTypeValue)
+                        {
+                            if filterType == FilterType.Brand
+                            {
+                                destinationVc.filterType = filterType
+                                
+                                if let brand = searchResults[indexPath.row] as? BrandResponse
+                                {
+                                    destinationVc.selectedItem = brand
+                                }
+                            }
+                            else if filterType == FilterType.Category
+                            {
+                                destinationVc.filterType = filterType
+                                
+                                if let category = searchResults[indexPath.row] as? CategoryResponse
+                                {
+                                    destinationVc.selectedItem = category
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

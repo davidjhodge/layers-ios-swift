@@ -94,13 +94,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 if success
                 {
-                    // Set Right Item as Share Button
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "share"), style: .Plain, target: self, action: #selector(self.share))
-                    })
-                    
                     if let productResponse = response as? ProductResponse
                     {
                         self.product = productResponse
@@ -445,6 +438,10 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     cell.ctaButton.setTitle("View Online".uppercaseString, forState: .Normal)
                     cell.ctaButton.addTarget(self, action: #selector(buy), forControlEvents: .TouchUpInside)
                     
+                    cell.shareButton.setImage(UIImage(named: "share"), forState: .Normal)
+                    cell.shareButton.setImage(UIImage(named: "share-filled"), forState: .Highlighted)
+                    cell.shareButton.addTarget(self, action: #selector(share), forControlEvents: .TouchUpInside)
+                    
                     cell.selectionStyle = .None
                     
                     return cell
@@ -595,8 +592,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         
                         navigationController?.pushViewController(reviewsVc, animated: true)
                     }
-                    
-//                    performSegueWithIdentifier("ShowReviewsViewController", sender: self)
                 }
                 
             default:

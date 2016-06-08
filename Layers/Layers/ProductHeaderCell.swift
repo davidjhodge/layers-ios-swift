@@ -22,6 +22,8 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
     
     @IBOutlet weak var ctaButton: HighlightedButton!
     
+    @IBOutlet weak var shareButton: UIButton!
+    
     var imageViews: Array<UIImageView> = Array<UIImageView>()
     
     override var frame: CGRect

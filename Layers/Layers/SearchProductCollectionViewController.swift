@@ -1,5 +1,5 @@
 //
-//  ProductCollectionViewController.swift
+//  SearchProductCollectionViewController.swift
 //  Layers
 //
 //  Created by David Hodge on 4/9/16.
@@ -9,63 +9,64 @@
 import Foundation
 import UIKit
 
-class ProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
+class SearchProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FilterDelegate
 {
     private let kProductCellIdentfier = "ProductCell"
-
+    
     @IBOutlet weak var collectionView: UICollectionView!
     
     @IBOutlet weak var collectionViewBottomLayoutConstraint: NSLayoutConstraint!
+    
+    var filterType: FilterType?
+    
+    var selectedItem: AnyObject?
+    
+    var filterItem: AnyObject?
     
     var products: Array<ProductResponse>?
     
     var currentPage: Int?
     
-    var refreshControl: UIRefreshControl?
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-        let titleLabel = UILabel(frame: CGRectMake(0,0,28,80))
-        titleLabel.attributedText = NSAttributedString(string: "Layers".uppercaseString, attributes: [NSForegroundColorAttributeName: Color.whiteColor(),
-            NSFontAttributeName: Font.CharterBold(size: 20.0),
-            NSKernAttributeName: 2.0]
-        )
-        navigationItem.titleView = titleLabel
-        
-        tabBarItem.title = "for you".uppercaseString
-        tabBarItem.image = UIImage(named: "shirt")
-        tabBarItem.image = UIImage(named: "shirt-filled")
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .None)
+        if let selection = selectedItem
+        {
+            if let category = selection as? CategoryResponse
+            {
+                filterItem = category
+                
+                if let categoryTitle = category.categoryName
+                {
+                    title = categoryTitle.uppercaseString
+                }
+            }
+            else if let brand = selection as? BrandResponse
+            {
+                filterItem = brand
+                
+                if let brandName = brand.brandName
+                {
+                    title = brandName.uppercaseString
+                }
+            }
+        }
+        
+        let filterButton = UIBarButtonItem(image: UIImage(named: "filter"), style: .Plain, target: self, action: #selector(filter))
+        
+        navigationItem.rightBarButtonItem = filterButton
+//        let searchButton = UIBarButtonItem(image: UIImage(named: "search"), style: .Plain, target: self, action: #selector(search))
+//        navigationItem.rightBarButtonItems = [filterButton, searchButton]
         
         collectionView.backgroundColor = Color.BackgroundGrayColor
         collectionView.alwaysBounceVertical = true
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         
-        refreshControl = UIRefreshControl()
-        refreshControl?.tintColor = Color.lightGrayColor()
-        refreshControl?.addTarget(self, action: #selector(refresh), forControlEvents: .ValueChanged)
-        refreshControl?.layer.zPosition = -1
-        collectionView.addSubview(refreshControl!)
-        
         currentPage = 1
         
         reloadProducts()
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        
-//        if let tabBar = navigationController?.tabBarController?.tabBar {
-//        collectionViewBottomLayoutConstraint.constant = (-1 * tabBar.bounds.size.height) + 8
-//        }
-//    }
     
     // MARK: Networking
     func reloadProducts()
@@ -78,7 +79,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
             LRSessionManager.sharedManager.loadProductCollection(page, completionHandler: { (success, error, response) -> Void in
                 
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                    
+                
                 if success
                 {
                     if let newProducts: Array<ProductResponse> = response as? Array<ProductResponse>
@@ -93,31 +94,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                                 // Update products and reload collection
                                 self.products = newProducts
                                 
-                                // If refresh control is active. Reload data after refresh indicator disappears
-                                if let refresh = self.refreshControl
-                                {
-                                    if refresh.refreshing
-                                    {
-                                        CATransaction.begin()
-                                        CATransaction.setCompletionBlock({ () -> Void in
-                                            
-                                            self.hardReloadCollectionView()
-                                        })
-                                        
-                                        refresh.endRefreshing()
-                                        CATransaction.commit()
-                                    }
-                                    else
-                                    {
-                                        // By default, refresh collection view immediately
-                                        self.hardReloadCollectionView()
-                                    }
-                                }
-                                else
-                                {
-                                    // By default, refresh collection view immediately
-                                    self.hardReloadCollectionView()
-                                }
+                                self.hardReloadCollectionView()
                             }
                             else
                             {
@@ -201,13 +178,32 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     }
     
     // MARK: Actions
-    func refresh()
+    func filter()
     {
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+        
+        if let filterVc = mainStoryboard.instantiateViewControllerWithIdentifier("FilterViewController") as? FilterViewController
+        {
+            let navController = UINavigationController(rootViewController: filterVc)
+            
+            presentViewController(navController, animated: true, completion: nil)
+        }
+    }
+    
+    func search()
+    {
+        
+    }
+    
+    // MARK: Filter Delegate
+    func didUpdateFilter()
+    {
+        // Reset current page to 1, because the Filter has changed, which yields a different set of results
         currentPage = 1
         
         reloadProducts()
     }
-
+    
     // MARK: Collection View Data Source
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
@@ -249,7 +245,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                     variant = matchingVariant
                 }
             }
-
+            
             if variant == nil
             {
                 if let firstVariant = product.variants?[safe: 0]
@@ -348,7 +344,23 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     // MARK: Collection View Delegate
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        performSegueWithIdentifier("ShowProductViewController", sender: indexPath)
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+        
+        if let productVc = mainStoryboard.instantiateViewControllerWithIdentifier("ProductViewController") as? ProductViewController
+        {
+            if let productCollection = products
+            {
+                if let product = productCollection[indexPath.row] as ProductResponse?
+                {
+                    if let productId = product.productId
+                    {
+                        productVc.productIdentifier = productId
+                        
+                        navigationController?.pushViewController(productVc, animated: true)
+                    }
+                }
+            }
+        }
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
@@ -404,32 +416,6 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 }
                 
                 }, completion: nil)
-        }
-    }
-    
-    // MARK: Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "ShowProductViewController"
-        {
-            if segue.destinationViewController is ProductViewController
-            {
-//                navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: self, action: nil)
-
-                //Selected Product Index
-                if let indexPath = sender as? NSIndexPath
-                {
-                    if let productCollection = products
-                    {
-                        if let product = productCollection[indexPath.row] as ProductResponse?
-                        {
-                            if let destinationVC = segue.destinationViewController as? ProductViewController
-                            {
-                                destinationVC.productIdentifier = product.productId
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }
