@@ -440,16 +440,6 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 }
             }
         }
-//        else if segue.identifier == "ShowProductViewControllerFromDeepLink"
-//        {
-//            if let destinationVC = segue.destinationViewController as? ProductViewController
-//            {
-//                if let productId = sender as? Int
-//                {
-//                    destinationVC.productIdentifier = productId
-//                }
-//            }
-//        }
         else if segue.identifier == "PresentModalFilterViewController"
         {
             if let destinationNav = segue.destinationViewController as? UINavigationController

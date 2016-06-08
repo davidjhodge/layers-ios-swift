@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate
+class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
     @IBOutlet weak var tableView: UITableView!
     
@@ -68,6 +68,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
+        navigationController?.setNavigationBarHidden(false, animated: false)
+
         view.endEditing(true)
     }
     
@@ -105,10 +107,20 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         })
     }
     
+    func shouldShowCategories() -> Bool
+    {
+        if searchBar.text?.characters.count > 0
+        {
+            return false
+        }
+        
+        return true
+    }
+    
     // MARK: Search Bar Delegate
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         
-        if searchText.characters.count == 0
+        if shouldShowCategories()
         {
             self.tableView.reloadData()
         }
@@ -146,14 +158,58 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
     }
     
+    func searchBarTextDidEndEditing(searchBar: UISearchBar)
+    {
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        
+        searchBar.setShowsCancelButton(false, animated: true)
+    }
+    
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        
+        searchBar.setShowsCancelButton(false, animated: true)
+    }
+    
+    func searchBar(searchBar: UISearchBar, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        
+        if text.characters.count == 0
+        {
+            tableView.setContentOffset(CGPointZero, animated: true)
+        }
+        
+        return true
+    }
+    
     // MARK: Table View Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        
+        if shouldShowCategories()
+        {
+            tableView.contentInset = UIEdgeInsets(top: 20, left: tableView.contentInset.left, bottom: tableView.contentInset.bottom, right: tableView.contentInset.right)
+        }
+        else
+        {
+            tableView.contentInset = UIEdgeInsets(top: 0, left: tableView.contentInset.left, bottom: tableView.contentInset.bottom, right: tableView.contentInset.right)
+        }
+        
         return 1
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        if searchBar.text?.characters.count > 0
+        if !shouldShowCategories()
         {
             if let results = searchResults
             {
@@ -174,7 +230,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        if searchResults?.count > 0 && searchBar.text?.characters.count > 0
+        if searchResults?.count > 0 && !shouldShowCategories()
         {
             let cell = tableView.dequeueReusableCellWithIdentifier("UITableViewCell")!
             
@@ -198,7 +254,14 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                 {
                     if let brandName = product.brand?.brandName, let productName = product.productName
                     {
-                        cell.textLabel?.text = "\(brandName) \(productName)"
+                        if productName.lowercaseString.rangeOfString(brandName.lowercaseString) == nil
+                        {
+                            cell.textLabel?.text = "\(brandName) \(productName)"
+                        }
+                        else
+                        {
+                            cell.textLabel?.text = "\(productName)"
+                        }
                     }
                 }
             }
@@ -231,15 +294,90 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        if let results = searchResults
+        {
+            if results[indexPath.row] is SimpleProductResponse
+            {
+                performSegueWithIdentifier("ShowProductViewController", sender: indexPath)
+            }
+            else if results[indexPath.row] is BrandResponse
+            {
+                log.debug("Show Collection for Brand")
+            }
+            else if results[indexPath.row] is CategoryResponse
+            {
+                log.debug("Show Collection for Brand")
+            }
+        }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 48.0
     }
     
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        return 0.01
+    }
+    
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
-        return 24.0
+        return 0.01
+    }
+    
+    // MARK: CollectionView Data Source
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ProductCell", forIndexPath: indexPath) as! ProductCell
+        
+        return cell
+    }
+    
+    // MARK: CollectionView Delegate
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        performSegueWithIdentifier("ShowProductViewController", sender: indexPath)
+    }
+    
+    // MARK: Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "ShowProductViewController"
+        {
+            if let destinationVc = segue.destinationViewController as? ProductViewController,
+                let indexPath = sender as? NSIndexPath,
+                let searchResults = searchResults,
+                let product = searchResults[indexPath.row] as? SimpleProductResponse
+            {
+                
+                if let productId = product.productId
+                {
+                    destinationVc.productIdentifier = productId
+                }
+            }
+        }
+        else if segue.identifier == "ShowProductCollectionViewController"
+        {
+            if let destinationVc = segue.destinationViewController as? ProductCollectionViewController,
+                let indexPath = sender as? NSIndexPath,
+                let searchResults = searchResults,
+                let product = searchResults[indexPath.row] as? SimpleProductResponse
+            {
+                if let productId = product.productId
+                {
+//                    destinationVc.product = productId
+                }
+            }
+        }
     }
     
     // MARK: Handle Keyboard

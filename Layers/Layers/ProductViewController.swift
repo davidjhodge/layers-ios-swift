@@ -587,7 +587,16 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 {
                     // Header Cell
                     tableView.deselectRowAtIndexPath(indexPath, animated: true)
-                    performSegueWithIdentifier("ShowReviewsViewController", sender: self)
+                    
+                    let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+                    if let reviewsVc = storyboard.instantiateViewControllerWithIdentifier("ReviewsViewController") as? ReviewsViewController, let currentProduct = self.product
+                    {
+                        reviewsVc.productId = currentProduct.productId
+                        
+                        navigationController?.pushViewController(reviewsVc, animated: true)
+                    }
+                    
+//                    performSegueWithIdentifier("ShowReviewsViewController", sender: self)
                 }
                 
             default:
