@@ -113,7 +113,6 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 if let product = product
                 {
-                    
                     cell.selectionStyle = .None
                     
                     cell.productImageView.image = UIImage()

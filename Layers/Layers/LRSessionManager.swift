@@ -568,14 +568,22 @@ class LRSessionManager: NSObject
                         // Add 2 categories
                         if let categories = searchResponse?.categories
                         {
-                            for (index, category) in categories.enumerate()
+                            var index = 0
+                            
+                            for category in categories
                             {
                                 if index > 1
                                 {
                                     break
                                 }
                                 
-                                results.append(category)
+                                // If not "Mens" Category, append the current category
+                                if category.parentId != nil
+                                {
+                                    results.append(category)
+                                    
+                                    index += 1
+                                }
                             }
                         }
                         
