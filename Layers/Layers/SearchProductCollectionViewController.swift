@@ -27,9 +27,16 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     
     var currentPage: Int?
     
+    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Update Filter with Selection
+        var currentFilter = FilterManager.defaultManager.getCurrentFilter()
+        
+        currentFilter = Filter()
+
         if let selection = selectedItem
         {
             if let category = selection as? CategoryResponse
@@ -40,6 +47,12 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 {
                     title = categoryTitle.uppercaseString
                 }
+                
+                // Update Filter
+                if let filterObject = FilterObjectConverter.filterObject(category)
+                {
+                    currentFilter.categories.selections = [filterObject]
+                }
             }
             else if let brand = selection as? BrandResponse
             {
@@ -49,8 +62,16 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 {
                     title = brandName.uppercaseString
                 }
+                
+                // Update Filter
+                if let filterObject = FilterObjectConverter.filterObject(brand)
+                {
+                    currentFilter.brands.selections = [filterObject]
+                }
             }
         }
+        
+        FilterManager.defaultManager.setNewFilter(currentFilter)
         
         let filterButton = UIBarButtonItem(image: UIImage(named: "filter"), style: .Plain, target: self, action: #selector(filter))
         
@@ -63,9 +84,19 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         
+        spinner.color = Color.grayColor()
+        spinner.hidesWhenStopped = true
+        view.addSubview(spinner)
+        
         currentPage = 1
         
         reloadProducts()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        spinner.center = collectionView.center
     }
     
     // MARK: Networking
@@ -76,9 +107,22 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         {
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
             
+            if products == nil || products?.count == 0
+            {
+                spinner.startAnimating()
+            }
+            
             LRSessionManager.sharedManager.loadProductCollection(page, completionHandler: { (success, error, response) -> Void in
                 
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                
+                if self.spinner.isAnimating()
+                {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.spinner.stopAnimating()
+                    })
+                }
                 
                 if success
                 {
@@ -184,6 +228,8 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         
         if let filterVc = mainStoryboard.instantiateViewControllerWithIdentifier("FilterViewController") as? FilterViewController
         {
+            filterVc.delegate = self
+            
             let navController = UINavigationController(rootViewController: filterVc)
             
             presentViewController(navController, animated: true, completion: nil)

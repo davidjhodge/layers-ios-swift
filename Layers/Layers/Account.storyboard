@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="EcW-3h-EBt">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="EcW-3h-EBt">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
@@ -34,7 +34,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bqW-hh-mmI">
-                                                    <rect key="frame" x="24" y="12" width="552" height="24"/>
+                                                    <rect key="frame" x="24" y="12" width="544" height="24"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="Create a free account">
                                                             <attributes>
@@ -67,17 +67,29 @@
                                                     </attributedString>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FdM-rB-TUz">
+                                                    <rect key="frame" x="572" y="0.0" width="24" height="30"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="Apr-33-d9v"/>
+                                                        <constraint firstAttribute="width" constant="24" id="Lvm-Wu-wqz"/>
+                                                    </constraints>
+                                                    <state key="normal" image="x-icon"/>
+                                                </button>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="FdM-rB-TUz" firstAttribute="top" secondItem="BNi-Mt-YZZ" secondAttribute="top" id="Ko4-LI-x0O"/>
                                                 <constraint firstAttribute="bottom" secondItem="bqW-hh-mmI" secondAttribute="bottom" constant="12" id="Kvr-eL-4zP"/>
-                                                <constraint firstAttribute="trailing" secondItem="bqW-hh-mmI" secondAttribute="trailing" constant="24" id="S6b-cv-yU2"/>
+                                                <constraint firstAttribute="trailing" secondItem="bqW-hh-mmI" secondAttribute="trailing" constant="32" id="S6b-cv-yU2"/>
                                                 <constraint firstItem="bqW-hh-mmI" firstAttribute="top" secondItem="BNi-Mt-YZZ" secondAttribute="top" constant="12" id="bWH-zo-XAp"/>
+                                                <constraint firstAttribute="trailing" secondItem="FdM-rB-TUz" secondAttribute="trailing" constant="4" id="cVg-6B-JvT"/>
                                                 <constraint firstItem="bqW-hh-mmI" firstAttribute="leading" secondItem="BNi-Mt-YZZ" secondAttribute="leading" constant="24" id="sIN-tn-3KJ"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                                         <connections>
                                             <outlet property="ctaTextLabel" destination="bqW-hh-mmI" id="jx3-Pj-UVL"/>
+                                            <outlet property="xButton" destination="FdM-rB-TUz" id="ZZ4-o6-pM9"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UITableViewCell" textLabel="rYR-Hn-Tbd" rowHeight="48" style="IBUITableViewCellStyleDefault" id="66c-hM-w5y">
@@ -272,4 +284,7 @@
             <point key="canvasLocation" x="478" y="431"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="x-icon" width="15" height="14"/>
+    </resources>
 </document>

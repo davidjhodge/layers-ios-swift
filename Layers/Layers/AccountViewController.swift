@@ -26,6 +26,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
 {
     @IBOutlet weak var tableView: UITableView!
     
+    var shouldShowCTA: Bool = true
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -162,6 +164,17 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         })
     }
     
+    // MARK: Actions
+    func hideCTA()
+    {
+        shouldShowCTA = false
+        
+        
+        tableView.beginUpdates()
+        tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: TableSection.CallToAction.rawValue)], withRowAnimation: .Automatic)
+        tableView.endUpdates()
+    }
+    
     // MARK: Table View Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int
     {
@@ -180,7 +193,14 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 // Show Call To Action if user is not logged in
                 if !LRSessionManager.sharedManager.isAuthenticated()
                 {
-                    return 1
+                    if shouldShowCTA
+                    {
+                        return 1
+                    }
+                    else
+                    {
+                        return 0
+                    }
                 }
                 else
                 {
@@ -240,6 +260,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                     mutableString.appendAttributedString(NSAttributedString(string: " to get access to sale alerts.", attributes: regularAttributes))
 
                     cell.ctaTextLabel.attributedText = NSAttributedString(attributedString: mutableString)
+                    
+                    cell.xButton.addTarget(self, action: #selector(hideCTA), forControlEvents: .TouchUpInside)
                     
                     return cell
                 }

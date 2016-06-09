@@ -47,6 +47,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         spinner.color = Color.grayColor()
         spinner.hidesWhenStopped = true
         spinner.hidden = true
+        view.addSubview(spinner)
         
         prepareToHandleKeyboard()
 
@@ -76,15 +77,26 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: Categories
     func fetchCategories()
     {
+        spinner.startAnimating()
+        spinner.hidden = false
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
         FilterManager.defaultManager.fetchOriginalCategories({ (success, response) -> Void in
          
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                self.spinner.stopAnimating()
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                
+                })
+            
             if success
             {
                 if let categories = response as? Array<CategoryResponse>
                 {
                     var parentCategories = Array<CategoryResponse>()
                     
-                    // Parent Categories have a key of 2
+                    // Parent Categories have a parentId of 1
                     parentCategories = categories.filter({ $0.parentId == 1})
                     
                     self.categories = parentCategories
@@ -265,6 +277,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                 {
                     if let brandName = product.brand?.brandName, let productName = product.productName
                     {
+                        // Avoid repeating the brand twice, if the brand name is contained in both the product name and brand name
+                        
                         if productName.lowercaseString.rangeOfString(brandName.lowercaseString) == nil
                         {
                             cell.textLabel?.text = "\(brandName) \(productName)"
@@ -328,7 +342,21 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         {
             if results[indexPath.row] is SimpleProductResponse
             {
-                performSegueWithIdentifier("ShowProductViewController", sender: indexPath)
+                if let searchResults = searchResults,
+                    let product = searchResults[indexPath.row] as? SimpleProductResponse
+                {
+                    if let productId = product.productId
+                    {
+                        let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+                        
+                        if let productVc = storyboard.instantiateViewControllerWithIdentifier("ProductViewController") as? ProductViewController
+                        {
+                            productVc.productIdentifier = productId
+                            
+                            navigationController?.pushViewController(productVc, animated: true)
+                        }
+                    }
+                }
             }
             else if results[indexPath.row] is BrandResponse
             {
@@ -374,27 +402,25 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: CollectionView Delegate
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        performSegueWithIdentifier("ShowProductViewController", sender: indexPath)
+        if let searchResults = searchResults,
+            let product = searchResults[indexPath.row] as? SimpleProductResponse
+        {
+            if let productId = product.productId
+            {
+                let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+                
+                if let productVc = storyboard.instantiateViewControllerWithIdentifier("ProductViewController") as? ProductViewController
+                {
+                    productVc.productIdentifier = productId
+                }
+            }
+        }
     }
     
     // MARK: Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "ShowProductViewController"
-        {
-            if let destinationVc = segue.destinationViewController as? ProductViewController,
-                let indexPath = sender as? NSIndexPath,
-                let searchResults = searchResults,
-                let product = searchResults[indexPath.row] as? SimpleProductResponse
-            {
-                
-                if let productId = product.productId
-                {
-                    destinationVc.productIdentifier = productId
-                }
-            }
-        }
-        else if segue.identifier == "ShowSearchProductCollectionViewController"
+        if segue.identifier == "ShowSearchProductCollectionViewController"
         {
             if let destinationVc = segue.destinationViewController as? SearchProductCollectionViewController,
             let senderDict = sender as? Dictionary<String,AnyObject>,
