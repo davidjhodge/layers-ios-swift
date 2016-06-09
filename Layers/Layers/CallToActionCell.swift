@@ -11,4 +11,6 @@ import Foundation
 class CallToActionCell: UITableViewCell
 {
     @IBOutlet weak var ctaTextLabel: UILabel!
+    
+    @IBOutlet weak var xButton: UIButton!
 }

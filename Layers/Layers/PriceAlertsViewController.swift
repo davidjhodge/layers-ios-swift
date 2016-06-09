@@ -22,7 +22,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
     
     var watchAlerts: Array<ProductResponse>?
     
-    var spinny = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    var spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -40,8 +40,10 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = Color.BackgroundGrayColor
         
-        spinny.tintColor = Color.grayColor()
-        spinny.hidesWhenStopped = true
+        spinner.color = Color.grayColor()
+        spinner.hidesWhenStopped = true
+//        view.bringSubviewToFront(spinner)
+        view.addSubview(spinner)
         
         reloadData()
     }
@@ -49,19 +51,23 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        spinny.center = view.center
+        spinner.center = tableView.center
     }
     
     // MARK: Networking
     //Reload Data
     func reloadData()
     {
-        spinny.startAnimating()
+        spinner.hidden = false
+        spinner.startAnimating()
         
         // SHOULD LOAD ONLY PRICE ALERT ITEMS FOR USER
         LRSessionManager.sharedManager.loadProductCollection(1, completionHandler: { (success, error, response) -> Void in
             
-            self.spinny.stopAnimating()
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                self.spinner.stopAnimating()
+            })
 
             if success
             {
