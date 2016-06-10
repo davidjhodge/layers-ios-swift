@@ -110,7 +110,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
         
-        if url.scheme == layersScheme
+        if url.scheme == facebookScheme
+        {
+            if let sourceApplication = options[UIApplicationOpenURLOptionsSourceApplicationKey] as? String, let annotation = options[UIApplicationOpenURLOptionsOpenInPlaceKey]
+            {
+                return FBSDKApplicationDelegate.sharedInstance().application(app, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+            }
+        }
+        else if url.scheme == layersScheme
         {
             router.handleURL(url, withCompletion: nil)
         }

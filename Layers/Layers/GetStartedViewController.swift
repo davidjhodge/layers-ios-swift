@@ -45,12 +45,6 @@ class GetStartedViewController: UIViewController
         
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
-    
-//    override func viewWillDisappear(animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        
-//        navigationController?.setNavigationBarHidden(false, animated: false)
-//    }
 
     // MARK: Actions
     func connectWithFacebook()
@@ -78,6 +72,8 @@ class GetStartedViewController: UIViewController
                     if success
                     {
                         log.debug("Facebook Registration Integration Complete.")
+                        
+                        // Show Confirmation Screen
                     }
                     else
                     {
@@ -105,6 +101,8 @@ class GetStartedViewController: UIViewController
         disableButttons()
         
         performSegueWithIdentifier("ShowEmailLoginViewController", sender: self)
+        
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     // MARK: Handle UI Interactivity

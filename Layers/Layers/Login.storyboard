@@ -146,7 +146,7 @@
                         <outlet property="getStartedButton" destination="TDY-WP-stc" id="Ph2-2z-2vv"/>
                         <outlet property="heroImage" destination="kdb-rk-KmF" id="7XK-2B-l5a"/>
                         <outlet property="logoLabel" destination="GAL-Zl-dcr" id="luB-bh-ZpO"/>
-                        <segue destination="8D7-xr-Bul" kind="show" identifier="ShowEmailLoginViewController" id="SHk-El-dS7"/>
+                        <segue destination="gYI-Zo-qKV" kind="presentation" identifier="ShowEmailLoginViewController" id="SHk-El-dS7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ryS-QK-sVr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -156,7 +156,7 @@
         <!--Email Create Account View Controller-->
         <scene sceneID="BBm-qB-C8l">
             <objects>
-                <viewController id="cTS-hu-wRg" customClass="EmailCreateAccountViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EmailCreateAccountViewController" id="cTS-hu-wRg" customClass="EmailCreateAccountViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="vC8-vb-P3f"/>
                         <viewControllerLayoutGuide type="bottom" id="kDF-ip-9Jk"/>
@@ -638,7 +638,7 @@ based on your age.</string>
         <!--Email Login View Controller-->
         <scene sceneID="2HW-Dp-hVC">
             <objects>
-                <viewController id="8D7-xr-Bul" customClass="EmailLoginViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EmailLoginViewController" id="8D7-xr-Bul" customClass="EmailLoginViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="xsc-OJ-x5j"/>
                         <viewControllerLayoutGuide type="bottom" id="uPA-mN-P5r"/>
@@ -706,6 +706,7 @@ based on your age.</string>
                             <constraint firstItem="Ke2-Gb-LwA" firstAttribute="leading" secondItem="uCQ-SF-2ta" secondAttribute="leading" id="oyq-Ic-5zm"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="wKb-Rq-cfG"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="loginButton" destination="bqb-SN-el3" id="VOJ-VF-7S8"/>
@@ -715,7 +716,7 @@ based on your age.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lIT-gT-NQ5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1915" y="1129"/>
+            <point key="canvasLocation" x="1875" y="1153"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ECZ-HI-ApJ">
@@ -752,6 +753,24 @@ based on your age.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="45X-aR-Crs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2581" y="431"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="b94-WR-geW">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gYI-Zo-qKV" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="STa-oU-sJU">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="8D7-xr-Bul" kind="relationship" relationship="rootViewController" id="iZt-MM-AW7"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tOa-JV-zfN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1227" y="1153"/>
         </scene>
     </scenes>
     <resources>
