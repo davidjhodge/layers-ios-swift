@@ -91,42 +91,43 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func signUp()
     {
-        LRSessionManager.sharedManager.register("dhodge416@gmail.com", password: "password123", completionHandler: { (success, error, response) -> Void in
+        let loginStoryboard = UIStoryboard(name: "Login", bundle: NSBundle.mainBundle())
+        
+        if let createAccountVc = loginStoryboard.instantiateViewControllerWithIdentifier("EmailCreateAccountViewController") as? EmailCreateAccountViewController
+        {
+            let nav = UINavigationController(rootViewController: createAccountVc)
             
-            if success
-            {
-                // Signing up to user pool succeeded
-            }
-            else
-            {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
-                })
-            }
-        })
+            presentViewController(nav, animated: true, completion: nil)
+        }
+        
+//        LRSessionManager.sharedManager.register("dhodge416@gmail.com", password: "password123", completionHandler: { (success, error, response) -> Void in
+//            
+//            if success
+//            {
+//                // Signing up to user pool succeeded
+//            }
+//            else
+//            {
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    
+//                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+//                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+//                    self.presentViewController(alert, animated: true, completion: nil)
+//                })
+//            }
+//        })
     }
     
     func signIn()
     {
-        LRSessionManager.sharedManager.signIn("dhodge416@gmail.com", password: "password123", completionHandler: { (success, error, response) -> Void in
-         
-            if success
-            {
-                // Login to user pool succeeded
-            }
-            else
-            {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
-                })
-            }
-        })
+        let loginStoryboard = UIStoryboard(name: "Login", bundle: NSBundle.mainBundle())
+        
+        if let loginVc = loginStoryboard.instantiateViewControllerWithIdentifier("EmailLoginViewController") as? EmailLoginViewController
+        {
+            let nav = UINavigationController(rootViewController: loginVc)
+            
+            presentViewController(nav, animated: true, completion: nil)
+        }
     }
     
     func showAccountActionSheet()

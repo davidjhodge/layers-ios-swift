@@ -24,7 +24,6 @@
 		705390341CD7D3C700DA8E15 /* PriceAlerts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 705390331CD7D3C700DA8E15 /* PriceAlerts.storyboard */; };
 		705390361CD7D49500DA8E15 /* PriceAlertCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705390351CD7D49500DA8E15 /* PriceAlertCell.swift */; };
 		7053903A1CD7ED9100DA8E15 /* SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705390391CD7ED9100DA8E15 /* SafeIndex.swift */; };
-		706FF8881CBC4EF8007B26AD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8871CBC4EF8007B26AD /* LoginViewController.swift */; };
 		706FF88A1CBC54F8007B26AD /* EmailLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */; };
 		706FF88C1CBC57D6007B26AD /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */; };
 		706FF8911CBD6B6C007B26AD /* SizeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8901CBD6B6C007B26AD /* SizeCell.swift */; };
@@ -126,7 +125,6 @@
 		705390331CD7D3C700DA8E15 /* PriceAlerts.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PriceAlerts.storyboard; sourceTree = "<group>"; };
 		705390351CD7D49500DA8E15 /* PriceAlertCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceAlertCell.swift; sourceTree = "<group>"; };
 		705390391CD7ED9100DA8E15 /* SafeIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeIndex.swift; sourceTree = "<group>"; };
-		706FF8871CBC4EF8007B26AD /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailLoginViewController.swift; sourceTree = "<group>"; };
 		706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldCell.swift; sourceTree = "<group>"; };
 		706FF8901CBD6B6C007B26AD /* SizeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SizeCell.swift; sourceTree = "<group>"; };
@@ -548,7 +546,6 @@
 			isa = PBXGroup;
 			children = (
 				70987C3C1CBBF07B00D86FBA /* GetStartedViewController.swift */,
-				706FF8871CBC4EF8007B26AD /* LoginViewController.swift */,
 				706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */,
 				702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */,
 				706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */,
@@ -810,7 +807,6 @@
 				70987C2A1CB9A4BF00D86FBA /* AccountViewController.swift in Sources */,
 				70987C301CB9B4E400D86FBA /* ProductViewController.swift in Sources */,
 				702FC2FC1CC344960012969C /* EmailCreateAccountViewController.swift in Sources */,
-				706FF8881CBC4EF8007B26AD /* LoginViewController.swift in Sources */,
 				70A40FFB1CD6A1C400CB515B /* SizeRating.swift in Sources */,
 				702FC3031CC408FC0012969C /* TextViewCell.swift in Sources */,
 				707F48D71D052B7100E82A4C /* SearchResponse.swift in Sources */,

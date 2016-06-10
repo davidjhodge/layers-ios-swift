@@ -35,6 +35,8 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
         
         createAccountButton.addTarget(self, action: #selector(createAccount), forControlEvents: .TouchUpInside)
         
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercaseString, style: .Plain, target: self, action: #selector(cancel))
+        
         prepareToHandleKeyboard()
     }
     
@@ -50,6 +52,13 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     }
     
     // MARK: Actions
+    func cancel()
+    {
+        view.endEditing(true)
+
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     func createAccount()
     {
         let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.Email.rawValue, inSection: 0)) as! TextFieldCell

@@ -37,6 +37,8 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
         
         loginButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
         
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercaseString, style: .Plain, target: self, action: #selector(cancel))
+        
         spinner.color = Color.grayColor()
         spinner.hidesWhenStopped = true
         spinner.hidden = true
@@ -64,6 +66,13 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     // MARK: Actions
+    func cancel()
+    {
+        view.endEditing(true)
+        
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     func login()
     {
         view.endEditing(true)
@@ -78,10 +87,14 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
             
             if success
             {
+                // Login to user pool succeeded
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     
-                    AppStateTransitioner.transitionToMainStoryboard(true)
-
+                    // LOGIN SUCCESS DELEGATE
+                    
+                    self.view.endEditing(true)
+                    
+                    self.dismissViewControllerAnimated(true, completion: nil)
                 })
             }
             else
@@ -93,7 +106,6 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
                     self.presentViewController(alert, animated: true, completion: nil)
                     
                     self.view.endEditing(false)
-
                 })
             }
             
@@ -101,7 +113,6 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
                 self.spinner.stopAnimating()
             })
         })
-        
     }
     
     // Helper method to access cell text fields
@@ -141,6 +152,8 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
         {
             cell.textField.placeholder = "Email"
             cell.textField.tag = TextField.Email.rawValue
+            
+            cell.textField.text = "dhodge416@gmail.com"
         }
         //Password
         else if indexPath.row == TextField.Password.rawValue
@@ -148,6 +161,8 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
             cell.textField.placeholder = "Password"
             cell.textField.secureTextEntry = true
             cell.textField.tag = TextField.Password.rawValue
+            
+            cell.textField.text = "password123"
         }
         else
         {

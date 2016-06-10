@@ -15,11 +15,12 @@ import AWSSNS
 
 import SwiftyJSON
 
-private let kAWSCognitoAppClientId = "7i6ivdpa5oh5mvgo097i3ca17u"
-private let kAWSCognitoAppClientSecret = "1oi7a878pig00vb0jl25s47gc7uq8g70ca8o36ndrg9ued8tk04e"
-private let kAWSCognitoIdentityPoolId = "us-east-1:cf0934de-5e7b-4aef-b1d4-e0f4a849cc55"
-private let kAWSCognitoUserPoolId = "us-east-1_jEKsn6S9s"
+private let kAWSCognitoAppClientId = "22lne1f5vp57ls55bkmifp06ir"
+private let kAWSCognitoAppClientSecret = "1qq3jup3mg7qq3ekbnok3tgkecbjlkr6gke9fqa8tfa4spdl4qbj"
+private let kAWSCognitoIdentityPoolId = "us-east-1:7a62ae60-d5ab-44a9-a224-c9b5167fc932"
+private let kAWSCognitoUserPoolId = "us-east-1_JrNu7NtLS"
 private let kAWSCognitoUserPoolKey = "kUserPool"
+private let kAWSSNSApplicationARN = "arn:aws:sns:us-east-1:843366835636:app/APNS_SANDBOX/Layers_Development"
 
 class AWSManager: NSObject, AWSIdentityProviderManager
 {
@@ -92,7 +93,6 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                     else
                     {
                         completion(success: false, error: "INVALID_AWS_TASK_RESPONSE".localized, response: nil)
-
                     }
                 }
             }
@@ -125,7 +125,9 @@ class AWSManager: NSObject, AWSIdentityProviderManager
     
     // MARK: Credential Management
     func isAuthorized() -> Bool
-    {        
+    {
+        return false
+        
         if userPool.currentUser() != nil
         {
             return true
@@ -180,8 +182,6 @@ class AWSManager: NSObject, AWSIdentityProviderManager
     {
         if let identityId = credentialsProvider.identityId, deviceToken = deviceToken
         {
-            let kAWSSNSApplicationARN = "arn:aws:sns:us-east-1:520777401565:app/APNS_SANDBOX/Layers"
-            
             let platformEndpointRequest = AWSSNSCreatePlatformEndpointInput()
             platformEndpointRequest.token = deviceTokenAsString(deviceToken)
             platformEndpointRequest.platformApplicationArn = kAWSSNSApplicationARN
@@ -286,11 +286,37 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                             log.debug("\(username) added to the User Pool.")
                         }
                     }
+                    
+                    self.automaticSignIn(email, password: password, autoSignInCompletionHandler: { (success, error, response) -> Void in
+                      
+                        if let completion = completionHandler
+                        {
+                            completion(success: success, error: error, response: response)
+                        }
+                        
+                    })
                 }
                 
                 return nil
             })
         }
+    }
+    
+    func automaticSignIn(email: String, password: String, autoSignInCompletionHandler: LRCompletionBlock?)
+    {
+        signInToUserPool(email, password: password, completionHandler: { (success, error, response) -> Void in
+          
+            if let completion = autoSignInCompletionHandler
+            {
+                if let tokenString = response as? String
+                {
+                    self.syncLoginCredentials(["cognito-idp.us-east-1.amazonaws.com/\(kAWSCognitoUserPoolId)":tokenString])
+                }
+                
+                completion(success: success, error: error, response: response)
+            }
+            
+        })
     }
     
     func signInToUserPool(email: String, password: String, completionHandler: LRCompletionBlock?)
@@ -322,8 +348,6 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                         {
                             if let token = session.idToken?.tokenString
                             {
-                                self.syncLoginCredentials(["cognito-idp.us-east-1.amazonaws.com/\(kAWSCognitoUserPoolId)":token])
-                                
                                 completion(success: true, error: nil, response: token)
                             }
                             else
