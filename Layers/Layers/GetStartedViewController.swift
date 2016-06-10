@@ -20,6 +20,8 @@ class GetStartedViewController: UIViewController
     
     @IBOutlet weak var heroImage: UIImageView!
     
+    @IBOutlet weak var facebookButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,6 +29,8 @@ class GetStartedViewController: UIViewController
             NSKernAttributeName:3])
         
         view.sendSubviewToBack(heroImage)
+        
+        facebookButton.addTarget(self, action: #selector(connectWithFacebook), forControlEvents: .TouchUpInside)
         
         getStartedButton.addTarget(self, action: #selector(startBrowsing), forControlEvents: .TouchUpInside)
 
@@ -49,6 +53,45 @@ class GetStartedViewController: UIViewController
 //    }
 
     // MARK: Actions
+    func connectWithFacebook()
+    {
+        let loginManager: FBSDKLoginManager = FBSDKLoginManager()
+        
+        loginManager.logInWithReadPermissions(["public_profile", "user_friends", "email"], fromViewController: self, handler: {(result:FBSDKLoginManagerLoginResult!, error:NSError!) -> Void in
+            
+            if error != nil
+            {
+                log.debug(error.localizedDescription)
+            }
+            else if result.isCancelled
+            {
+                log.debug("User cancelled Facebook Login")
+            }
+            else
+            {
+                log.debug("User successfully logged in with Facebook!")
+                
+                // Facebook token now exists and can be accessed at FBSDKAccessToken.currentAccessToken()
+                
+                LRSessionManager.sharedManager.registerWithFacebook( { (success, error, result) -> Void in
+                    
+                    if success
+                    {
+                        log.debug("Facebook Registration Integration Complete.")
+                    }
+                    else
+                    {
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
+                        })
+                    }
+                })
+            }
+        })
+    }
     
     func startBrowsing()
     {

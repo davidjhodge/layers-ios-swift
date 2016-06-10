@@ -125,9 +125,7 @@ class AWSManager: NSObject, AWSIdentityProviderManager
     
     // MARK: Credential Management
     func isAuthorized() -> Bool
-    {
-        return false
-        
+    {        
         if userPool.currentUser() != nil
         {
             return true

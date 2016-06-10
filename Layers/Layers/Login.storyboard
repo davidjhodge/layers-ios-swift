@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="nVf-hk-afI">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="nVf-hk-afI">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="Oxygen-Bold.ttf">
+            <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
@@ -45,14 +46,14 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="white-logo" translatesAutoresizingMaskIntoConstraints="NO" id="gAw-gp-0yb">
-                                <rect key="frame" x="252" y="118" width="96" height="64"/>
+                                <rect key="frame" x="252" y="88" width="96" height="64"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="96" id="UUd-Fx-REs"/>
                                     <constraint firstAttribute="height" constant="64" id="oda-0o-YHx"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ftk-AZ-MfL">
-                                <rect key="frame" x="196" y="490" width="208" height="30"/>
+                                <rect key="frame" x="196" y="506" width="208" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="208" id="Ajw-1y-exg"/>
                                 </constraints>
@@ -62,7 +63,7 @@
                                 </state>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LAYERS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GAL-Zl-dcr">
-                                <rect key="frame" x="236" y="206" width="128" height="36"/>
+                                <rect key="frame" x="236" y="176" width="128" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="1cj-v8-R0j"/>
                                     <constraint firstAttribute="width" constant="128" id="7j0-6r-sbH"/>
@@ -72,10 +73,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8p6-DK-9IA" userLabel="Container">
-                                <rect key="frame" x="0.0" y="242" width="600" height="188"/>
+                                <rect key="frame" x="0.0" y="212" width="600" height="170"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finding clothes you like just got easier." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HUu-Md-VCL">
-                                        <rect key="frame" x="72" y="84" width="456" height="21"/>
+                                        <rect key="frame" x="72" y="58" width="456" height="21"/>
                                         <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -84,12 +85,12 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="HUu-Md-VCL" firstAttribute="leading" secondItem="8p6-DK-9IA" secondAttribute="leading" constant="72" id="4uk-me-Wkt"/>
-                                    <constraint firstItem="HUu-Md-VCL" firstAttribute="centerY" secondItem="8p6-DK-9IA" secondAttribute="centerY" id="kxj-31-cv2"/>
+                                    <constraint firstItem="HUu-Md-VCL" firstAttribute="centerY" secondItem="8p6-DK-9IA" secondAttribute="centerY" multiplier="0.8" id="kxj-31-cv2"/>
                                     <constraint firstAttribute="trailing" secondItem="HUu-Md-VCL" secondAttribute="trailing" constant="72" id="wuv-Dc-XxU"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDY-WP-stc">
-                                <rect key="frame" x="24" y="430" width="552" height="48"/>
+                                <rect key="frame" x="24" y="446" width="552" height="48"/>
                                 <color key="backgroundColor" red="0.29803921568627451" green="0.52156862745098043" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="AfP-47-tMg"/>
@@ -99,24 +100,39 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jrn-x4-R1f">
+                                <rect key="frame" x="24" y="382" width="552" height="48"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="48" id="XX2-iO-FU1"/>
+                                    <constraint firstAttribute="height" constant="48" id="uu0-VC-Mq4"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="16"/>
+                                <state key="normal" title="CONNECT WITH FACEBOOK">
+                                    <color key="titleColor" red="0.054901960780000002" green="0.14117647059999999" blue="0.41568627450000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="gAw-gp-0yb" firstAttribute="centerY" secondItem="zQT-tU-KJd" secondAttribute="centerY" multiplier="0.5" priority="750" id="2e0-B9-Fdp"/>
-                            <constraint firstItem="TDY-WP-stc" firstAttribute="top" secondItem="8p6-DK-9IA" secondAttribute="bottom" id="4T0-IR-d4I"/>
+                            <constraint firstItem="gAw-gp-0yb" firstAttribute="centerY" secondItem="zQT-tU-KJd" secondAttribute="centerY" multiplier="0.4" priority="750" id="2e0-B9-Fdp"/>
                             <constraint firstItem="8p6-DK-9IA" firstAttribute="top" secondItem="GAL-Zl-dcr" secondAttribute="bottom" id="6a1-RP-xE1"/>
                             <constraint firstItem="ftk-AZ-MfL" firstAttribute="top" secondItem="TDY-WP-stc" secondAttribute="bottom" constant="12" id="9wo-9M-aUf"/>
+                            <constraint firstAttribute="trailing" secondItem="Jrn-x4-R1f" secondAttribute="trailing" constant="24" id="CqU-C9-r5O"/>
                             <constraint firstItem="TDY-WP-stc" firstAttribute="leading" secondItem="zQT-tU-KJd" secondAttribute="leading" constant="24" id="IrE-Ts-PXh"/>
                             <constraint firstAttribute="trailing" secondItem="8p6-DK-9IA" secondAttribute="trailing" id="Mr7-ix-g23"/>
                             <constraint firstItem="GAL-Zl-dcr" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="Nae-Oe-Z7F"/>
-                            <constraint firstItem="6YJ-Q7-aB6" firstAttribute="top" secondItem="ftk-AZ-MfL" secondAttribute="bottom" constant="80" id="R6c-3k-2Q2"/>
+                            <constraint firstItem="6YJ-Q7-aB6" firstAttribute="top" secondItem="ftk-AZ-MfL" secondAttribute="bottom" constant="64" id="R6c-3k-2Q2"/>
+                            <constraint firstItem="TDY-WP-stc" firstAttribute="top" secondItem="Jrn-x4-R1f" secondAttribute="bottom" constant="16" id="U0l-cK-AKq"/>
                             <constraint firstItem="gAw-gp-0yb" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="X1f-sm-yD6"/>
                             <constraint firstItem="TDY-WP-stc" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="cmn-Qc-T3g"/>
                             <constraint firstItem="ftk-AZ-MfL" firstAttribute="centerX" secondItem="zQT-tU-KJd" secondAttribute="centerX" id="cr6-8u-CsJ"/>
+                            <constraint firstItem="Jrn-x4-R1f" firstAttribute="leading" secondItem="zQT-tU-KJd" secondAttribute="leading" constant="24" id="ewU-0F-rpP"/>
                             <constraint firstItem="kdb-rk-KmF" firstAttribute="top" secondItem="zQT-tU-KJd" secondAttribute="top" id="gr1-Ps-2Yv"/>
                             <constraint firstItem="8p6-DK-9IA" firstAttribute="leading" secondItem="zQT-tU-KJd" secondAttribute="leading" id="hSN-TN-RJS"/>
                             <constraint firstItem="6YJ-Q7-aB6" firstAttribute="top" secondItem="kdb-rk-KmF" secondAttribute="bottom" id="if2-Ln-DTp"/>
                             <constraint firstAttribute="trailing" secondItem="kdb-rk-KmF" secondAttribute="trailing" id="juS-Nc-3Qc"/>
+                            <constraint firstItem="Jrn-x4-R1f" firstAttribute="top" secondItem="8p6-DK-9IA" secondAttribute="bottom" id="kl6-0X-ax7"/>
                             <constraint firstItem="kdb-rk-KmF" firstAttribute="leading" secondItem="zQT-tU-KJd" secondAttribute="leading" id="qOM-Ll-aSQ"/>
                             <constraint firstItem="GAL-Zl-dcr" firstAttribute="top" secondItem="gAw-gp-0yb" secondAttribute="bottom" constant="24" id="uSt-pi-5Fd"/>
                             <constraint firstAttribute="trailing" secondItem="TDY-WP-stc" secondAttribute="trailing" constant="24" id="wdK-yW-7nv"/>
@@ -126,6 +142,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="alreadyHasAccountButton" destination="ftk-AZ-MfL" id="ECL-zF-Bv4"/>
+                        <outlet property="facebookButton" destination="Jrn-x4-R1f" id="IoY-Vc-26R"/>
                         <outlet property="getStartedButton" destination="TDY-WP-stc" id="Ph2-2z-2vv"/>
                         <outlet property="heroImage" destination="kdb-rk-KmF" id="7XK-2B-l5a"/>
                         <outlet property="logoLabel" destination="GAL-Zl-dcr" id="luB-bh-ZpO"/>
