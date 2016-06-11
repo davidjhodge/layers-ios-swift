@@ -23,6 +23,8 @@ let productCollectionPageSize = 20
 typealias LRCompletionBlock = ((success: Bool, error: String?, response:AnyObject?) -> Void)
 typealias LRJsonCompletionBlock = ((success: Bool, error: String?, response:JSON?) -> Void)
 
+private let kUserPoolLoginProvider = "kUserPoolLoginProvider"
+
 class LRSessionManager: NSObject
 {
     // Static variable to handle all networking and caching activities
@@ -35,7 +37,7 @@ class LRSessionManager: NSObject
     private let backgroundQueue: dispatch_queue_t = dispatch_queue_create("Session Background", DISPATCH_QUEUE_CONCURRENT)
     
     // Access the Keychain
-    private let keychain: Keychain = Keychain(service: "Layers")
+    private let keychain: Keychain = Keychain(service: NSBundle.mainBundle().bundleIdentifier!)
         
     // MARK: Initialization
     override init ()
@@ -82,7 +84,12 @@ class LRSessionManager: NSObject
     
     func isAuthenticated() -> Bool
     {
-        return AWSManager.defaultManager.isAuthorized()
+        if FBSDKAccessToken.currentAccessToken() != nil || keychain[kUserPoolLoginProvider] != nil
+        {
+            return true
+        }
+        
+        return false
     }
 
     func logout()
@@ -92,6 +99,8 @@ class LRSessionManager: NSObject
         {
             FBSDKLoginManager().logOut()
         }
+        
+        keychain[kUserPoolLoginProvider] = nil
         
         AWSManager.defaultManager.clearAWSCache()
     }
@@ -191,19 +200,15 @@ class LRSessionManager: NSObject
             if let completion = completionHandler
             {
                 // Pass completion block returned from AWS Service
+                if let token = response as? String
+                {
+                    self.keychain[kUserPoolLoginProvider] = token
+                }
+                
                 completion(success: success, error: error, response: response)
             }
         })
     }
-    
-//        //Send API
-//        let postBody = ["email":        email,
-//                        "password":     password,
-//                        "first_name":   firstName,
-//                        "last_name":    lastName,
-//                        "gender":       gender,
-//                        "age":          age]
-
     
     func registerWithFacebook(completion: LRJsonCompletionBlock?)
     {

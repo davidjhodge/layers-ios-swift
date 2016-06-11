@@ -123,19 +123,6 @@ class AWSManager: NSObject, AWSIdentityProviderManager
         return AWSTask(result: nil)
     }
     
-    // MARK: Credential Management
-    func isAuthorized() -> Bool
-    {
-        return false
-        
-        if userPool.currentUser() != nil
-        {
-            return true
-        }
-        
-        return false
-    }
-    
     func fetchIdentityId(completionHandler: LRCompletionBlock?)
     {
         // Retrieves cognito identity locally if one is cached, and from the AWS Cognito Remote service if none exists
