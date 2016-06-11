@@ -11,10 +11,11 @@ import UIKit
 
 import FBSDKLoginKit
 import ObjectMapper
+import MBProgressHUD
 
 private enum TableSection: Int
 {
-    case CallToAction = 0, Contact, Legal, AccountState, Count
+    case Contact = 0, Legal, AccountState, Count
 }
 
 private enum LegalTableRow: Int
@@ -22,9 +23,17 @@ private enum LegalTableRow: Int
     case Terms = 0, Privacy, OpenSource
 }
 
-class AccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
+class AccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AuthenticationDelegate
 {
     @IBOutlet weak var tableView: UITableView!
+    
+    @IBOutlet weak var tableViewTopConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var ctaView: UIView!
+    
+    @IBOutlet weak var ctaLabel: UILabel!
+    
+    @IBOutlet weak var ctaXButton: UIButton!
     
     var shouldShowCTA: Bool = true
     
@@ -46,6 +55,36 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.backgroundColor = Color.BackgroundGrayColor
         
         tableView.estimatedRowHeight = 44.0
+        
+        hideCTAIfNeeded(false)
+    }
+    
+    func configureCTA()
+    {
+        let regularAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),
+                                 NSFontAttributeName: Font.OxygenRegular(size: 16.0),
+                                 ]
+        let boldAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),
+                              NSFontAttributeName: Font.OxygenBold(size: 16.0),
+                              ]
+        
+        let mutableString = NSMutableAttributedString()
+        
+        mutableString.appendAttributedString(NSAttributedString(string: "Create a free account", attributes: boldAttributes))
+        
+        mutableString.appendAttributedString(NSAttributedString(string: " or ", attributes: regularAttributes))
+        
+        mutableString.appendAttributedString(NSAttributedString(string: "sign in", attributes: boldAttributes))
+        
+        mutableString.appendAttributedString(NSAttributedString(string: " to get access to sale alerts.", attributes: regularAttributes))
+        
+        ctaLabel.attributedText = mutableString
+        
+        ctaView.backgroundColor = Color.NeonBlueColor
+        
+        ctaView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showAccountActionSheet)))
+        
+        ctaXButton.addTarget(self, action: #selector(hideCTA), forControlEvents: .TouchUpInside)
     }
     
     // MARK: Sign Up
@@ -95,27 +134,12 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if let createAccountVc = loginStoryboard.instantiateViewControllerWithIdentifier("EmailCreateAccountViewController") as? EmailCreateAccountViewController
         {
+            createAccountVc.delegate = self
+            
             let nav = UINavigationController(rootViewController: createAccountVc)
             
             presentViewController(nav, animated: true, completion: nil)
         }
-        
-//        LRSessionManager.sharedManager.register("dhodge416@gmail.com", password: "password123", completionHandler: { (success, error, response) -> Void in
-//            
-//            if success
-//            {
-//                // Signing up to user pool succeeded
-//            }
-//            else
-//            {
-//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                    
-//                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-//                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-//                    self.presentViewController(alert, animated: true, completion: nil)
-//                })
-//            }
-//        })
     }
     
     func signIn()
@@ -124,6 +148,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if let loginVc = loginStoryboard.instantiateViewControllerWithIdentifier("EmailLoginViewController") as? EmailLoginViewController
         {
+            loginVc.delegate = self
+            
             let nav = UINavigationController(rootViewController: loginVc)
             
             presentViewController(nav, animated: true, completion: nil)
@@ -166,14 +192,55 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     // MARK: Actions
+    func hideCTAIfNeeded(animated: Bool)
+    {
+        if LRSessionManager.sharedManager.isAuthenticated() || !shouldShowCTA
+        {
+            if animated
+            {
+                self.tableViewTopConstraint.constant = 0
+
+                UIView.animateWithDuration(0.3, animations: { () -> Void in
+                    
+                        self.view.layoutIfNeeded()
+
+                    }, completion: { (finished) -> Void in
+                        
+                            self.ctaView.removeFromSuperview()
+                })
+            }
+            else
+            {
+                // Not animated
+                self.tableViewTopConstraint.constant = 0
+                
+                self.ctaView.removeFromSuperview()
+            }
+            
+            return
+        }
+        
+        // If CTA won't be hidden, configure it
+        configureCTA()
+    }
+    
     func hideCTA()
     {
         shouldShowCTA = false
         
+        self.hideCTAIfNeeded(true)
+    }
+    
+    // MARK: Create Account Delegate
+    func authenticationDidSucceed()
+    {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+
+        self.hideCTAIfNeeded(true)
         
-        tableView.beginUpdates()
-        tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: TableSection.CallToAction.rawValue)], withRowAnimation: .Automatic)
-        tableView.endUpdates()
+        self.tableView.reloadData()
+            
+        })
     }
     
     // MARK: Table View Data Source
@@ -188,25 +255,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             switch tableSection
             {
-                
-            case .CallToAction:
-                
-                // Show Call To Action if user is not logged in
-                if !LRSessionManager.sharedManager.isAuthenticated()
-                {
-                    if shouldShowCTA
-                    {
-                        return 1
-                    }
-                    else
-                    {
-                        return 0
-                    }
-                }
-                else
-                {
-                    return 0
-                }
                 
             case .Contact:
                 return 1
@@ -233,39 +281,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             switch tableSection
             {
-            case .CallToAction:
-                
-                if let cell: CallToActionCell = tableView.dequeueReusableCellWithIdentifier("CallToActionCell") as? CallToActionCell
-                {
-                    cell.selectionStyle = .None
-                    
-                    cell.backgroundColor = Color.NeonBlueColor
-                    
-                    // Attributed Text
-                    
-                    let regularAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),
-                                          NSFontAttributeName: Font.OxygenRegular(size: 16.0),
-                                          ]
-                    let boldAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),
-                                          NSFontAttributeName: Font.OxygenBold(size: 16.0),
-                                          ]
-                    
-                    let mutableString = NSMutableAttributedString()
-                    
-                    mutableString.appendAttributedString(NSAttributedString(string: "Create a free account", attributes: boldAttributes))
-                    
-                    mutableString.appendAttributedString(NSAttributedString(string: " or ", attributes: regularAttributes))
-
-                    mutableString.appendAttributedString(NSAttributedString(string: "sign in", attributes: boldAttributes))
-
-                    mutableString.appendAttributedString(NSAttributedString(string: " to get access to sale alerts.", attributes: regularAttributes))
-
-                    cell.ctaTextLabel.attributedText = NSAttributedString(attributedString: mutableString)
-                    
-                    cell.xButton.addTarget(self, action: #selector(hideCTA), forControlEvents: .TouchUpInside)
-                    
-                    return cell
-                }
                 
             case .Contact:
                 
@@ -298,19 +313,19 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 if indexPath.row == 0
                 {
-                    if !LRSessionManager.sharedManager.isAuthenticated()
-                    {
-                        // Not logged in
-                        cell.textLabel?.text = "Sign In"
-                        cell.textLabel?.textAlignment = .Center
-                        cell.textLabel?.textColor = Color.DarkNavyColor
-                    }
-                    else
+                    if LRSessionManager.sharedManager.isAuthenticated()
                     {
                         // Already Logged in
                         cell.textLabel?.text = "Sign Out"
                         cell.textLabel?.textAlignment = .Center
                         cell.textLabel?.textColor = Color.RedColor
+                    }
+                    else
+                    {
+                        // Not logged in
+                        cell.textLabel?.text = "Sign In"
+                        cell.textLabel?.textAlignment = .Center
+                        cell.textLabel?.textColor = Color.DarkNavyColor
                     }
                 }
             
@@ -332,10 +347,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             switch tableSection
             {
-                
-            case .CallToAction:
-                
-                showAccountActionSheet()
                 
             case .Contact:
                 
@@ -377,10 +388,15 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                         //Clear Credentials
                         LRSessionManager.sharedManager.logout()
                         
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            AppStateTransitioner.transitionToLoginStoryboard(true)
-                        })
+                        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+                        hud.mode = .CustomView
+                        hud.customView = UIImageView(image: UIImage(named: "checkmark"))
+                        
+                        hud.labelText = "Successfully Logged Out"
+                        hud.labelFont = Font.OxygenBold(size: 17.0)
+                        hud.hide(true, afterDelay: 1.5)
+                        
+                        tableView.reloadData()
                     }
                 }
                  
@@ -391,11 +407,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        
-        if TableSection(rawValue: indexPath.section) == .CallToAction
-        {
-            return UITableViewAutomaticDimension
-        }
 
         return 48.0
     }
@@ -406,8 +417,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             switch tableSection
             {
-            case .CallToAction:
-                return 0.01
                 
             case .Contact:
                 
@@ -429,11 +438,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
-//        if TableSection(rawValue: section) == .CallToAction
-//        {
-//            return 0.01
-//        }
-        
         return 1.0
     }
     
@@ -442,15 +446,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         if let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)
         {
             UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
-                
-                if indexPath.section == TableSection.CallToAction.rawValue
-                {
-                    cell.backgroundColor = Color.NeonBlueHighlightedColor
-                }
-                else
-                {
+
                     cell.backgroundColor = Color.HighlightedGrayColor
-                }
                 
                 }, completion: nil)
         }
@@ -462,14 +459,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
                 
-                if indexPath.section == TableSection.CallToAction.rawValue
-                {
-                    cell.backgroundColor = Color.NeonBlueColor
-                }
-                else
-                {
                     cell.backgroundColor = Color.whiteColor()
-                }
                 
                 }, completion: nil)
         }
@@ -503,7 +493,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                         
                         vcTitle = "Open Source Libraries"
                         webUrlString = "https://www.google.com/?gfe_rd=ssl"
-                        
                     }
                 }
             }

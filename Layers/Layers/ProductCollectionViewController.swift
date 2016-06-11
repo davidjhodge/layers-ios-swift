@@ -33,7 +33,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         )
         navigationItem.titleView = titleLabel
         
-        tabBarItem.title = "for you".uppercaseString
+        tabBarItem.title = "Discover".uppercaseString
         tabBarItem.image = UIImage(named: "shirt")
         tabBarItem.image = UIImage(named: "shirt-filled")
     }

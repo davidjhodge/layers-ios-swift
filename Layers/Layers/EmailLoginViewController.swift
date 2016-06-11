@@ -22,6 +22,8 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     
     @IBOutlet weak var tableView: UITableView!
 
+    var delegate: AuthenticationDelegate?
+    
     var keyboardNotificationObserver: AnyObject?
     
     var spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
@@ -88,10 +90,10 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
             if success
             {
                 // Login to user pool succeeded
+                self.delegate?.authenticationDidSucceed()
+                
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                    // LOGIN SUCCESS DELEGATE
-                    
+                                        
                     self.view.endEditing(true)
                     
                     self.dismissViewControllerAnimated(true, completion: nil)

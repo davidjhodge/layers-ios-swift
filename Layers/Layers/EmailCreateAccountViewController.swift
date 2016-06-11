@@ -9,6 +9,11 @@
 import Foundation
 import UIKit
 
+protocol AuthenticationDelegate {
+    
+    func authenticationDidSucceed()
+}
+
 private enum CellType: Int
 {
     case Email, Password, RetypePassword, Count
@@ -21,6 +26,8 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     @IBOutlet weak var createAccountButton: UIButton!
     
     @IBOutlet weak var createAccountButtonBottomConstraint: NSLayoutConstraint!
+    
+    var delegate: AuthenticationDelegate?
     
     var keyboardNotificationObserver: AnyObject?
     
@@ -77,28 +84,30 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
                 tableView.userInteractionEnabled = false
                 createAccountButton.userInteractionEnabled = false
                 
-//                LRSessionManager.sharedManager.register(emailInput, password: passwordInput, firstName: "", lastName: "", gender: "", age: 0, completion: { (success, error, response) -> Void in
-//                    
-//                    if success
-//                    {
-//                        AppStateTransitioner.transitionToMainStoryboard(true)
-//                    }
-//                    else
-//                    {
-//                        if error != nil
-//                        {
-//                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                              
-//                                let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-//                                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-//                                self.presentViewController(alert, animated: true, completion: nil)
-//                            })
-//                        }
-//                        
-//                        self.tableView.userInteractionEnabled = true
-//                        self.createAccountButton.userInteractionEnabled = true
-//                    }
-//                })
+                LRSessionManager.sharedManager.register("dhodge416@gmail.com", password: "password123", completionHandler: { (success, error, response) -> Void in
+                    
+                    if success
+                    {
+                        // Signing up to user pool succeeded
+                        self.delegate?.authenticationDidSucceed()
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.view.endEditing(true)
+
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        })
+                    }
+                    else
+                    {
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
+                        })
+                    }
+                })
             }
             else
             {
