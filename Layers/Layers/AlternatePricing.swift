@@ -27,7 +27,7 @@ class AlternatePricing: Mappable
     
     func mapping(map: Map)
     {
-        couponCode                    <- map["currency"]
+        couponCode                    <- map["coupon_code"]
         priceAfterCoupon              <- map["price_after_coupon"]
         deletedAt                     <- (map["deleted_at"], DateTransform())
         createdAt                     <- (map["created_at"], DateTransform())

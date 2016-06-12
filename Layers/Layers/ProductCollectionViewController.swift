@@ -287,7 +287,11 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                         var currentPrice: NSNumber?
                         var retailPrice: NSNumber?
                         
-                        if let currPrice = priceInfo.price
+                        if let altCouponPrice = firstSize.altPricing?.priceAfterCoupon
+                        {
+                            currentPrice = altCouponPrice
+                        }
+                        else if let currPrice = priceInfo.price
                         {
                             currentPrice = currPrice
                         }
