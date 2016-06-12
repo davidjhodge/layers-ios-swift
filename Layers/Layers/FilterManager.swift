@@ -37,7 +37,7 @@ struct Filter
     
     var retailers: (selections: Array<FilterObject>?, all: Array<FilterObject>?)
     
-    var priceRange: (minPrice: Int, maxPrice: Int)?
+    var priceRange: PriceFilter?
     
     var colors: (selections: Array<ColorResponse>?, all: Array<ColorResponse>?)
 }
@@ -207,7 +207,7 @@ class FilterManager
         
         if let priceMax = filter.priceRange?.maxPrice
         {
-            let priceParam = "price_min=\(priceMax)&"
+            let priceParam = "price_max=\(priceMax)&"
             
             paramsString = paramsString.stringByAppendingString(priceParam)
         }

@@ -35,8 +35,6 @@
 		706FF8A11CBD84EE007B26AD /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8A01CBD84EE007B26AD /* ReviewCell.swift */; };
 		706FF8A31CBDF771007B26AD /* SimpleProductHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8A21CBDF771007B26AD /* SimpleProductHeaderCell.swift */; };
 		70776FC61CC5F881002E6F25 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FC51CC5F881002E6F25 /* FilterViewController.swift */; };
-		70776FC81CC685B0002E6F25 /* SliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FC71CC685B0002E6F25 /* SliderCell.swift */; };
-		70776FCB1CC69506002E6F25 /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FCA1CC69506002E6F25 /* RangeSlider.swift */; };
 		70776FD11CC8A90C002E6F25 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70776FD01CC8A90C002E6F25 /* Localizable.strings */; };
 		70776FD31CC8A9FF002E6F25 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FD21CC8A9FF002E6F25 /* Localization.swift */; };
 		70776FD51CCC03C1002E6F25 /* OnboardingGenderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70776FD41CCC03C1002E6F25 /* OnboardingGenderViewController.swift */; };
@@ -67,7 +65,6 @@
 		70987C1B1CB98A7700D86FBA /* NSAttributedString+Pricing.m in Sources */ = {isa = PBXBuildFile; fileRef = 70987C1A1CB98A7700D86FBA /* NSAttributedString+Pricing.m */; };
 		70987C281CB9A4A500D86FBA /* Account.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70987C271CB9A4A500D86FBA /* Account.storyboard */; };
 		70987C2A1CB9A4BF00D86FBA /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C291CB9A4BF00D86FBA /* AccountViewController.swift */; };
-		70987C2E1CB9A81C00D86FBA /* LRNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C2D1CB9A81C00D86FBA /* LRNavigationBar.swift */; };
 		70987C301CB9B4E400D86FBA /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C2F1CB9B4E400D86FBA /* ProductViewController.swift */; };
 		70987C331CB9CA1300D86FBA /* ProductHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C321CB9CA1300D86FBA /* ProductHeaderCell.swift */; };
 		70987C371CB9D15100D86FBA /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70987C361CB9D15100D86FBA /* Login.storyboard */; };
@@ -103,6 +100,7 @@
 		70D84AA91CB9557300A70485 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA71CB9557300A70485 /* LaunchScreen.storyboard */; };
 		70DD853F1CFFA08F00319716 /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70DD853E1CFFA08F00319716 /* Search.storyboard */; };
 		70DD85411CFFA0C900319716 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DD85401CFFA0C900319716 /* SearchViewController.swift */; };
+		70FF31CE1D0CDDB800F19C9E /* PriceFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FF31CD1D0CDDB800F19C9E /* PriceFilterViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -136,8 +134,6 @@
 		706FF8A01CBD84EE007B26AD /* ReviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
 		706FF8A21CBDF771007B26AD /* SimpleProductHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleProductHeaderCell.swift; sourceTree = "<group>"; };
 		70776FC51CC5F881002E6F25 /* FilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
-		70776FC71CC685B0002E6F25 /* SliderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SliderCell.swift; sourceTree = "<group>"; };
-		70776FCA1CC69506002E6F25 /* RangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
 		70776FD01CC8A90C002E6F25 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		70776FD21CC8A9FF002E6F25 /* Localization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		70776FD41CCC03C1002E6F25 /* OnboardingGenderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingGenderViewController.swift; sourceTree = "<group>"; };
@@ -170,7 +166,6 @@
 		70987C1A1CB98A7700D86FBA /* NSAttributedString+Pricing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Pricing.m"; sourceTree = "<group>"; };
 		70987C271CB9A4A500D86FBA /* Account.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Account.storyboard; sourceTree = "<group>"; };
 		70987C291CB9A4BF00D86FBA /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
-		70987C2D1CB9A81C00D86FBA /* LRNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LRNavigationBar.swift; sourceTree = "<group>"; };
 		70987C2F1CB9B4E400D86FBA /* ProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductViewController.swift; sourceTree = "<group>"; };
 		70987C321CB9CA1300D86FBA /* ProductHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductHeaderCell.swift; sourceTree = "<group>"; };
 		70987C361CB9D15100D86FBA /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
@@ -208,6 +203,7 @@
 		70D84AAA1CB9557300A70485 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		70DD853E1CFFA08F00319716 /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
 		70DD85401CFFA0C900319716 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		70FF31CD1D0CDDB800F19C9E /* PriceFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceFilterViewController.swift; sourceTree = "<group>"; };
 		C29055E7EACEA98F3107E42C /* Pods_Layers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Layers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -317,6 +313,7 @@
 			children = (
 				70776FC51CC5F881002E6F25 /* FilterViewController.swift */,
 				70AF1A2C1CE3C57500C0518C /* TextFilterViewController.swift */,
+				70FF31CD1D0CDDB800F19C9E /* PriceFilterViewController.swift */,
 				70488C531CE63C640085BAE9 /* ColorFilterViewController.swift */,
 				70776FC91CC685B4002E6F25 /* Cells */,
 			);
@@ -326,27 +323,10 @@
 		70776FC91CC685B4002E6F25 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				70776FC71CC685B0002E6F25 /* SliderCell.swift */,
 				70AF1A2E1CE3C6A800C0518C /* SubtitleFilterCell.swift */,
 				70488C511CE63C3E0085BAE9 /* ColorCell.swift */,
 			);
 			name = Cells;
-			sourceTree = "<group>";
-		};
-		70776FCC1CC6950A002E6F25 /* Range Slider */ = {
-			isa = PBXGroup;
-			children = (
-				70776FCA1CC69506002E6F25 /* RangeSlider.swift */,
-			);
-			name = "Range Slider";
-			sourceTree = "<group>";
-		};
-		70776FCD1CC69510002E6F25 /* External Components */ = {
-			isa = PBXGroup;
-			children = (
-				70776FCC1CC6950A002E6F25 /* Range Slider */,
-			);
-			name = "External Components";
 			sourceTree = "<group>";
 		};
 		70776FD61CCC03CC002E6F25 /* Onboarding */ = {
@@ -602,9 +582,7 @@
 			isa = PBXGroup;
 			children = (
 				70D84A9E1CB9557300A70485 /* AppDelegate.swift */,
-				70987C2D1CB9A81C00D86FBA /* LRNavigationBar.swift */,
 				70837E691CFA4A9200C83045 /* Deep Linking */,
-				70776FCD1CC69510002E6F25 /* External Components */,
 				70987BFE1CB97AC300D86FBA /* Utilities */,
 				70987BF61CB9740100D86FBA /* Colors & Fonts */,
 				70987BE61CB95E9E00D86FBA /* App State Transitioner */,
@@ -831,13 +809,12 @@
 				70987BF11CB9672200D86FBA /* ProductCell.swift in Sources */,
 				70776FD81CCC1660002E6F25 /* BrandCollectionCell.swift in Sources */,
 				70CC927C1CFFDF1A000AD403 /* VariantColorMatcher.swift in Sources */,
+				70FF31CE1D0CDDB800F19C9E /* PriceFilterViewController.swift in Sources */,
 				705390311CD7D38600DA8E15 /* PriceAlertsViewController.swift in Sources */,
 				706FF8911CBD6B6C007B26AD /* SizeCell.swift in Sources */,
 				70CECA821CEE31E600FF7B8F /* FilterManager.swift in Sources */,
 				70CECA871CF7AD2400FF7B8F /* FilterObjectConverter.swift in Sources */,
 				70059C951CD672990094B454 /* FacebookUserResponse.swift in Sources */,
-				70987C2E1CB9A81C00D86FBA /* LRNavigationBar.swift in Sources */,
-				70776FC81CC685B0002E6F25 /* SliderCell.swift in Sources */,
 				706FF89E1CBD82D2007B26AD /* ReviewsViewController.swift in Sources */,
 				702FC2F11CC2D8470012969C /* UINavigationItem+BackButton.m in Sources */,
 				7022F2F31CFB6A740097DDF9 /* CategoryResponse.swift in Sources */,
@@ -868,7 +845,6 @@
 				70987BEE1CB9658200D86FBA /* User.swift in Sources */,
 				70488C541CE63C640085BAE9 /* ColorFilterViewController.swift in Sources */,
 				70A71B9C1CC593D800B58B74 /* PickerAccessoryView.swift in Sources */,
-				70776FCB1CC69506002E6F25 /* RangeSlider.swift in Sources */,
 				70776FD31CC8A9FF002E6F25 /* Localization.swift in Sources */,
 				70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */,
 			);

@@ -10,7 +10,7 @@ import Foundation
 import FBSDKLoginKit
 import ObjectMapper
 
-class GetStartedViewController: UIViewController
+class GetStartedViewController: UIViewController, AuthenticationDelegate
 {
     @IBOutlet weak var getStartedButton: UIButton!
 
@@ -74,6 +74,8 @@ class GetStartedViewController: UIViewController
                         log.debug("Facebook Registration Integration Complete.")
                         
                         // Show Confirmation Screen
+                        // On success
+//                        self.completeFirstLaunchExperience()
                     }
                     else
                     {
@@ -93,16 +95,46 @@ class GetStartedViewController: UIViewController
     {
         disableButttons()
         
-        AppStateTransitioner.transitionToMainStoryboard(true)
+        completeFirstLaunchExperience()
     }
     
     func login()
     {
         disableButttons()
         
-        performSegueWithIdentifier("ShowEmailLoginViewController", sender: self)
+        // Show Email Login View Controller
+        let loginStoryboard = UIStoryboard(name: "Login", bundle: NSBundle.mainBundle())
+        
+        if let emailLoginVc = loginStoryboard.instantiateViewControllerWithIdentifier("EmailLoginViewController") as? EmailLoginViewController
+        {
+            emailLoginVc.delegate = self
+            
+            let nav = UINavigationController(rootViewController: emailLoginVc)
+            
+            // Show Login
+            presentViewController(nav, animated: true, completion: nil)
+            
+            // Hide nav bar on Get Started Screen
+            navigationController?.setNavigationBarHidden(false, animated: false)
+        }
         
         navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    func completeFirstLaunchExperience()
+    {
+        LRSessionManager.sharedManager.completeFirstLaunch()
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            AppStateTransitioner.transitionToMainStoryboard(true)
+        })
+    }
+    
+    // MARK: AuthenticationDelegate
+    func authenticationDidSucceed() {
+        
+        completeFirstLaunchExperience()
     }
     
     // MARK: Handle UI Interactivity
@@ -118,6 +150,7 @@ class GetStartedViewController: UIViewController
         alreadyHasAccountButton.userInteractionEnabled = true
     }
     
+    // MARK: Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "ShowOnboardingContainerViewController"
@@ -125,13 +158,6 @@ class GetStartedViewController: UIViewController
             navigationController?.setNavigationBarHidden(true, animated: false)
             
             UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .None)
-            
-            //Add Child Vie Controller
-        }
-        else if segue.identifier == "ShowEmailLoginViewController"
-        {
-            navigationController?.setNavigationBarHidden(false, animated: false)
-
         }
     }
 }

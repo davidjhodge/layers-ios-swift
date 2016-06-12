@@ -39,29 +39,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Deep Linking
         registerRoutes()
         
+        // Determine intial view controller based on FirstLaunchExperience
         
-        // Determine intial view controller based on login state
-        
-        AppStateTransitioner.transitionToMainStoryboard(false)
-        
-//        AppStateTransitioner.transitionToLoginStoryboard(false)
-        
-//        if LRSessionManager.sharedManager.isLoggedIn()
-//        {
-//            AppStateTransitioner.transitionToMainStoryboard(false)
-//        }
-//        else
-//        {
-//            AppStateTransitioner.transitionToLoginStoryboard(false)
-//        }
+        if LRSessionManager.sharedManager.hasCompletedFirstLaunch() == true
+        {
+            AppStateTransitioner.transitionToMainStoryboard(false)
+        }
+        else
+        {
+            AppStateTransitioner.transitionToLoginStoryboard(false)
+        }
 
         window?.makeKeyAndVisible()
                 
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        
-        // Should only be called at the appropriate time
-        LRSessionManager.sharedManager.registerForRemoteNotifications()
-        
+                
         return true
     }
     

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="LOd-S7-glQ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="LOd-S7-glQ">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
@@ -160,14 +160,10 @@
                                     <constraint firstAttribute="height" constant="64" id="qQu-Q7-Gs3"/>
                                 </constraints>
                             </imageView>
-                            <searchBar contentMode="redraw" searchBarStyle="prominent" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="PcF-6t-qbc">
-                                <rect key="frame" x="8" y="20" width="584" height="44"/>
+                            <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="Ltp-wb-zet">
+                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="caN-13-utt"/>
-                                </constraints>
-                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                         </subviews>
@@ -175,16 +171,17 @@
                         <constraints>
                             <constraint firstItem="Bb6-LI-FPs" firstAttribute="top" secondItem="abR-fo-ruL" secondAttribute="bottom" id="6JP-iw-cS4"/>
                             <constraint firstItem="trU-lc-ZDv" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" id="8Bc-nR-dRi"/>
-                            <constraint firstItem="PcF-6t-qbc" firstAttribute="top" secondItem="q4E-5p-nPV" secondAttribute="top" constant="20" id="A5v-4H-HSH"/>
+                            <constraint firstItem="Ltp-wb-zet" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" id="B4W-bV-Kxx"/>
                             <constraint firstAttribute="trailing" secondItem="trU-lc-ZDv" secondAttribute="trailing" id="B9S-lq-Qtc"/>
+                            <constraint firstAttribute="trailing" secondItem="Ltp-wb-zet" secondAttribute="trailing" id="FcF-CQ-Y8F"/>
                             <constraint firstItem="Bb6-LI-FPs" firstAttribute="top" secondItem="trU-lc-ZDv" secondAttribute="bottom" id="UcM-wO-hU8"/>
                             <constraint firstItem="abR-fo-ruL" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" id="VbI-yh-q3D"/>
                             <constraint firstItem="1Zy-3S-7sS" firstAttribute="top" secondItem="q4E-5p-nPV" secondAttribute="top" id="XFs-HF-GW7"/>
-                            <constraint firstItem="PcF-6t-qbc" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" constant="8" id="d2h-Lz-COO"/>
-                            <constraint firstAttribute="trailing" secondItem="PcF-6t-qbc" secondAttribute="trailing" constant="8" id="fOH-BM-eec"/>
                             <constraint firstAttribute="trailing" secondItem="abR-fo-ruL" secondAttribute="trailing" id="g5u-4c-oYF"/>
                             <constraint firstItem="1Zy-3S-7sS" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" id="hK1-6S-oAR"/>
-                            <constraint firstItem="trU-lc-ZDv" firstAttribute="top" secondItem="PcF-6t-qbc" secondAttribute="bottom" id="rbR-dM-1AM"/>
+                            <constraint firstItem="trU-lc-ZDv" firstAttribute="top" secondItem="1Zy-3S-7sS" secondAttribute="bottom" id="iWB-gJ-Nr9"/>
+                            <constraint firstItem="Ltp-wb-zet" firstAttribute="top" secondItem="BNj-qo-r3S" secondAttribute="bottom" id="sGA-Sz-6Eg"/>
+                            <constraint firstItem="trU-lc-ZDv" firstAttribute="top" secondItem="Ltp-wb-zet" secondAttribute="bottom" id="xeW-Fd-m75"/>
                             <constraint firstAttribute="trailing" secondItem="1Zy-3S-7sS" secondAttribute="trailing" id="xu4-2M-6bV"/>
                             <constraint firstItem="abR-fo-ruL" firstAttribute="top" secondItem="1Zy-3S-7sS" secondAttribute="bottom" id="y7f-0B-lVH"/>
                         </constraints>
@@ -192,7 +189,7 @@
                     <navigationItem key="navigationItem" id="FZX-Y4-Zc5"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="searchBar" destination="PcF-6t-qbc" id="aT5-DB-g2A"/>
+                        <outlet property="searchBar" destination="Ltp-wb-zet" id="Fuq-Ce-FLy"/>
                         <outlet property="tableView" destination="abR-fo-ruL" id="1zv-Vv-RKM"/>
                         <outlet property="tableViewBottomConstraint" destination="6JP-iw-cS4" id="t8B-fE-4Yi"/>
                         <segue destination="4uE-h6-L4a" kind="show" identifier="ShowSearchProductCollectionViewController" id="MZu-5j-T1A"/>

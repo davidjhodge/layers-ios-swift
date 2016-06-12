@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import NMRangeSlider
 
 enum FilterType: Int
 {
@@ -20,7 +19,7 @@ protocol FilterDelegate {
     func didUpdateFilter()
 }
 
-class FilterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FilterTypeDelegate, ColorFilterDelegate
+class FilterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FilterTypeDelegate, PriceFilterDelegate, ColorFilterDelegate
 {
     var delegate: FilterDelegate?
     
@@ -106,12 +105,6 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    // MARK: Range Slider
-    func sliderValueChanged(sender: UISlider)
-    {
-
-    }
-    
     // MARK: FilterTypeDelegate
     func textFilterChanged(filters: Array<FilterObject>?, filterType: FilterType?)
     {
@@ -139,20 +132,26 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    func sliderFilterChanged(filter: (minValue: Int, maxValue: Int)?, filterType: FilterType?)
-    {
-        if let sliderFilter = filter
+    func priceFilterChanged(priceFilter: PriceFilter?) {
+        
+        if let priceFilter = priceFilter
         {
-            if sliderFilter.minValue > 0 && sliderFilter.maxValue > 0
+            if priceFilter.minPrice?.integerValue > 0 && priceFilter.maxPrice?.integerValue > 0
             {
-                if filterType == .Price
-                {
-                    newFilter.priceRange = (minPrice: sliderFilter.minValue, maxPrice: sliderFilter.maxValue)
-                }
+                newFilter.priceRange = priceFilter
+                
+                // Would be better practice to only reload the cell we updated
+                tableView.reloadData()
             }
         }
+        else
+        {
+            newFilter.priceRange = nil
+            
+            tableView.reloadData()
+        }
     }
-    
+
     // MARK: Color Filter Delegate
     func colorFilterChanged(colors: Array<ColorResponse>?) {
         
@@ -289,7 +288,15 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 
                 cell.filterTypeLabel.text = "Price".uppercaseString
 
-                cell.filterSelectionLabel.text = "25 - 50"
+                if let minPrice = newFilter.priceRange?.minPrice?.stringValue,
+                    let maxPrice = newFilter.priceRange?.maxPrice?.stringValue
+                {
+                    cell.filterSelectionLabel.text = "\(minPrice) - \(maxPrice)"
+                }
+                else
+                {
+                    cell.filterSelectionLabel.text = "All Prices"
+                }
                 
                 // If filter selected, show blue dot
                 if newFilter.priceRange != nil
@@ -350,20 +357,20 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             switch filterType {
  
             case .Category:
-                // Use the logic for .Price
+                // Use the logic for .Retailer
                 fallthrough
                 
             case .Brand:
-                // Use the logic for .Price
+                // Use the logic for .Retailer
                 fallthrough
                 
             case .Retailer:
-                // Use the logic for .Price
-                fallthrough
+                
+                performSegueWithIdentifier("ShowTextFilterViewController", sender:filterType.rawValue)
                 
             case .Price:
                 
-                performSegueWithIdentifier("ShowTextFilterViewController", sender:filterType.rawValue)
+                performSegueWithIdentifier("ShowPriceFilterViewController", sender:filterType.rawValue)
                 
             case .Color:
 
@@ -448,10 +455,13 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 }
             }
         }
-//        else if segue.identifier == "ShowSliderFilterViewController"
-//        {
-//            
-//        }
+        else if segue.identifier == "ShowPriceFilterViewController"
+        {
+            if let destinationVc = segue.destinationViewController as? PriceFilterViewController
+            {
+                destinationVc.delegate = self
+            }
+        }
         else if segue.identifier == "ShowColorFilterViewController"
         {
             if let destinationVc = segue.destinationViewController as? ColorFilterViewController

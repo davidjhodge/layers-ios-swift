@@ -25,6 +25,8 @@ typealias LRJsonCompletionBlock = ((success: Bool, error: String?, response:JSON
 
 private let kUserPoolLoginProvider = "kUserPoolLoginProvider"
 
+private let kUserDidCompleteFirstLaunch = "kUserDidCompleteFirstLaunch"
+
 class LRSessionManager: NSObject
 {
     // Static variable to handle all networking and caching activities
@@ -104,6 +106,18 @@ class LRSessionManager: NSObject
         
         AWSManager.defaultManager.clearAWSCache()
     }
+    
+    func completeFirstLaunch()
+    {
+        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "kUserDidCompleteFirstLaunch")
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
+    func hasCompletedFirstLaunch() -> Bool
+    {
+        return NSUserDefaults.standardUserDefaults().boolForKey(kUserDidCompleteFirstLaunch)
+    }
+    
     
 //    /**
 //     Restores the current session credentials from keychain.
@@ -257,26 +271,39 @@ class LRSessionManager: NSObject
         })
     }
     
-    func registerForRemoteNotifications()
+    func registerForRemoteNotificationsIfNeeded()
     {
-        let readAction: UIMutableUserNotificationAction = UIMutableUserNotificationAction()
-        readAction.identifier = "READ_IDENTIFIER"
-        readAction.title = "Read"
-        readAction.activationMode = .Foreground
-        readAction.destructive = false
-        readAction.authenticationRequired = true
+        if let grantedSettings: UIUserNotificationSettings = UIApplication.sharedApplication().currentUserNotificationSettings()
+        {
+            // Check if no permission have been granted
+            if grantedSettings.types == .None
+            {
+                // Prompt user to register for notifications
+                let readAction: UIMutableUserNotificationAction = UIMutableUserNotificationAction()
+                readAction.identifier = "READ_IDENTIFIER"
+                readAction.title = "Read"
+                readAction.activationMode = .Foreground
+                readAction.destructive = false
+                readAction.authenticationRequired = true
+                
+                let messageCategory = UIMutableUserNotificationCategory()
+                messageCategory.identifier = "MESSAGE_CATEGORY"
+                messageCategory.setActions([readAction], forContext: .Default)
+                messageCategory.setActions([readAction], forContext: .Minimal)
+                
+                let categories: Set<UIUserNotificationCategory> = NSSet(object: messageCategory) as! Set<UIUserNotificationCategory>
+                
+                let settings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [.Badge, .Sound, .Alert], categories: categories)
+                
+                UIApplication.sharedApplication().registerForRemoteNotifications()
+                UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+            }
+        }
+    }
+    
+    func registerIdentityToken(identityToken: String, completionHandler: LRCompletionBlock?)
+    {
         
-        let messageCategory = UIMutableUserNotificationCategory()
-        messageCategory.identifier = "MESSAGE_CATEGORY"
-        messageCategory.setActions([readAction], forContext: .Default)
-        messageCategory.setActions([readAction], forContext: .Minimal)
-        
-        let categories: Set<UIUserNotificationCategory> = NSSet(object: messageCategory) as! Set<UIUserNotificationCategory>
-        
-        let settings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [.Badge, .Sound, .Alert], categories: categories)
-        
-        UIApplication.sharedApplication().registerForRemoteNotifications()
-        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
     }
     
     // MARK: Fetching Server Data

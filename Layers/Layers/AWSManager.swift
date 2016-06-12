@@ -333,6 +333,10 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                     {
                         if let session = task.result as? AWSCognitoIdentityUserSession
                         {
+                            let accessToken = session.accessToken?.tokenString
+//                            let idToken = session.idToken?.tokenString
+//                            let refreshToken = session.refreshToken?.tokenString
+                            
                             if let token = session.idToken?.tokenString
                             {
                                 completion(success: true, error: nil, response: token)
@@ -376,7 +380,7 @@ class AWSManager: NSObject, AWSIdentityProviderManager
     func clearAWSCache()
     {
         // Clear AWS Datasets
-        AWSCognito.defaultCognito().wipe()
+//        AWSCognito.defaultCognito().wipe()
         
         // Clear AWS Cognito Temporary Credentials
         credentialsProvider.clearCredentials()
