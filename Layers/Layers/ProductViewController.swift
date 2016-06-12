@@ -416,7 +416,19 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     cell.largePriceLabel.text = ""
                     cell.smallPriceLabel.text = ""
                     
-                    if let currentPrice = selectedSize?.prices?[0].price
+                    var currentPrice: NSNumber?
+                    
+                    // If a coupon price exists, show it instead of the default price
+                    if let altCouponPrice = selectedSize?.altPricing?.priceAfterCoupon
+                    {
+                        currentPrice = altCouponPrice
+                    }
+                    else if let currPrice = selectedSize?.prices?[0].price
+                    {
+                        currentPrice = currPrice
+                    }
+                    
+                    if let currentPrice = currentPrice
                     {
                         if let retailPrice = selectedSize?.prices?[0].retailPrice
                         {
@@ -599,7 +611,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             default:
                 
-                log.debug("didSelectRowAtIndexPath Error")
+                break
             }
         }
     }
@@ -945,6 +957,11 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     if let url = currentProduct.outboundUrl
                     {
                         destinationViewController.webURL = NSURL(string: url)
+                    }
+                    
+                    if let coupon = selectedSize?.altPricing?.couponCode
+                    {
+                        destinationViewController.couponCode = coupon
                     }
                     
                     if let brandName = currentProduct.brand?.brandName

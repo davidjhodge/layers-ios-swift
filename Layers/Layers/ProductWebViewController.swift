@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class ProductWebViewController: UIViewController, UIWebViewDelegate
+class ProductWebViewController: UIViewController, UIWebViewDelegate, UITextFieldDelegate
 {
     @IBOutlet weak var webView: UIWebView!
     
@@ -17,12 +17,46 @@ class ProductWebViewController: UIViewController, UIWebViewDelegate
 
     var brandName: String?
     
+    var couponCode: String?
+    
+    var couponTextField: UITextField?
+    
     let spinner: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .White)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let brand = brandName
+        if let coupon = couponCode
+        {
+            couponTextField = UITextField(frame: CGRectMake(0, 0, 100.0, 32.0))
+            
+            if let couponTextField = couponTextField
+            {
+                couponTextField.text = "   \(coupon)"
+                couponTextField.font = Font.OxygenBold(size: 16.0)
+                couponTextField.textColor = Color.whiteColor()
+                couponTextField.backgroundColor = Color.clearColor()
+                
+                let imageView = UIImageView(image: UIImage(named: "small-price-tag"))
+                imageView.bounds = CGRectMake(0, 0, 10, 18)
+                
+                couponTextField.leftViewMode = .Always
+                couponTextField.leftView = imageView
+                
+                couponTextField.spellCheckingType = .No
+                couponTextField.autocorrectionType = .No
+                
+                // Placeholder view so keyboard does not show
+                couponTextField.inputView = UIView()
+                
+                couponTextField.delegate = self
+            }
+
+            navigationItem.titleView = couponTextField
+            
+//            title = coupon
+        }
+        else if let brand = brandName
         {
             title = brand
         }
@@ -43,6 +77,12 @@ class ProductWebViewController: UIViewController, UIWebViewDelegate
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        if let couponTextField = couponTextField
+        {
+            couponTextField.sizeToFit()
+        }
+        
+        // Prevent user from accidentally leaving the page.
         navigationController?.interactivePopGestureRecognizer?.enabled = false
 }
     
@@ -51,7 +91,7 @@ class ProductWebViewController: UIViewController, UIWebViewDelegate
         
         navigationController?.interactivePopGestureRecognizer?.enabled = true
     }
-
+    
     // MARK: Actions
     @IBAction func back(sender: AnyObject)
     {
@@ -68,6 +108,16 @@ class ProductWebViewController: UIViewController, UIWebViewDelegate
     {
         spinner.stopAnimating()
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+    }
+    
+    // MARK: Text Field Delegate
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        return true
+    }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        return false
     }
     
     // MARK: Web View Delegate

@@ -18,7 +18,7 @@ let kLRAPIBase = "http://52.22.85.12:8000/"
 let kAccessToken = "kAccessToken"
 let kCurrentUser = "kCurrentUser"
 
-let productCollectionPageSize = 20
+let productCollectionPageSize = 12
 
 typealias LRCompletionBlock = ((success: Bool, error: String?, response:AnyObject?) -> Void)
 typealias LRJsonCompletionBlock = ((success: Bool, error: String?, response:JSON?) -> Void)

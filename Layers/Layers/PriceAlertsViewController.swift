@@ -168,9 +168,17 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                             {
                                 if let priceObject = firstSize.prices?[safe: 0]
                                 {
-                                    if let price = priceObject.price
+                                    if let salePrice = priceObject.price, retailPrice = priceObject.retailPrice
                                     {
-                                        cell.priceLabel.attributedText = NSAttributedString(string: numberFormatter.stringFromNumber(price)!, attributes: [NSForegroundColorAttributeName: Color.RedColor, NSFontAttributeName: Font.OxygenBold(size: 14.0)])
+                                        let retailString = NSAttributedString.priceStringWithRetailPrice(retailPrice, size: 10.0, strikethrough: true)
+                                        
+                                        let saleString = NSAttributedString(string: " \(salePrice.stringValue)", attributes: [NSForegroundColorAttributeName: Color.RedColor, NSFontAttributeName: Font.OxygenBold(size: 14.0)])
+                                        
+                                        let finalString = NSMutableAttributedString(attributedString: retailString)
+                                        
+                                        finalString.appendAttributedString(saleString)
+                                        
+                                        cell.priceLabel.attributedText = NSAttributedString(attributedString: finalString)
                                     }
                                 }
                             }
@@ -221,7 +229,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                                 {
                                     if let price = priceObject.price
                                     {
-                                        cell.priceLabel.attributedText = NSAttributedString(string: numberFormatter.stringFromNumber(price)!, attributes: [NSForegroundColorAttributeName: Color.DarkNavyColor, NSFontAttributeName: Font.OxygenBold(size: 14.0)])
+                                        cell.priceLabel.attributedText = NSAttributedString(string: price.stringValue, attributes: [NSForegroundColorAttributeName: Color.DarkTextColor, NSFontAttributeName: Font.OxygenBold(size: 14.0)])
                                     }
                                 }
                             }
@@ -371,6 +379,11 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                             if let brandName = alertProduct.brand?.brandName
                             {
                                 destinationVC.brandName = brandName
+                            }
+                            
+                            if let coupon = alertProduct.variants?[safe: 0]?.sizes?[safe: 0]?.altPricing?.couponCode
+                            {
+                                destinationVC.couponCode = coupon
                             }
 
                             if let url = alertProduct.outboundUrl
