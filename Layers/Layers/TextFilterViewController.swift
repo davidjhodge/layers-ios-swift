@@ -19,8 +19,6 @@ struct FilterItem
 protocol FilterTypeDelegate
 {
     func textFilterChanged(filters: Array<FilterObject>?, filterType: FilterType?)
-    
-    func sliderFilterChanged(filter: (minValue: Int, maxValue: Int)?, filterType: FilterType?)
 }
 
 class TextFilterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
@@ -34,10 +32,6 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
     var items: Array<FilterObject>?
     
     var selectedItems: Array<FilterObject>?
-    
-    var minPrice: Int?
-    
-    var maxPrice: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,13 +98,6 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
                         
                         delegate.textFilterChanged(filterArray, filterType: FilterType.Retailer)
                         
-                    case .Price:
-                        
-                        if let priceMin = minPrice, priceMax = maxPrice
-                        {
-                            delegate.sliderFilterChanged((minValue: priceMin, maxValue: priceMax), filterType: FilterType.Price)
-                        }
-                        
                     default:
                         break
                     }
@@ -137,10 +124,6 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
             case .Retailer:
                 
                 title = "Retailer".uppercaseString
-
-            case .Price:
-                
-                title = "Price".uppercaseString
                 
             default:
                 title = ""
@@ -161,9 +144,9 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
                     {
                         if let categories = results as? Array<CategoryResponse>
                         {
-                            var parentCategories = categories.filter({ $0.parentId == 1 })
+                            let parentCategories = categories.filter({ $0.parentId == 1 })
                             
-                            var filterObjects = FilterObjectConverter.filterObjectArray(parentCategories)
+                            let filterObjects = FilterObjectConverter.filterObjectArray(parentCategories)
                             
                             self.items = filterObjects
                             
@@ -267,12 +250,6 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
         
         tableView.endUpdates()
-    }
-    
-    // MARK: Price Slider Action
-    func sliderValueChanged(sender: UISlider)
-    {
-        print(sender.value)
     }
     
     // MARK: UITableView Data Source

@@ -16,4 +16,6 @@ class SimpleProductHeaderCell: UITableViewCell
     @IBOutlet weak var brandLabel: UILabel!
     
     @IBOutlet weak var productNameLabel: UILabel!
+    
+    @IBOutlet weak var ctaButton: UIButton!
 }

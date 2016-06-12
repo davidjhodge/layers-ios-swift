@@ -206,7 +206,10 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
 
                     }, completion: { (finished) -> Void in
                         
+                        if self.ctaView != nil
+                        {
                             self.ctaView.removeFromSuperview()
+                        }
                 })
             }
             else

@@ -84,7 +84,7 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
                 tableView.userInteractionEnabled = false
                 createAccountButton.userInteractionEnabled = false
                 
-                LRSessionManager.sharedManager.register("dhodge416@gmail.com", password: "password123", completionHandler: { (success, error, response) -> Void in
+                LRSessionManager.sharedManager.register(emailInput, password: passwordInput, completionHandler: { (success, error, response) -> Void in
                     
                     if success
                     {

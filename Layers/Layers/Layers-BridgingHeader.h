@@ -12,8 +12,6 @@
 #import "NSAttributedString+Pricing.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
-#import <NMRangeSlider/NMRangeSlider.h>
-
 #import <AWSCore/AWSCore.h>
 #import <AWSCognitoIdentityProvider/AWSCognitoIdentityProvider.h>
 

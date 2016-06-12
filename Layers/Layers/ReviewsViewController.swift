@@ -69,6 +69,12 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    // MARK: Actions
+    func ctaSelected()
+    {
+        performSegueWithIdentifier("ShowProductWebViewController", sender: self)
+    }
+    
     // MARK: Table View Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int
     {
@@ -143,6 +149,8 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                     {
                         cell.productNameLabel.text = productName
                     }
+                    
+                    cell.ctaButton.addTarget(self, action: #selector(ctaSelected), forControlEvents: .TouchUpInside)
                 }
 
                 return cell
@@ -157,9 +165,9 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                     cell.starView.rating = 0.0
                     cell.rightLabel.text = ""
                     
-                    if let rating = product?.rating?.score, reviews = product?.reviews
+                    if let rating = product?.rating?.score, totalRating = product?.rating?.total, reviews = product?.reviews
                     {
-                        cell.ratingLabel.text = rating.stringValue
+                        cell.ratingLabel.text = "\(rating.stringValue) / \(totalRating)"
                         
                         cell.starView.rating = rating.doubleValue
                         
@@ -170,20 +178,7 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     return cell
                 }
-//                else
-//                {
-//                    let cell: AlternateReviewCell = tableView.dequeueReusableCellWithIdentifier("AlternateReviewCell") as! AlternateReviewCell
-//                    
-//                    let rating: Float = 4.5
-//                    
-//                    cell.titleLabel.text = "Durability".uppercaseString
-//                    
-//                    cell.ratingLabel.text = String(rating)
-//                    
-//                    cell.starView.rating = Double(rating)
-//                    
-//                    return cell
-//                }
+
             case .Reviews:
                 
                 if let reviews = product?.reviews
@@ -232,14 +227,7 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // MARK: Table View Delegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
-        {
-            if tableSection == TableSection.ProductHeader
-            {
-                performSegueWithIdentifier("ShowProductWebViewController", sender: self)
-            }
-        }
+    
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -248,7 +236,7 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             switch tableSection {
             case .ProductHeader:
-                return 96.0
+                return UITableViewAutomaticDimension
                 
             case .OverallReviews:
                 return 44.0
@@ -263,6 +251,18 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
         
         return 0.0
 
+    }
+    
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        if indexPath.section == TableSection.ProductHeader.rawValue
+        {
+            return 169.0
+        }
+        else
+        {
+            return 80.0
+        }
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -302,6 +302,14 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 {
                     productHeaderCell.productImageView.alpha = 0.5
                 }
+                else if let overallReviewCell = cell as? OverallReviewCell
+                {
+                    overallReviewCell.starView.alpha = 0.5
+                }
+                else if let reviewCell = cell as? ReviewCell
+                {
+                    reviewCell.starView.alpha = 0.5
+                }
                 
                 }, completion: nil)
         }
@@ -319,8 +327,39 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 {
                     productHeaderCell.productImageView.alpha = 1.0
                 }
+                else if let overallReviewCell = cell as? OverallReviewCell
+                {
+                    overallReviewCell.starView.alpha = 1.0
+                }
+                else if let reviewCell = cell as? ReviewCell
+                {
+                    reviewCell.starView.alpha = 1.0
+                }
                 
                 }, completion: nil)
+        }
+    }
+    
+    // MARK: Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "ShowProductWebViewController"
+        {
+            if let currentProduct = self.product
+            {
+                if let destinationViewController = segue.destinationViewController as? ProductWebViewController
+                {
+                    if let url = currentProduct.outboundUrl
+                    {
+                        destinationViewController.webURL = NSURL(string: url)
+                    }
+                    
+                    if let brandName = currentProduct.brand?.brandName
+                    {
+                        destinationViewController.brandName = brandName
+                    }
+                }
+            }
         }
     }
 }

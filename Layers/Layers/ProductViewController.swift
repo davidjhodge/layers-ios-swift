@@ -264,17 +264,19 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func createSaleAlert()
     {
+        LRSessionManager.sharedManager.registerForRemoteNotificationsIfNeeded()
+        
         // Send API call to create Price alert
         
         //On success
         
-        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
-        hud.mode = .CustomView
-        hud.customView = UIImageView(image: UIImage(named: "checkmark"))
-
-        hud.labelText = "Sale Alert Created"
-        hud.labelFont = Font.OxygenBold(size: 17.0)
-        hud.hide(true, afterDelay: 1.5)
+//        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+//        hud.mode = .CustomView
+//        hud.customView = UIImageView(image: UIImage(named: "checkmark"))
+//
+//        hud.labelText = "Sale Alert Created"
+//        hud.labelFont = Font.OxygenBold(size: 17.0)
+//        hud.hide(true, afterDelay: 1.5)
     }
     
     func showPicker(textField: UITextField?)
@@ -500,14 +502,15 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         
                         if let firstRating = product.rating
                         {
-                            if let ratingScore = firstRating.score
+                            if let ratingScore = firstRating.score?.integerValue,
+                                let ratingTotal = firstRating.total?.integerValue
                             {
-                                cell.ratingLabel.text = String(ratingScore)
+                                cell.ratingLabel.text = "\(ratingScore) / \(ratingTotal)"
                             }
                             
                             if let reviewCount = product.reviews?.count
                             {
-                                cell.rightLabel.text = "See all \(reviewCount) reviews".uppercaseString
+                                cell.rightLabel.text = "See \(reviewCount) reviews".uppercaseString
                             }
                         }
                         
