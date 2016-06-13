@@ -63,6 +63,50 @@ class AWSManager: NSObject, AWSIdentityProviderManager
         })
     }
     
+    func fetchOpenIdToken(completionHandler: LRCompletionBlock?)
+    {
+        fetchIdentityId({ (success, error, response) -> Void in
+            
+            if success
+            {
+                if let identityId = response as? String
+                {
+                    let request = AWSCognitoIdentityGetOpenIdTokenInput()
+                    
+                    request.identityId = identityId
+                    
+                    AWSCognitoIdentity.defaultCognitoIdentity().getOpenIdToken(request, completionHandler: { (response, error) -> Void in
+                        
+                        if error != nil
+                        {
+                            log.error(error?.localizedDescription)
+                        }
+                        else
+                        {
+                            // Success
+                            if let tokenResponse: AWSCognitoIdentityGetOpenIdTokenResponse = response
+                            {
+                                if let openIdToken = tokenResponse.token
+                                {
+                                    if let completion = completionHandler
+                                    {
+                                        completion(success: true, error: nil, response: openIdToken)
+                                    }
+                                }
+                            }
+                        }
+                    })
+                    
+                }
+            }
+            else
+            {
+                log.error(error)
+            }
+        })
+        
+    }
+    
     func fetchAccessToken(completionHandler: LRCompletionBlock?)
     {
         // Fetch temporary Credentials from Aamzon
@@ -169,6 +213,8 @@ class AWSManager: NSObject, AWSIdentityProviderManager
     {
         if let identityId = credentialsProvider.identityId, deviceToken = deviceToken
         {
+            AWSCognito.defaultCognito().registerDevice(deviceToken)
+
             let platformEndpointRequest = AWSSNSCreatePlatformEndpointInput()
             platformEndpointRequest.token = deviceTokenAsString(deviceToken)
             platformEndpointRequest.platformApplicationArn = kAWSSNSApplicationARN
@@ -383,7 +429,7 @@ class AWSManager: NSObject, AWSIdentityProviderManager
 //        AWSCognito.defaultCognito().wipe()
         
         // Clear AWS Cognito Temporary Credentials
-        credentialsProvider.clearCredentials()
+        credentialsProvider.invalidateCachedTemporaryCredentials()
     }
     
     
