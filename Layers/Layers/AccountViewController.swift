@@ -158,6 +158,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func showAccountActionSheet()
     {
+        FBSDKAppEvents.logEvent("Show Account Registration Options")
+
         // Show Create Account Action Sheet
         let accountActionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         
@@ -229,6 +231,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func hideCTA()
     {
+        FBSDKAppEvents.logEvent("User Hides Account CTA Taps")
+
         shouldShowCTA = false
         
         self.hideCTAIfNeeded(true)
@@ -354,6 +358,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             case .Contact:
                 
                 //Show Contact Page
+                FBSDKAppEvents.logEvent("Contact Us Button Taps")
+                
                 performSegueWithIdentifier("ShowContactUsViewController", sender: self)
                 
             case .Legal:

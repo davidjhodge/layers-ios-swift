@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import FBSDKCoreKit
 
 class SearchProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FilterDelegate
 {
@@ -31,7 +32,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         // Update Filter with Selection
         var currentFilter = FilterManager.defaultManager.getCurrentFilter()
         
@@ -224,6 +225,8 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     // MARK: Actions
     func filter()
     {
+        FBSDKAppEvents.logEvent("Filter Buttons Taps")
+        
         let mainStoryboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
         
         if let filterVc = mainStoryboard.instantiateViewControllerWithIdentifier("FilterViewController") as? FilterViewController

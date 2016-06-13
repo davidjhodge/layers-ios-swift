@@ -48,6 +48,8 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
     // MARK: Actions
     func connectWithFacebook()
     {
+        FBSDKAppEvents.logEvent("GetStarted Facebook Button Taps")
+
         let loginManager: FBSDKLoginManager = FBSDKLoginManager()
         
         loginManager.logInWithReadPermissions(["public_profile", "user_friends", "email"], fromViewController: self, handler: {(result:FBSDKLoginManagerLoginResult!, error:NSError!) -> Void in
@@ -72,6 +74,8 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
                     {
                         log.debug("Facebook Registration Integration Complete.")
                         
+                        FBSDKAppEvents.logEvent("Get Started Facebook Registrations")
+
                         // Show Confirmation Screen
                         // On success
 //                        self.completeFirstLaunchExperience()
@@ -92,6 +96,8 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
     
     func startBrowsing()
     {
+        FBSDKAppEvents.logEvent("GetStarted Start Browsing Button Taps")
+
         disableButttons()
         
         completeFirstLaunchExperience()
@@ -99,6 +105,8 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
     
     func login()
     {
+        FBSDKAppEvents.logEvent("GetStarted Login Button Taps")
+        
         disableButttons()
         
         // Show Email Login View Controller
@@ -133,6 +141,8 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
     // MARK: AuthenticationDelegate
     func authenticationDidSucceed() {
         
+        FBSDKAppEvents.logEvent("Get Started Email Registrations")
+
         completeFirstLaunchExperience()
     }
     

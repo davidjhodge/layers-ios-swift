@@ -599,13 +599,6 @@ class LRSessionManager: NSObject
             
             let requestString = "search?&q=\(queryString)&per_page=\(pageSize)"
             
-//            if FilterManager.defaultManager.getCurrentFilter().hasActiveFilters()
-//            {
-//                let paramsString = FilterManager.defaultManager.filterParamsAsString()
-//                
-//                requestString = requestString.stringByAppendingString("&\(paramsString)")
-//            }
-            
             let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint(requestString))
             
             request.HTTPMethod = "GET"
@@ -689,7 +682,139 @@ class LRSessionManager: NSObject
     }
 
     // MARK: Sale Alerts
+    func loadSaleAlerts(completionHandler: LRCompletionBlock?)
+    {
+        let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("watch"))
+        
+        request.HTTPMethod = "GET"
+                
+        sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+            
+            if success
+            {
+                if let jsonResponse = response
+                {
+                    
+                    let colors = Mapper<ColorResponse>().mapArray(jsonResponse.arrayObject)
+                    
+                    if let completion = completionHandler
+                    {
+                        completion(success: true, error: error, response: colors)
+                    }
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: false, error: error, response: nil)
+                }
+            }
+        })
+    }
     
+    func createSaleAlert(productId: NSNumber?, completionHandler: LRCompletionBlock?)
+    {
+        if let productId = productId
+        {
+            sendAPIRequest(self.jsonRequest(APIUrlAtEndpoint("watch/products/\(productId.stringValue)"), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
+                
+                if success
+                {
+                    if let jsonResponse = response
+                    {
+                        
+                        let colors = Mapper<ColorResponse>().mapArray(jsonResponse.arrayObject)
+                        
+                        if let completion = completionHandler
+                        {
+                            completion(success: true, error: error, response: colors)
+                        }
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, error: error, response: nil)
+                    }
+                }
+            })
+        }
+        else
+        {
+            if let completion = completionHandler
+            {
+                completion(success: false, error: "INVALID_PARAMETERS".localized, response: nil)
+            }
+        }
+    }
+    
+    func deleteSaleAlert(productId: NSNumber?, completionHandler: LRCompletionBlock?)
+    {
+        if let productId = productId
+        {
+            let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("watch/products/\(productId.stringValue)"))
+            
+            request.HTTPMethod = "DELETE"
+            
+            sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+                
+                if success
+                {
+                    if let jsonResponse = response
+                    {
+                        
+                        let colors = Mapper<ColorResponse>().mapArray(jsonResponse.arrayObject)
+                        
+                        if let completion = completionHandler
+                        {
+                            completion(success: true, error: error, response: colors)
+                        }
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, error: error, response: nil)
+                    }
+                }
+            })
+
+            
+            sendAPIRequest(self.jsonRequest(APIUrlAtEndpoint("watch/products/\(productId.stringValue)"), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
+                
+                if success
+                {
+                    if let jsonResponse = response
+                    {
+                        
+                        let colors = Mapper<ColorResponse>().mapArray(jsonResponse.arrayObject)
+                        
+                        if let completion = completionHandler
+                        {
+                            completion(success: true, error: error, response: colors)
+                        }
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, error: error, response: nil)
+                    }
+                }
+            })
+        }
+        else
+        {
+            if let completion = completionHandler
+            {
+                completion(success: false, error: "INVALID_PARAMETERS".localized, response: nil)
+            }
+        }
+    }
     
     // MARK: API Helpers
     func APIUrlAtEndpoint(endpointPath: String?) -> NSURL
@@ -850,7 +975,6 @@ class LRSessionManager: NSObject
                                 {
                                     completionHandler(success: true, error: nil, response: jsonObject)
                                 }
-                                
                             }
                         }
                         else
@@ -862,6 +986,11 @@ class LRSessionManager: NSObject
                                     log.error("Networking Error: \(errorMessage)")
                                     
                                     completionHandler(success: false, error: errorMessage, response: nil)
+                                }
+                                else
+                                {
+                                    log.error("NETWORK_ERROR_UNKNOWN".localized)
+                                    completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
                                 }
                             }
                         }

@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import MBProgressHUD
 import DeepLinkKit
+import FBSDKCoreKit
 
 private enum TableSection: Int
 {
@@ -58,7 +59,12 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
+        if let productId = productIdentifier
+        {
+            FBSDKAppEvents.logEvent("Product Views", parameters: ["Product ID":productId.stringValue])
+        }
+
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
         
@@ -220,6 +226,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: Actions
     func buy(sender: AnyObject)
     {
+        FBSDKAppEvents.logEvent("Product Page CTA Taps")
+        
         performSegueWithIdentifier("ShowProductWebViewController", sender: self)
     }
     
@@ -246,6 +254,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func share()
     {
+        FBSDKAppEvents.logEvent("Product Page Share Taps")
+
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
             if let url = self.product?.outboundUrl
@@ -264,6 +274,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func createSaleAlert()
     {
+        FBSDKAppEvents.logEvent("Product Page Create Sale Alert Taps")
+
         LRSessionManager.sharedManager.registerForRemoteNotificationsIfNeeded()
         
         // Send API call to create Price alert

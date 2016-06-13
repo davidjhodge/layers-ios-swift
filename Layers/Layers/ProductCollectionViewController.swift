@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import FBSDKCoreKit
 
 class ProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
@@ -98,6 +99,9 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                                 {
                                     if refresh.refreshing
                                     {
+                                        // Log Refresh
+                                        FBSDKAppEvents.logEvent("Discover Refresh Events")
+                                        
                                         CATransaction.begin()
                                         CATransaction.setCompletionBlock({ () -> Void in
                                             
