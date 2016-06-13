@@ -35,7 +35,6 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
         getStartedButton.addTarget(self, action: #selector(startBrowsing), forControlEvents: .TouchUpInside)
 
         alreadyHasAccountButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
-        
     }
     
     override func viewWillAppear(animated: Bool) {

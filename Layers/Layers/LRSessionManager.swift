@@ -109,6 +109,8 @@ class LRSessionManager: NSObject
     
     func completeFirstLaunch()
     {
+        registerIdentity(nil)
+        
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "kUserDidCompleteFirstLaunch")
         NSUserDefaults.standardUserDefaults().synchronize()
     }
@@ -193,7 +195,37 @@ class LRSessionManager: NSObject
 //        return false
 //    }
     
+    
     // MARK: Authorization
+    func registerIdentity(completionHandler: LRCompletionBlock?)
+    {
+        AWSManager.defaultManager.fetchIdentityId({ (success, error, response) -> Void in
+            
+            if success
+            {
+                if let identityId = response as? String
+                {
+                    let jsonDict = ["identity_id": identityId]
+                    
+                    self.sendAPIRequest(self.jsonRequest(self.APIUrlAtEndpoint("identity"), HTTPMethod: "POST", json: jsonDict), authorization: true, completion: { (success, error, response) -> Void in
+                        
+                        if success
+                        {
+                            log.debug("User identity registration successful.")
+                        }
+                        else
+                        {
+                            log.error("Unable to register user identity.")
+                        }
+                    })
+                }
+            }
+            else
+            {
+                log.error("Could not fetch identityId.")
+            }
+        })
+    }
     
     func register(email: String, password: String, completionHandler: LRCompletionBlock?)
     {
@@ -261,7 +293,7 @@ class LRSessionManager: NSObject
     
     // MARK: Push Notifications
     func registerForPushNotifications(deviceToken: NSData?, completionHandler: LRCompletionBlock?)
-    {
+    {        
         AWSManager.defaultManager.registerWithSNS(deviceToken, completionHandler: { (success, error, response) -> Void in
             
             if let completion = completionHandler
@@ -315,7 +347,7 @@ class LRSessionManager: NSObject
             
             request.HTTPMethod = "GET"
             
-            sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+            sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
@@ -369,7 +401,7 @@ class LRSessionManager: NSObject
                         
             request.HTTPMethod = "GET"
             
-            sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+            sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
@@ -408,7 +440,7 @@ class LRSessionManager: NSObject
         
         request.HTTPMethod = "GET"
         
-        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+        sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
@@ -441,7 +473,7 @@ class LRSessionManager: NSObject
         
         request.HTTPMethod = "GET"
         
-        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+        sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
@@ -471,7 +503,7 @@ class LRSessionManager: NSObject
         
         request.HTTPMethod = "GET"
         
-        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+        sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
@@ -501,7 +533,7 @@ class LRSessionManager: NSObject
         
         request.HTTPMethod = "GET"
         
-        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+        sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
@@ -531,7 +563,7 @@ class LRSessionManager: NSObject
         
         request.HTTPMethod = "GET"
         
-        sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+        sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
@@ -578,7 +610,7 @@ class LRSessionManager: NSObject
             
             request.HTTPMethod = "GET"
             
-            sendAPIRequest(request, authorization: false, completion: { (success, error, response) -> Void in
+            sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
@@ -656,6 +688,8 @@ class LRSessionManager: NSObject
         }
     }
 
+    // MARK: Sale Alerts
+    
     
     // MARK: API Helpers
     func APIUrlAtEndpoint(endpointPath: String?) -> NSURL
@@ -701,92 +735,52 @@ class LRSessionManager: NSObject
         
         if let networkRequest = request.mutableCopy() as? NSMutableURLRequest
         {
-            // If user is authenticated, fetch token and authorize request
-            if authorization && isAuthenticated()
+            if authorization
             {
-                AWSManager.defaultManager.fetchAccessToken({ (success, error, response) -> Void in
-                    
-                    if success
-                    {
-                        if let accessToken = response as? String
+                if isAuthenticated()
+                {
+                    // If user is authenticated, use access token to authorize user
+                    AWSManager.defaultManager.fetchAccessToken({ (success, error, response) -> Void in
+                        
+                        if success
                         {
-                            networkRequest.setValue(accessToken, forHTTPHeaderField: "Authorization")
-                        }
-                    }
-                    else
-                    {
-                        log.debug(error)
-                    }
-                })
-            }
-            
-            networkRequest.setValue("close", forHTTPHeaderField: "Connection")
-            
-            networkManager.request(networkRequest)
-                .validate(contentType: ["application/json"]).responseString(encoding: NSUTF8StringEncoding) { (responseInfo: Response<String, NSError>) -> Void in
-                    
-                    //Process responses in a queue
-                    dispatch_async(self.backgroundQueue, { () -> Void in
-                        
-                        let requestUrlString = request.URL?.absoluteString
-                        let requestTimestamp = NSDate().timeIntervalSince1970 - startTime
-                        
-                        log.verbose("Request: \(requestUrlString!) returned in: \(requestTimestamp)")
-                        
-                        //Extract data from response string
-                        if let data = responseInfo.result.value?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-                        {
-                            var jsonError: NSError?
-                            let jsonObject = JSON(data: data, options: .AllowFragments, error: &jsonError)
-                            
-                            // Handle JSON parsing errors
-                            if let jsonParsingError = jsonError
+                            if let accessToken = response as? String
                             {
-                                if let completionHandler = completion
-                                {
-                                    log.error("Networking Error: ", jsonParsingError.localizedDescription)
-                                    
-                                    completionHandler(success: false, error: jsonParsingError.localizedDescription, response: nil)
-                                }
+                                networkRequest.setValue(accessToken, forHTTPHeaderField: "Authorization")
                                 
-                                return
+                                self.performNetworkReqeuest(request, networkRequest: networkRequest, startTime: startTime, completion: completion)
                             }
-                            
-                            // Check for networking errors
-                            if jsonObject["status"] == "error"
-                            {
-                                if let completionHandler = completion
-                                {
-                                    // Need to handle error
-                                    completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
-                                }
-                                
-                                return
-                            }
-                            
-                            //SUCCESS
-                            if let completionHandler = completion
-                            {
-                                completionHandler(success: true, error: nil, response: jsonObject)
-                            }
-                            
                         }
                         else
                         {
-                            if let completionHandler = completion
-                            {
-                                if let errorMessage = responseInfo.result.error?.localizedDescription
-                                {
-                                    log.error("Networking Error: \(errorMessage)")
-                                }
-                                else
-                                {
-                                    log.error("NETWORK_ERROR_UNKNOWN".localized)
-                                    completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
-                                }
-                            }
+                            log.debug(error)
                         }
                     })
+                }
+                else
+                {
+                    // If user is not authenticated, use open id token to identify user
+                    AWSManager.defaultManager.fetchOpenIdToken({ (success, error, response) -> Void in
+                        
+                        if success
+                        {
+                            if let openIdToken = response as? String
+                            {
+                                networkRequest.setValue(openIdToken, forHTTPHeaderField: "Authorization")
+                                
+                                self.performNetworkReqeuest(request, networkRequest: networkRequest, startTime: startTime, completion: completion)
+                            }
+                        }
+                        else
+                        {
+                            log.debug(error)
+                        }
+                    })
+                }
+            }
+            else
+            {
+                performNetworkReqeuest(request, networkRequest: networkRequest, startTime: startTime, completion: completion)
             }
         }
         else
@@ -795,6 +789,100 @@ class LRSessionManager: NSObject
             {
                 completionHandler(success: false, error: "The URL request made by the client is malformed.", response: nil)
             }
+        }
+    }
+    
+    func performNetworkReqeuest(intialRequest: NSURLRequest, networkRequest: NSMutableURLRequest, startTime: NSTimeInterval, completion: LRJsonCompletionBlock?)
+    {
+        networkRequest.setValue("close", forHTTPHeaderField: "Connection")
+        
+        networkManager.request(networkRequest)
+            .validate(contentType: ["application/json"]).responseString(encoding: NSUTF8StringEncoding) { (responseInfo: Response<String, NSError>) -> Void in
+                
+                //Process responses in a queue
+                dispatch_async(self.backgroundQueue, { () -> Void in
+                    
+                    let requestUrlString = intialRequest.URL?.absoluteString
+                    let requestTimestamp = NSDate().timeIntervalSince1970 - startTime
+                    
+                    let milliseconds = Int(round(requestTimestamp * 1000))
+                    
+                    log.verbose("Request: \(requestUrlString!) returned in: \(milliseconds) ms")
+                    
+                    // If Error return
+                    if let statusCode = responseInfo.response?.statusCode
+                    {
+                        if statusCode >= 200 && statusCode < 300
+                        {
+                            //Extract data from response string
+                            if let data = responseInfo.result.value?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+                            {
+                                var jsonError: NSError?
+                                let jsonObject = JSON(data: data, options: .AllowFragments, error: &jsonError)
+                                
+                                // Handle JSON parsing errors
+                                if let jsonParsingError = jsonError
+                                {
+                                    if let completionHandler = completion
+                                    {
+                                        log.error("Networking Error: ", jsonParsingError.localizedDescription)
+                                        
+                                        completionHandler(success: false, error: jsonParsingError.localizedDescription, response: nil)
+                                    }
+                                    
+                                    return
+                                }
+                                
+                                // Check for networking errors
+                                if jsonObject["status"] == "error"
+                                {
+                                    if let completionHandler = completion
+                                    {
+                                        // Need to handle error
+                                        completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
+                                    }
+                                    
+                                    return
+                                }
+                                
+                                //SUCCESS
+                                if let completionHandler = completion
+                                {
+                                    completionHandler(success: true, error: nil, response: jsonObject)
+                                }
+                                
+                            }
+                        }
+                        else
+                        {
+                            if let completionHandler = completion
+                            {
+                                if let errorMessage = responseInfo.result.error?.localizedDescription
+                                {
+                                    log.error("Networking Error: \(errorMessage)")
+                                    
+                                    completionHandler(success: false, error: errorMessage, response: nil)
+                                }
+                            }
+                        }
+                        
+                    }
+                    else
+                    {
+                        if let completionHandler = completion
+                        {
+                            if let errorMessage = responseInfo.result.error?.localizedDescription
+                            {
+                                log.error("Networking Error: \(errorMessage)")
+                            }
+                            else
+                            {
+                                log.error("NETWORK_ERROR_UNKNOWN".localized)
+                                completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
+                            }
+                        }
+                    }
+                })
         }
     }
     
