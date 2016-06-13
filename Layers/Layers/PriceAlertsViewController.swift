@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import FBSDKCoreKit
 
 private enum TableSection: Int
 {
@@ -62,25 +63,11 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         spinner.startAnimating()
         
         // SHOULD LOAD ONLY PRICE ALERT ITEMS FOR USER
-        LRSessionManager.sharedManager.loadProductCollection(1, completionHandler: { (success, error, response) -> Void in
-            
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
-                self.spinner.stopAnimating()
-            })
-
+        LRSessionManager.sharedManager.loadSaleAlerts({ (success, error, response) -> Void in
+         
             if success
             {
-                if let productsResponse = response as? Array<ProductResponse>
-                {
-                    self.saleAlerts = [productsResponse[0]]
-                    self.watchAlerts = [productsResponse[1]]
-
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        self.tableView.reloadData()
-                    })
-                }
+                
             }
             else
             {
@@ -92,7 +79,40 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                 })
             }
         })
+        
     }
+    
+//        LRSessionManager.sharedManager.loadProductCollection(1, completionHandler: { (success, error, response) -> Void in
+//            
+//            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                
+//                self.spinner.stopAnimating()
+//            })
+//
+//            if success
+//            {
+//                if let productsResponse = response as? Array<ProductResponse>
+//                {
+//                    self.saleAlerts = [productsResponse[0]]
+//                    self.watchAlerts = [productsResponse[1]]
+//
+//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                        
+//                        self.tableView.reloadData()
+//                    })
+//                }
+//            }
+//            else
+//            {
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    
+//                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+//                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+//                    self.presentViewController(alert, animated: true, completion: nil)
+//                })
+//            }
+//        })
+//    }
     
     // MARK: UITableView Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -390,6 +410,12 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                             {
                                 destinationVC.webURL = NSURL(string: url)
                             }
+                            
+                            if let productName = alertProduct.productName,
+                            let productId = alertProduct.productId
+                            {
+                                FBSDKAppEvents.logEvent("Sale Alert On Sale Product Views", parameters: ["Product Name":productName, "Product ID":productId])
+                            }
                         }
                     }
                     else if indexPath.section == TableSection.Watching.rawValue
@@ -405,24 +431,16 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                             {
                                 destinationVC.webURL = NSURL(string: url)
                             }
+                            
+                            if let productName = alertProduct.productName,
+                                let productId = alertProduct.productId
+                            {
+                                FBSDKAppEvents.logEvent("Sale Alert Watching Product Views", parameters: ["Product Name":productName, "Product ID":productId])
+                            }
                         }
                     }
                 }
             }
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

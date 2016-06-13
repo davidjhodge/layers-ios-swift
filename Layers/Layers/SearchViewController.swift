@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import FBSDKCoreKit
 
 class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
@@ -188,9 +189,13 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         {
             tableView.setContentOffset(CGPointZero, animated: true)
         }
+        
+        FBSDKAppEvents.logEvent("Search Queries", parameters: ["Query String":searchText])
     }
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        
+        FBSDKAppEvents.logEvent("Search Bar Taps")
         
         searchBar.setShowsCancelButton(true, animated: true)
     }
@@ -377,6 +382,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                         searchProductCollectionVc.selectedItem = category
                         
                         navigationController?.pushViewController(searchProductCollectionVc, animated: true)
+                        
+                        if let categoryName = category?.categoryName, categoryId = category?.categoryId
+                        {
+                            FBSDKAppEvents.logEvent("Search Categories Selected", parameters: ["Category Name":categoryName, "Category ID":categoryId
+                                ])
+                        }
                     }
                 }
             }
@@ -397,6 +408,11 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                             productVc.productIdentifier = productId
                             
                             navigationController?.pushViewController(productVc, animated: true)
+                            
+                            if let productName = product.productName
+                            {
+                                FBSDKAppEvents.logEvent("Search Product Selecttions", parameters: ["Product Name":productName, "Product ID":productId])
+                            }
                         }
                     }
                 }
@@ -497,6 +513,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                                 if let brand = searchResults[indexPath.row] as? BrandResponse
                                 {
                                     destinationVc.selectedItem = brand
+                                    
+                                    if let brandName = brand.brandName,
+                                    let brandId = brand.brandId
+                                    {
+                                        FBSDKAppEvents.logEvent("Search Brand Selections", parameters: ["Brand Name":brandName, "Brand ID":brandId])
+                                    }
                                 }
                             }
                             else if filterType == FilterType.Category
@@ -506,6 +528,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                                 if let category = searchResults[indexPath.row] as? CategoryResponse
                                 {
                                     destinationVc.selectedItem = category
+                                    
+                                    if let categoryName = category.categoryName,
+                                    let categoryId = category.categoryId
+                                    {
+                                        FBSDKAppEvents.logEvent("Search Category Selections", parameters: ["Category Name":categoryName, "Category ID":categoryId])
+                                    }
                                 }
                             }
                         }
