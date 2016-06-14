@@ -205,9 +205,9 @@ class LRSessionManager: NSObject
             {
                 if let identityId = response as? String
                 {
-                    let jsonDict = ["identity_id": identityId]
+                    let jsonDict: Dictionary<String,String> = ["identity_id": identityId]
                     
-                    self.sendAPIRequest(self.jsonRequest(self.APIUrlAtEndpoint("identity"), HTTPMethod: "POST", json: jsonDict), authorization: true, completion: { (success, error, response) -> Void in
+                    self.sendRequest(self.jsonRequest(self.APIUrlAtEndpoint("identity"), HTTPMethod: "POST", json: jsonDict), authorization: true, completion: { (success, error, response) -> Void in
                         
                         if success
                         {
@@ -347,7 +347,7 @@ class LRSessionManager: NSObject
             
             request.HTTPMethod = "GET"
             
-            sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+            sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
@@ -401,7 +401,7 @@ class LRSessionManager: NSObject
                         
             request.HTTPMethod = "GET"
             
-            sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+            sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
@@ -440,7 +440,7 @@ class LRSessionManager: NSObject
         
         request.HTTPMethod = "GET"
         
-        sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+        sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
@@ -473,7 +473,7 @@ class LRSessionManager: NSObject
         
         request.HTTPMethod = "GET"
         
-        sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+        sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
@@ -503,7 +503,7 @@ class LRSessionManager: NSObject
         
         request.HTTPMethod = "GET"
         
-        sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+        sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
@@ -533,7 +533,7 @@ class LRSessionManager: NSObject
         
         request.HTTPMethod = "GET"
         
-        sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+        sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
@@ -563,7 +563,7 @@ class LRSessionManager: NSObject
         
         request.HTTPMethod = "GET"
         
-        sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+        sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
@@ -603,7 +603,7 @@ class LRSessionManager: NSObject
             
             request.HTTPMethod = "GET"
             
-            sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+            sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
@@ -688,18 +688,17 @@ class LRSessionManager: NSObject
         
         request.HTTPMethod = "GET"
                 
-        sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+        sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
                 if let jsonResponse = response
                 {
-                    
-                    let colors = Mapper<ColorResponse>().mapArray(jsonResponse.arrayObject)
+                    let saleAlertResponse = Mapper<SaleAlertResponse>().map(jsonResponse.dictionaryObject)
                     
                     if let completion = completionHandler
                     {
-                        completion(success: true, error: error, response: colors)
+                        completion(success: true, error: error, response: saleAlertResponse)
                     }
                 }
             }
@@ -717,18 +716,15 @@ class LRSessionManager: NSObject
     {
         if let productId = productId
         {
-            sendAPIRequest(self.jsonRequest(APIUrlAtEndpoint("watch/products/\(productId.stringValue)"), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("watch/products/\(productId.stringValue)"), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
                     if let jsonResponse = response
                     {
-                        
-                        let colors = Mapper<ColorResponse>().mapArray(jsonResponse.arrayObject)
-                        
                         if let completion = completionHandler
                         {
-                            completion(success: true, error: error, response: colors)
+                            completion(success: true, error: error, response: jsonResponse.dictionaryObject)
                         }
                     }
                 }
@@ -758,18 +754,15 @@ class LRSessionManager: NSObject
             
             request.HTTPMethod = "DELETE"
             
-            sendAPIRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+            sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
                     if let jsonResponse = response
                     {
-                        
-                        let colors = Mapper<ColorResponse>().mapArray(jsonResponse.arrayObject)
-                        
                         if let completion = completionHandler
                         {
-                            completion(success: true, error: error, response: colors)
+                            completion(success: true, error: error, response: jsonResponse.dictionaryObject)
                         }
                     }
                 }
@@ -782,8 +775,7 @@ class LRSessionManager: NSObject
                 }
             })
 
-            
-            sendAPIRequest(self.jsonRequest(APIUrlAtEndpoint("watch/products/\(productId.stringValue)"), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("watch/products/\(productId.stringValue)"), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
@@ -854,7 +846,7 @@ class LRSessionManager: NSObject
  
     This function calls the completion block on the method it was called on. You are responsible for calling completion blocks on the main thread.
     */
-    private func sendAPIRequest(request: NSURLRequest, authorization: Bool, completion: LRJsonCompletionBlock?)
+    private func sendRequest(request: NSURLRequest, authorization: Bool, completion: LRJsonCompletionBlock?)
     {
         let startTime = NSDate().timeIntervalSince1970
         
@@ -919,10 +911,16 @@ class LRSessionManager: NSObject
     
     func performNetworkReqeuest(intialRequest: NSURLRequest, networkRequest: NSMutableURLRequest, startTime: NSTimeInterval, completion: LRJsonCompletionBlock?)
     {
-        networkRequest.setValue("close", forHTTPHeaderField: "Connection")
+        let newRequest = networkRequest
         
-        networkManager.request(networkRequest)
-            .validate(contentType: ["application/json"]).responseString(encoding: NSUTF8StringEncoding) { (responseInfo: Response<String, NSError>) -> Void in
+        newRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        newRequest.setValue("close", forHTTPHeaderField: "Connection")
+        
+        networkManager.request(newRequest)
+            .validate(statusCode: 200..<300)
+            .validate(contentType: ["application/json"])
+            .responseString(encoding: NSUTF8StringEncoding) { (response: Response<String, NSError>) -> Void in
                 
                 //Process responses in a queue
                 dispatch_async(self.backgroundQueue, { () -> Void in
@@ -934,75 +932,47 @@ class LRSessionManager: NSObject
                     
                     log.verbose("Request: \(requestUrlString!) returned in: \(milliseconds) ms")
                     
-                    // If Error return
-                    if let statusCode = responseInfo.response?.statusCode
+                    switch response.result
                     {
-                        if statusCode >= 200 && statusCode < 300
+                    case .Success:
+                        
+                        if let data = response.result.value?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
                         {
-                            //Extract data from response string
-                            if let data = responseInfo.result.value?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+                            var jsonError: NSError?
+                            let jsonObject = JSON(data: data, options: .AllowFragments, error: &jsonError)
+                            
+                            // Check if json error exists. If so, valid data cannot be extracted, so the error must be returned.
+                            if let jsonParsingError = jsonError
                             {
-                                var jsonError: NSError?
-                                let jsonObject = JSON(data: data, options: .AllowFragments, error: &jsonError)
-                                
-                                // Handle JSON parsing errors
-                                if let jsonParsingError = jsonError
+                                if let completionHandler = completion
                                 {
-                                    if let completionHandler = completion
-                                    {
-                                        log.error("Networking Error: ", jsonParsingError.localizedDescription)
-                                        
-                                        completionHandler(success: false, error: jsonParsingError.localizedDescription, response: nil)
-                                    }
+                                    log.error("Networking Error: ", jsonParsingError.localizedDescription)
                                     
-                                    return
+                                    completionHandler(success: false, error: jsonParsingError.localizedDescription, response: nil)
                                 }
                                 
-                                // Check for networking errors
-                                if jsonObject["status"] == "error"
-                                {
-                                    if let completionHandler = completion
-                                    {
-                                        // Need to handle error
-                                        completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
-                                    }
-                                    
-                                    return
-                                }
-                                
-                                //SUCCESS
+                                // A JSON error occured so the method returns after passing the error back through the completion block
+                                return
+                            }
+                            else
+                            {
+                                // The request succeeded and returned valid data
                                 if let completionHandler = completion
                                 {
                                     completionHandler(success: true, error: nil, response: jsonObject)
                                 }
                             }
                         }
-                        else
-                        {
-                            if let completionHandler = completion
-                            {
-                                if let errorMessage = responseInfo.result.error?.localizedDescription
-                                {
-                                    log.error("Networking Error: \(errorMessage)")
-                                    
-                                    completionHandler(success: false, error: errorMessage, response: nil)
-                                }
-                                else
-                                {
-                                    log.error("NETWORK_ERROR_UNKNOWN".localized)
-                                    completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
-                                }
-                            }
-                        }
                         
-                    }
-                    else
-                    {
+                    case .Failure(let error):
+                        
                         if let completionHandler = completion
                         {
-                            if let errorMessage = responseInfo.result.error?.localizedDescription
+                            if let errorMessage: String = error.localizedDescription
                             {
                                 log.error("Networking Error: \(errorMessage)")
+                                
+                                completionHandler(success: false, error: errorMessage, response: nil)
                             }
                             else
                             {

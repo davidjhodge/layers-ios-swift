@@ -61,13 +61,36 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
     {
         spinner.hidden = false
         spinner.startAnimating()
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
         // SHOULD LOAD ONLY PRICE ALERT ITEMS FOR USER
         LRSessionManager.sharedManager.loadSaleAlerts({ (success, error, response) -> Void in
          
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                self.spinner.stopAnimating()
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            })
+            
             if success
             {
-                
+                if let alerts = response as? SaleAlertResponse
+                {
+                    if let saleAlerts = alerts.saleProducts
+                    {
+                        self.saleAlerts = saleAlerts
+                    }
+                    
+                    if let watchingAlerts = alerts.watchingProducts
+                    {
+                        self.watchAlerts = watchingAlerts
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                      
+                        self.tableView.reloadData()
+                    })
+                }
             }
             else
             {
@@ -119,14 +142,20 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         
         var sections = 0
         
-        if saleAlerts != nil
+        if let saleAlerts = saleAlerts
         {
-            sections += 1
+            if saleAlerts.count > 0
+            {
+                sections += 1
+            }
         }
         
-        if watchAlerts != nil
+        if let watchAlerts = watchAlerts
         {
-            sections += 1
+            if watchAlerts.count > 0
+            {
+                sections += 1
+            }
         }
         
         return sections
