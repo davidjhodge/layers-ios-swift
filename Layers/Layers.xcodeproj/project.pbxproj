@@ -98,6 +98,9 @@
 		70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D84A9E1CB9557300A70485 /* AppDelegate.swift */; };
 		70D84AA41CB9557300A70485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA21CB9557300A70485 /* Main.storyboard */; };
 		70D84AA61CB9557300A70485 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70D84AA51CB9557300A70485 /* Assets.xcassets */; };
+		70D9019E1D0FA15F0078298B /* ConfirmFacebookInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D9019D1D0FA15F0078298B /* ConfirmFacebookInfoViewController.swift */; };
+		70D901A01D0FA6840078298B /* TwoTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D9019F1D0FA6840078298B /* TwoTextFieldCell.swift */; };
+		70D901A21D10C0620078298B /* SaleAlertResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D901A11D10C0620078298B /* SaleAlertResponse.swift */; };
 		70DD853F1CFFA08F00319716 /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70DD853E1CFFA08F00319716 /* Search.storyboard */; };
 		70DD85411CFFA0C900319716 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DD85401CFFA0C900319716 /* SearchViewController.swift */; };
 		70FF31CE1D0CDDB800F19C9E /* PriceFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FF31CD1D0CDDB800F19C9E /* PriceFilterViewController.swift */; };
@@ -201,6 +204,9 @@
 		70D84AA31CB9557300A70485 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		70D84AA51CB9557300A70485 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		70D84AAA1CB9557300A70485 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		70D9019D1D0FA15F0078298B /* ConfirmFacebookInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmFacebookInfoViewController.swift; sourceTree = "<group>"; };
+		70D9019F1D0FA6840078298B /* TwoTextFieldCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoTextFieldCell.swift; sourceTree = "<group>"; };
+		70D901A11D10C0620078298B /* SaleAlertResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaleAlertResponse.swift; sourceTree = "<group>"; };
 		70DD853E1CFFA08F00319716 /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
 		70DD85401CFFA0C900319716 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		70FF31CD1D0CDDB800F19C9E /* PriceFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceFilterViewController.swift; sourceTree = "<group>"; };
@@ -272,6 +278,7 @@
 				7022F2F01CFB65120097DDF9 /* ColorResponse.swift */,
 				707F48D41D052A2300E82A4C /* SimpleProductResponse.swift */,
 				707F48D61D052B7100E82A4C /* SearchResponse.swift */,
+				70D901A11D10C0620078298B /* SaleAlertResponse.swift */,
 			);
 			name = Responses;
 			sourceTree = "<group>";
@@ -537,6 +544,8 @@
 				706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */,
 				702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */,
 				706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */,
+				70D9019D1D0FA15F0078298B /* ConfirmFacebookInfoViewController.swift */,
+				70D9019F1D0FA6840078298B /* TwoTextFieldCell.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -783,6 +792,7 @@
 				70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */,
 				706FF89A1CBD6E7A007B26AD /* AlternateReviewCell.swift in Sources */,
 				70776FDC1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift in Sources */,
+				70D901A21D10C0620078298B /* SaleAlertResponse.swift in Sources */,
 				70A410031CD6AA5C00CB515B /* AlternatePricing.swift in Sources */,
 				706FF8A11CBD84EE007B26AD /* ReviewCell.swift in Sources */,
 				70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */,
@@ -813,6 +823,7 @@
 				706FF8941CBD6B83007B26AD /* StyleCell.swift in Sources */,
 				70987BEA1CB95F1900D86FBA /* ProductCollectionViewController.swift in Sources */,
 				7053903A1CD7ED9100DA8E15 /* SafeIndex.swift in Sources */,
+				70D901A01D0FA6840078298B /* TwoTextFieldCell.swift in Sources */,
 				70059C931CD65AD50094B454 /* OnboardingContainerViewController.swift in Sources */,
 				70987BF11CB9672200D86FBA /* ProductCell.swift in Sources */,
 				70776FD81CCC1660002E6F25 /* BrandCollectionCell.swift in Sources */,
@@ -835,6 +846,7 @@
 				70AF1A2F1CE3C6A800C0518C /* SubtitleFilterCell.swift in Sources */,
 				70204A611CBF5E9B00868C00 /* ProductWebViewController.swift in Sources */,
 				70A410011CD6A8FB00CB515B /* Price.swift in Sources */,
+				70D9019E1D0FA15F0078298B /* ConfirmFacebookInfoViewController.swift in Sources */,
 				706FF8A31CBDF771007B26AD /* SimpleProductHeaderCell.swift in Sources */,
 				706FF8981CBD6E3E007B26AD /* OverallReviewCell.swift in Sources */,
 				70987BFA1CB9749700D86FBA /* Color.swift in Sources */,

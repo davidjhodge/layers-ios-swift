@@ -274,7 +274,10 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func createSaleAlert()
     {
-        FBSDKAppEvents.logEvent("Product Page Create Sale Alert Taps")
+        if let productId = productIdentifier
+        {
+            FBSDKAppEvents.logEvent("Product Page Create Sale Alert Taps", parameters: ["ProductID":productId])
+        }
 
         LRSessionManager.sharedManager.registerForRemoteNotificationsIfNeeded()
         
@@ -304,6 +307,25 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
 
             textField.becomeFirstResponder()
         }
+    }
+    
+    // MARK: Analytics
+    func photoTap()
+    {
+        if let product = product
+        {
+            if let productId = product.productId,
+            let productName = product.productName,
+            let category = product.category?.categoryName
+            {
+                FBSDKAppEvents.logEvent("Product Page Photo Taps", parameters: ["Product ID":productId, "Product Name":productName, "Category Name":category])
+            }
+        }
+    }
+    
+    func brandTap()
+    {
+        
     }
     
     // MARK: Picker Actions
@@ -414,6 +436,9 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                     
                     cell.setImageElements(productImages)
+                    
+                    // For Analytics
+                    cell.scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(photoTap)))
                     
                     if let brandName = product.brand?.brandName
                     {
@@ -598,10 +623,30 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     if variant == .Style
                     {
                         showPicker(styleTextField)
+                        
+                        if let product = product
+                        {
+                            if let productId = product.productId,
+                                let productName = product.productName,
+                                let category = product.category?.categoryName
+                            {
+                                FBSDKAppEvents.logEvent("Product Page Style Taps", parameters: ["ProductID": productId, "Product Name": productName, "Category":category])
+                            }
+                        }
                     }
                     else if variant == .Size
                     {
                         showPicker(sizeTextField)
+                        
+                        if let product = product
+                        {
+                            if let productId = product.productId,
+                                let productName = product.productName,
+                                let category = product.category?.categoryName
+                            {
+                                FBSDKAppEvents.logEvent("Product Page Size Taps", parameters: ["ProductID": productId, "Product Name": productName, "Category":category])
+                            }
+                        }
                     }
                 }
                 
