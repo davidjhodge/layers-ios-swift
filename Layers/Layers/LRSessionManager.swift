@@ -11,6 +11,7 @@ import Alamofire
 import SwiftyJSON
 import ObjectMapper
 import KeychainAccess
+import MBProgressHUD
 
 import FBSDKLoginKit
 
@@ -227,6 +228,44 @@ class LRSessionManager: NSObject
         })
     }
     
+    func handleInvalidIdentity()
+    {
+        let errorString = "We're having trouble on our end. Try refreshing the session."
+        
+        let alert = UIAlertController(title: errorString, message: nil, preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        
+        alert.addAction(UIAlertAction(title: "Refresh", style: .Default, handler: { (action) -> Void in
+            
+            LRSessionManager.sharedManager.registerIdentity({ (success, error, response) -> Void in
+                
+                if success
+                {
+                    // Successfully registered Identity
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        if let rootVc = UIApplication.sharedApplication().keyWindow?.rootViewController
+                        {
+                            let hud = MBProgressHUD.showHUDAddedTo(rootVc.view, animated: true)
+                            hud.mode = .CustomView
+                            hud.customView = UIImageView(image: UIImage(named: "checkmark"))
+                            
+                            hud.labelText = "Identity Registered"
+                            hud.labelFont = Font.OxygenBold(size: 17.0)
+                            hud.hide(true, afterDelay: 1.5)
+                        }
+                    })
+                }
+            })
+        
+        }))
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+        })
+    }
+
     func register(email: String, password: String, completionHandler: LRCompletionBlock?)
     {
         AWSManager.defaultManager.registerToUserPool(email, password: password, completionHandler: { (success, error, response) -> Void in
@@ -238,7 +277,7 @@ class LRSessionManager: NSObject
             }
         })
     }
-    
+
     func signIn(email: String, password: String, completionHandler: LRCompletionBlock?)
     {
         AWSManager.defaultManager.signInToUserPool(email, password: password, completionHandler: { (success, error, response) -> Void in
@@ -256,7 +295,7 @@ class LRSessionManager: NSObject
         })
     }
     
-    func registerWithFacebook(completion: LRJsonCompletionBlock?)
+    func registerWithFacebook(completion: LRCompletionBlock?)
     {
         // The currentAccessToken() should be retrieved from Facebook in the View Controller that the login dialogue is shown from.
         if (FBSDKAccessToken.currentAccessToken() != nil)
@@ -270,14 +309,13 @@ class LRSessionManager: NSObject
             request.startWithCompletionHandler({(connection:FBSDKGraphRequestConnection!, result: AnyObject!, error: NSError!) -> Void in
                 
                 if error == nil
-                {
-                    let attributes: Dictionary<String,AnyObject> = result as! Dictionary<String,AnyObject>
-                    
-                    let response = Mapper<FacebookUserResponse>().map(attributes)
-                    
-                    if let completionBlock = completion
+                {                    
+                    if let response = Mapper<FacebookUserResponse>().map(JSON(result).dictionaryObject)
                     {
-                        completionBlock(success: true, error: nil, response: JSON(response!))
+                        if let completionBlock = completion
+                        {
+                            completionBlock(success: true, error: nil, response: response)
+                        }
                     }
                 }
                 else
@@ -305,37 +343,42 @@ class LRSessionManager: NSObject
     
     func registerForRemoteNotificationsIfNeeded()
     {
+        if !userHasEnabledNotifications()
+        {
+            // Prompt user to register for notifications
+            let readAction: UIMutableUserNotificationAction = UIMutableUserNotificationAction()
+            readAction.identifier = "READ_IDENTIFIER"
+            readAction.title = "Read"
+            readAction.activationMode = .Foreground
+            readAction.destructive = false
+            readAction.authenticationRequired = true
+            
+            let messageCategory = UIMutableUserNotificationCategory()
+            messageCategory.identifier = "MESSAGE_CATEGORY"
+            messageCategory.setActions([readAction], forContext: .Default)
+            messageCategory.setActions([readAction], forContext: .Minimal)
+            
+            let categories: Set<UIUserNotificationCategory> = NSSet(object: messageCategory) as! Set<UIUserNotificationCategory>
+            
+            let settings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [.Badge, .Sound, .Alert], categories: categories)
+            
+            UIApplication.sharedApplication().registerForRemoteNotifications()
+            UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+        }
+    }
+
+    func userHasEnabledNotifications() -> Bool
+    {
         if let grantedSettings: UIUserNotificationSettings = UIApplication.sharedApplication().currentUserNotificationSettings()
         {
             // Check if no permission have been granted
-            if grantedSettings.types == .None
+            if grantedSettings.types == [.Badge, .Sound, .Alert]
             {
-                // Prompt user to register for notifications
-                let readAction: UIMutableUserNotificationAction = UIMutableUserNotificationAction()
-                readAction.identifier = "READ_IDENTIFIER"
-                readAction.title = "Read"
-                readAction.activationMode = .Foreground
-                readAction.destructive = false
-                readAction.authenticationRequired = true
-                
-                let messageCategory = UIMutableUserNotificationCategory()
-                messageCategory.identifier = "MESSAGE_CATEGORY"
-                messageCategory.setActions([readAction], forContext: .Default)
-                messageCategory.setActions([readAction], forContext: .Minimal)
-                
-                let categories: Set<UIUserNotificationCategory> = NSSet(object: messageCategory) as! Set<UIUserNotificationCategory>
-                
-                let settings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [.Badge, .Sound, .Alert], categories: categories)
-                
-                UIApplication.sharedApplication().registerForRemoteNotifications()
-                UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+                return true
             }
         }
-    }
-    
-    func registerIdentityToken(identityToken: String, completionHandler: LRCompletionBlock?)
-    {
         
+        return false
     }
     
     // MARK: Fetching Server Data
@@ -694,6 +737,8 @@ class LRSessionManager: NSObject
             {
                 if let jsonResponse = response
                 {
+                    print(jsonResponse)
+                    
                     let saleAlertResponse = Mapper<SaleAlertResponse>().map(jsonResponse.dictionaryObject)
                     
                     if let completion = completionHandler
@@ -918,7 +963,6 @@ class LRSessionManager: NSObject
         newRequest.setValue("close", forHTTPHeaderField: "Connection")
         
         networkManager.request(newRequest)
-            .validate(statusCode: 200..<300)
             .validate(contentType: ["application/json"])
             .responseString(encoding: NSUTF8StringEncoding) { (response: Response<String, NSError>) -> Void in
                 
@@ -932,43 +976,71 @@ class LRSessionManager: NSObject
                     
                     log.verbose("Request: \(requestUrlString!) returned in: \(milliseconds) ms")
                     
-                    switch response.result
+                    if let data = response.result.value?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
                     {
-                    case .Success:
+                        var jsonError: NSError?
+                        let jsonObject = JSON(data: data, options: .AllowFragments, error: &jsonError)
                         
-                        if let data = response.result.value?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+                        // Check if json error exists. If so, valid data cannot be extracted, so the error must be returned.
+                        if let jsonParsingError = jsonError
                         {
-                            var jsonError: NSError?
-                            let jsonObject = JSON(data: data, options: .AllowFragments, error: &jsonError)
-                            
-                            // Check if json error exists. If so, valid data cannot be extracted, so the error must be returned.
-                            if let jsonParsingError = jsonError
+                            if let completionHandler = completion
                             {
-                                if let completionHandler = completion
-                                {
-                                    log.error("Networking Error: ", jsonParsingError.localizedDescription)
-                                    
-                                    completionHandler(success: false, error: jsonParsingError.localizedDescription, response: nil)
-                                }
+                                log.error("Networking Error: ", jsonParsingError.localizedDescription)
                                 
-                                // A JSON error occured so the method returns after passing the error back through the completion block
-                                return
+                                completionHandler(success: false, error: jsonParsingError.localizedDescription, response: nil)
                             }
-                            else
+                            
+                            // A JSON error occured so the method returns after passing the error back through the completion block
+                            return
+                        }
+                        
+                        // Handle invalid identity
+                        if response.response?.statusCode == 401
+                        {
+                            if let errors = jsonObject["errors"].dictionaryObject
                             {
-                                // The request succeeded and returned valid data
-                                if let completionHandler = completion
+                                if errors["invalid_token"] != nil
                                 {
-                                    completionHandler(success: true, error: nil, response: jsonObject)
+                                    // Identity Unauthorized
+                                    self.handleInvalidIdentity()
+                                    
+                                    return
                                 }
                             }
                         }
                         
-                    case .Failure(let error):
+                        // Check for request error
+                        if let statusCode = response.response?.statusCode
+                        {
+                            // If status code is not in the 200s, return error
+                            if statusCode < 200 || statusCode > 299
+                            {
+                                if let errors = jsonObject["errors"].string
+                                {
+                                    if let completionHandler = completion
+                                    {
+                                        completionHandler(success: false, error: errors, response: nil)
+                                        
+                                        log.error(errors)
+                                        
+                                        return
+                                    }
+                                }
+                            }
+                        }
                         
+                        // The request succeeded and returned valid data
                         if let completionHandler = completion
                         {
-                            if let errorMessage: String = error.localizedDescription
+                            completionHandler(success: true, error: nil, response: jsonObject)
+                        }
+                    }
+                    else
+                    {
+                        if let completionHandler = completion
+                        {
+                            if let errorMessage: String = response.result.error?.localizedDescription
                             {
                                 log.error("Networking Error: \(errorMessage)")
                                 
@@ -984,9 +1056,4 @@ class LRSessionManager: NSObject
                 })
         }
     }
-    
-//    deinit
-//    {
-//        NSNotificationCenter.defaultCenter().removeObserver(self)
-//    }
 }

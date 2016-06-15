@@ -77,8 +77,9 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
                         FBSDKAppEvents.logEvent("Get Started Facebook Registrations")
 
                         // Show Confirmation Screen
-                        // On success
-//                        self.completeFirstLaunchExperience()
+                        let loginStoryboard = UIStoryboard(name: "Login", bundle: NSBundle.mainBundle())
+                        let confirmFacebookVc = loginStoryboard.instantiateViewControllerWithIdentifier("ConfirmFacebookInfoViewController")
+                        self.navigationController?.pushViewController(confirmFacebookVc, animated: true)
                     }
                     else
                     {
