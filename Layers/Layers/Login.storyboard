@@ -15,6 +15,7 @@
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
+            <string>Oxygen-Bold</string>
         </mutableArray>
         <mutableArray key="Oxygen-Regular.ttf">
             <string>Oxygen-Regular</string>
@@ -239,7 +240,7 @@
         <!--Confirm Facebook Info View Controller-->
         <scene sceneID="MUl-Nk-9Pz">
             <objects>
-                <viewController id="oMd-TC-BIt" customClass="ConfirmFacebookInfoViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ConfirmFacebookInfoViewController" id="oMd-TC-BIt" customClass="ConfirmFacebookInfoViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="EBD-Bv-dSS"/>
                         <viewControllerLayoutGuide type="bottom" id="LjU-9P-QKE"/>
@@ -255,25 +256,25 @@
                                         <rect key="frame" x="8" y="8" width="584" height="584"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ddj-TM-dPr">
-                                                <rect key="frame" x="191" y="64" width="203" height="21"/>
+                                                <rect key="frame" x="180" y="48" width="224" height="26"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="21" id="1vj-Mw-rW4"/>
-                                                    <constraint firstAttribute="width" constant="203" id="maB-JZ-8tW"/>
+                                                    <constraint firstAttribute="height" constant="26" id="1vj-Mw-rW4"/>
+                                                    <constraint firstAttribute="width" constant="224" id="maB-JZ-8tW"/>
                                                 </constraints>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Does everything look right?">
                                                         <attributes>
                                                             <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                            <font key="NSFont" size="16" name="Oxygen-Regular"/>
+                                                            <font key="NSFont" size="18" name="Oxygen-Regular"/>
                                                             <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                         </attributes>
                                                     </fragment>
                                                 </attributedString>
                                             </label>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.96470588235294119" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="Ddj-TM-dPr" firstAttribute="top" secondItem="5TE-gU-pN5" secondAttribute="top" constant="64" id="9P1-SP-GVt"/>
+                                            <constraint firstItem="Ddj-TM-dPr" firstAttribute="top" secondItem="5TE-gU-pN5" secondAttribute="top" priority="750" constant="48" id="9P1-SP-GVt"/>
                                             <constraint firstItem="Ddj-TM-dPr" firstAttribute="centerX" secondItem="5TE-gU-pN5" secondAttribute="centerX" id="qcV-yF-Sky"/>
                                         </constraints>
                                     </view>
@@ -287,11 +288,12 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lXT-Vo-pkH">
-                                <rect key="frame" x="8" y="141" width="584" height="147"/>
+                                <rect key="frame" x="8" y="130" width="584" height="147"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="147" id="SdH-5r-qmN"/>
                                 </constraints>
+                                <inset key="separatorInset" minX="16" minY="0.0" maxX="16" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TextFieldCell" rowHeight="48" id="V0C-fl-F01" customClass="TextFieldCell" customModule="Layers" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="584" height="48"/>
@@ -352,7 +354,6 @@
                                         <connections>
                                             <outlet property="firstTextField" destination="TNV-Kw-5d3" id="0ue-kx-hoV"/>
                                             <outlet property="secondTextField" destination="sHd-PC-mah" id="YcR-cd-wH2"/>
-                                            <outlet property="textField" destination="TNV-Kw-5d3" id="DF6-HS-UjH"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -361,20 +362,39 @@
                                     <outlet property="delegate" destination="oMd-TC-BIt" id="hmJ-ev-Wrd"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="thm-Hy-JlI">
+                                <rect key="frame" x="0.0" y="552" width="600" height="48"/>
+                                <color key="backgroundColor" red="0.29803921570000003" green="0.52156862749999999" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="4ne-5s-enh"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="48" id="kwf-cG-A3V"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="16"/>
+                                <state key="normal" title="SUBMIT">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="thm-Hy-JlI" firstAttribute="top" relation="greaterThanOrEqual" secondItem="lXT-Vo-pkH" secondAttribute="bottom" constant="16" id="1t4-lu-qmR"/>
                             <constraint firstAttribute="trailing" secondItem="lXT-Vo-pkH" secondAttribute="trailing" constant="8" id="1tS-sr-PJ8"/>
                             <constraint firstItem="w0u-MQ-HZW" firstAttribute="leading" secondItem="cYQ-dy-igb" secondAttribute="leading" id="3k2-4l-bJx"/>
                             <constraint firstItem="w0u-MQ-HZW" firstAttribute="top" secondItem="cYQ-dy-igb" secondAttribute="top" id="BCe-s7-dQ7"/>
                             <constraint firstItem="lXT-Vo-pkH" firstAttribute="top" secondItem="Ddj-TM-dPr" secondAttribute="bottom" constant="48" id="X9x-bt-NU0"/>
+                            <constraint firstAttribute="trailing" secondItem="thm-Hy-JlI" secondAttribute="trailing" id="apb-Dz-GTy"/>
                             <constraint firstItem="LjU-9P-QKE" firstAttribute="top" secondItem="w0u-MQ-HZW" secondAttribute="bottom" id="eyH-iS-SkM"/>
                             <constraint firstItem="lXT-Vo-pkH" firstAttribute="leading" secondItem="cYQ-dy-igb" secondAttribute="leading" constant="8" id="fNj-OI-9JS"/>
+                            <constraint firstItem="thm-Hy-JlI" firstAttribute="leading" secondItem="cYQ-dy-igb" secondAttribute="leading" id="qam-R7-dPm"/>
+                            <constraint firstItem="LjU-9P-QKE" firstAttribute="top" secondItem="thm-Hy-JlI" secondAttribute="bottom" id="qoG-6W-f0C"/>
                             <constraint firstAttribute="trailing" secondItem="w0u-MQ-HZW" secondAttribute="trailing" id="ybo-ot-jPP"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="RLA-kS-Jiy"/>
                     <connections>
+                        <outlet property="headerLabel" destination="Ddj-TM-dPr" id="11T-fo-GkZ"/>
+                        <outlet property="submitButton" destination="thm-Hy-JlI" id="YQy-eB-9ft"/>
+                        <outlet property="submitButtonBottomConstraint" destination="qoG-6W-f0C" id="9hU-Rk-YOS"/>
                         <outlet property="tableView" destination="lXT-Vo-pkH" id="T85-iV-Qye"/>
                     </connections>
                 </viewController>

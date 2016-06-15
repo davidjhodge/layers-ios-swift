@@ -60,14 +60,6 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         reloadProducts()
     }
     
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        
-//        if let tabBar = navigationController?.tabBarController?.tabBar {
-//        collectionViewBottomLayoutConstraint.constant = (-1 * tabBar.bounds.size.height) + 8
-//        }
-//    }
-    
     // MARK: Networking
     func reloadProducts()
     {
@@ -184,6 +176,13 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                     })
                 }
                 
+                if let refresh = self.refreshControl
+                {
+                    if refresh.refreshing
+                    {
+                        refresh.endRefreshing()
+                    }
+                }
             })
         }
         else

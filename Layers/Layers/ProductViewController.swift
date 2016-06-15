@@ -175,7 +175,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func setupPickers()
     {
-//        for (index, imageView) in imageViews.enumerate()
         for (index, picker) in pickers.enumerate()
         {
             picker.backgroundColor = Color.BackgroundGrayColor
@@ -279,19 +278,45 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             FBSDKAppEvents.logEvent("Product Page Create Sale Alert Taps", parameters: ["ProductID":productId])
         }
 
-        LRSessionManager.sharedManager.registerForRemoteNotificationsIfNeeded()
-        
-        // Send API call to create Price alert
-        
-        //On success
-        
-//        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
-//        hud.mode = .CustomView
-//        hud.customView = UIImageView(image: UIImage(named: "checkmark"))
-//
-//        hud.labelText = "Sale Alert Created"
-//        hud.labelFont = Font.OxygenBold(size: 17.0)
-//        hud.hide(true, afterDelay: 1.5)
+        if LRSessionManager.sharedManager.userHasEnabledNotifications()
+        {
+            if let productId = productIdentifier
+            {
+                LRSessionManager.sharedManager.createSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
+                    
+                    if success
+                    {
+                        // Post Notification
+                        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kSaleAlertCreatedNotification, object: nil))
+                        
+                        // Show Success HUD
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                            hud.mode = .CustomView
+                            hud.customView = UIImageView(image: UIImage(named: "checkmark"))
+                            
+                            hud.labelText = "Sale Alert Created"
+                            hud.labelFont = Font.OxygenBold(size: 17.0)
+                            hud.hide(true, afterDelay: 1.5)
+                        })
+                    }
+                    else
+                    {
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
+                        })
+                    }
+                })
+            }
+        }
+        else
+        {
+            LRSessionManager.sharedManager.registerForRemoteNotificationsIfNeeded()
+        }
     }
     
     func showPicker(textField: UITextField?)

@@ -113,6 +113,22 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                     if success
                     {
                         log.debug("Facebook Registration Integration Complete.")
+                        
+                        // Show Confirmation Screen
+                        let loginStoryboard = UIStoryboard(name: "Login", bundle: NSBundle.mainBundle())
+                        if let confirmFacebookVc = loginStoryboard.instantiateViewControllerWithIdentifier("ConfirmFacebookInfoViewController") as? ConfirmFacebookInfoViewController
+                        {
+                            if let facebookResponse = result as? FacebookUserResponse
+                            {
+                                confirmFacebookVc.facebookResponse = facebookResponse
+                            }
+                            
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                
+                                self.presentViewController(confirmFacebookVc, animated: true, completion: nil)
+                                
+                            })
+                        }
                     }
                     else
                     {

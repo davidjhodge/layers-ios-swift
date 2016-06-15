@@ -39,7 +39,7 @@ class FacebookUserResponse: Mappable
     
     var friendCount: Int?
     
-    var ageRange: Dictionary<String,Int>?
+    var ageRange: AgeRange?
     
     required init?(_ map: Map) {
         
