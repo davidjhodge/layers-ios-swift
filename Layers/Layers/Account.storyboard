@@ -88,7 +88,7 @@
                                                 <constraint firstItem="bqW-hh-mmI" firstAttribute="leading" secondItem="BNi-Mt-YZZ" secondAttribute="leading" constant="24" id="sIN-tn-3KJ"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <outlet property="ctaTextLabel" destination="bqW-hh-mmI" id="jx3-Pj-UVL"/>
                                             <outlet property="xButton" destination="FdM-rB-TUz" id="ZZ4-o6-pM9"/>
