@@ -10,7 +10,6 @@ pod 'KeychainAccess'
 pod 'SDWebImage'
 pod 'Alamofire'
 pod 'SwiftyJSON'
-pod 'HidingNavigationBar', '~> 0.3'
 pod 'Cosmos', '~> 1.2'
 pod 'SwiftyBeaver'
 pod 'Charts'
@@ -24,6 +23,7 @@ pod 'AWSSNS'
 pod 'MBProgressHUD'
 pod 'DeepLinkKit'
 pod 'SwiftRangeSlider'
+pod 'NHAlignmentFlowLayout'
 
 end
 

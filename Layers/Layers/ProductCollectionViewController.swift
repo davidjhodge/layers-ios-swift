@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import FBSDKCoreKit
+import NHAlignmentFlowLayout
 
 class ProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
@@ -54,6 +55,15 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         refreshControl?.addTarget(self, action: #selector(refresh), forControlEvents: .ValueChanged)
         refreshControl?.layer.zPosition = -1
         collectionView.addSubview(refreshControl!)
+        
+        // Flow Layout
+        let customLayout = NHAlignmentFlowLayout()
+        customLayout.scrollDirection = .Vertical
+        customLayout.alignment = .TopLeftAligned
+        customLayout.minimumLineSpacing = 8.0
+        customLayout.minimumInteritemSpacing = 8.0
+        customLayout.sectionInset = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
+        collectionView.collectionViewLayout = customLayout
         
         currentPage = 1
         
