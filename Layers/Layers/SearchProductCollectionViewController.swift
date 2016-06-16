@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import FBSDKCoreKit
+import NHAlignmentFlowLayout
 
 class SearchProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FilterDelegate
 {
@@ -84,6 +85,15 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         collectionView.alwaysBounceVertical = true
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
+        
+        // Flow Layout
+        let customLayout = NHAlignmentFlowLayout()
+        customLayout.scrollDirection = .Vertical
+        customLayout.alignment = .TopLeftAligned
+        customLayout.minimumLineSpacing = 8.0
+        customLayout.minimumInteritemSpacing = 8.0
+        customLayout.sectionInset = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
+        collectionView.collectionViewLayout = customLayout
         
         spinner.color = Color.grayColor()
         spinner.hidesWhenStopped = true
