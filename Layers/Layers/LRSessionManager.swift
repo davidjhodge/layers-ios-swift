@@ -899,51 +899,29 @@ class LRSessionManager: NSObject
         {
             if authorization
             {
-                if isAuthenticated()
-                {
-                    // If user is authenticated, use access token to authorize user
-                    AWSManager.defaultManager.fetchAccessToken({ (success, error, response) -> Void in
-                        
-                        if success
+                // If user is not authenticated, use open id token to identify user
+                AWSManager.defaultManager.fetchOpenIdToken({ (success, error, response) -> Void in
+                    
+                    if success
+                    {
+                        if let openIdToken = response as? String
                         {
-                            if let accessToken = response as? String
-                            {
-                                networkRequest.setValue(accessToken, forHTTPHeaderField: "Authorization")
-                                
-                                self.performNetworkReqeuest(request, networkRequest: networkRequest, startTime: startTime, completion: completion)
-                            }
+                            networkRequest.setValue(openIdToken, forHTTPHeaderField: "Authorization")
+                            
+                            self.performNetworkReqeuest(request, networkRequest: networkRequest, startTime: startTime, completion: completion)
+                            
+                            return
                         }
-                        else
-                        {
-                            log.debug(error)
-                        }
-                    })
-                }
-                else
-                {
-                    // If user is not authenticated, use open id token to identify user
-                    AWSManager.defaultManager.fetchOpenIdToken({ (success, error, response) -> Void in
-                        
-                        if success
-                        {
-                            if let openIdToken = response as? String
-                            {
-                                networkRequest.setValue(openIdToken, forHTTPHeaderField: "Authorization")
-                                
-                                self.performNetworkReqeuest(request, networkRequest: networkRequest, startTime: startTime, completion: completion)
-                            }
-                        }
-                        else
-                        {
-                            log.debug(error)
-                        }
-                    })
-                }
+                    }
+                    else
+                    {
+                        log.debug(error)
+                    }
+                })
             }
-            else
-            {
-                performNetworkReqeuest(request, networkRequest: networkRequest, startTime: startTime, completion: completion)
-            }
+            
+            performNetworkReqeuest(request, networkRequest: networkRequest, startTime: startTime, completion: completion)
+            
         }
         else
         {

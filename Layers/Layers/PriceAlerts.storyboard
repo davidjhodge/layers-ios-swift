@@ -7,8 +7,10 @@
         <mutableArray key="Oxygen-Bold.ttf">
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
+            <string>Oxygen-Bold</string>
         </mutableArray>
         <mutableArray key="Oxygen-Regular.ttf">
+            <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
         </mutableArray>
     </customFonts>
@@ -105,10 +107,48 @@
                                     <outlet property="delegate" destination="2F7-pm-9rl" id="QEB-9a-zZI"/>
                                 </connections>
                             </tableView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Cq-9F-4fN">
+                                <rect key="frame" x="48" y="208" width="504" height="152"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VzI-1c-yYz">
+                                        <rect key="frame" x="0.0" y="104" width="504" height="48"/>
+                                        <color key="backgroundColor" red="0.29803921568627451" green="0.52156862745098043" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="48" id="fh4-j0-HOx"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="15"/>
+                                        <state key="normal" title="START DISCOVERING">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zm4-qB-BZv">
+                                        <rect key="frame" x="0.0" y="0.0" width="504" height="41"/>
+                                        <string key="text">When you create a sale alert,
+you'll see it here.</string>
+                                        <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="16"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="Zm4-qB-BZv" firstAttribute="leading" secondItem="4Cq-9F-4fN" secondAttribute="leading" id="1DZ-uh-m4P"/>
+                                    <constraint firstItem="VzI-1c-yYz" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Zm4-qB-BZv" secondAttribute="bottom" constant="56" id="FQr-NZ-S4S"/>
+                                    <constraint firstAttribute="bottom" secondItem="VzI-1c-yYz" secondAttribute="bottom" id="IhD-zX-LRC"/>
+                                    <constraint firstItem="Zm4-qB-BZv" firstAttribute="top" secondItem="4Cq-9F-4fN" secondAttribute="top" id="XPR-5P-3Cd"/>
+                                    <constraint firstAttribute="trailing" secondItem="Zm4-qB-BZv" secondAttribute="trailing" id="dCl-LJ-CHw"/>
+                                    <constraint firstAttribute="height" constant="152" id="eja-eY-Ohx"/>
+                                    <constraint firstItem="VzI-1c-yYz" firstAttribute="leading" secondItem="4Cq-9F-4fN" secondAttribute="leading" id="fF7-hv-aOl"/>
+                                    <constraint firstAttribute="trailing" secondItem="VzI-1c-yYz" secondAttribute="trailing" id="hrr-Ow-IgQ"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="4Cq-9F-4fN" secondAttribute="trailing" constant="48" id="HBq-Dh-Pal"/>
                             <constraint firstAttribute="trailing" secondItem="9Wu-0p-pW0" secondAttribute="trailing" constant="8" id="ZfS-ix-y6w"/>
+                            <constraint firstItem="4Cq-9F-4fN" firstAttribute="centerY" secondItem="dLh-tp-zWA" secondAttribute="centerY" constant="-16" id="dtH-6P-xje"/>
+                            <constraint firstItem="4Cq-9F-4fN" firstAttribute="leading" secondItem="dLh-tp-zWA" secondAttribute="leading" constant="48" id="jyc-7F-pOB"/>
                             <constraint firstItem="MQq-Qs-qEQ" firstAttribute="top" secondItem="9Wu-0p-pW0" secondAttribute="bottom" id="mBy-AX-FpE"/>
                             <constraint firstItem="9Wu-0p-pW0" firstAttribute="top" secondItem="dLh-tp-zWA" secondAttribute="top" id="oAq-pA-f6m"/>
                             <constraint firstItem="9Wu-0p-pW0" firstAttribute="leading" secondItem="dLh-tp-zWA" secondAttribute="leading" constant="8" id="pX2-K4-I5U"/>
@@ -116,6 +156,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="Y1h-14-dbF"/>
                     <connections>
+                        <outlet property="emptyStateView" destination="4Cq-9F-4fN" id="BfS-aF-e3f"/>
+                        <outlet property="startDiscoveringButton" destination="VzI-1c-yYz" id="Hsb-cx-veh"/>
                         <outlet property="tableView" destination="9Wu-0p-pW0" id="Qau-tS-TyC"/>
                         <segue destination="qNC-BS-LPj" kind="show" identifier="ShowProductWebViewController" id="UWU-pN-EQc"/>
                     </connections>

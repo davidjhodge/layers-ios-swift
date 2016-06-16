@@ -19,6 +19,10 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
 {
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var emptyStateView: UIView!
+    
+    @IBOutlet weak var startDiscoveringButton: UIButton!
+    
     var saleAlerts: Array<ProductResponse>?
     
     var watchAlerts: Array<ProductResponse>?
@@ -56,6 +60,8 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         refreshControl.addTarget(self, action: #selector(refresh), forControlEvents: .ValueChanged)
         tableView.addSubview(refreshControl)
         
+        startDiscoveringButton.addTarget(self, action: #selector(startDiscovering), forControlEvents: .TouchUpInside)
+        
         // Reload table when new sale alert is created in another View Controller
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(newSaleAlertCreated(_:)), name: kSaleAlertCreatedNotification, object: nil)
         
@@ -77,6 +83,11 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         {
             spinner.hidden = false
             spinner.startAnimating()
+        }
+        
+        if emptyStateView.hidden == false
+        {
+            emptyStateView.hidden = true
         }
 
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
@@ -132,6 +143,18 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                     {
                         // By default, refresh table view immediately
                         self.hardReloadTableView()
+                    }
+                }
+                
+                if let saleAlerts = self.saleAlerts,
+                    let watchAlerts = self.watchAlerts
+                {
+                    if saleAlerts.count == 0 && watchAlerts.count == 0
+                    {
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.emptyStateView.hidden = false
+                        })
                     }
                 }
             }
@@ -261,6 +284,19 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
     func newSaleAlertCreated(notification: NSNotification)
     {
         reloadData()
+    }
+    
+    func startDiscovering()
+    {
+        if let tabBarVc = tabBarController
+        {
+            if let navController = tabBarVc.viewControllers?[safe: 0] as? UINavigationController
+            {
+                navController.popToRootViewControllerAnimated(false)
+            }
+            
+            tabBarVc.selectedIndex = 0
+        }
     }
     
     // MARK: UITableView Data Source

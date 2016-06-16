@@ -53,14 +53,7 @@ class AWSManager: NSObject, AWSIdentityProviderManager
         let defaultServiceConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: credentialsProvider)
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration
         
-        fetchAccessToken({ (success, error, response) -> Void in
-         
-            if success
-            {
-                // If we have received valid credentials, we can configure the user pool
-                self.configureUserPool()
-            }
-        })
+        self.configureUserPool()
     }
     
     func fetchOpenIdToken(completionHandler: LRCompletionBlock?)
@@ -96,7 +89,6 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                             }
                         }
                     })
-                    
                 }
             }
             else
@@ -109,41 +101,88 @@ class AWSManager: NSObject, AWSIdentityProviderManager
     
     func fetchAccessToken(completionHandler: LRCompletionBlock?)
     {
-        // Fetch temporary Credentials from Aamzon
-        credentialsProvider.credentials().continueWithBlock({ (task: AWSTask) -> AnyObject! in
-          
-            if task.error != nil
+        // Fetch temporary Credentials from Amazon
+        fetchIdentityId({ (success, error, response) -> Void in
+            
+            if success
             {
-                if let completion = completionHandler
+                if let identityId = response as? String
                 {
-                    if let errorMessage = task.error?.formattedMessage()
-                    {
-                        completion(success: false, error: errorMessage, response: nil)
-                    }
+                    let request = AWSCognitoIdentityGetCredentialsForIdentityInput()
+                    
+                    request.identityId = identityId
+                    
+                    AWSCognitoIdentity.defaultCognitoIdentity().getCredentialsForIdentity(request, completionHandler: { (response, error) -> Void in
+                        
+                        if error != nil
+                        {
+                            log.error(error?.localizedDescription)
+                        }
+                        else
+                        {
+                            if let credentialsResponse: AWSCognitoIdentityGetCredentialsForIdentityResponse = response
+                            {
+                                if let credentials = credentialsResponse.credentials
+                                {
+                                    
+                                }
+                            }
+                        }
+                    })
+
                 }
-                
-                log.error(task.error?.localizedDescription)
             }
             else
             {
-                if let completion = completionHandler
-                {
-                    if let result = task.result as? AWSCredentials
-                    {
-                        let accessToken = result.accessKey
-                        
-                        completion(success: true, error: nil, response: accessToken)
-                    }
-                    else
-                    {
-                        completion(success: false, error: "INVALID_AWS_TASK_RESPONSE".localized, response: nil)
-                    }
-                }
+                log.error(error)
             }
-            
-            return nil
         })
     }
+    
+//        user.getSession().continueWithBlock({ (task) -> AnyObject! in
+//         
+//            if let result = task.result
+//            {
+//                
+//            }
+//            
+//            return nil
+//        })
+//        
+//        credentialsProvider.credentials().continueWithBlock({ (task: AWSTask) -> AnyObject! in
+//          
+//            if task.error != nil
+//            {
+//                if let completion = completionHandler
+//                {
+//                    if let errorMessage = task.error?.formattedMessage()
+//                    {
+//                        completion(success: false, error: errorMessage, response: nil)
+//                    }
+//                }
+//                
+//                log.error(task.error?.localizedDescription)
+//            }
+//            else
+//            {
+//                if let completion = completionHandler
+//                {
+//                    if let result = task.result as? AWSCredentials
+//                    {
+//                        let accessToken = result.accessKey
+//                        
+//                        completion(success: true, error: nil, response: accessToken)
+//                    }
+//                    else
+//                    {
+//                        completion(success: false, error: "INVALID_AWS_TASK_RESPONSE".localized, response: nil)
+//                    }
+//                }
+//            }
+//            
+//            return nil
+//        })
+//    }
     
     func configureUserPool()
     {
