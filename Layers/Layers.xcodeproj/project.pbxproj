@@ -18,6 +18,10 @@
 		702FC2FC1CC344960012969C /* EmailCreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */; };
 		702FC3011CC3FE6D0012969C /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */; };
 		702FC3031CC408FC0012969C /* TextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC3021CC408FC0012969C /* TextViewCell.swift */; };
+		703D463A1D15C21700AB25C0 /* OpenSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703D46391D15C21700AB25C0 /* OpenSourceViewController.swift */; };
+		703D463C1D15C75300AB25C0 /* OpenSourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703D463B1D15C75300AB25C0 /* OpenSourceCell.swift */; };
+		703D463F1D15CA7E00AB25C0 /* OpenSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703D463E1D15CA7E00AB25C0 /* OpenSource.swift */; };
+		703D46411D15CCCA00AB25C0 /* OpenSourceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 703D46401D15CCCA00AB25C0 /* OpenSourceList.plist */; };
 		70488C521CE63C3E0085BAE9 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70488C511CE63C3E0085BAE9 /* ColorCell.swift */; };
 		70488C541CE63C640085BAE9 /* ColorFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70488C531CE63C640085BAE9 /* ColorFilterViewController.swift */; };
 		705390311CD7D38600DA8E15 /* PriceAlertsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705390301CD7D38600DA8E15 /* PriceAlertsViewController.swift */; };
@@ -123,6 +127,10 @@
 		702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailCreateAccountViewController.swift; sourceTree = "<group>"; };
 		702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
 		702FC3021CC408FC0012969C /* TextViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViewCell.swift; sourceTree = "<group>"; };
+		703D46391D15C21700AB25C0 /* OpenSourceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSourceViewController.swift; sourceTree = "<group>"; };
+		703D463B1D15C75300AB25C0 /* OpenSourceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSourceCell.swift; sourceTree = "<group>"; };
+		703D463E1D15CA7E00AB25C0 /* OpenSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSource.swift; sourceTree = "<group>"; };
+		703D46401D15CCCA00AB25C0 /* OpenSourceList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = OpenSourceList.plist; sourceTree = "<group>"; };
 		70488C511CE63C3E0085BAE9 /* ColorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		70488C531CE63C640085BAE9 /* ColorFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorFilterViewController.swift; sourceTree = "<group>"; };
 		705390301CD7D38600DA8E15 /* PriceAlertsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceAlertsViewController.swift; sourceTree = "<group>"; };
@@ -288,6 +296,16 @@
 				70D901A11D10C0620078298B /* SaleAlertResponse.swift */,
 			);
 			name = Responses;
+			sourceTree = "<group>";
+		};
+		703D463D1D15C75900AB25C0 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				707F48831D013D9D00E82A4C /* CallToActionCell.swift */,
+				702FC3021CC408FC0012969C /* TextViewCell.swift */,
+				703D463B1D15C75300AB25C0 /* OpenSourceCell.swift */,
+			);
+			name = Cells;
 			sourceTree = "<group>";
 		};
 		705390321CD7D3A000DA8E15 /* Price Alerts */ = {
@@ -507,9 +525,9 @@
 			children = (
 				70987C291CB9A4BF00D86FBA /* AccountViewController.swift */,
 				702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */,
-				707F48831D013D9D00E82A4C /* CallToActionCell.swift */,
-				702FC3021CC408FC0012969C /* TextViewCell.swift */,
 				70987C3A1CBAB4BF00D86FBA /* SimpleWebViewController.swift */,
+				703D46391D15C21700AB25C0 /* OpenSourceViewController.swift */,
+				703D463D1D15C75900AB25C0 /* Cells */,
 			);
 			name = Account;
 			sourceTree = "<group>";
@@ -601,6 +619,8 @@
 			children = (
 				70D84A9E1CB9557300A70485 /* AppDelegate.swift */,
 				70D901A41D10FA220078298B /* Constants.swift */,
+				703D463E1D15CA7E00AB25C0 /* OpenSource.swift */,
+				703D46401D15CCCA00AB25C0 /* OpenSourceList.plist */,
 				70837E691CFA4A9200C83045 /* Deep Linking */,
 				70987BFE1CB97AC300D86FBA /* Utilities */,
 				70987BF61CB9740100D86FBA /* Colors & Fonts */,
@@ -714,6 +734,7 @@
 				70987C111CB9832E00D86FBA /* Charter-Bold.ttf in Resources */,
 				70987C061CB980B300D86FBA /* Oxygen-Light.ttf in Resources */,
 				70DD853F1CFFA08F00319716 /* Search.storyboard in Resources */,
+				703D46411D15CCCA00AB25C0 /* OpenSourceList.plist in Resources */,
 				70776FDE1CD64516002E6F25 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -793,6 +814,7 @@
 				70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */,
 				706FF89A1CBD6E7A007B26AD /* AlternateReviewCell.swift in Sources */,
 				70776FDC1CCC4EFA002E6F25 /* OnboardingAgeViewController.swift in Sources */,
+				703D463F1D15CA7E00AB25C0 /* OpenSource.swift in Sources */,
 				70D901A21D10C0620078298B /* SaleAlertResponse.swift in Sources */,
 				70A410031CD6AA5C00CB515B /* AlternatePricing.swift in Sources */,
 				706FF8A11CBD84EE007B26AD /* ReviewCell.swift in Sources */,
@@ -817,6 +839,7 @@
 				706FF8961CBD6B95007B26AD /* PriceGraphCell.swift in Sources */,
 				707F48D51D052A2300E82A4C /* SimpleProductResponse.swift in Sources */,
 				702FC3011CC3FE6D0012969C /* ContactUsViewController.swift in Sources */,
+				703D463C1D15C75300AB25C0 /* OpenSourceCell.swift in Sources */,
 				70987BFC1CB97A9900D86FBA /* LRWindow.swift in Sources */,
 				705390361CD7D49500DA8E15 /* PriceAlertCell.swift in Sources */,
 				70A40FF51CD69C4F00CB515B /* ProductResponse.swift in Sources */,
@@ -867,6 +890,7 @@
 				70D901B41D151DAC0078298B /* GlobalAlert.swift in Sources */,
 				70987BEE1CB9658200D86FBA /* User.swift in Sources */,
 				70488C541CE63C640085BAE9 /* ColorFilterViewController.swift in Sources */,
+				703D463A1D15C21700AB25C0 /* OpenSourceViewController.swift in Sources */,
 				70A71B9C1CC593D800B58B74 /* PickerAccessoryView.swift in Sources */,
 				70776FD31CC8A9FF002E6F25 /* Localization.swift in Sources */,
 				70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */,
