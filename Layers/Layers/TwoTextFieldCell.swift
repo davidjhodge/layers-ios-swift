@@ -13,4 +13,14 @@ class TwoTextFieldCell: UITableViewCell
     @IBOutlet weak var firstTextField: UITextField!
     
     @IBOutlet weak var secondTextField: UITextField!
+    
+    @IBOutlet weak var separatorView: UIView!
+    
+    @IBOutlet weak var separatorViewWidthConstraint: NSLayoutConstraint!
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        separatorViewWidthConstraint.constant = 1.0 / UIScreen.mainScreen().scale
+    }
 }
