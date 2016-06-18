@@ -438,6 +438,10 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     let cell: ProductHeaderCell = tableView.dequeueReusableCellWithIdentifier("ProductHeaderCell") as! ProductHeaderCell
                     
+                    cell.brandLabel.text = ""
+                    
+                    cell.nameLabel.text = ""
+                    
                     var productImages: Array<NSURL> = Array<NSURL>()
                     
                     if let imageDict = selectedVariant?.images?[0]
@@ -531,6 +535,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             
                             let cell: StyleCell = tableView.dequeueReusableCellWithIdentifier("StyleCell") as! StyleCell
                             
+                            cell.styleLabel.text = ""
+                            
                             if let variantName = selectedVariant?.styleName
                             {
                                 cell.styleLabel.text = variantName.capitalizedString
@@ -552,6 +558,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             
                             let cell: SizeCell = tableView.dequeueReusableCellWithIdentifier("SizeCell") as! SizeCell
                             
+                            cell.sizeLabel.text = ""
+
                             if let sizeName = selectedSize?.sizeTitle
                             {
                                 cell.sizeLabel.text = sizeName
@@ -849,7 +857,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    // MARK: Picker View Data Source
     // MARK: Picker View
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1

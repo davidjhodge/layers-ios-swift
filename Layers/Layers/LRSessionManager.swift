@@ -985,6 +985,14 @@ class LRSessionManager: NSObject
                                     
                                     return
                                 }
+                                
+                                if errors["user_not_registered"] != nil
+                                {
+                                    // Identity Unauthorized
+                                    self.handleInvalidIdentity()
+                                    
+                                    return
+                                }
                             }
                         }
                         

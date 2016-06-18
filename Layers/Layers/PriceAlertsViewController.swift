@@ -44,6 +44,8 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = Color.BackgroundGrayColor
+        
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = Color.BackgroundGrayColor
         tableView.contentInset = UIEdgeInsets(top: 8.0, left: tableView.contentInset.left, bottom: tableView.contentInset.bottom, right: tableView.contentInset.right)
@@ -87,6 +89,8 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         
         if emptyStateView.hidden == false
         {
+            tableView.hidden = false
+            
             emptyStateView.hidden = true
         }
 
@@ -153,6 +157,8 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                     {
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
+                            self.tableView.hidden = true
+
                             self.emptyStateView.hidden = false
                         })
                     }
