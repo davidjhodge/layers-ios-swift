@@ -33,6 +33,8 @@ class AWSManager: NSObject, AWSIdentityProviderManager
 
     var socialLoginDict: Dictionary<String,String>?
 
+    var openIdToken: String?
+    
     override init()
     {
         super.init()
@@ -43,7 +45,6 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                 
         // Respond if the identity changes when authentication state changes
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(identityDidChange), name: AWSCognitoIdentityIdChangedNotification, object: nil)
-
     }
     
     func setConfiguration()
@@ -58,6 +59,16 @@ class AWSManager: NSObject, AWSIdentityProviderManager
     
     func fetchOpenIdToken(completionHandler: LRCompletionBlock?)
     {
+        if let openIdToken: String = openIdToken
+        {
+            if let completion = completionHandler
+            {
+                completion(success: true, error: nil, response: openIdToken)
+                
+                return
+            }
+        }
+        
         fetchIdentityId({ (success, error, response) -> Void in
             
             if success
@@ -84,6 +95,11 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                                     if let completion = completionHandler
                                     {
                                         completion(success: true, error: nil, response: openIdToken)
+                                        
+                                        self.openIdToken = openIdToken
+                                        
+                                        // Refresh Token after 1 hour
+                                        self.refreshOpenIdTokenAfterOneHour()
                                     }
                                 }
                             }
@@ -96,94 +112,44 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                 log.error(error)
             }
         })
-        
+
     }
     
-    func fetchAccessToken(completionHandler: LRCompletionBlock?)
+    func refreshOpenIdTokenAfterOneHour()
     {
-        // Fetch temporary Credentials from Amazon
-        fetchIdentityId({ (success, error, response) -> Void in
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
-            if success
-            {
-                if let identityId = response as? String
-                {
-                    let request = AWSCognitoIdentityGetCredentialsForIdentityInput()
-                    
-                    request.identityId = identityId
-                    
-                    AWSCognitoIdentity.defaultCognitoIdentity().getCredentialsForIdentity(request, completionHandler: { (response, error) -> Void in
-                        
-                        if error != nil
-                        {
-                            log.error(error?.localizedDescription)
-                        }
-                        else
-                        {
-                            if let credentialsResponse: AWSCognitoIdentityGetCredentialsForIdentityResponse = response
-                            {
-                                if let credentials = credentialsResponse.credentials
-                                {
-                                    
-                                }
-                            }
-                        }
-                    })
-
-                }
-            }
-            else
-            {
-                log.error(error)
-            }
+            self.performSelector(#selector(self.refreshOpenIdToken), withObject: nil, afterDelay: 3600.0)
         })
     }
     
-//        user.getSession().continueWithBlock({ (task) -> AnyObject! in
-//         
-//            if let result = task.result
-//            {
-//                
-//            }
-//            
-//            return nil
-//        })
-//        
-//        credentialsProvider.credentials().continueWithBlock({ (task: AWSTask) -> AnyObject! in
-//          
-//            if task.error != nil
-//            {
-//                if let completion = completionHandler
-//                {
-//                    if let errorMessage = task.error?.formattedMessage()
-//                    {
-//                        completion(success: false, error: errorMessage, response: nil)
-//                    }
-//                }
-//                
-//                log.error(task.error?.localizedDescription)
-//            }
-//            else
-//            {
-//                if let completion = completionHandler
-//                {
-//                    if let result = task.result as? AWSCredentials
-//                    {
-//                        let accessToken = result.accessKey
-//                        
-//                        completion(success: true, error: nil, response: accessToken)
-//                    }
-//                    else
-//                    {
-//                        completion(success: false, error: "INVALID_AWS_TASK_RESPONSE".localized, response: nil)
-//                    }
-//                }
-//            }
-//            
-//            return nil
-//        })
-//    }
-    
+    func refreshOpenIdToken()
+    {
+        credentialsProvider.invalidateCachedTemporaryCredentials()
+        
+        openIdToken = nil
+        
+        fetchOpenIdToken({ (success, error, response) -> Void in
+        
+            if success
+            {
+                if let newToken = response as? String
+                {
+                    self.openIdToken = newToken
+                    
+                    // Set new timer to refresh the next hour
+                    self.refreshOpenIdTokenAfterOneHour()
+                }
+                else
+                {
+                    log.error("Token Refresh Error. Will Attempt Refresh")
+                    
+                    self.performSelector(#selector(self.refreshOpenIdToken), withObject: nil, afterDelay: 30)
+                }
+            }
+        })
+    }
+
     func configureUserPool()
     {
         // AWS User Pools
