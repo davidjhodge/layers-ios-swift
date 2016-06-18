@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class FacebookUserResponse: Mappable
+class FacebookUserResponse: NSObject, Mappable
 {
     var userID: String?
     

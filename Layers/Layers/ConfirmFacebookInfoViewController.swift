@@ -19,7 +19,7 @@ enum GenderOption: NSInteger
     case Male = 0, Female, OtherSpecific, NotKnown, NotSpecific, Count
 }
 
-class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
+class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate
 {
     @IBOutlet weak var tableView: UITableView!
     
@@ -32,6 +32,8 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
     @IBOutlet weak var pickerView: UIPickerView!
     
     @IBOutlet var pickerAccessoryView: PickerAccessoryView!
+    
+    @IBOutlet weak var pickerViewHeightConstraint: NSLayoutConstraint!
     
     var facebookResponse: FacebookUserResponse?
     
@@ -57,8 +59,12 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
     }
     
     func configureGenderPicker()
-    {
+    {        
         pickerView.backgroundColor = Color.BackgroundGrayColor
+        
+        pickerView.dataSource = self
+        
+        pickerView.delegate = self
         
         if let genderAgeCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.GenderAge.rawValue, inSection: 0)) as? TwoTextFieldCell
         {
@@ -66,7 +72,7 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
             {
                 genderTextField.inputView = pickerView
                 
-                genderTextField.inputAccessoryView = pickerAccessoryView
+                genderTextField.inputAccessoryView = nil
             }
         }
     }
@@ -80,6 +86,8 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
     func completeFirstLaunchExperience()
     {
         LRSessionManager.sharedManager.completeFirstLaunch()
+        
+        view.endEditing(true)
         
         if isModal
         {
@@ -111,6 +119,8 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
             {
                 let cell = tableView.dequeueReusableCellWithIdentifier("TwoTextFieldCell") as! TwoTextFieldCell
                 
+                cell.separatorView.backgroundColor = tableView.separatorColor
+
                 cell.selectionStyle = .None
                 
                 // First Name
@@ -141,6 +151,8 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
             {
                 let cell = tableView.dequeueReusableCellWithIdentifier("TwoTextFieldCell") as! TwoTextFieldCell
                 
+                cell.separatorView.backgroundColor = tableView.separatorColor
+                
                 cell.selectionStyle = .None
 
                 // Gender
@@ -150,13 +162,11 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
                 if let picker = pickerView
                 {
                     cell.firstTextField.inputView = picker
+                    
+                    cell.firstTextField.tintColor = Color.clearColor()
+                    
+                    cell.firstTextField.inputAccessoryView = nil
                 }
-                
-                if let pickerToolbar = pickerAccessoryView
-                {
-                    cell.firstTextField.inputAccessoryView = pickerToolbar
-                }
-                
                 
                 cell.firstTextField.autocapitalizationType = .Words
                 
@@ -213,9 +223,9 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        
-        return 0
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
+    {
+        return GenderOption.Count.rawValue
     }
     
     func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
@@ -282,43 +292,67 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         return 48.0
     }
     
-//    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-//        
-//        if pickerView.tag == Picker.Style.rawValue
-//        {
-//            if let product = self.product
-//            {
-//                if let variant = product.variants?[row]
-//                {
-//                    if let variantName = variant.styleName
-//                    {
-//                        return variantName.capitalizedString
-//                    }
-//                }
-//            }
-//        }
-//        else if pickerView.tag == Picker.Size.rawValue
-//        {
-//            if let currentVariant = selectedVariant
-//            {
-//                if let size = currentVariant.sizes?[row]
-//                {
-//                    if let sizeName = size.sizeTitle
-//                    {
-//                        return sizeName
-//                    }
-//                }
-//            }
-//        }
-//        
-//        return ""
-//    }
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        if let gender = GenderOption(rawValue: row)
+        {
+            switch gender
+            {
+            case .Male:
+                return "Male"
+                
+            case .Female:
+                return "Female"
+                
+            case .OtherSpecific:
+                return "Other Specific"
+                
+            case .NotKnown:
+                return "Not Known"
+                
+            case .NotSpecific:
+                return "Not Specific"
+                
+            default:
+                break
+            }
+        }
+        
+        return ""
+    }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         if let gender = GenderOption(rawValue: row)
         {
             selectedGender = gender
+            
+            if let genderAgeCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.GenderAge.rawValue, inSection: 0)) as? TwoTextFieldCell
+            {
+                if let genderTextField = genderAgeCell.firstTextField
+                {
+                    switch gender
+                    {
+                    case .Male:
+                        genderTextField.text = "Male"
+                        
+                    case .Female:
+                        genderTextField.text = "Female"
+                        
+                    case .OtherSpecific:
+                        genderTextField.text = "Other Specific"
+                        
+                    case .NotKnown:
+                        genderTextField.text = "Not Known"
+                        
+                    case .NotSpecific:
+                        genderTextField.text = "Not Specific"
+                        
+                    default:
+                        break
+                    }
+                }
+            }
         }
     }
     

@@ -58,7 +58,7 @@
                                     <constraint firstAttribute="height" constant="64" id="oda-0o-YHx"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ftk-AZ-MfL">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ftk-AZ-MfL">
                                 <rect key="frame" x="196" y="506" width="208" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="208" id="Ajw-1y-exg"/>
@@ -78,10 +78,10 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8p6-DK-9IA" userLabel="Container">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8p6-DK-9IA" userLabel="Container">
                                 <rect key="frame" x="0.0" y="242" width="600" height="140"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Finding clothes you like just got easier." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HUu-Md-VCL">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finding clothes you like just got easier." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HUu-Md-VCL">
                                         <rect key="frame" x="72" y="46" width="456" height="21"/>
                                         <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -95,7 +95,7 @@
                                     <constraint firstAttribute="trailing" secondItem="HUu-Md-VCL" secondAttribute="trailing" constant="72" id="wuv-Dc-XxU"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDY-WP-stc">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDY-WP-stc">
                                 <rect key="frame" x="24" y="446" width="552" height="48"/>
                                 <color key="backgroundColor" red="0.29803921568627451" green="0.52156862745098043" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -106,7 +106,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jrn-x4-R1f">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jrn-x4-R1f">
                                 <rect key="frame" x="24" y="382" width="552" height="48"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -330,32 +330,44 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Placeholder" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TNV-Kw-5d3">
-                                                    <rect key="frame" x="24" y="4" width="272" height="40"/>
+                                                    <rect key="frame" x="24" y="4" width="268" height="40"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                                 </textField>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Placeholder" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sHd-PC-mah">
-                                                    <rect key="frame" x="304" y="4" width="272" height="40"/>
+                                                    <rect key="frame" x="309" y="4" width="267" height="40"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                                 </textField>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EkR-Qs-77d">
+                                                    <rect key="frame" x="292" y="8" width="1" height="32"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="1" id="ndL-Ch-gjX"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="EkR-Qs-77d" firstAttribute="top" secondItem="7ZG-v9-LAz" secondAttribute="top" constant="8" id="8Ej-bH-J6z"/>
                                                 <constraint firstItem="TNV-Kw-5d3" firstAttribute="leading" secondItem="7ZG-v9-LAz" secondAttribute="leading" constant="24" id="FwX-mw-snu"/>
                                                 <constraint firstAttribute="bottom" secondItem="sHd-PC-mah" secondAttribute="bottom" constant="3.5" id="Jlw-SP-VIV"/>
                                                 <constraint firstItem="TNV-Kw-5d3" firstAttribute="top" secondItem="7ZG-v9-LAz" secondAttribute="top" constant="4" id="LtY-3Q-hLr"/>
+                                                <constraint firstAttribute="bottom" secondItem="EkR-Qs-77d" secondAttribute="bottom" constant="8" id="PU4-mN-220"/>
                                                 <constraint firstAttribute="bottom" secondItem="TNV-Kw-5d3" secondAttribute="bottom" constant="4" id="W7u-Gv-1S4"/>
-                                                <constraint firstItem="sHd-PC-mah" firstAttribute="leading" secondItem="TNV-Kw-5d3" secondAttribute="trailing" constant="8" id="kFG-J4-Q2a"/>
                                                 <constraint firstAttribute="trailing" secondItem="sHd-PC-mah" secondAttribute="trailing" constant="8" id="tTT-Yc-Tr2"/>
+                                                <constraint firstItem="EkR-Qs-77d" firstAttribute="leading" secondItem="TNV-Kw-5d3" secondAttribute="trailing" id="ufN-ct-add"/>
                                                 <constraint firstItem="sHd-PC-mah" firstAttribute="width" secondItem="TNV-Kw-5d3" secondAttribute="width" id="wYx-fQ-lLA"/>
+                                                <constraint firstItem="sHd-PC-mah" firstAttribute="leading" secondItem="EkR-Qs-77d" secondAttribute="trailing" constant="16" id="wdE-OA-hAw"/>
                                                 <constraint firstItem="sHd-PC-mah" firstAttribute="top" secondItem="7ZG-v9-LAz" secondAttribute="top" constant="4" id="xaM-ud-cuF"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="firstTextField" destination="TNV-Kw-5d3" id="0ue-kx-hoV"/>
                                             <outlet property="secondTextField" destination="sHd-PC-mah" id="YcR-cd-wH2"/>
+                                            <outlet property="separatorView" destination="EkR-Qs-77d" id="Jsh-sQ-q8X"/>
+                                            <outlet property="separatorViewWidthConstraint" destination="ndL-Ch-gjX" id="NzQ-25-PnI"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
