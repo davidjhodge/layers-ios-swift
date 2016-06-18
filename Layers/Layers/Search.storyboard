@@ -6,10 +6,8 @@
     <customFonts key="customFonts">
         <mutableArray key="Oxygen-Bold.ttf">
             <string>Oxygen-Bold</string>
-            <string>Oxygen-Bold</string>
         </mutableArray>
         <mutableArray key="Oxygen-Regular.ttf">
-            <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
         </mutableArray>
     </customFonts>
@@ -28,7 +26,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="abR-fo-ruL">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UITableViewCell" textLabel="2tC-zD-Oeh" style="IBUITableViewCellStyleDefault" id="j1d-kl-5uh">
                                         <rect key="frame" x="0.0" y="49.5" width="600" height="44"/>
@@ -43,7 +41,7 @@
                                                     <attributedString key="attributedText">
                                                         <fragment content="Title">
                                                             <attributes>
-                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <font key="NSFont" size="16" name="Oxygen-Regular"/>
                                                             </attributes>
                                                         </fragment>
@@ -60,100 +58,6 @@
                                     <outlet property="delegate" destination="1gX-Ib-B4I" id="WVZ-2x-TX3"/>
                                 </connections>
                             </tableView>
-                            <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="trU-lc-ZDv">
-                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
-                                <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="BHQ-7p-szI">
-                                    <size key="itemSize" width="50" height="50"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="8" minY="8" maxX="8" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ProductCell" id="bTd-bN-Axa" customClass="ProductCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="8" width="148" height="226"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="148" height="226"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue-polo" translatesAutoresizingMaskIntoConstraints="NO" id="p0H-ez-M1L">
-                                                    <rect key="frame" x="16" y="16" width="116" height="132"/>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BRAND" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TqV-yW-mX7">
-                                                    <rect key="frame" x="4" y="164" width="140" height="20"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="20" id="w4j-Eb-aJ9"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="14"/>
-                                                    <color key="textColor" red="0.15686274510000001" green="0.1764705882" blue="0.17254901959999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dYK-9n-u2I">
-                                                    <rect key="frame" x="4" y="196" width="140" height="14"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="14" id="AwT-IO-gZS"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="14"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="dYK-9n-u2I" firstAttribute="top" secondItem="TqV-yW-mX7" secondAttribute="bottom" constant="12" id="1om-Wn-HHP"/>
-                                            <constraint firstItem="dYK-9n-u2I" firstAttribute="leading" secondItem="bTd-bN-Axa" secondAttribute="leading" constant="4" id="6SH-wU-gDo"/>
-                                            <constraint firstAttribute="trailing" secondItem="dYK-9n-u2I" secondAttribute="trailing" constant="4" id="8h0-fE-tBW"/>
-                                            <constraint firstItem="p0H-ez-M1L" firstAttribute="top" secondItem="bTd-bN-Axa" secondAttribute="top" constant="16" id="BH3-yr-fPc"/>
-                                            <constraint firstAttribute="trailing" secondItem="TqV-yW-mX7" secondAttribute="trailing" constant="4" id="H5r-qx-9li"/>
-                                            <constraint firstAttribute="bottom" secondItem="dYK-9n-u2I" secondAttribute="bottom" constant="16" id="IC3-Yi-Ceh"/>
-                                            <constraint firstItem="TqV-yW-mX7" firstAttribute="top" secondItem="p0H-ez-M1L" secondAttribute="bottom" constant="16" id="Kji-3M-yfW"/>
-                                            <constraint firstItem="TqV-yW-mX7" firstAttribute="leading" secondItem="bTd-bN-Axa" secondAttribute="leading" constant="4" id="Xdc-Vw-VZJ"/>
-                                            <constraint firstAttribute="trailing" secondItem="p0H-ez-M1L" secondAttribute="trailing" constant="16" id="dFz-3i-grq"/>
-                                            <constraint firstItem="p0H-ez-M1L" firstAttribute="leading" secondItem="bTd-bN-Axa" secondAttribute="leading" constant="16" id="jwF-ON-Ody"/>
-                                        </constraints>
-                                        <size key="customSize" width="148" height="226"/>
-                                        <connections>
-                                            <outlet property="brandLabel" destination="TqV-yW-mX7" id="yjv-PY-9Fy"/>
-                                            <outlet property="priceLabel" destination="dYK-9n-u2I" id="JLv-JE-IOm"/>
-                                            <outlet property="productImageView" destination="p0H-ez-M1L" id="Ibv-J2-eqq"/>
-                                        </connections>
-                                    </collectionViewCell>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LoadingCell" id="aAq-dW-iSc" customClass="LoadingCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="164" y="101" width="270" height="40"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="270" height="40"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="3Al-el-jUn">
-                                                    <rect key="frame" x="125" y="10" width="20" height="20"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="20" id="kjh-1S-7TI"/>
-                                                        <constraint firstAttribute="width" constant="20" id="onU-5n-TAs"/>
-                                                    </constraints>
-                                                </activityIndicatorView>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="3Al-el-jUn" firstAttribute="centerY" secondItem="aAq-dW-iSc" secondAttribute="centerY" id="Ap7-3A-if0"/>
-                                            <constraint firstItem="3Al-el-jUn" firstAttribute="centerX" secondItem="aAq-dW-iSc" secondAttribute="centerX" id="vMN-vg-n45"/>
-                                        </constraints>
-                                        <size key="customSize" width="270" height="40"/>
-                                        <connections>
-                                            <outlet property="spinner" destination="3Al-el-jUn" id="M66-Uy-ZG4"/>
-                                        </connections>
-                                    </collectionViewCell>
-                                </cells>
-                                <connections>
-                                    <outlet property="dataSource" destination="1gX-Ib-B4I" id="9ly-OS-hfO"/>
-                                    <outlet property="delegate" destination="1gX-Ib-B4I" id="LG2-eq-z0W"/>
-                                </connections>
-                            </collectionView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nav-bar" translatesAutoresizingMaskIntoConstraints="NO" id="1Zy-3S-7sS">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
                                 <constraints>
@@ -170,18 +74,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Bb6-LI-FPs" firstAttribute="top" secondItem="abR-fo-ruL" secondAttribute="bottom" id="6JP-iw-cS4"/>
-                            <constraint firstItem="trU-lc-ZDv" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" id="8Bc-nR-dRi"/>
                             <constraint firstItem="Ltp-wb-zet" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" id="B4W-bV-Kxx"/>
-                            <constraint firstAttribute="trailing" secondItem="trU-lc-ZDv" secondAttribute="trailing" id="B9S-lq-Qtc"/>
                             <constraint firstAttribute="trailing" secondItem="Ltp-wb-zet" secondAttribute="trailing" id="FcF-CQ-Y8F"/>
-                            <constraint firstItem="Bb6-LI-FPs" firstAttribute="top" secondItem="trU-lc-ZDv" secondAttribute="bottom" id="UcM-wO-hU8"/>
                             <constraint firstItem="abR-fo-ruL" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" id="VbI-yh-q3D"/>
                             <constraint firstItem="1Zy-3S-7sS" firstAttribute="top" secondItem="q4E-5p-nPV" secondAttribute="top" id="XFs-HF-GW7"/>
                             <constraint firstAttribute="trailing" secondItem="abR-fo-ruL" secondAttribute="trailing" id="g5u-4c-oYF"/>
                             <constraint firstItem="1Zy-3S-7sS" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" id="hK1-6S-oAR"/>
-                            <constraint firstItem="trU-lc-ZDv" firstAttribute="top" secondItem="1Zy-3S-7sS" secondAttribute="bottom" id="iWB-gJ-Nr9"/>
                             <constraint firstItem="Ltp-wb-zet" firstAttribute="top" secondItem="BNj-qo-r3S" secondAttribute="bottom" id="sGA-Sz-6Eg"/>
-                            <constraint firstItem="trU-lc-ZDv" firstAttribute="top" secondItem="Ltp-wb-zet" secondAttribute="bottom" id="xeW-Fd-m75"/>
                             <constraint firstAttribute="trailing" secondItem="1Zy-3S-7sS" secondAttribute="trailing" id="xu4-2M-6bV"/>
                             <constraint firstItem="abR-fo-ruL" firstAttribute="top" secondItem="1Zy-3S-7sS" secondAttribute="bottom" id="y7f-0B-lVH"/>
                         </constraints>

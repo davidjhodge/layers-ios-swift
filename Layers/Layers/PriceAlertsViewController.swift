@@ -62,6 +62,8 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         refreshControl.addTarget(self, action: #selector(refresh), forControlEvents: .ValueChanged)
         tableView.addSubview(refreshControl)
         
+        refreshControl.hidden = true
+        
         startDiscoveringButton.addTarget(self, action: #selector(startDiscovering), forControlEvents: .TouchUpInside)
         
         // Reload table when new sale alert is created in another View Controller
@@ -83,6 +85,8 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         // Show center spinner on first load
         if saleAlerts == nil && watchAlerts == nil
         {
+            refreshControl.hidden = true
+
             spinner.hidden = false
             spinner.startAnimating()
         }
@@ -102,6 +106,11 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
                 self.spinner.stopAnimating()
+                
+                if self.refreshControl.hidden == true
+                {
+                    self.refreshControl.hidden = false
+                }
                 
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 

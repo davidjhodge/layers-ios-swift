@@ -39,8 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Deep Linking
         registerRoutes()
         
-        // Determine intial view controller based on FirstLaunchExperience
-        
+        // Determine intial view controller based on FirstLaunchExperience        
         if LRSessionManager.sharedManager.hasCompletedFirstLaunch() == true
         {
             AppStateTransitioner.transitionToMainStoryboard(false)

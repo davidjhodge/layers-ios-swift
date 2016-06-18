@@ -10,7 +10,6 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 import ObjectMapper
-import KeychainAccess
 import MBProgressHUD
 
 import FBSDKLoginKit
@@ -39,9 +38,8 @@ class LRSessionManager: NSObject
     // Background queue to handle API responses
     private let backgroundQueue: dispatch_queue_t = dispatch_queue_create("Session Background", DISPATCH_QUEUE_CONCURRENT)
     
-    // Access the Keychain
-    private let keychain: Keychain = Keychain(service: NSBundle.mainBundle().bundleIdentifier!)
-        
+    var isShowingAlert = false
+    
     // MARK: Initialization
     override init ()
     {
@@ -57,6 +55,12 @@ class LRSessionManager: NSObject
         
         networkManager = Alamofire.Manager(configuration: configuration)
         
+        // Clear existing persisted credentials
+        if !hasCompletedFirstLaunch()
+        {
+            logout()
+        }
+        
         resumeSession()
     }
     
@@ -65,34 +69,30 @@ class LRSessionManager: NSObject
     func resumeSession()
     {
         // Retrieves cognito identity locally if one is cached, and from the AWS Cognito Remote service if none exists
-        AWSManager.defaultManager.fetchIdentityId({ (success, error, response) -> Void in
-          
-            if success
-            {
-                log.debug("Successfully retrieved identity token from AWS.")
-            }
-            else
-            {
-                if let errorMessage = error
+        
+            AWSManager.defaultManager.fetchIdentityId({ (success, error, response) -> Void in
+                
+                if success
                 {
-                    log.debug(errorMessage)
-                    
-                    // If identityId does not exist, clear all existing credentials to avoid an incomplete state
-                    self.logout()
-
+                    log.debug("Successfully retrieved identity token from AWS.")
                 }
-            }
+                else
+                {
+                    if let errorMessage = error
+                    {
+                        log.debug(errorMessage)
+                        
+                        // If identityId does not exist, clear all existing credentials to avoid an incomplete state
+                        self.logout()
+                        
+                    }
+                }
         })
     }
     
     func isAuthenticated() -> Bool
     {
-        if FBSDKAccessToken.currentAccessToken() != nil || keychain[kUserPoolLoginProvider] != nil
-        {
-            return true
-        }
-        
-        return false
+        return AWSManager.defaultManager.isAuthenticated()
     }
 
     func logout()
@@ -102,15 +102,16 @@ class LRSessionManager: NSObject
         {
             FBSDKLoginManager().logOut()
         }
-        
-        keychain[kUserPoolLoginProvider] = nil
-        
+                
         AWSManager.defaultManager.clearAWSCache()
     }
     
     func completeFirstLaunch()
     {
         registerIdentity(nil)
+        
+        AWSManager.defaultManager.syncLoginCredentials({ (success, error, response) -> Void in
+        })
         
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "kUserDidCompleteFirstLaunch")
         NSUserDefaults.standardUserDefaults().synchronize()
@@ -120,7 +121,6 @@ class LRSessionManager: NSObject
     {
         return NSUserDefaults.standardUserDefaults().boolForKey(kUserDidCompleteFirstLaunch)
     }
-    
     
 //    /**
 //     Restores the current session credentials from keychain.
@@ -233,10 +233,15 @@ class LRSessionManager: NSObject
         let errorString = "We're having trouble on our end. Try refreshing the session."
         
         let alert = UIAlertController(title: errorString, message: nil, preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) -> Void in
+            
+                LRSessionManager.sharedManager.isShowingAlert = false
+        }))
         
         alert.addAction(UIAlertAction(title: "Refresh", style: .Default, handler: { (action) -> Void in
             
+            LRSessionManager.sharedManager.isShowingAlert = false
+
             LRSessionManager.sharedManager.registerIdentity({ (success, error, response) -> Void in
                 
                 if success
@@ -260,10 +265,13 @@ class LRSessionManager: NSObject
         
         }))
         
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
-        })
+        if !LRSessionManager.sharedManager.isShowingAlert
+        {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                alert.show()
+            })
+        }
     }
 
     func register(email: String, password: String, completionHandler: LRCompletionBlock?)
@@ -285,11 +293,6 @@ class LRSessionManager: NSObject
             if let completion = completionHandler
             {
                 // Pass completion block returned from AWS Service
-                if let token = response as? String
-                {
-                    self.keychain[kUserPoolLoginProvider] = token
-                }
-                
                 completion(success: success, error: error, response: response)
             }
         })
@@ -300,8 +303,8 @@ class LRSessionManager: NSObject
         // The currentAccessToken() should be retrieved from Facebook in the View Controller that the login dialogue is shown from.
         if (FBSDKAccessToken.currentAccessToken() != nil)
         {
-            // Add this login to an existing cognito identity
-            AWSManager.defaultManager.syncLoginCredentials([AWSIdentityProviderFacebook: FBSDKAccessToken.currentAccessToken().tokenString])
+            // Add this login to an existing cognito identity            
+            AWSManager.defaultManager.registerFacebookToken()
             
             // Get user information with Facebook Graph API
             let request = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, age_range, link, gender, locale, picture, timezone, updated_time, verified, friends, email"], HTTPMethod: "GET")
@@ -343,7 +346,7 @@ class LRSessionManager: NSObject
     
     func registerForRemoteNotificationsIfNeeded()
     {
-        if !userHasEnabledNotifications()
+        if !LRSessionManager.sharedManager.userHasEnabledNotifications()
         {
             // Prompt user to register for notifications
             let readAction: UIMutableUserNotificationAction = UIMutableUserNotificationAction()
@@ -736,9 +739,7 @@ class LRSessionManager: NSObject
             if success
             {
                 if let jsonResponse = response
-                {
-                    print(jsonResponse)
-                    
+                {                    
                     let saleAlertResponse = Mapper<SaleAlertResponse>().map(jsonResponse.dictionaryObject)
                     
                     if let completion = completionHandler
@@ -983,6 +984,18 @@ class LRSessionManager: NSObject
                                     // Identity Unauthorized
                                     self.handleInvalidIdentity()
                                     
+                                    if let completionHandler = completion
+                                    {
+                                        var errorMessage: String?
+                                        
+                                        if let errorString = errors["invalid_token"] as? String
+                                        {
+                                            errorMessage = "invalid_token: \(errorString)"
+                                        }
+                                        
+                                        completionHandler(success: false, error: errorMessage, response: nil)
+                                    }
+                                    
                                     return
                                 }
                                 
@@ -991,7 +1004,30 @@ class LRSessionManager: NSObject
                                     // Identity Unauthorized
                                     self.handleInvalidIdentity()
                                     
+                                    if let completionHandler = completion
+                                    {
+                                        var errorMessage: String?
+                                        
+                                        if let errorString = errors["user_not_registered"] as? String
+                                        {
+                                            errorMessage = "user_not_registered: \(errorString)"
+                                        }
+                                        
+                                        completionHandler(success: false, error: errorMessage, response: nil)
+                                    }
+                                    
                                     return
+                                }
+                                
+                                if let authError = errors["Authentication Required"] as? String
+                                {
+                                    log.error("Authentication Required: \(authError)")
+                                    
+                                    if (FBSDKAccessToken.currentAccessToken() != nil)
+                                    {
+                                        // Add this login to an existing cognito identity
+                                        AWSManager.defaultManager.registerFacebookToken()
+                                    }
                                 }
                             }
                         }
