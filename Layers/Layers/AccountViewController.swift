@@ -403,7 +403,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                     case .OpenSource:
                         
                         //Show Open Source
-                        performSegueWithIdentifier("ShowSimpleWebViewController", sender: indexPath)
+                        performSegueWithIdentifier("ShowOpenSourceViewController", sender: indexPath)
                     }
                 }
                 
