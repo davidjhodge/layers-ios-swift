@@ -78,8 +78,15 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
 
                         // Show Confirmation Screen
                         let loginStoryboard = UIStoryboard(name: "Login", bundle: NSBundle.mainBundle())
-                        let confirmFacebookVc = loginStoryboard.instantiateViewControllerWithIdentifier("ConfirmFacebookInfoViewController")
-                        self.navigationController?.pushViewController(confirmFacebookVc, animated: true)
+                        if let confirmFacebookVc = loginStoryboard.instantiateViewControllerWithIdentifier("ConfirmFacebookInfoViewController") as? ConfirmFacebookInfoViewController
+                        {
+                            if let facebookResponse = result as? FacebookUserResponse
+                            {
+                                confirmFacebookVc.facebookResponse = facebookResponse
+                            }
+                            
+                            self.navigationController?.pushViewController(confirmFacebookVc, animated: true)
+                        }
                     }
                     else
                     {

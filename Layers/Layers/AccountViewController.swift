@@ -120,6 +120,10 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                         {
                             if let facebookResponse = result as? FacebookUserResponse
                             {
+                                confirmFacebookVc.isModal = true
+                                
+                                confirmFacebookVc.delegate = self
+                                
                                 confirmFacebookVc.facebookResponse = facebookResponse
                             }
                             
@@ -235,7 +239,10 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 // Not animated
                 self.tableViewTopConstraint.constant = 0
                 
-                self.ctaView.removeFromSuperview()
+                if self.ctaView != nil
+                {
+                    self.ctaView.removeFromSuperview()
+                }
             }
             
             return
@@ -259,9 +266,9 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
 
-        self.hideCTAIfNeeded(true)
+            self.hideCTAIfNeeded(false)
         
-        self.tableView.reloadData()
+            self.tableView.reloadData()
             
         })
     }

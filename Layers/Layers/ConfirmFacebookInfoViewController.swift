@@ -35,6 +35,8 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
     
     @IBOutlet weak var pickerViewHeightConstraint: NSLayoutConstraint!
     
+    var delegate: AuthenticationDelegate?
+    
     var facebookResponse: FacebookUserResponse?
     
     var selectedGender: GenderOption?
@@ -93,6 +95,11 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         {
             // Logged in on Account Page
             dismissViewControllerAnimated(true, completion: nil)
+        
+            if let authDelegate = delegate
+            {
+                authDelegate.authenticationDidSucceed()
+            }
         }
         else
         {

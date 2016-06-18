@@ -13,6 +13,9 @@ import AWSCore
 import AWSCognito
 import AWSSNS
 
+import FBSDKLoginKit
+import KeychainAccess
+
 import SwiftyJSON
 
 private let kAWSCognitoAppClientId = "22lne1f5vp57ls55bkmifp06ir"
@@ -22,10 +25,15 @@ private let kAWSCognitoUserPoolId = "us-east-1_JrNu7NtLS"
 private let kAWSCognitoUserPoolKey = "kUserPool"
 private let kAWSSNSApplicationARN = "arn:aws:sns:us-east-1:843366835636:app/APNS_SANDBOX/Layers_Development"
 
+private let kAWSCognitoUserPoolProvider = "cognito-idp.us-east-1.amazonaws.com/\(kAWSCognitoUserPoolId)"
+
 class AWSManager: NSObject, AWSIdentityProviderManager
 {
     // Static variable to allow single access to the service.
     static let defaultManager = AWSManager()
+    
+    // Access the Keychain
+    private let keychain: Keychain = Keychain(service: NSBundle.mainBundle().bundleIdentifier!)
     
     var credentialsProvider: AWSCognitoCredentialsProvider!
     
@@ -57,11 +65,53 @@ class AWSManager: NSObject, AWSIdentityProviderManager
         self.configureUserPool()
     }
     
-    func fetchOpenIdToken(completionHandler: LRCompletionBlock?)
+    func configureUserPool()
+    {
+        // AWS User Pools
+        let userPoolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: kAWSCognitoAppClientId, clientSecret: kAWSCognitoAppClientSecret, poolId: kAWSCognitoUserPoolId)
+        AWSCognitoIdentityUserPool.registerCognitoIdentityUserPoolWithUserPoolConfiguration(userPoolConfiguration, forKey:kAWSCognitoUserPoolKey)
+        userPool = AWSCognitoIdentityUserPool(forKey: kAWSCognitoUserPoolKey)
+    }
+    
+    func loginMap() -> [String:String]?
+    {
+        var dict = Dictionary<String,String>()
+        
+        if FBSDKAccessToken.currentAccessToken() != nil
+        {
+            dict[AWSIdentityProviderFacebook] = FBSDKAccessToken.currentAccessToken().tokenString
+        }
+        
+        if let userPoolId = keychain[kAWSCognitoUserPoolProvider]
+        {
+            dict[kAWSCognitoUserPoolProvider] = userPoolId
+        }
+        
+        if dict.keys.count == 0
+        {
+            return nil
+        }
+        
+        return dict
+    }
+    
+    func isAuthenticated() -> Bool
+    {
+        if FBSDKAccessToken.currentAccessToken() != nil || keychain[kAWSCognitoUserPoolProvider] != nil
+        {
+            return true
+        }
+        
+        return false
+    }
+    
+    
+    // MARK: Token Management
+    func fetchOpenIdToken(completion: LRCompletionBlock?)
     {
         if let openIdToken: String = openIdToken
         {
-            if let completion = completionHandler
+            if let completion = completion
             {
                 completion(success: true, error: nil, response: openIdToken)
                 
@@ -79,6 +129,8 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                     
                     request.identityId = identityId
                     
+                    request.logins = self.loginMap()
+                    
                     AWSCognitoIdentity.defaultCognitoIdentity().getOpenIdToken(request, completionHandler: { (response, error) -> Void in
                         
                         if error != nil
@@ -90,12 +142,20 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                             // Success
                             if let tokenResponse: AWSCognitoIdentityGetOpenIdTokenResponse = response
                             {
-                                if let openIdToken = tokenResponse.token
+                                if let openIdToken = tokenResponse.token,
+                                    let newIdentityId = tokenResponse.identityId
                                 {
-                                    if let completion = completionHandler
+                                    if let completion = completion
                                     {
                                         completion(success: true, error: nil, response: openIdToken)
                                         
+                                        // Reset identity id
+                                        if self.credentialsProvider.identityProvider.identityId != nil
+                                        {
+                                            self.credentialsProvider.identityProvider.identityId = newIdentityId
+                                        }
+                                        
+                                        // Store OpenIdToken Locally
                                         self.openIdToken = openIdToken
                                         
                                         // Refresh Token after 1 hour
@@ -142,20 +202,12 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                 }
                 else
                 {
-                    log.error("Token Refresh Error. Will Attempt Refresh")
+                    log.error("Token Refresh Error. Will Attempt Refresh.")
                     
                     self.performSelector(#selector(self.refreshOpenIdToken), withObject: nil, afterDelay: 30)
                 }
             }
         })
-    }
-
-    func configureUserPool()
-    {
-        // AWS User Pools
-        let userPoolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: kAWSCognitoAppClientId, clientSecret: kAWSCognitoAppClientSecret, poolId: kAWSCognitoUserPoolId)
-        AWSCognitoIdentityUserPool.registerCognitoIdentityUserPoolWithUserPoolConfiguration(userPoolConfiguration, forKey:kAWSCognitoUserPoolKey)
-        userPool = AWSCognitoIdentityUserPool(forKey: kAWSCognitoUserPoolKey)
     }
     
     // MARK: AWSIdentityProviderManager Protocol
@@ -348,9 +400,11 @@ class AWSManager: NSObject, AWSIdentityProviderManager
             {
                 if let tokenString = response as? String
                 {
-                    self.syncLoginCredentials(["cognito-idp.us-east-1.amazonaws.com/\(kAWSCognitoUserPoolId)":tokenString])
+                    self.keychain[kAWSCognitoUserPoolProvider] = tokenString
+                    
+                    self.syncLoginCredentials(nil)
                 }
-                
+
                 completion(success: success, error: error, response: response)
             }
             
@@ -384,12 +438,14 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                     {
                         if let session = task.result as? AWSCognitoIdentityUserSession
                         {
-                            let accessToken = session.accessToken?.tokenString
+//                            let accessToken = session.accessToken?.tokenString
 //                            let idToken = session.idToken?.tokenString
 //                            let refreshToken = session.refreshToken?.tokenString
                             
                             if let token = session.idToken?.tokenString
                             {
+                                self.keychain[kAWSCognitoUserPoolProvider] = token
+                                
                                 completion(success: true, error: nil, response: token)
                             }
                             else
@@ -409,32 +465,79 @@ class AWSManager: NSObject, AWSIdentityProviderManager
         }
     }
     
-    func syncLoginCredentials(logins: [String: String]?)
+    // Facebook Registration
+    func registerFacebookToken()
     {
-        socialLoginDict = logins
+        if let facebookToken = FBSDKAccessToken.currentAccessToken().tokenString
+        {
+            keychain[AWSIdentityProviderFacebook] = facebookToken
+            
+            syncLoginCredentials(nil)
+        }
+    }
+    
+    func syncLoginCredentials(completionHandler: LRCompletionBlock?)
+    {
+        socialLoginDict = loginMap()
         
-        credentialsProvider.identityProvider.logins().continueWithBlock( { (task: AWSTask!) -> AnyObject! in
-            
-            if task.error != nil
+        if isAuthenticated()
+        {
+            credentialsProvider.identityProvider.logins().continueWithBlock( { (task: AWSTask!) -> AnyObject! in
+                
+                if task.error != nil
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, error: task.error?.localizedDescription, response: nil)
+                    }
+                    
+                    log.error(task.error?.localizedDescription)
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: true, error: nil, response: task.result)
+                    }
+                    
+                    log.debug("Logins Synced.")
+                }
+                
+                return AWSTask(result: task.result)
+            })
+        }
+        else
+        {
+            if let completion = completionHandler
             {
-                log.error(task.error?.localizedDescription)
+                completion(success: false, error:"Login Credentials cannot sync because user is not logged in.", response: nil)
             }
-            else
-            {
-                log.debug("Social Login successfully added.")
-            }
-            
-            return nil
-        })
+        }
     }
     
     func clearAWSCache()
     {
+        // Clear Keychain
+        keychain[kAWSCognitoUserPoolProvider] = nil
+        keychain[AWSIdentityProviderFacebook] = nil
+        
+        syncLoginCredentials(nil)
+        
         // Clear AWS Datasets
-//        AWSCognito.defaultCognito().wipe()
+        AWSCognito.defaultCognito().wipe()
         
         // Clear AWS Cognito Temporary Credentials
         credentialsProvider.invalidateCachedTemporaryCredentials()
+        
+//        syncLoginCredentials({ (success, error, response) -> Void in
+//            // When logins map has been cleared, clear al credentials
+//            
+//            // Clear AWS Datasets
+//            AWSCognito.defaultCognito().wipe()
+//            
+//            // Clear AWS Cognito Temporary Credentials
+//            self.credentialsProvider.clearKeychain()
+//        })
     }
     
     
@@ -446,7 +549,17 @@ class AWSManager: NSObject, AWSIdentityProviderManager
         {
             if let userInfo = notification.userInfo as? [String: AnyObject]
             {
-                print("AWSCognito Identity changed from: \(userInfo[AWSCognitoNotificationPreviousId]) to: \(userInfo[AWSCognitoNotificationNewId])")
+                if let newId = userInfo[AWSCognitoNotificationNewId] as? String
+                {
+                    print("AWSCognito Identity changed from: \(userInfo[AWSCognitoNotificationPreviousId]) to: \(newId)")
+                    
+                    if credentialsProvider.identityProvider.identityId != nil
+                    {
+                        credentialsProvider.identityProvider.identityId = newId
+                    }
+                    
+                    openIdToken = nil
+                }
             }
         }
     }
