@@ -33,13 +33,15 @@ class ProductResponse: Mappable
     
     var rating: Rating?
     
-    var isInStock: Bool?
+    var isInStock: Bool = true
     
     var retailer: RetailerResponse?
     
     var description: String?
     
     var features: Array<Feature>?
+    
+    var isWatching: Bool = false
     
     required init?(_ map: Map) {
         
@@ -60,6 +62,6 @@ class ProductResponse: Mappable
         retailer                 <-  map["retailer"]
         description              <-  map["description"]
         features                 <-  map["features.0.features.item"]
-
+        isWatching               <-  map["is_watching"]
     }
 }

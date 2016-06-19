@@ -59,6 +59,12 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         hideCTAIfNeeded(false)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.contentOffset = CGPointMake(0, 0)
+    }
+    
     func configureCTA()
     {
         let regularAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),
@@ -469,6 +475,11 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        
+        if TableSection(rawValue: section) == .AccountState
+        {
+            return 24.0
+        }
         
         return 1.0
     }

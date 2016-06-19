@@ -22,6 +22,8 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
     
     @IBOutlet weak var facebookButton: UIButton!
     
+    @IBOutlet weak var copyLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,6 +37,11 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
         getStartedButton.addTarget(self, action: #selector(startBrowsing), forControlEvents: .TouchUpInside)
 
         alreadyHasAccountButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
+        
+        if UIDevice.currentDevice().type == .iPhone4S
+        {
+            copyLabel.hidden = true
+        }
     }
     
     override func viewWillAppear(animated: Bool) {

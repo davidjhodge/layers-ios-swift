@@ -147,7 +147,12 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                             // Update UI
                             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                 
+                                let topOffset = self.collectionView.contentOffset.y
+                                
                                 //Insert new products
+                                CATransaction.begin()
+                                CATransaction.setDisableActions(true)
+                                
                                 self.collectionView.performBatchUpdates({ () -> Void in
                                     
                                     var indexPaths = Array<NSIndexPath>()
@@ -163,7 +168,12 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                                     
                                     self.collectionView.insertItemsAtIndexPaths(indexPaths)
                                     
-                                    }, completion: nil)
+                                    }, completion: { (finished) -> Void in
+                                 
+                                        // Set correct content offset
+                                        self.collectionView.contentOffset = CGPointMake(0, topOffset)
+                                        CATransaction.commit()
+                                })
                             })
                         }
                     }
@@ -278,7 +288,9 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 {
                     if let primaryUrl = firstImage.primaryUrl
                     {
-                        cell.productImageView.sd_setImageWithURL(primaryUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                        let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize112)
+                        
+                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
                             
                             if image != nil && cacheType != .Memory
                             {
@@ -335,7 +347,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         if let products = products
         {
             // Insert next page of items as we near the end of the current list
-            if indexPath.row == products.count - 6
+            if indexPath.row == products.count - 4
             {
                 // If last page returned a full list of products, it's highly likely the next page is not empty. This is not perfect, but will reduce unnecessary API calls
                 if products.count % productCollectionPageSize == 0

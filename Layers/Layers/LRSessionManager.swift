@@ -854,6 +854,51 @@ class LRSessionManager: NSObject
         }
     }
     
+    // MARK: Pricing History
+    func loadPricingHistory(productId: NSNumber, completionHandler: LRCompletionBlock?)
+    {
+        if productId.integerValue >= 0
+        {
+            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("prices/\(productId.stringValue)"))
+            
+            request.HTTPMethod = "GET"
+            
+            sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+                
+                if success
+                {
+                    if let jsonResponse = response
+                    {
+                        if let completion = completionHandler
+                        {
+                            // Returns nil
+                            completion(success: success, error: error, response: jsonResponse.dictionaryObject)
+                        }
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: success, error: error, response: nil)
+                    }
+                }
+            })
+        }
+        else
+        {
+            if let completion = completionHandler
+            {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    completion(success: false, error: "NO_PRODUCT_ID".localized, response: nil)
+                })
+            }
+            
+            return
+        }
+    }
+    
     // MARK: API Helpers
     func APIUrlAtEndpoint(endpointPath: String?) -> NSURL
     {
@@ -1029,6 +1074,11 @@ class LRSessionManager: NSObject
                                         AWSManager.defaultManager.registerFacebookToken()
                                     }
                                 }
+                                
+//                                if let _ = errors
+//                                {
+//                                    AWSManager.defaultManager.refreshOpenIdToken()
+//                                }
                             }
                         }
                         
