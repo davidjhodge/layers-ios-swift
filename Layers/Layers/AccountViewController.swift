@@ -270,6 +270,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: Create Account Delegate
     func authenticationDidSucceed()
     {
+        LRSessionManager.sharedManager.completeLogin()
+        
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
 
             self.hideCTAIfNeeded(false)

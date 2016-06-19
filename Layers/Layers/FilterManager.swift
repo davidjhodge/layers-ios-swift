@@ -112,7 +112,7 @@ class FilterManager
                     // First category
                     if categoryParams.characters.count == 0
                     {
-                        categoryParams = categoryParams.stringByAppendingString("category=\(categoryKey),")
+                        categoryParams = categoryParams.stringByAppendingString("category_id=\(categoryKey),")
                     }
                     // Any additional categories
                     else

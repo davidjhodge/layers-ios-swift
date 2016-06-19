@@ -19,6 +19,10 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     
     @IBOutlet weak var collectionViewBottomLayoutConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var emptyStateView: UIView!
+
+    @IBOutlet weak var editFilterButton: UIButton!
+    
     var filterType: FilterType?
     
     var selectedItem: AnyObject?
@@ -77,6 +81,8 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         
         let filterButton = UIBarButtonItem(image: UIImage(named: "filter"), style: .Plain, target: self, action: #selector(filter))
         
+        editFilterButton.addTarget(self, action: #selector(filter), forControlEvents: .TouchUpInside)
+        
         navigationItem.rightBarButtonItem = filterButton
 //        let searchButton = UIBarButtonItem(image: UIImage(named: "search"), style: .Plain, target: self, action: #selector(search))
 //        navigationItem.rightBarButtonItems = [filterButton, searchButton]
@@ -116,6 +122,9 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         // Get next page of results
         if let page = currentPage where page > 0
         {
+            emptyStateView.hidden = true
+            collectionView.hidden = false
+            
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
             
             if products == nil || products?.count == 0
@@ -158,9 +167,11 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                                     // New filter yielded 0 products. Show Alert
                                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                         
-                                        let alert = UIAlertController(title: "NO_RESULTS_FOR_FILTER".localized, message: nil, preferredStyle: .Alert)
-                                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                                        self.presentViewController(alert, animated: true, completion: nil)
+                                        self.emptyStateView.hidden = false
+                                        self.collectionView.hidden = true
+
+                                        log.debug("NO_RESULTS_FOR_FILTER".localized)
+
                                     })
                                 }
                             }
@@ -389,7 +400,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         if let products = products
         {
             // Insert next page of items as we near the end of the current list
-            if indexPath.row == products.count - 6
+            if indexPath.row == products.count - 4
             {
                 // If last page returned a full list of products, it's highly likely the next page is not empty. This is not perfect, but will reduce unnecessary API calls
                 if products.count % productCollectionPageSize == 0
