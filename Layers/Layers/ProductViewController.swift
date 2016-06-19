@@ -448,7 +448,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     {
                         if let primaryUrl = imageDict.primaryUrl
                         {   
-                            let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize112)
+                            let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize224)
                             
                             productImages.append(resizedPrimaryUrl)
                             
@@ -456,7 +456,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             {
                                 for alternateUrl in alternateUrls
                                 {
-                                    let resizedAlternateUrl = NSURL.imageAtUrl(alternateUrl, imageSize: ImageSize.kImageSize112)
+                                    let resizedAlternateUrl = NSURL.imageAtUrl(alternateUrl, imageSize: ImageSize.kImageSize224)
                                     
                                     productImages.append(resizedAlternateUrl)
                                 }
@@ -608,17 +608,26 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     cell.selectionStyle = .None
                     
+                    if product.isWatching
+                    {
+                        cell.createSaleAlertButton.setTitle("Watching".uppercaseString, forState: .Normal)
+                    }
+                    else
+                    {
+                        cell.createSaleAlertButton.setTitle("Create a Price Alert".uppercaseString, forState: .Normal)
+                    }
+                    
                     cell.createSaleAlertButton.addTarget(self, action: #selector(createSaleAlert), forControlEvents: .TouchUpInside)
                     
                     return cell
                     
                 default:
-                    return tableView.dequeueReusableCellWithIdentifier("UITableViewCell")!
+                    return UITableViewCell(style: .Default, reuseIdentifier: "UITableViewCell")
                 }
             }
         }
         
-        return tableView.dequeueReusableCellWithIdentifier("UITableViewCell")!
+        return UITableViewCell(style: .Default, reuseIdentifier: "UITableViewCell")
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -810,7 +819,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 return 0.01
                 
             case .PriceHistory:
-                return 4.0
+                return 8.0
 
             default:
                 return 8.0

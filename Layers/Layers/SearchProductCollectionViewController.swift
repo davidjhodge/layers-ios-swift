@@ -173,7 +173,12 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                             // Update UI
                             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                 
+                                let topOffset = self.collectionView.contentOffset.y
+                                
                                 //Insert new products
+                                CATransaction.begin()
+                                CATransaction.setDisableActions(true)
+                                
                                 self.collectionView.performBatchUpdates({ () -> Void in
                                     
                                     var indexPaths = Array<NSIndexPath>()
@@ -189,7 +194,12 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                                     
                                     self.collectionView.insertItemsAtIndexPaths(indexPaths)
                                     
-                                    }, completion: nil)
+                                    }, completion: { (finished) -> Void in
+                                        
+                                        // Set correct content offset
+                                        self.collectionView.contentOffset = CGPointMake(0, topOffset)
+                                        CATransaction.commit()
+                                })
                             })
                         }
                     }
@@ -320,7 +330,9 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 {
                     if let primaryUrl = firstImage.primaryUrl
                     {
-                        cell.productImageView.sd_setImageWithURL(primaryUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                        let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize224)
+
+                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
                             
                             if image != nil && cacheType != .Memory
                             {

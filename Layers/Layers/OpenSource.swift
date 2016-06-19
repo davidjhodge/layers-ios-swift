@@ -57,11 +57,6 @@ class OpenSource
                 libraries.append(OpenSourceLibrary(name: "Bolts", licenseDescription: content))
             }
             
-            if let content = dict["Charts"] as? String
-            {
-                libraries.append(OpenSourceLibrary(name: "Charts", licenseDescription: content))
-            }
-            
             if let content = dict["Cosmos"] as? String
             {
                 libraries.append(OpenSourceLibrary(name: "Cosmos", licenseDescription: content))

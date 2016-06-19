@@ -148,6 +148,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="alreadyHasAccountButton" destination="ftk-AZ-MfL" id="ECL-zF-Bv4"/>
+                        <outlet property="copyLabel" destination="HUu-Md-VCL" id="nvl-OZ-SlH"/>
                         <outlet property="facebookButton" destination="Jrn-x4-R1f" id="IoY-Vc-26R"/>
                         <outlet property="getStartedButton" destination="TDY-WP-stc" id="Ph2-2z-2vv"/>
                         <outlet property="heroImage" destination="kdb-rk-KmF" id="7XK-2B-l5a"/>
