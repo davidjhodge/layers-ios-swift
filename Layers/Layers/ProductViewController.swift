@@ -490,7 +490,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     {
                         currentPrice = altCouponPrice
                     }
-                    else if let currPrice = selectedSize?.prices?[0].price
+                    else if let currPrice = selectedSize?.prices?[safe: 0]?.price
                     {
                         currentPrice = currPrice
                     }

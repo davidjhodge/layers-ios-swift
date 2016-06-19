@@ -108,13 +108,18 @@ class LRSessionManager: NSObject
     
     func completeFirstLaunch()
     {
+        completeLogin()
+        
+        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "kUserDidCompleteFirstLaunch")
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
+    func completeLogin()
+    {
         registerIdentity(nil)
         
         AWSManager.defaultManager.syncLoginCredentials({ (success, error, response) -> Void in
         })
-        
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "kUserDidCompleteFirstLaunch")
-        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
     func hasCompletedFirstLaunch() -> Bool
@@ -397,11 +402,11 @@ class LRSessionManager: NSObject
             {
                 if let jsonResponse = response
                 {
-                    let product = Mapper<ProductResponse>().map(jsonResponse.dictionaryObject)
+                    let products = Mapper<SimpleProductResponse>().mapArray(jsonResponse.arrayObject)
                     
                     if let completion = completionHandler
                     {
-                        completion(success: success, error: error, response: product)
+                        completion(success: success, error: error, response: products)
                     }
                 }
             }
@@ -464,7 +469,7 @@ class LRSessionManager: NSObject
     {
         if page >= 0
         {
-            var requestString = "products/?page=\(page)&per_page=\(productCollectionPageSize)"
+            var requestString = "products?page=\(page)&per_page=\(productCollectionPageSize)"
             
             if FilterManager.defaultManager.getCurrentFilter().hasActiveFilters()
             {

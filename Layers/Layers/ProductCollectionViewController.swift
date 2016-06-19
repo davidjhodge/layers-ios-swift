@@ -19,7 +19,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     
     @IBOutlet weak var collectionViewBottomLayoutConstraint: NSLayoutConstraint!
     
-    var products: Array<ProductResponse>?
+    var products: Array<SimpleProductResponse>?
     
     var currentPage: Int?
     
@@ -65,59 +65,46 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         customLayout.sectionInset = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
         collectionView.collectionViewLayout = customLayout
         
-        currentPage = 1
-        
         reloadProducts()
     }
     
     // MARK: Networking
     func reloadProducts()
     {
-        // Get next page of results
-        if let page = currentPage where page > 0
-        {
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
+        LRSessionManager.sharedManager.loadDiscoverProducts({ (success, error, response) -> Void in
             
-            LRSessionManager.sharedManager.loadProductCollection(page, completionHandler: { (success, error, response) -> Void in
-                
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                    
-                if success
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            
+            if success
+            {
+                if let newProducts: Array<SimpleProductResponse> = response as? Array<SimpleProductResponse>
                 {
-                    if let newProducts: Array<ProductResponse> = response as? Array<ProductResponse>
+                    // If this is the first page of results
+                    if self.products == nil || self.products?.count == 0
                     {
-                        self.currentPage = page + 1
-                        
-                        // If this is the first page of results
-                        if page == 1
+                        if newProducts.count > 0
                         {
-                            if newProducts.count > 0
+                            // Update products and reload collection
+                            self.products = newProducts
+                            
+                            // If refresh control is active. Reload data after refresh indicator disappears
+                            if let refresh = self.refreshControl
                             {
-                                // Update products and reload collection
-                                self.products = newProducts
-                                
-                                // If refresh control is active. Reload data after refresh indicator disappears
-                                if let refresh = self.refreshControl
+                                if refresh.refreshing
                                 {
-                                    if refresh.refreshing
-                                    {
-                                        // Log Refresh
-                                        FBSDKAppEvents.logEvent("Discover Refresh Events")
+                                    // Log Refresh
+                                    FBSDKAppEvents.logEvent("Discover Refresh Events")
+                                    
+                                    CATransaction.begin()
+                                    CATransaction.setCompletionBlock({ () -> Void in
                                         
-                                        CATransaction.begin()
-                                        CATransaction.setCompletionBlock({ () -> Void in
-                                            
-                                            self.hardReloadCollectionView()
-                                        })
-                                        
-                                        refresh.endRefreshing()
-                                        CATransaction.commit()
-                                    }
-                                    else
-                                    {
-                                        // By default, refresh collection view immediately
                                         self.hardReloadCollectionView()
-                                    }
+                                    })
+                                    
+                                    refresh.endRefreshing()
+                                    CATransaction.commit()
                                 }
                                 else
                                 {
@@ -127,38 +114,33 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                             }
                             else
                             {
-                                if FilterManager.defaultManager.getCurrentFilter().hasActiveFilters()
-                                {
-                                    // New filter yielded 0 products. Show Alert
-                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                        
-                                        let alert = UIAlertController(title: "NO_RESULTS_FOR_FILTER".localized, message: nil, preferredStyle: .Alert)
-                                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                                        self.presentViewController(alert, animated: true, completion: nil)
-                                    })
-                                }
+                                // By default, refresh collection view immediately
+                                self.hardReloadCollectionView()
                             }
                         }
-                        else
-                        {
-                            // If this is a response for page 2 or greater
-                            self.products?.appendContentsOf(newProducts)
+                    }
+                    else
+                    {
+                        // If this is a response for page 2 or greater
+                        self.products?.appendContentsOf(newProducts)
+                        
+                        // Update UI
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
-                            // Update UI
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            let topOffset = self.collectionView.contentOffset.y
+                            
+                            //Insert new products
+                            CATransaction.begin()
+                            CATransaction.setDisableActions(true)
+                            
+                            self.collectionView.performBatchUpdates({ () -> Void in
                                 
-                                let topOffset = self.collectionView.contentOffset.y
+                                var indexPaths = Array<NSIndexPath>()
                                 
-                                //Insert new products
-                                CATransaction.begin()
-                                CATransaction.setDisableActions(true)
-                                
-                                self.collectionView.performBatchUpdates({ () -> Void in
-                                    
-                                    var indexPaths = Array<NSIndexPath>()
-                                    
-                                    // (Page - 1) represents the first index we want to insert into
-                                    let index: Int = (page - 1) * productCollectionPageSize
+                                // (Page - 1) represents the first index we want to insert into
+                                if let products = self.products
+                                {
+                                    let index: Int = products.count - newProducts.count
                                     
                                     // When less items than the productCollectionPageSize are returned, newProducts.count ensures we only try to insert the number of products we have. This avoids an indexOutOfBounds error
                                     for i in index...index+newProducts.count-1
@@ -168,49 +150,43 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                                     
                                     self.collectionView.insertItemsAtIndexPaths(indexPaths)
                                     
-                                    }, completion: { (finished) -> Void in
-                                 
-                                        // Set correct content offset
-                                        self.collectionView.contentOffset = CGPointMake(0, topOffset)
-                                        CATransaction.commit()
-                                })
+                                }
+                                }, completion: { (finished) -> Void in
+                                    
+                                    // Set correct content offset
+                                    self.collectionView.contentOffset = CGPointMake(0, topOffset)
+                                    CATransaction.commit()
                             })
-                        }
+                        })
                     }
                 }
-                else
+            }
+            else
+            {
+                if let products = self.products where self.products?.count > 0
                 {
-                    if let products = self.products where self.products?.count > 0
+                    if let loadingCell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: products.count, inSection: 0)) as? LoadingCell
                     {
-                        if let loadingCell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: products.count, inSection: 0)) as? LoadingCell
-                        {
-                            loadingCell.spinner.stopAnimating()
-                        }
+                        loadingCell.spinner.stopAnimating()
                     }
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                        self.presentViewController(alert, animated: true, completion: nil)
-                    })
                 }
                 
-                if let refresh = self.refreshControl
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                })
+            }
+            
+            if let refresh = self.refreshControl
+            {
+                if refresh.refreshing
                 {
-                    if refresh.refreshing
-                    {
-                        refresh.endRefreshing()
-                    }
+                    refresh.endRefreshing()
                 }
-            })
-        }
-        else
-        {
-            let alert = UIAlertController(title: "Page not specified.", message: nil, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
+            }
+        })
     }
     
     func hardReloadCollectionView()
@@ -257,9 +233,13 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 return loadingCell
             }
             
-            let product: ProductResponse = items[indexPath.row]
+            let product: SimpleProductResponse = items[indexPath.row]
             
             let cell: ProductCell = collectionView.dequeueReusableCellWithReuseIdentifier(kProductCellIdentfier, forIndexPath: indexPath) as! ProductCell
+            
+            cell.brandLabel.text = ""
+            cell.productImageView.image = nil
+            cell.priceLabel.text = ""
             
             // If no color filters are activated, use the first variant. Else, use the first variant with a matching color.
             var variant: Variant?
@@ -449,7 +429,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 {
                     if let productCollection = products
                     {
-                        if let product = productCollection[indexPath.row] as ProductResponse?
+                        if let product = productCollection[indexPath.row] as SimpleProductResponse?
                         {
                             if let destinationVC = segue.destinationViewController as? ProductViewController
                             {

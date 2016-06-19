@@ -6,8 +6,10 @@
     <customFonts key="customFonts">
         <mutableArray key="Oxygen-Bold.ttf">
             <string>Oxygen-Bold</string>
+            <string>Oxygen-Bold</string>
         </mutableArray>
         <mutableArray key="Oxygen-Regular.ttf">
+            <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
         </mutableArray>
     </customFonts>
@@ -222,12 +224,50 @@
                                     <outlet property="delegate" destination="4uE-h6-L4a" id="cLo-1m-wm2"/>
                                 </connections>
                             </collectionView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RdG-OL-TDe">
+                                <rect key="frame" x="48" y="176" width="504" height="152"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kyE-du-scX">
+                                        <rect key="frame" x="0.0" y="104" width="504" height="48"/>
+                                        <color key="backgroundColor" red="0.29803921570000003" green="0.52156862749999999" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="48" id="bCb-ba-GSf"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="15"/>
+                                        <state key="normal" title="EDIT SEARCH">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.90000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="GQi-WW-OZW">
+                                        <rect key="frame" x="0.0" y="0.0" width="504" height="41"/>
+                                        <string key="text">Whoops! We couldn't find any
+products that match your search.</string>
+                                        <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="16"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="GQi-WW-OZW" firstAttribute="leading" secondItem="RdG-OL-TDe" secondAttribute="leading" id="3MO-R9-rLB"/>
+                                    <constraint firstItem="kyE-du-scX" firstAttribute="leading" secondItem="RdG-OL-TDe" secondAttribute="leading" id="3go-fR-97a"/>
+                                    <constraint firstAttribute="bottom" secondItem="kyE-du-scX" secondAttribute="bottom" id="7rn-dB-szZ"/>
+                                    <constraint firstItem="kyE-du-scX" firstAttribute="top" relation="greaterThanOrEqual" secondItem="GQi-WW-OZW" secondAttribute="bottom" constant="56" id="GUM-oQ-HLU"/>
+                                    <constraint firstItem="GQi-WW-OZW" firstAttribute="top" secondItem="RdG-OL-TDe" secondAttribute="top" id="bdV-rr-mqh"/>
+                                    <constraint firstAttribute="trailing" secondItem="GQi-WW-OZW" secondAttribute="trailing" id="oDX-Zv-Whz"/>
+                                    <constraint firstAttribute="height" constant="152" id="siL-j0-u3Q"/>
+                                    <constraint firstAttribute="trailing" secondItem="kyE-du-scX" secondAttribute="trailing" id="xTD-tU-ce7"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Vee-EY-MlP" firstAttribute="leading" secondItem="4Fd-P2-Nge" secondAttribute="leading" id="0Fn-S9-qaf"/>
+                            <constraint firstItem="RdG-OL-TDe" firstAttribute="leading" secondItem="4Fd-P2-Nge" secondAttribute="leading" constant="48" id="7ly-wn-0Kk"/>
                             <constraint firstItem="Vee-EY-MlP" firstAttribute="top" secondItem="4Fd-P2-Nge" secondAttribute="top" id="L1R-kR-Ynx"/>
                             <constraint firstAttribute="trailing" secondItem="Vee-EY-MlP" secondAttribute="trailing" id="N5n-2c-QcT"/>
+                            <constraint firstAttribute="trailing" secondItem="RdG-OL-TDe" secondAttribute="trailing" constant="48" id="ZUt-FQ-AnT"/>
+                            <constraint firstItem="RdG-OL-TDe" firstAttribute="centerY" secondItem="4Fd-P2-Nge" secondAttribute="centerY" constant="-16" id="aFr-jm-78Q"/>
                             <constraint firstItem="Ues-Ox-kHQ" firstAttribute="top" secondItem="Vee-EY-MlP" secondAttribute="bottom" id="eOs-kQ-y3G"/>
                         </constraints>
                     </view>
@@ -236,6 +276,8 @@
                     <connections>
                         <outlet property="collectionView" destination="Vee-EY-MlP" id="l9r-Ro-HgM"/>
                         <outlet property="collectionViewBottomLayoutConstraint" destination="eOs-kQ-y3G" id="zdv-oT-iDt"/>
+                        <outlet property="editFilterButton" destination="kyE-du-scX" id="ny9-eQ-INx"/>
+                        <outlet property="emptyStateView" destination="RdG-OL-TDe" id="N9b-MT-kCR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7bh-rQ-4kq" userLabel="First Responder" sceneMemberID="firstResponder"/>
