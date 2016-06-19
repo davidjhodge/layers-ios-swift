@@ -298,7 +298,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                         cell.textLabel?.text = categoryName
                     }
                 }
-                else if let product = searchResults[safe: indexPath.row] as? SimpleProductResponse
+                else if let product = searchResults[safe: indexPath.row] as? SearchProductResponse
                 {
                     if let brandName = product.brand?.brandName, let productName = product.productName
                     {
@@ -394,10 +394,10 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         }
         else if let results = searchResults
         {
-            if results[indexPath.row] is SimpleProductResponse
+            if results[indexPath.row] is SearchProductResponse
             {
                 if let searchResults = searchResults,
-                    let product = searchResults[indexPath.row] as? SimpleProductResponse
+                    let product = searchResults[indexPath.row] as? SearchProductResponse
                 {
                     if let productId = product.productId
                     {
@@ -477,7 +477,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
         if let searchResults = searchResults,
-            let product = searchResults[indexPath.row] as? SimpleProductResponse
+            let product = searchResults[indexPath.row] as? SearchProductResponse
         {
             if let productId = product.productId
             {

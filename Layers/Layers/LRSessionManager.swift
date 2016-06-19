@@ -385,6 +385,36 @@ class LRSessionManager: NSObject
     }
     
     // MARK: Fetching Server Data
+    func loadDiscoverProducts(completionHandler: LRCompletionBlock?)
+    {
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("discover"))
+        
+        request.HTTPMethod = "GET"
+        
+        sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+            
+            if success
+            {
+                if let jsonResponse = response
+                {
+                    let product = Mapper<ProductResponse>().map(jsonResponse.dictionaryObject)
+                    
+                    if let completion = completionHandler
+                    {
+                        completion(success: success, error: error, response: product)
+                    }
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: success, error: error, response: nil)
+                }
+            }
+        })
+    }
+    
     func loadProduct(productId: NSNumber, completionHandler: LRCompletionBlock?)
     {
         if productId.integerValue >= 0
@@ -482,7 +512,7 @@ class LRSessionManager: NSObject
     
     func loadReviewsForProduct(productId: NSNumber, completionHandler: LRCompletionBlock?)
     {
-        let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/\(productId.stringValue)"))
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("reviews/\(productId.stringValue)"))
         
         request.HTTPMethod = "GET"
         
@@ -492,12 +522,11 @@ class LRSessionManager: NSObject
             {
                 if let jsonResponse = response
                 {
-                    let product = Mapper<ProductResponse>().map(jsonResponse.dictionaryObject)
-                    
+                    let reviews = Mapper<ReviewResponse>().mapArray(jsonResponse.arrayObject)
                     
                     if let completion = completionHandler
                     {
-                        completion(success: success, error: error, response: product)
+                        completion(success: success, error: error, response: reviews)
                     }
                 }
             }
@@ -696,7 +725,7 @@ class LRSessionManager: NSObject
                         {
                             for (_, productResponse) in productDicts
                             {
-                                if let product: SimpleProductResponse = productResponse
+                                if let product: SearchProductResponse = productResponse
                                 {
                                     results.append(product)
                                 }

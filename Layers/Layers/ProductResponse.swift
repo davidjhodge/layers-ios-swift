@@ -21,8 +21,6 @@ class ProductResponse: Mappable
     
     var outboundUrl: String?
     
-    var reviews: Array<Review>?
-    
     var sizeRatings: Array<SizeRating>?
     
     var variants: Array<Variant>?
@@ -42,6 +40,8 @@ class ProductResponse: Mappable
     var features: Array<Feature>?
     
     var isWatching: Bool = false
+        
+    var reviewCount: NSNumber?
     
     required init?(_ map: Map) {
         
@@ -52,7 +52,6 @@ class ProductResponse: Mappable
         brand                    <-  map["brand"]
         category                 <-  map["category"]
         outboundUrl              <-  map["outbound_url"]
-        reviews                  <-  map["reviews"]
         sizeRatings              <-  map["size_ratings"]
         variants                 <-  map["variants"]
         sku                      <-  map["sku"]
@@ -63,5 +62,6 @@ class ProductResponse: Mappable
         description              <-  map["description"]
         features                 <-  map["features.0.features.item"]
         isWatching               <-  map["is_watching"]
+        reviewCount              <-  map["review_count"]
     }
 }

@@ -1,5 +1,5 @@
 //
-//  Review.swift
+//  ReviewResponse.swift
 //  Layers
 //
 //  Created by David Hodge on 5/1/16.
@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Review: Mappable
+class ReviewResponse: Mappable
 {
     var date: NSDate?
     

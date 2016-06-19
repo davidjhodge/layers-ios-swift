@@ -22,6 +22,8 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var product: ProductResponse?
     
+    var reviews: Array<ReviewResponse>?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,9 +44,9 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
              
                 if success
                 {
-                    if let product = response as? ProductResponse
+                    if let reviews = response as? Array<ReviewResponse>
                     {
-                        self.product = product
+                        self.reviews = reviews
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
@@ -95,7 +97,7 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .Reviews:
                 
-                if let reviews = product?.reviews
+                if let reviews = reviews
                 {
                     return reviews.count
                 }
@@ -165,7 +167,7 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                     cell.starView.rating = 0.0
                     cell.rightLabel.text = ""
                     
-                    if let rating = product?.rating?.score, totalRating = product?.rating?.total, reviews = product?.reviews
+                    if let rating = product?.rating?.score, totalRating = product?.rating?.total, reviews = reviews
                     {
                         cell.ratingLabel.text = "\(rating.stringValue) / \(totalRating)"
                         
@@ -181,9 +183,9 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
 
             case .Reviews:
                 
-                if let reviews = product?.reviews
+                if let reviews = reviews
                 {
-                    let review = reviews[indexPath.row] as Review
+                    let review = reviews[indexPath.row] as ReviewResponse
                     
                     let cell: ReviewCell = tableView.dequeueReusableCellWithIdentifier("ReviewCell") as! ReviewCell
                     
@@ -195,6 +197,10 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                     if let rating = review.rating?.score?.doubleValue
                     {
                         cell.starView.rating = rating
+                    }
+                    else
+                    {
+                        cell.starView.hidden = true
                     }
                     
                     if let reviewTitle = review.title
