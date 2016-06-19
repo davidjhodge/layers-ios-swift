@@ -11,7 +11,7 @@ import ObjectMapper
 
 class SearchResponse: Mappable
 {
-    var products: Dictionary<String, SimpleProductResponse>?
+    var products: Dictionary<String, SearchProductResponse>?
     
     var brands: Array<BrandResponse>?
     

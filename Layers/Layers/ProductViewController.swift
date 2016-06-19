@@ -405,11 +405,12 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                 case .Reviews:
                     
-                    if let reviews = product.reviews
+                    if let reviewCount = product.reviewCount?.integerValue
                     {
-                        if reviews.count > 0
+                        if reviewCount > 0
                         {
                             return 1
+
                         }
                     }
                     
@@ -590,9 +591,23 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                                 cell.ratingLabel.text = "\(ratingScore) / \(ratingTotal)"
                             }
                             
-                            if let reviewCount = product.reviews?.count
+                            if let reviewCount = product.reviewCount
                             {
-                                cell.rightLabel.text = "See \(reviewCount) reviews".uppercaseString
+                                if reviewCount.integerValue == 1
+                                {
+                                    cell.rightLabel.text = "See \(reviewCount) review".uppercaseString
+                                }
+                                else if reviewCount.integerValue > 0
+                                {
+                                    cell.rightLabel.text = "See \(reviewCount) reviews".uppercaseString
+                                }
+                                else
+                                {
+                                    cell.rightLabel.text = "No Reviews".uppercaseString
+                                    
+                                    // Just in case
+                                    cell.userInteractionEnabled = false
+                                }
                             }
                         }
                         
@@ -704,6 +719,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     {
                         reviewsVc.productId = currentProduct.productId
                         
+                        reviewsVc.product = product
+                        
                         navigationController?.pushViewController(reviewsVc, animated: true)
                     }
                 }
@@ -773,14 +790,14 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .Reviews:
                 
-                if let reviews = product?.reviews
+                if let reviewCount = product?.reviewCount?.integerValue
                 {
-                    if reviews.count > 0
+                    if reviewCount > 0
                     {
                         return 4.0
                     }
                 }
-                
+
                 return 0.01
                 
             case .PriceHistory:
@@ -808,9 +825,9 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .Reviews:
                 
-                if let reviews = product?.reviews
+                if let reviewCount = product?.reviewCount?.integerValue
                 {
-                    if reviews.count > 0
+                    if reviewCount > 0
                     {
                         return 4.0
                     }
@@ -1040,6 +1057,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 if let destinationViewController = segue.destinationViewController as? ReviewsViewController
                 {
                     destinationViewController.productId = currentProduct.productId
+                    
+                    destinationViewController.product = product
                 }
             }
             
