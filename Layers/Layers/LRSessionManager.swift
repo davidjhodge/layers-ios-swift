@@ -499,7 +499,53 @@ class LRSessionManager: NSObject
         }
     }
     
-//    func load
+    func loadPriceHistory(productId: NSNumber?, variantId: String?, sizeId: String?, completionHandler: LRCompletionBlock?)
+    {
+        if let productId = productId,
+            variantId = variantId,
+            sizeId = sizeId
+            where productId.integerValue >= 0
+        {
+            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/\(productId.stringValue)/\(variantId)/\(sizeId)"))
+            
+            request.HTTPMethod = "GET"
+            
+            sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+                
+                if success
+                {
+                    if let jsonResponse = response
+                    {
+                        let product = Mapper<Price>().map(jsonResponse.dictionaryObject)
+                        
+                        if let completion = completionHandler
+                        {
+                            completion(success: success, error: error, response: product)
+                        }
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: success, error: error, response: nil)
+                    }
+                }
+            })
+        }
+        else
+        {
+            if let completion = completionHandler
+            {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    completion(success: false, error: "NO_PRODUCT_ID".localized, response: nil)
+                })
+            }
+            
+            return
+        }
+    }
     
     func loadProductCollection(page: Int, completionHandler: LRCompletionBlock?)
     {
@@ -931,52 +977,7 @@ class LRSessionManager: NSObject
             }
         }
     }
-    
-    // MARK: Pricing History
-    func loadPricingHistory(productId: NSNumber, completionHandler: LRCompletionBlock?)
-    {
-        if productId.integerValue >= 0
-        {
-            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("prices/\(productId.stringValue)"))
-            
-            request.HTTPMethod = "GET"
-            
-            sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
-                
-                if success
-                {
-                    if let jsonResponse = response
-                    {
-                        if let completion = completionHandler
-                        {
-                            // Returns nil
-                            completion(success: success, error: error, response: jsonResponse.dictionaryObject)
-                        }
-                    }
-                }
-                else
-                {
-                    if let completion = completionHandler
-                    {
-                        completion(success: success, error: error, response: nil)
-                    }
-                }
-            })
-        }
-        else
-        {
-            if let completion = completionHandler
-            {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                    completion(success: false, error: "NO_PRODUCT_ID".localized, response: nil)
-                })
-            }
-            
-            return
-        }
-    }
-    
+        
     // MARK: API Helpers
     func APIUrlAtEndpoint(endpointPath: String?) -> NSURL
     {

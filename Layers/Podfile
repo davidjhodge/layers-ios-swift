@@ -23,6 +23,8 @@ pod 'MBProgressHUD'
 pod 'DeepLinkKit'
 pod 'SwiftRangeSlider'
 pod 'NHAlignmentFlowLayout'
+pod 'Fabric'
+pod 'Crashlytics'
 
 end
 

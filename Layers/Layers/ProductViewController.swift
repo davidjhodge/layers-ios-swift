@@ -44,7 +44,9 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     var selectedVariant: Variant?
     
     var selectedSize: Size?
-        
+    
+    var priceData: PricingResponse?
+    
     //Dummy text fields to handle input views
     let styleTextField: UITextField = UITextField()
     let sizeTextField: UITextField = UITextField()
@@ -82,10 +84,10 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         
         setupPickers()
         
-        reloadData()
+        reloadProduct()
     }
     
-    func reloadData()
+    func reloadProduct()
     {
         if let productId = productIdentifier
         {
@@ -171,6 +173,27 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         tableView.reloadData()
+    }
+    
+    func reloadPriceData()
+    {
+        if let productId = product?.productId,
+            let variantId = selectedVariant?.styleId,
+            let sizeId = selectedSize?.specificId
+        {
+            LRSessionManager.sharedManager.loadPriceHistory(productId, variantId: variantId, sizeId: sizeId, completionHandler: { (success, error, response) -> Void in
+                
+                if success
+                {
+                    
+                }
+                else
+                {
+                    log.error(error)
+                }
+            })
+
+        }
     }
     
     func setupPickers()
@@ -448,7 +471,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     if let imageDict = selectedVariant?.images?[0]
                     {
                         if let primaryUrl = imageDict.primaryUrl
-                        {   
+                        {
                             let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize224)
                             
                             productImages.append(resizedPrimaryUrl)
@@ -560,7 +583,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             let cell: SizeCell = tableView.dequeueReusableCellWithIdentifier("SizeCell") as! SizeCell
                             
                             cell.sizeLabel.text = ""
-
+                            
                             if let sizeName = selectedSize?.sizeTitle
                             {
                                 cell.sizeLabel.text = sizeName
@@ -617,9 +640,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 case .PriceHistory:
                     
                     let cell: PriceGraphCell = tableView.dequeueReusableCellWithIdentifier("PriceGraphCell") as! PriceGraphCell
-                    
-                    //Temp
-                    cell.setPercentChange(-7)
                     
                     cell.selectionStyle = .None
                     
