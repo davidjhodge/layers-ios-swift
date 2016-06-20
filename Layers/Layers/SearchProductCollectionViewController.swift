@@ -33,6 +33,8 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     
     var currentPage: Int?
     
+    var hasMore: Bool = true
+    
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     
     override func viewDidLoad() {
@@ -116,6 +118,27 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         spinner.center = collectionView.center
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let selection = selectedItem
+        {
+            if let _ = selection as? CategoryResponse
+            {
+                if let currentSelections = FilterManager.defaultManager.getCurrentFilter().categories.selections
+                {
+                    if currentSelections.count == 1
+                    {
+                        if let categoryFilter: FilterObject = currentSelections.first
+                        {
+                            title = categoryFilter.name?.uppercaseString
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     // MARK: Networking
     func reloadProducts()
     {
@@ -159,6 +182,11 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                                 self.products = newProducts
                                 
                                 self.hardReloadCollectionView()
+                                
+                                if newProducts.count != productCollectionPageSize
+                                {
+//                                    self.hideLoadingCell()
+                                }
                             }
                             else
                             {
@@ -178,40 +206,87 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                         }
                         else
                         {
-                            // If this is a response for page 2 or greater
-                            self.products?.appendContentsOf(newProducts)
-                            
-                            // Update UI
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            if newProducts.count > 0
+                            {
+                                // If this is a response for page 2 or greater
+                                self.products?.appendContentsOf(newProducts)
                                 
-                                let topOffset = self.collectionView.contentOffset.y
-                                
-                                //Insert new products
-                                CATransaction.begin()
-                                CATransaction.setDisableActions(true)
-                                
-                                self.collectionView.performBatchUpdates({ () -> Void in
+                                // Update UI
+                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                     
-                                    var indexPaths = Array<NSIndexPath>()
+                                    let topOffset = self.collectionView.contentOffset.y
                                     
-                                    // (Page - 1) represents the first index we want to insert into
-                                    let index: Int = (page - 1) * productCollectionPageSize
+                                    //Insert new products
+                                    CATransaction.begin()
+                                    CATransaction.setDisableActions(true)
                                     
-                                    // When less items than the productCollectionPageSize are returned, newProducts.count ensures we only try to insert the number of products we have. This avoids an indexOutOfBounds error
-                                    for i in index...index+newProducts.count-1
-                                    {
-                                        indexPaths.append(NSIndexPath(forRow: i, inSection: 0))
-                                    }
-                                    
-                                    self.collectionView.insertItemsAtIndexPaths(indexPaths)
-                                    
-                                    }, completion: { (finished) -> Void in
+                                    self.collectionView.performBatchUpdates({ () -> Void in
                                         
-                                        // Set correct content offset
-                                        self.collectionView.contentOffset = CGPointMake(0, topOffset)
-                                        CATransaction.commit()
+                                        // Remove loading cell if needed
+                                        if newProducts.count % productCollectionPageSize != 0
+                                        {
+//                                            self.hideLoadingCell()
+                                        }
+                                        
+                                        var indexPaths = Array<NSIndexPath>()
+                                        
+                                        // (Page - 1) represents the first index we want to insert into
+                                        let index: Int = (page - 1) * productCollectionPageSize
+                                        
+                                        // When less items than the productCollectionPageSize are returned, newProducts.count ensures we only try to insert the number of products we have. This avoids an indexOutOfBounds error
+                                        
+                                        if newProducts.count < productCollectionPageSize
+                                        {
+                                            for i in index+1...index + newProducts.count
+                                            {
+                                                indexPaths.append(NSIndexPath(forRow: i, inSection: 0))
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for i in index...index+newProducts.count-1
+                                            {
+                                                indexPaths.append(NSIndexPath(forRow: i, inSection: 0))
+                                            }
+                                        }
+                                        
+                                        self.collectionView.insertItemsAtIndexPaths(indexPaths)
+                                        
+                                        }, completion: { (finished) -> Void in
+
+                                            // Set correct content offset
+                                            self.collectionView.contentOffset = CGPointMake(0, topOffset)
+                                
+                                            CATransaction.commit()
+                                    })
                                 })
-                            })
+                            }
+                            else
+                            {
+                                // Remove loading cell
+                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                    
+                                    let topOffset = self.collectionView.contentOffset.y
+                                    
+                                    CATransaction.begin()
+                                    CATransaction.setDisableActions(true)
+                                    
+                                    self.collectionView.performBatchUpdates({ () -> Void in
+                                        
+                                        // Remove loading cell if needed
+                                        if newProducts.count % productCollectionPageSize != 0
+                                        {
+                                            self.hideLoadingCell()
+                                        }
+                                        
+                                        }, completion: { (finished) -> Void in
+                                            
+                                            // Set correct content offset
+                                            self.collectionView.contentOffset = CGPointMake(0, topOffset)
+                                            CATransaction.commit()
+                                    })
+                                })
+                            }
                         }
                     }
                 }
@@ -251,6 +326,25 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
             
             self.collectionView.setContentOffset(CGPointZero, animated: false)
         })
+    }
+    
+    func hideLoadingCell()
+    {
+        self.hasMore = false
+        
+        if let products = self.products
+        {
+            let loadingCellIndexPath = NSIndexPath(forRow: products.count, inSection: 0)
+            
+            if let _ = self.collectionView.cellForItemAtIndexPath(loadingCellIndexPath) as? LoadingCell
+            {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    self.collectionView.deleteItemsAtIndexPaths([loadingCellIndexPath])
+                    
+                })
+            }
+        }
     }
     
     // MARK: Actions
@@ -293,7 +387,14 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         
         if let items = products where items.count > 0
         {
-            return items.count + 1
+            if items.count % productCollectionPageSize == 0
+            {
+                return items.count + 1
+            }
+            else
+            {
+                return items.count
+            }
         }
         
         return 0
@@ -360,12 +461,12 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 //Set Price for first size
                 if let firstSize = variant.sizes?[safe:  0]
                 {
-                    if let priceInfo = firstSize.prices?[safe: 0]
+                    if let priceInfo = firstSize.price
                     {
                         var currentPrice: NSNumber?
                         var retailPrice: NSNumber?
                         
-                        if let altCouponPrice = firstSize.altPricing?.priceAfterCoupon
+                        if let altCouponPrice = firstSize.altPrice?.priceAfterCoupon
                         {
                             currentPrice = altCouponPrice
                         }
@@ -399,15 +500,17 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         
         if let products = products
         {
-            // Insert next page of items as we near the end of the current list
-            if indexPath.row == products.count - 4
+            // Next Pagination Request will not return any results. Return
+            if products.count % productCollectionPageSize != 0
             {
-                // If last page returned a full list of products, it's highly likely the next page is not empty. This is not perfect, but will reduce unnecessary API calls
-                if products.count % productCollectionPageSize == 0
-                {
-                    // Auto-increments page, so no <page> parameter is required
-                    reloadProducts()
-                }
+                return
+            }
+            
+            // Insert next page of items as we near the end of the current list
+            if indexPath.row == products.count - 3
+            {
+                // Auto-increments page, so no <page> parameter is required
+                reloadProducts()
             }
         }
     }

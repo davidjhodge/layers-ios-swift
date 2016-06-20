@@ -47,7 +47,7 @@ class AWSManager: NSObject, AWSIdentityProviderManager
     {
         super.init()
         
-        AWSLogger.defaultLogger().logLevel = .Verbose
+        AWSLogger.defaultLogger().logLevel = .Error
 
         self.setConfiguration()
                 

@@ -486,18 +486,18 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     var currentPrice: NSNumber?
                     
                     // If a coupon price exists, show it instead of the default price
-                    if let altCouponPrice = selectedSize?.altPricing?.priceAfterCoupon
+                    if let altCouponPrice = selectedSize?.altPrice?.priceAfterCoupon
                     {
                         currentPrice = altCouponPrice
                     }
-                    else if let currPrice = selectedSize?.prices?[safe: 0]?.price
+                    else if let currPrice = selectedSize?.price?.price
                     {
                         currentPrice = currPrice
                     }
                     
                     if let currentPrice = currentPrice
                     {
-                        if let retailPrice = selectedSize?.prices?[0].retailPrice
+                        if let retailPrice = selectedSize?.price?.retailPrice
                         {
                             if (currentPrice.floatValue != retailPrice.floatValue)
                             {
@@ -919,8 +919,9 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         if view == nil
         {
             // Remove selection indicators
-            pickerView.subviews[1].hidden = true
-            pickerView.subviews[2].hidden = true
+            pickerView.subviews[1].hidden = false
+            pickerView.subviews[2].hidden = false
+            pickerView.subviews[3].hidden = true
             
             if let pickerRow: PickerRow = NSBundle.mainBundle().loadNibNamed("PickerRow", owner: self, options: nil)[0] as? PickerRow
             {
@@ -1076,7 +1077,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         destinationViewController.webURL = NSURL(string: url)
                     }
                     
-                    if let coupon = selectedSize?.altPricing?.couponCode
+                    if let coupon = selectedSize?.altPrice?.couponCode
                     {
                         destinationViewController.couponCode = coupon
                     }

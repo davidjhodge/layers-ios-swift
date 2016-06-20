@@ -33,7 +33,7 @@ extension NSURL
                 }
             }
         }
-        
+
         return imageUrl
     }
 }

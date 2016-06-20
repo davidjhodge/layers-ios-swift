@@ -11,8 +11,6 @@ import ObjectMapper
 
 class BrandResponse: Mappable
 {
-    var brandUrl: String?
-    
     var brandName: String?
     
     var brandId: NSNumber?
@@ -22,7 +20,6 @@ class BrandResponse: Mappable
     }
     
     func mapping(map: Map) {
-        brandUrl         <-  map["brand_url"]
         brandName        <-  map["brand_name"]
         brandId          <- map["id"]
     }

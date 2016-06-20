@@ -470,6 +470,11 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             if let destinationVc = segue.destinationViewController as? PriceFilterViewController
             {
                 destinationVc.delegate = self
+                
+                if let currentFilter = newFilter.priceRange
+                {
+                    destinationVc.priceFilter = currentFilter
+                }
             }
         }
         else if segue.identifier == "ShowColorFilterViewController"

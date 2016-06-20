@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import FBSDKCoreKit
 import NHAlignmentFlowLayout
+import SDWebImage
 
 class ProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
@@ -25,6 +26,8 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     
     var refreshControl: UIRefreshControl?
     
+    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -65,7 +68,18 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         customLayout.sectionInset = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
         collectionView.collectionViewLayout = customLayout
         
+        spinner.hidesWhenStopped = true
+        spinner.hidden = true
+        spinner.color = Color.grayColor()
+        view.addSubview(spinner)
+
         reloadProducts()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        spinner.center = collectionView.center
     }
     
     // MARK: Networking
@@ -270,6 +284,8 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                     {
                         let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize112)
                         
+//                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
+
                         cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
                             
                             if image != nil && cacheType != .Memory
@@ -278,7 +294,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                                 
                                 UIView.animateWithDuration(0.3, animations: {
                                     cell.productImageView.alpha = 1.0
-                                })
+                                    })
                             }
                         })
                     }
@@ -287,12 +303,12 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 //Set Price for first size
                 if let firstSize = variant.sizes?[safe:  0]
                 {
-                    if let priceInfo = firstSize.prices?[safe: 0]
+                    if let priceInfo = firstSize.price
                     {
                         var currentPrice: NSNumber?
                         var retailPrice: NSNumber?
                         
-                        if let altCouponPrice = firstSize.altPricing?.priceAfterCoupon
+                        if let altCouponPrice = firstSize.altPrice?.priceAfterCoupon
                         {
                             currentPrice = altCouponPrice
                         }

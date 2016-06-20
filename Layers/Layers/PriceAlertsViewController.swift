@@ -420,7 +420,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                         {
                             if let firstSize = firstVariant.sizes?[safe: 0]
                             {
-                                if let priceObject = firstSize.prices?[safe: 0]
+                                if let priceObject = firstSize.price
                                 {
                                     if let salePrice = priceObject.price, retailPrice = priceObject.retailPrice
                                     {
@@ -479,7 +479,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                             // First Size
                             if let firstSize = firstVariant.sizes?[safe: 0]
                             {
-                                if let priceObject = firstSize.prices?[safe: 0]
+                                if let priceObject = firstSize.price
                                 {
                                     if let price = priceObject.price
                                     {
@@ -708,7 +708,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                                 destinationVC.brandName = brandName
                             }
                             
-                            if let coupon = alertProduct.variants?[safe: 0]?.sizes?[safe: 0]?.altPricing?.couponCode
+                            if let coupon = alertProduct.variants?[safe: 0]?.sizes?[safe: 0]?.altPrice?.couponCode
                             {
                                 destinationVC.couponCode = coupon
                             }

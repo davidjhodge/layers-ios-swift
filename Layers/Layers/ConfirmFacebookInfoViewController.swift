@@ -79,6 +79,34 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         }
     }
     
+//    func validateInputs() -> Bool
+//    {
+//        if let nameCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Name.rawValue, inSection: 0)) as? TwoTextFieldCell,
+//            
+//            let genderAgeCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.GenderAge.rawValue, inSection: 0)) as? TwoTextFieldCell,
+//        
+//                let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Email.rawValue, inSection: 0)) as? TextFieldCell
+//        {
+//            if let firstNameTextField = nameCell.firstTextField,
+//                let lastNameTextField = nameCell.secondTextField,
+//                let genderTextField = genderAgeCell.firstTextField,
+//                let ageTextField = genderAgeCell.secondTextField,
+//                let emailTextField = emailCell.textField
+//            {
+//                if firstNameTextField.text?.characters.count > 0
+//                && lastNameTextField.text?.characters.count > 0
+//                && genderTextField.text?.characters.count > 0
+//                && ageTextField.text?.characters.count > 0
+//                && emailTextField.text?.characters.count > 0
+//                {
+//                    return true
+//                }
+//            }
+//        }
+//        
+//        return false
+//    }
+    
     // MARK: Actions
     func submit()
     {
