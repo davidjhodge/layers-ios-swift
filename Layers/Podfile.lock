@@ -14,7 +14,10 @@ PODS:
     - Bolts/Tasks
   - Bolts/Tasks (1.7.0)
   - Cosmos (1.2.2)
+  - Crashlytics (3.7.1):
+    - Fabric (~> 1.6.3)
   - DeepLinkKit (1.2.1)
+  - Fabric (1.6.7)
   - FBSDKCoreKit (4.11.0):
     - Bolts (~> 1.7)
   - FBSDKLoginKit (4.11.0):
@@ -38,7 +41,9 @@ DEPENDENCIES:
   - AWSCore
   - AWSSNS
   - Cosmos (~> 1.2)
+  - Crashlytics
   - DeepLinkKit
+  - Fabric
   - FBSDKCoreKit (~> 4.11)
   - FBSDKLoginKit (~> 4.11)
   - KeychainAccess
@@ -59,7 +64,9 @@ SPEC CHECKSUMS:
   AWSSNS: b1e52a1d9b72e777810c8bb1188218f2a0ae9974
   Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
   Cosmos: 87c49100c69d2cb2eebfa4eb8d1e801fe29ff774
+  Crashlytics: 3cdd4c9655be68032a0cf0379e0fb5ef6af22cad
   DeepLinkKit: 4c3a713b7ecc6c6e25ba56c87d0c728f6035a9ef
+  Fabric: caf7580c725e64db144f610ac65cd60956911dc7
   FBSDKCoreKit: 686ac982723a14ec9ddb85e2f81235d7706c891b
   FBSDKLoginKit: bade9fc78277764149ccc5bfaadbf13c83175c6a
   KeychainAccess: e283c1981a6c5655e1984cd411c6faf16fa165ae
