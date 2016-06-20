@@ -25,13 +25,13 @@ class SimpleProductResponse: Mappable
     
     var productId: NSNumber?
     
-    var isInStock: Bool = true
+    var isInStock: Bool?
     
     var retailer: RetailerResponse?
     
     var description: String?
-        
-    var isWatching: Bool = false
+    
+    var updatedAt: NSDate?
     
     required init?(_ map: Map) {
         
@@ -40,6 +40,7 @@ class SimpleProductResponse: Mappable
     func mapping(map: Map) {
         productName              <-  map["product_name"]
         brand                    <-  map["brand"]
+        categories               <-  map["categories"]
         outboundUrl              <-  map["outbound_url"]
         variants                 <-  map["variants"]
         sku                      <-  map["sku"]
@@ -47,6 +48,6 @@ class SimpleProductResponse: Mappable
         isInStock                <-  map["product_in_stock"]
         retailer                 <-  map["retailer"]
         description              <-  map["description"]
-        isWatching               <-  map["is_watching"]
+        updatedAt                <- (map["updated_at"], DateTransform())
     }
 }

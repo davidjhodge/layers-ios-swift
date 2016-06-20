@@ -56,6 +56,30 @@ class PriceFilterViewController: UIViewController
         slider.lowerValue = 3
         slider.upperValue = 10
         
+        if let currentFilter = priceFilter
+        {
+            if let lowPrice = currentFilter.minPrice?.integerValue,
+                let highPrice = currentFilter.maxPrice?.integerValue
+            {
+                var reverseDict = Dictionary<Int,Int>()
+                
+                for key in lookupDict().keys
+                {
+                    if let value = lookupDict()[key]
+                    {
+                        reverseDict[value] = key
+                    }
+                }
+                
+                if let lowerSliderValue = reverseDict[lowPrice],
+                    let upperSliderValue = reverseDict[highPrice]
+                {
+                    slider.lowerValue = Double(lowerSliderValue)
+                    slider.upperValue = Double(upperSliderValue)
+                }
+            }
+        }
+        
         slider.addTarget(self, action: #selector(sliderValueChanged), forControlEvents: .ValueChanged)
         
         if let lowerValue = lookupDict()[Int(slider.lowerValue)],
@@ -67,6 +91,8 @@ class PriceFilterViewController: UIViewController
         }
         
         priceFilterButton.addTarget(self, action: #selector(selectAllPrices), forControlEvents: .TouchUpInside)
+        
+        selectAllPrices()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -140,9 +166,11 @@ class PriceFilterViewController: UIViewController
     {
         if !allPricesSelected
         {
-            checkmarkView.hidden = false
-            
             allPricesSelected = true
+            
+            self.checkmarkView.hidden = false
+
+            self.priceFilterButton.backgroundColor = Color.NeonBlueColor
         }
         else
         {
@@ -155,6 +183,10 @@ class PriceFilterViewController: UIViewController
         checkmarkView.hidden = true
         
         allPricesSelected = false
+        
+        self.priceFilterButton.backgroundColor = Color.LightGray
+
+        self.checkmarkView.hidden = true
     }
     
     func selectFilter()

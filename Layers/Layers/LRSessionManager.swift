@@ -104,6 +104,40 @@ class LRSessionManager: NSObject
         }
                 
         AWSManager.defaultManager.clearAWSCache()
+        
+        AWSManager.defaultManager.openIdToken = nil
+        
+        //Register new unauthenticated identity
+        AWSManager.defaultManager.fetchIdentityId({ (success, error, response) -> Void in
+            
+            if success
+            {
+                log.debug("Successfully retrieved new identity token from AWS.")
+                
+                self.registerIdentity({ (success, error, response) -> Void in
+                    
+                    if success
+                    {
+                        log.debug("New identity registered.")
+                    }
+                    else
+                    {
+                        log.error(error)
+                    }
+                })
+            }
+            else
+            {
+                if let errorMessage = error
+                {
+                    log.debug(errorMessage)
+                    
+                    // If identityId does not exist, clear all existing credentials to avoid an incomplete state
+                    self.logout()
+                    
+                }
+            }
+        })
     }
     
     func completeFirstLaunch()
@@ -465,6 +499,8 @@ class LRSessionManager: NSObject
         }
     }
     
+//    func load
+    
     func loadProductCollection(page: Int, completionHandler: LRCompletionBlock?)
     {
         if page >= 0
@@ -561,9 +597,11 @@ class LRSessionManager: NSObject
                 {
                     let categories = Mapper<CategoryResponse>().mapArray(jsonResponse.arrayObject)
                     
+                    let sortedCategories = categories?.sort{ $0.categoryName < $1.categoryName }
+                    
                     if let completion = completionHandler
                     {
-                        completion(success: true, error: error, response: categories)
+                        completion(success: true, error: error, response: sortedCategories)
                     }
                 }
             }
@@ -591,9 +629,11 @@ class LRSessionManager: NSObject
                 {
                     let brands = Mapper<BrandResponse>().mapArray(jsonResponse.arrayObject)
                     
+                    let sortedBrands = brands?.sort{ $0.brandName < $1.brandName }
+                    
                     if let completion = completionHandler
                     {
-                        completion(success: true, error: error, response: brands)
+                        completion(success: true, error: error, response: sortedBrands)
                     }
                 }
             }
@@ -620,10 +660,12 @@ class LRSessionManager: NSObject
                 if let jsonResponse = response
                 {
                     let retailers = Mapper<RetailerResponse>().mapArray(jsonResponse.arrayObject)
-                        
+                    
+                    let sortedRetailers = retailers?.sort{ $0.retailerName < $1.retailerName }
+                    
                     if let completion = completionHandler
                     {
-                            completion(success: true, error: error, response: retailers)
+                            completion(success: true, error: error, response: sortedRetailers)
                     }
                 }
             }
@@ -651,9 +693,11 @@ class LRSessionManager: NSObject
                 {
                     let colors = Mapper<ColorResponse>().mapArray(jsonResponse.arrayObject)
                     
+                    let sortedColors = colors?.sort{ $0.colorName < $1.colorName }
+                    
                     if let completion = completionHandler
                     {
-                        completion(success: true, error: error, response: colors)
+                        completion(success: true, error: error, response: sortedColors)
                     }
                 }
             }
@@ -973,8 +1017,6 @@ class LRSessionManager: NSObject
     */
     private func sendRequest(request: NSURLRequest, authorization: Bool, completion: LRJsonCompletionBlock?)
     {
-        let startTime = NSDate().timeIntervalSince1970
-        
         if let networkRequest = request.mutableCopy() as? NSMutableURLRequest
         {
             if authorization
@@ -988,7 +1030,7 @@ class LRSessionManager: NSObject
                         {
                             networkRequest.setValue(openIdToken, forHTTPHeaderField: "Authorization")
                             
-                            self.performNetworkReqeuest(request, networkRequest: networkRequest, startTime: startTime, completion: completion)
+                            self.performNetworkReqeuest(request, networkRequest: networkRequest, completion: completion)
                             
                             return
                         }
@@ -999,9 +1041,10 @@ class LRSessionManager: NSObject
                     }
                 })
             }
-            
-            performNetworkReqeuest(request, networkRequest: networkRequest, startTime: startTime, completion: completion)
-            
+            else
+            {
+                performNetworkReqeuest(request, networkRequest: networkRequest, completion: completion)
+            }
         }
         else
         {
@@ -1012,7 +1055,7 @@ class LRSessionManager: NSObject
         }
     }
     
-    func performNetworkReqeuest(intialRequest: NSURLRequest, networkRequest: NSMutableURLRequest, startTime: NSTimeInterval, completion: LRJsonCompletionBlock?)
+    func performNetworkReqeuest(intialRequest: NSURLRequest, networkRequest: NSMutableURLRequest, completion: LRJsonCompletionBlock?)
     {
         let newRequest = networkRequest
         
@@ -1020,6 +1063,8 @@ class LRSessionManager: NSObject
         
         newRequest.setValue("close", forHTTPHeaderField: "Connection")
         
+        let startTime = NSDate().timeIntervalSince1970
+
         networkManager.request(newRequest)
             .validate(contentType: ["application/json"])
             .responseString(encoding: NSUTF8StringEncoding) { (response: Response<String, NSError>) -> Void in

@@ -428,15 +428,27 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                         //Clear Credentials
                         LRSessionManager.sharedManager.logout()
                         
-                        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
-                        hud.mode = .CustomView
-                        hud.customView = UIImageView(image: UIImage(named: "checkmark"))
+                        // Completely reset all view controllers in heirarchy
+                        AppStateTransitioner.transitionToMainStoryboard(false)
                         
-                        hud.labelText = "Successfully Logged Out"
-                        hud.labelFont = Font.OxygenBold(size: 17.0)
-                        hud.hide(true, afterDelay: 1.5)
-                        
-                        tableView.reloadData()
+                        if let tabBarVc = UIApplication.sharedApplication().keyWindow?.rootViewController as? UITabBarController
+                        {
+                            tabBarVc.selectedIndex = 3
+                            
+                            if let nav = tabBarVc.selectedViewController as? UINavigationController
+                            {
+                                if let accountVc = nav.viewControllers[0] as? AccountViewController
+                                {
+                                    let hud = MBProgressHUD.showHUDAddedTo(accountVc.view, animated: true)
+                                    hud.mode = .CustomView
+                                    hud.customView = UIImageView(image: UIImage(named: "checkmark"))
+                                    
+                                    hud.labelText = "Successfully Logged Out"
+                                    hud.labelFont = Font.OxygenBold(size: 17.0)
+                                    hud.hide(true, afterDelay: 1.5)
+                                }
+                            }
+                        }
                     }
                 }
                  

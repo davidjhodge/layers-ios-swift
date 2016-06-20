@@ -44,7 +44,6 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
         spinner.color = Color.grayColor()
         spinner.hidesWhenStopped = true
         spinner.hidden = true
-        
         view.addSubview(spinner)
         
         prepareToHandleKeyboard()
@@ -175,6 +174,11 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     // MARK: Table View Delegate
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    {
+        return 48.0
+    }
+    
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         if section == 0

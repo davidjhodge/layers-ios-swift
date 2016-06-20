@@ -17,12 +17,9 @@ class Size: Mappable
     
     var inStock: Bool?
     
-    var prices: Array<Price>?
+    var price: Price?
     
-    var altPricing: AlternatePricing?
-    
-//    var sizeDetails:
-    
+    var altPrice: AlternatePricing?
     
     required init?(_ map: Map) {
         
@@ -33,7 +30,7 @@ class Size: Mappable
         sizeTitle                   <- map["size_title"]
         specificId                  <- map["specific_id"]
         inStock                     <- map["in_stock"]
-        prices                      <- map["prices"]
-        altPricing                  <- map["alt_pricing.0"]
+        price                       <- map["prices.0"]
+        altPrice                    <- map["alt_pricing.0"]
     }
 }

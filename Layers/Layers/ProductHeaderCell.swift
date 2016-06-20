@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SDWebImage
 
 class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
 {
@@ -85,7 +86,9 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
                     imageView.contentMode = UIViewContentMode.ScaleAspectFit
                     
                     // Set Image
-                    imageView.sd_setImageWithURL(imageUrl, completed: { (image, error, cacheType, url) -> Void in
+//                    imageView.sd_setImageWithURL(imageUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, url) -> Void in
+                    
+                    imageView.sd_setImageWithURL(imageUrl, placeholderImage: nil, completed: { (image, error, cacheType, url) -> Void in
                         
                         if image != nil && cacheType != .Memory
                         {
@@ -114,9 +117,6 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
         // Set content size based on number of images
         scrollView.contentSize = CGSizeMake(scrollView.bounds.size.width * (CGFloat(imageViews.count)), scrollView.bounds.size.height - 1)
 
-        //Set offset to zero
-        scrollView.setContentOffset(CGPointZero, animated: false)
-        
         updatePageControl()
     }
     

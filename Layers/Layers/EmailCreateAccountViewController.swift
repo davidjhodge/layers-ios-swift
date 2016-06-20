@@ -31,10 +31,12 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     
     var keyboardNotificationObserver: AnyObject?
     
+    var spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        title = "sign up".uppercaseString
+        title = "create account".uppercaseString
     }
     
     override func viewDidLoad() {
@@ -44,7 +46,18 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercaseString, style: .Plain, target: self, action: #selector(cancel))
         
+        spinner.hidesWhenStopped = true
+        spinner.color = Color.grayColor()
+        spinner.hidesWhenStopped = true
+        view.addSubview(spinner)
+        
         prepareToHandleKeyboard()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        spinner.center = tableView.center
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -84,7 +97,14 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
                 tableView.userInteractionEnabled = false
                 createAccountButton.userInteractionEnabled = false
                 
+                spinner.startAnimating()
+                
                 LRSessionManager.sharedManager.register(emailInput, password: passwordInput, completionHandler: { (success, error, response) -> Void in
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.spinner.stopAnimating()
+                    })
                     
                     if success
                     {
@@ -101,6 +121,9 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
                     else
                     {
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.tableView.userInteractionEnabled = true
+                            self.createAccountButton.userInteractionEnabled = true
                             
                             let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
                             alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
@@ -186,6 +209,11 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     }
     
     // MARK: Table View Delegate
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    {
+        return 48.0
+    }
+    
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         if section == 0
