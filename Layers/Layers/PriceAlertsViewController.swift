@@ -54,7 +54,6 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         
         spinner.color = Color.grayColor()
         spinner.hidesWhenStopped = true
-//        view.bringSubviewToFront(spinner)
         view.addSubview(spinner)
         
         refreshControl = UIRefreshControl()
@@ -68,6 +67,8 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         
         // Reload table when new sale alert is created in another View Controller
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(newSaleAlertCreated(_:)), name: kSaleAlertCreatedNotification, object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(saleAlertDeleted), name: kSaleAlertDeletedNotification, object: nil)
         
         reloadData()
     }
@@ -115,10 +116,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 
                 // If refresh control is animating, stop the animation
-                if self.refreshControl.refreshing
-                {
-                    self.refreshControl.endRefreshing()
-                }
+                self.refreshControl.endRefreshing()
             })
             
             if success
@@ -301,6 +299,11 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         reloadData()
     }
     
+    func saleAlertDeleted(notification: NSNotification)
+    {
+        reloadData()
+    }
+    
     func startDiscovering()
     {
         if let tabBarVc = tabBarController
@@ -415,24 +418,32 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                             cell.productLabel.text = productName
                         }
                         
-                        // Should be a "lowest price" field
                         if let firstVariant = product.variants?[safe: 0]
                         {
                             if let firstSize = firstVariant.sizes?[safe: 0]
                             {
                                 if let priceObject = firstSize.price
                                 {
-                                    if let salePrice = priceObject.price, retailPrice = priceObject.retailPrice
+                                    if let retailPrice = priceObject.retailPrice
                                     {
                                         let retailString = NSAttributedString.priceStringWithRetailPrice(retailPrice, size: 10.0, strikethrough: true)
                                         
-                                        let saleString = NSAttributedString(string: " \(salePrice.stringValue)", attributes: [NSForegroundColorAttributeName: Color.RedColor, NSFontAttributeName: Font.OxygenBold(size: 14.0)])
-                                        
-                                        let finalString = NSMutableAttributedString(attributedString: retailString)
-                                        
-                                        finalString.appendAttributedString(saleString)
-                                        
-                                        cell.priceLabel.attributedText = NSAttributedString(attributedString: finalString)
+                                        if let salePrice = priceObject.price
+                                        {
+                                            let saleString = NSAttributedString.priceStringWithSalePrice(salePrice, size: 14.0)
+                                            
+                                            let finalString = NSMutableAttributedString(attributedString: retailString)
+                                            
+                                            finalString.appendAttributedString(NSAttributedString(string: " "))
+                                                
+                                            finalString.appendAttributedString(saleString)
+                                            
+                                            cell.priceLabel.attributedText = NSAttributedString(attributedString: finalString)
+                                        }
+                                        else
+                                        {
+                                            cell.priceLabel.attributedText = retailString
+                                        }
                                     }
                                 }
                             }
@@ -481,9 +492,26 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                             {
                                 if let priceObject = firstSize.price
                                 {
-                                    if let price = priceObject.price
+                                    if let retailPrice = priceObject.retailPrice
                                     {
-                                        cell.priceLabel.attributedText = NSAttributedString(string: price.stringValue, attributes: [NSForegroundColorAttributeName: Color.DarkTextColor, NSFontAttributeName: Font.OxygenBold(size: 14.0)])
+                                        let retailString = NSAttributedString.priceStringWithRetailPrice(retailPrice, size: 10.0, strikethrough: true)
+                                        
+                                        if let salePrice = priceObject.price
+                                        {
+                                            let saleString = NSAttributedString.priceStringWithSalePrice(salePrice, size: 14.0)
+                                            
+                                            let finalString = NSMutableAttributedString(attributedString: retailString)
+                                            
+                                            finalString.appendAttributedString(NSAttributedString(string: " "))
+                                            
+                                            finalString.appendAttributedString(saleString)
+                                            
+                                            cell.priceLabel.attributedText = NSAttributedString(attributedString: finalString)
+                                        }
+                                        else
+                                        {
+                                            cell.priceLabel.attributedText = retailString
+                                        }
                                     }
                                 }
                             }

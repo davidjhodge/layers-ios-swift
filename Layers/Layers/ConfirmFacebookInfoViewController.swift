@@ -209,6 +209,10 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
                 {
                     cell.firstTextField.text = gender.capitalizedString
                 }
+                else
+                {
+                    cell.firstTextField.text = "Other Specific"
+                }
                 
                 // Age
                 cell.secondTextField.placeholder = "Age"
