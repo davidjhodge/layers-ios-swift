@@ -481,6 +481,11 @@ class LRSessionManager: NSObject
                     {
                         let product = Mapper<ProductResponse>().map(jsonResponse.dictionaryObject)
                         
+                        if let sortedVariants = SizeSorter.sortSizes(product)
+                        {
+                            product?.variants = sortedVariants
+                        }
+                        
                         if let completion = completionHandler
                         {
                             completion(success: success, error: error, response: product)

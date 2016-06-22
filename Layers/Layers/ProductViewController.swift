@@ -1174,8 +1174,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     destinationViewController.product = product
                 }
             }
-            
-//            navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
         }
         
         if segue.identifier == "ShowProductWebViewController"
