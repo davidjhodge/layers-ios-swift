@@ -296,49 +296,132 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func createSaleAlert()
     {
-        if let productId = productIdentifier
+        if let isWatching = product?.isWatching
         {
-            FBSDKAppEvents.logEvent("Product Page Create Sale Alert Taps", parameters: ["ProductID":productId])
-        }
+            let indexPath = NSIndexPath(forRow: 0, inSection: TableSection.PriceHistory.rawValue)
 
-        if LRSessionManager.sharedManager.userHasEnabledNotifications()
-        {
-            if let productId = productIdentifier
+            if let priceHistoryCell = self.tableView.cellForRowAtIndexPath(indexPath) as? PriceGraphCell
             {
-                LRSessionManager.sharedManager.createSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
-                    
-                    if success
+
+                priceHistoryCell.createSaleAlertButton.userInteractionEnabled = false
+                
+                UIView.performWithoutAnimation({ () -> Void in
+
+                    priceHistoryCell.createSaleAlertButton.setTitle(" ", forState: .Normal)
+                    })
+                
+                priceHistoryCell.spinner.startAnimating()
+                
+            if !isWatching
+            {
+                product?.isWatching = true
+                
+                // Create New Alert
+                if let productId = productIdentifier
+                {
+                    FBSDKAppEvents.logEvent("Product Page Create Sale Alert", parameters: ["ProductID":productId])
+                }
+                
+                if LRSessionManager.sharedManager.userHasEnabledNotifications()
+                {
+                    if let productId = productIdentifier
                     {
-                        // Post Notification
-                        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kSaleAlertCreatedNotification, object: nil))
-                        
-                        // Show Success HUD
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+//                        hud.mode = .Indeterminate
+//                        hud.labelText = "Creating Sale Alert"
+//                        hud.labelFont = Font.OxygenBold(size: 17.0)
+
+                        LRSessionManager.sharedManager.createSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
                             
-                            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                            hud.mode = .CustomView
-                            hud.customView = UIImageView(image: UIImage(named: "checkmark"))
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                
+                                priceHistoryCell.createSaleAlertButton.userInteractionEnabled = true
+                                priceHistoryCell.spinner.stopAnimating()
+                            })
                             
-                            hud.labelText = "Sale Alert Created"
-                            hud.labelFont = Font.OxygenBold(size: 17.0)
-                            hud.hide(true, afterDelay: 1.5)
+                            if success
+                            {
+                                // Post Notification
+                                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kSaleAlertCreatedNotification, object: nil))
+                                
+                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                        
+                                        UIView.performWithoutAnimation({ () -> Void in
+                                            
+                                            priceHistoryCell.createSaleAlertButton.setTitle("Watching".uppercaseString, forState: .Normal)
+                                            })
+                                        })
+                                
+                                // Show Success HUD
+//                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                                    
+//                                    hud.hide(true, afterDelay: 0.0)
+//                                })
+                            }
+                            else
+                            {
+                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                    
+                                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                                    self.presentViewController(alert, animated: true, completion: nil)
+                                })
+                            }
                         })
                     }
-                    else
-                    {
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                            self.presentViewController(alert, animated: true, completion: nil)
-                        })
-                    }
-                })
+                }
+                else
+                {
+                    LRSessionManager.sharedManager.registerForRemoteNotificationsIfNeeded()
+                }
+                
             }
-        }
-        else
-        {
-            LRSessionManager.sharedManager.registerForRemoteNotificationsIfNeeded()
+            else
+            {
+                product?.isWatching = false
+
+                // Delete Alert
+                if let productId = productIdentifier
+                {
+                    FBSDKAppEvents.logEvent("Product Page Delete Sale Alert", parameters: ["ProductID":productId])
+                }
+                
+                if let productId = productIdentifier
+                {
+                    LRSessionManager.sharedManager.createSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            priceHistoryCell.createSaleAlertButton.userInteractionEnabled = true
+                            priceHistoryCell.spinner.stopAnimating()
+                        })
+                        
+                        if success
+                        {
+                            // Post Notification
+                            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kSaleAlertDeletedNotification, object: nil))
+                            
+                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                        
+                                        UIView.performWithoutAnimation({ () -> Void in
+                                        
+                                        priceHistoryCell.createSaleAlertButton.setTitle("Create a Price Alert".uppercaseString, forState: .Normal)
+                                        })
+                                    })
+                        }
+                        else
+                        {
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                
+                                let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                                self.presentViewController(alert, animated: true, completion: nil)
+                            })
+                        }
+                    })
+                }
+            }
+            }
         }
     }
     
@@ -643,14 +726,18 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     cell.selectionStyle = .None
                     
+                    var buttonTitle = ""
+                    
                     if product.isWatching
                     {
-                        cell.createSaleAlertButton.setTitle("Watching".uppercaseString, forState: .Normal)
+                        buttonTitle = "Watching".uppercaseString
                     }
                     else
                     {
-                        cell.createSaleAlertButton.setTitle("Create a Price Alert".uppercaseString, forState: .Normal)
+                        buttonTitle = "Create a Price Alert".uppercaseString
                     }
+                    
+                    cell.createSaleAlertButton.setTitle(buttonTitle, forState: .Normal)
                     
                     cell.createSaleAlertButton.addTarget(self, action: #selector(createSaleAlert), forControlEvents: .TouchUpInside)
                     
@@ -941,7 +1028,12 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             // Remove selection indicators
             pickerView.subviews[1].hidden = false
             pickerView.subviews[2].hidden = false
-            pickerView.subviews[3].hidden = true
+//            pickerView.subviews[3].hidden = true
+            
+            for (index, subview) in pickerView.subviews.enumerate()
+            {
+                print("Index: \(index), \(subview.alpha)")
+            }
             
             if let pickerRow: PickerRow = NSBundle.mainBundle().loadNibNamed("PickerRow", owner: self, options: nil)[0] as? PickerRow
             {

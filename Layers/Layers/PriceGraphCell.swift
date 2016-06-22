@@ -21,6 +21,8 @@ class PriceGraphCell: UITableViewCell
     
     @IBOutlet weak var newPrice: UILabel!
 
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
     func setPercentChange(delta: Int)
     {
        if delta > 0

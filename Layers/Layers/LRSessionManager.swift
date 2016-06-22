@@ -255,6 +255,8 @@ class LRSessionManager: NSObject
                         }
                         else
                         {
+                            self.handleInvalidIdentity()
+                            
                             log.error("Unable to register user identity.")
                         }
                     })
@@ -354,6 +356,15 @@ class LRSessionManager: NSObject
                 {                    
                     if let response = Mapper<FacebookUserResponse>().map(JSON(result).dictionaryObject)
                     {
+                        if let gender = response.gender
+                        {
+                            // If gender exists but is not male or female
+                            if gender.characters.count > 0 && gender.lowercaseString != "male" && gender.lowercaseString != "female"
+                            {
+                                response.gender = "other specific"
+                            }
+                        }
+                        
                         if let completionBlock = completion
                         {
                             completionBlock(success: true, error: nil, response: response)

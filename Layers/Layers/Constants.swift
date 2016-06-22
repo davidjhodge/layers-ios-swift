@@ -9,3 +9,4 @@
 import Foundation
 
 let kSaleAlertCreatedNotification = "kSaleAlertCreatedNotification"
+let kSaleAlertDeletedNotification = "kSaleAlertDeletedNotification"
