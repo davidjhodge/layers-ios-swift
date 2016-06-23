@@ -1032,7 +1032,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             
             for (index, subview) in pickerView.subviews.enumerate()
             {
-                print("Index: \(index), \(subview.alpha)")
+                print("Index: \(index), \(subview.backgroundColor)")
             }
             
             if let pickerRow: PickerRow = NSBundle.mainBundle().loadNibNamed("PickerRow", owner: self, options: nil)[0] as? PickerRow

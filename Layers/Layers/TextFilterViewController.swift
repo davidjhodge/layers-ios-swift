@@ -27,6 +27,8 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var selectButton: UIButton!
+    
     var filterType: FilterType?
     
     var items: Array<FilterObject>?
@@ -38,10 +40,14 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         
         tableView.tableFooterView = UIView()
         
+        tableView.backgroundColor = Color.BackgroundGrayColor
+
         // Set the Navigation Title
         setNavTitle()
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "SELECT", style: .Plain, target: self, action:#selector(confirmSelection))
+        selectButton.addTarget(self, action: #selector(confirmSelection), forControlEvents: .TouchUpInside)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercaseString, style: .Plain, target: self, action:#selector(reset))
         
         reloadData()
     }
@@ -203,6 +209,13 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
     func confirmSelection()
     {
         navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func reset()
+    {
+        selectedItems = nil
+        
+        tableView.reloadData()
     }
     
     // MARK: Add/Remove
