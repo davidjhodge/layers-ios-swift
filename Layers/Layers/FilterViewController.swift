@@ -43,6 +43,8 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercaseString, style: .Plain, target: self, action: #selector(reset))
         
+        tableView.backgroundColor = Color.BackgroundGrayColor
+        
         applyButton.addTarget(self, action: #selector(applyFilter), forControlEvents: .TouchUpInside)
         
         if !newFilter.hasActiveFilters()
@@ -136,7 +138,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         
         if let priceFilter = priceFilter
         {
-            if priceFilter.minPrice?.integerValue > 0 && priceFilter.maxPrice?.integerValue > 0
+            if priceFilter.minPrice?.integerValue >= 0 && priceFilter.maxPrice?.integerValue > 0
             {
                 newFilter.priceRange = priceFilter
                 

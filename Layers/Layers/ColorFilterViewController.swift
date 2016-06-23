@@ -26,6 +26,8 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
     
     var selectedColors: Array<ColorResponse>?
     
+    @IBOutlet weak var selectButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,8 +41,10 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
         
         setNavTitle()
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "SELECT", style: .Plain, target: self, action:#selector(confirmSelection))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercaseString, style: .Plain, target: self, action:#selector(reset))
 
+        selectButton.addTarget(self, action: #selector(confirmSelection), forControlEvents: .TouchUpInside)
+        
         reloadColors()
     }
     
@@ -95,6 +99,13 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
     func confirmSelection()
     {
         navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func reset()
+    {
+        selectedColors = nil
+        
+        collectionView.reloadData()
     }
     
     // MARK: Add/Remove

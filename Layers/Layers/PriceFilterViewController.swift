@@ -33,28 +33,26 @@ class PriceFilterViewController: UIViewController
     
     @IBOutlet weak var priceFilterButton: UIButton!
     
-    @IBOutlet weak var checkmarkView: UIImageView!
-    
     var priceFilter: PriceFilter?
-    
-    var allPricesSelected: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Price".uppercaseString
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Select".uppercaseString, style: .Plain, target: self, action: #selector(selectFilter))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercaseString, style: .Plain, target: self, action: #selector(reset))
+        
+        priceFilterButton.addTarget(self, action: #selector(selectFilter), forControlEvents: .TouchUpInside)
         
         slider.trackTintColor = Color.LightGray
         slider.trackHighlightTintColor = Color.DarkNavyColor
         slider.thumbTintColor = Color.whiteColor()
         
         slider.minimumValue = 0
-        slider.maximumValue = Double(lookupDict().keys.count)
+        slider.maximumValue = 20
         
-        slider.lowerValue = 3
-        slider.upperValue = 10
+        slider.lowerValue = slider.minimumValue
+        slider.upperValue = slider.maximumValue
         
         if let currentFilter = priceFilter
         {
@@ -89,27 +87,20 @@ class PriceFilterViewController: UIViewController
             
             upperLabel.text = String(upperValue)
         }
-        
-        priceFilterButton.addTarget(self, action: #selector(selectAllPrices), forControlEvents: .TouchUpInside)
-        
-        selectAllPrices()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if let priceFilter = priceFilter
+        if let delegate = delegate
         {
-            if let delegate = delegate
+            if let priceFilter = priceFilter
             {
-                if allPricesSelected
-                {
-                    delegate.priceFilterChanged(nil)
-                }
-                else
-                {
-                    delegate.priceFilterChanged(priceFilter)
-                }
+                delegate.priceFilterChanged(priceFilter)
+            }
+            else
+            {
+                delegate.priceFilterChanged(nil)
             }
         }
     }
@@ -155,52 +146,40 @@ class PriceFilterViewController: UIViewController
             
             upperLabel.text = String(upperValue)
         }
-        
-        if allPricesSelected
-        {
-            deselectAllPrices()
-        }
-    }
-    
-    func selectAllPrices()
-    {
-        if !allPricesSelected
-        {
-            allPricesSelected = true
-            
-            self.checkmarkView.hidden = false
-
-            self.priceFilterButton.backgroundColor = Color.NeonBlueColor
-        }
-        else
-        {
-            deselectAllPrices()
-        }
-    }
-    
-    func deselectAllPrices()
-    {
-        checkmarkView.hidden = true
-        
-        allPricesSelected = false
-        
-        self.priceFilterButton.backgroundColor = Color.LightGray
-
-        self.checkmarkView.hidden = true
     }
     
     func selectFilter()
     {
-        priceFilter = PriceFilter()
-        
         if let lowerValue = lookupDict()[Int(slider.lowerValue)],
             let upperValue = lookupDict()[Int(slider.upperValue)]
         {
+            priceFilter = PriceFilter()
+
             priceFilter!.minPrice = NSNumber(integer: lowerValue)
             
             priceFilter!.maxPrice = NSNumber(integer: upperValue)
+        }
+        else
+        {
+            priceFilter = nil
+        }
+        
+        navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func reset()
+    {
+        priceFilter = nil
+
+        slider.lowerValue = 0
+        slider.upperValue = Double(lookupDict().keys.count)
+        
+        if let lowerValue = lookupDict()[Int(slider.minimumValue)],
+            let upperValue = lookupDict()[Int(slider.maximumValue)]
+        {
+            lowerLabel.text = String(lowerValue)
             
-            navigationController?.popViewControllerAnimated(true)
+            upperLabel.text = String(upperValue)
         }
     }
 }
