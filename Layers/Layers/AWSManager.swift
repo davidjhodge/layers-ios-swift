@@ -400,6 +400,105 @@ class AWSManager: NSObject, AWSIdentityProviderManager
         return temp.stringByReplacingOccurrencesOfString(">", withString: "")
     }
     
+    // MARK: Cognito Sync
+    func syncCognitoData(data: NSData?, forKey key: String?, dataset: String?, completionHandler: LRCompletionBlock?)
+    {
+        if let data = data,
+            let key = key,
+            let dataset = dataset
+        {
+            // Valid Params
+            
+            // Configure dataset
+            let syncClient = AWSCognito(forKey: "USEast1Cognito")
+            
+            let dataset = syncClient.openOrCreateDataset(dataset)
+
+//                if let dataDict = JSON(data: data).dictionaryObject as? Dictionary<String,String>
+//                {
+//                    if dataset.stringForKey(key) != nil
+//                    {
+//                        var newDictionary = Dictionary<String,String>()
+//
+//                        if let existingDict = JSON(dataset.stringForKey(key)).dictionaryObject as? Dictionary<String,String>
+//                        {
+//                            newDictionary = existingDict
+//                            
+//                            let jsonString = JSON(newDictionary).rawString()
+//                            
+//                            dataset.setString(jsonString, forKey: key)
+//                            
+//                            synchronizeDataSet(dataset, completionHandler: { (success, error, response) -> Void in
+//                                
+//                                if let completion = completionHandler
+//                                {
+//                                    completion(success: success, error: error, response: response)
+//                                }
+//                            })
+//                        }
+//                    }
+//                }
+            if let dataArray = JSON(data: data).arrayObject
+            {
+                var newArray: Array<AnyObject> = dataArray
+                
+                if dataset.stringForKey(key) != nil
+                {
+                    if let existingArray = JSON(dataset.stringForKey(key)).arrayObject
+                    {
+                        newArray = existingArray
+                    }
+                }
+                newArray.appendContentsOf(dataArray)
+                
+                let jsonString = JSON(newArray).rawString()
+                
+                dataset.setString(jsonString, forKey: key)
+                
+                synchronizeDataSet(dataset, completionHandler: { (success, error, response) -> Void in
+                    
+                    if let completion = completionHandler
+                    {
+                        completion(success: success, error: error, response: response)
+                    }
+                })
+                
+            }
+        }
+        else
+        {
+            if let completion = completionHandler
+            {
+                completion(success: false, error: "Invalid parameters passed to Cognito sync.", response: nil)
+            }
+        }
+    }
+
+    func synchronizeDataSet(dataset: AWSCognitoDataset, completionHandler: LRCompletionBlock?)
+    {
+        dataset.synchronize().continueWithBlock({ (task) -> AnyObject! in
+            
+            if task.error != nil
+            {
+                if let completion = completionHandler
+                {
+                    log.debug("SNS Platform Endpoint successfully created.")
+                    
+                    completion(success: false, error: task.error?.localizedDescription, response: nil)
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: true, error: nil, response: task.result)
+                }
+            }
+            
+            return nil
+        })
+    }
+
     // MARK: User Pools
     func registerToUserPool(email: String, password: String, completionHandler: LRCompletionBlock?)
     {

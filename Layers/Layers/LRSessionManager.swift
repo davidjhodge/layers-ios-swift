@@ -1047,7 +1047,7 @@ class LRSessionManager: NSObject
                         {
                             networkRequest.setValue(openIdToken, forHTTPHeaderField: "Authorization")
                             
-                            self.performNetworkReqeuest(request, networkRequest: networkRequest, completion: completion)
+                            self.performNetworkRequest(request, networkRequest: networkRequest, completion: completion)
                             
                             return
                         }
@@ -1060,7 +1060,7 @@ class LRSessionManager: NSObject
             }
             else
             {
-                performNetworkReqeuest(request, networkRequest: networkRequest, completion: completion)
+                performNetworkRequest(request, networkRequest: networkRequest, completion: completion)
             }
         }
         else
@@ -1072,7 +1072,7 @@ class LRSessionManager: NSObject
         }
     }
     
-    func performNetworkReqeuest(intialRequest: NSURLRequest, networkRequest: NSMutableURLRequest, completion: LRJsonCompletionBlock?)
+    func performNetworkRequest(intialRequest: NSURLRequest, networkRequest: NSMutableURLRequest, completion: LRJsonCompletionBlock?)
     {
         let newRequest = networkRequest
         
