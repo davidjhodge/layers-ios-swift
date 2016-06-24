@@ -138,6 +138,19 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             }
                         }
                         
+                        // Log to Cognito
+                        if let productId = self.product?.productId,
+                            let variantId = self.selectedVariant?.styleId
+                        {
+                            UserDataManager.defaultManager.viewedProduct(productId, variantId: variantId, completionHandler: { (success, error, response) -> Void in
+                                
+                                if !success
+                                {
+                                    log.error(error)
+                                }
+                            })
+                        }
+                        
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
                             self.refreshUI()
@@ -1159,6 +1172,18 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 if let size = currentVariant.sizes?[row]
                 {
                     selectedSize = size
+                    
+                    if let sizeId = size.specificId,
+                        let productId = product?.productId
+                    {
+                        UserDataManager.defaultManager.selectedSize(sizeId, productId: productId, completionHandler: { (success, error, response) -> Void in
+                            
+                            if !success
+                            {
+                                log.error(error)
+                            }
+                        })
+                    }
                 }
             }
         }
