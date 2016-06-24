@@ -82,6 +82,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             navigationController?.setNavigationBarHidden(false, animated: true)
         }
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(createSaleAlert), name: kUserDidRegisterForNotifications, object: nil)
+        
         setupPickers()
         
         reloadProduct()
@@ -296,6 +298,50 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func createSaleAlert()
     {
+        let indexPath = NSIndexPath(forRow: 0, inSection: TableSection.PriceHistory.rawValue)
+
+        if let priceHistoryCell = self.tableView.cellForRowAtIndexPath(indexPath) as? PriceGraphCell
+        {
+            
+            if let productId = productIdentifier
+            {
+                LRSessionManager.sharedManager.createSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        priceHistoryCell.createSaleAlertButton.userInteractionEnabled = true
+                        priceHistoryCell.spinner.stopAnimating()
+                    })
+                    
+                    if success
+                    {
+                        // Post Notification
+                        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kSaleAlertCreatedNotification, object: nil))
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            UIView.performWithoutAnimation({ () -> Void in
+                                
+                                priceHistoryCell.createSaleAlertButton.setTitle("Watching".uppercaseString, forState: .Normal)
+                            })
+                        })
+                    }
+                    else
+                    {
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
+                        })
+                    }
+                })
+            }
+        }
+    }
+    
+    func toggleSaleAlert()
+    {
         if let isWatching = product?.isWatching
         {
             let indexPath = NSIndexPath(forRow: 0, inSection: TableSection.PriceHistory.rawValue)
@@ -324,62 +370,20 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 if LRSessionManager.sharedManager.userHasEnabledNotifications()
                 {
-                    if let productId = productIdentifier
-                    {
-//                        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-//                        hud.mode = .Indeterminate
-//                        hud.labelText = "Creating Sale Alert"
-//                        hud.labelFont = Font.OxygenBold(size: 17.0)
-
-                        LRSessionManager.sharedManager.createSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
-                            
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                
-                                priceHistoryCell.createSaleAlertButton.userInteractionEnabled = true
-                                priceHistoryCell.spinner.stopAnimating()
-                            })
-                            
-                            if success
-                            {
-                                // Post Notification
-                                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kSaleAlertCreatedNotification, object: nil))
-                                
-                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                        
-                                        UIView.performWithoutAnimation({ () -> Void in
-                                            
-                                            priceHistoryCell.createSaleAlertButton.setTitle("Watching".uppercaseString, forState: .Normal)
-                                            })
-                                        })
-                                
-                                // Show Success HUD
-//                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                                    
-//                                    hud.hide(true, afterDelay: 0.0)
-//                                })
-                            }
-                            else
-                            {
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                    
-                                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                                    self.presentViewController(alert, animated: true, completion: nil)
-                                })
-                            }
-                        })
-                    }
+                    createSaleAlert()
                 }
                 else
                 {
+                    // Reset Sale Alert Button until user is registers for notifications
                     LRSessionManager.sharedManager.registerForRemoteNotificationsIfNeeded()
+                    
+                    product?.isWatching = false
                 }
-                
             }
             else
             {
                 product?.isWatching = false
-
+                
                 // Delete Alert
                 if let productId = productIdentifier
                 {
@@ -388,7 +392,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 if let productId = productIdentifier
                 {
-                    LRSessionManager.sharedManager.createSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
+                    LRSessionManager.sharedManager.deleteSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
@@ -401,13 +405,13 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             // Post Notification
                             NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kSaleAlertDeletedNotification, object: nil))
                             
-                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                        
-                                        UIView.performWithoutAnimation({ () -> Void in
-                                        
-                                        priceHistoryCell.createSaleAlertButton.setTitle("Create a Price Alert".uppercaseString, forState: .Normal)
-                                        })
-                                    })
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                
+                                UIView.performWithoutAnimation({ () -> Void in
+                                    
+                                    priceHistoryCell.createSaleAlertButton.setTitle("Create a Price Alert".uppercaseString, forState: .Normal)
+                                })
+                            })
                         }
                         else
                         {
@@ -420,7 +424,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         }
                     })
                 }
-            }
+                }
             }
         }
     }
@@ -739,7 +743,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     cell.createSaleAlertButton.setTitle(buttonTitle, forState: .Normal)
                     
-                    cell.createSaleAlertButton.addTarget(self, action: #selector(createSaleAlert), forControlEvents: .TouchUpInside)
+                    cell.createSaleAlertButton.addTarget(self, action: #selector(toggleSaleAlert), forControlEvents: .TouchUpInside)
                     
                     return cell
                     
@@ -1201,4 +1205,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    deinit
+    {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
 }

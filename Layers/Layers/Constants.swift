@@ -10,3 +10,4 @@ import Foundation
 
 let kSaleAlertCreatedNotification = "kSaleAlertCreatedNotification"
 let kSaleAlertDeletedNotification = "kSaleAlertDeletedNotification"
+let kUserDidRegisterForNotifications = "kUserDidRegisterForNotifications"
