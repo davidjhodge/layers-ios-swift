@@ -77,14 +77,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func registerRoutes()
     {
-        router["product/:product_id"] = ProductRouteHandler.self
+        router["products/:product_id"] = ProductRouteHandler.self
     }
     
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         
         LRSessionManager.sharedManager.registerForPushNotifications(deviceToken, completionHandler: { (success, error, response) -> Void in
          
-            if !success
+            if success
+            {
+                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kUserDidRegisterForNotifications, object: nil))
+            }
+            else
             {
                 log.error(error)
             }
@@ -97,7 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let productId = userInfo["product_id"] as? String
             {
                 // Mimicking an outbound Url to use Routing functionality. This should be improved in the future.
-                router.handleURL(NSURL(string: "trylayers://product/\(productId)"), withCompletion: nil)
+                router.handleURL(NSURL(string: "trylayers://products/\(productId)"), withCompletion: nil)
             }
             
         let message = userInfo

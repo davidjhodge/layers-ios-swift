@@ -62,6 +62,8 @@ class AWSManager: NSObject, AWSIdentityProviderManager
         let defaultServiceConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: credentialsProvider)
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration
         
+        AWSCognito.registerCognitoWithConfiguration(defaultServiceConfiguration, forKey: "USEast1Cognito")
+        
         self.configureUserPool()
     }
     
@@ -270,7 +272,7 @@ class AWSManager: NSObject, AWSIdentityProviderManager
     {
         if let identityId = credentialsProvider.identityId, deviceToken = deviceToken
         {
-            AWSCognito.defaultCognito().registerDevice(deviceToken)
+//            AWSCognito.defaultCognito().registerDevice(deviceToken)
 
             let platformEndpointRequest = AWSSNSCreatePlatformEndpointInput()
             platformEndpointRequest.token = deviceTokenAsString(deviceToken)
@@ -288,7 +290,7 @@ class AWSManager: NSObject, AWSIdentityProviderManager
             let snsManager = AWSSNS.defaultSNS()
             
             snsManager.createPlatformEndpoint(platformEndpointRequest).continueWithBlock({ (task) -> AnyObject! in
-                
+
                 if task.error != nil
                 {
                     if let completion = completionHandler
@@ -304,15 +306,85 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                 else
                 {
                     // Success
-                    log.debug("SNS Platform Endpoint successfully created.")
                     
-                    if let completion = completionHandler
+                    // Sync Endpoint with Cognito Sync
+                    if let endpointResponse = task.result as? AWSSNSCreateEndpointResponse
                     {
-                        completion(success: false, error: task.error?.localizedDescription, response: task.result)
+                        if let endpointARN: String = endpointResponse.endpointArn
+                        {
+                            let syncClient = AWSCognito(forKey: "USEast1Cognito")
+                            
+                            let dataset = syncClient.openOrCreateDataset("user_info")
+                            
+                            let pushDevicesKey = "push_devices"
+
+                            var pushDevices: Array<String>?
+
+                            if dataset.stringForKey(pushDevicesKey) != nil
+                            {
+                                if let existingDevices = JSON(dataset.stringForKey(pushDevicesKey)).arrayObject as? Array<String>
+                                {
+                                    pushDevices = existingDevices
+                                        
+                                    pushDevices?.appendContentsOf(existingDevices)
+                                }
+                                else
+                                {
+                                    pushDevices = Array<String>()
+                                }
+                            }
+                            else
+                            {
+                                pushDevices = Array<String>()
+                            }
+                            
+                            pushDevices?.append(endpointARN)
+                            
+                            let jsonString = JSON(pushDevices!).rawString()
+                            
+                            dataset.setString(jsonString, forKey: pushDevicesKey)
+                            
+                            dataset.synchronize().continueWithBlock({ (task) -> AnyObject! in
+                             
+                                if task.error != nil
+                                {
+                                    if let completion = completionHandler
+                                    {
+                                        log.debug("SNS Platform Endpoint successfully created.")
+
+                                        completion(success: false, error: task.error?.localizedDescription, response: nil)
+                                    }
+                                }
+                                else
+                                {
+                                    if let completion = completionHandler
+                                    {
+                                        completion(success: true, error: nil, response: task.result)
+                                    }
+                                }
+                                
+                                return nil
+                            })
+                        }
+                        else
+                        {
+                            if let completion = completionHandler
+                            {
+                                completion(success: false, error: "Device Token could not be saved to Cognito.", response: nil)
+                            }
+                        }
+                    }
+                    else
+                        
+                    {
+                        if let completion = completionHandler
+                        {
+                            completion(success: false, error: "Invalid Endpoint Response.", response: nil)
+                        }
                     }
                 }
                 
-                return nil
+                return AWSTask(result: task.result)
             })
         }
     }
