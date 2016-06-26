@@ -20,6 +20,10 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     
     @IBOutlet weak var collectionViewBottomLayoutConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var emptyStateView: UIView!
+    
+    @IBOutlet weak var emptyStateButton: UIButton!
+    
     var products: Array<SimpleProductResponse>?
     
     var currentPage: Int?
@@ -67,6 +71,8 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         customLayout.sectionInset = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
         collectionView.collectionViewLayout = customLayout
         
+        emptyStateButton.addTarget(self, action: #selector(showSearchTab), forControlEvents: .TouchUpInside)
+        
         spinner.hidesWhenStopped = true
         spinner.hidden = true
         spinner.color = Color.grayColor()
@@ -85,6 +91,13 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     func reloadProducts()
     {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
+        if emptyStateView.hidden == false
+        {
+            collectionView.hidden = false
+            
+            emptyStateView.hidden = true
+        }
         
         LRSessionManager.sharedManager.loadDiscoverProducts({ (success, error, response) -> Void in
             
@@ -130,8 +143,18 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                     }
                     else
                     {
-                        //                            hideLoadingCell()
+                        // hideLoadingCell()
                     }
+                }
+                
+                if self.products == nil || self.products?.count == 0
+                {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.collectionView.hidden = true
+                        
+                        self.emptyStateView.hidden = false
+                    })
                 }
             }
             else
@@ -241,6 +264,14 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         currentPage = 1
         
         reloadProducts()
+    }
+    
+    func showSearchTab()
+    {
+        if let tabBarVc = tabBarController
+        {
+            tabBarVc.selectedIndex = 1
+        }
     }
 
     // MARK: Collection View Data Source

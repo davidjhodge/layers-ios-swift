@@ -50,7 +50,9 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         tableView.backgroundColor = Color.BackgroundGrayColor
         tableView.contentInset = UIEdgeInsets(top: 8.0, left: tableView.contentInset.left, bottom: tableView.contentInset.bottom, right: tableView.contentInset.right)
         
-//        navigationItem.leftBarButtonItem = editButtonItem()
+//        tableView.allowsMultipleSelectionDuringEditing = true
+        
+        navigationItem.leftBarButtonItem = editButtonItem()
         
         spinner.color = Color.grayColor()
         spinner.hidesWhenStopped = true
@@ -61,7 +63,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         refreshControl.addTarget(self, action: #selector(refresh), forControlEvents: .ValueChanged)
         tableView.addSubview(refreshControl)
         
-        refreshControl.hidden = true
+        tableView.userInteractionEnabled = false
         
         startDiscoveringButton.addTarget(self, action: #selector(startDiscovering), forControlEvents: .TouchUpInside)
         
@@ -108,15 +110,12 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                 
                 self.spinner.stopAnimating()
                 
-                if self.refreshControl.hidden == true
+                if self.tableView.userInteractionEnabled == false
                 {
-                    self.refreshControl.hidden = false
+                    self.tableView.userInteractionEnabled = true
                 }
                 
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                
-                // If refresh control is animating, stop the animation
-                self.refreshControl.endRefreshing()
             })
             
             if success
@@ -144,10 +143,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                             self.hardReloadTableView()
                         })
                         
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            self.refreshControl.endRefreshing()
-                        })
+                        self.refreshControl.endRefreshing()
                         CATransaction.commit()
                     }
                     else
@@ -206,6 +202,27 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
     
     func deleteAlertAtIndexPath(indexPath: NSIndexPath)
     {
+        if indexPath.section == TableSection.OnSale.rawValue
+        {
+            // Remove item from data model
+            deleteAlert(indexPath, alertSection: TableSection.OnSale)
+            
+            return
+        }
+        else if indexPath.section == TableSection.Watching.rawValue
+        {
+            // Remove item from data model
+            deleteAlert(indexPath, alertSection: TableSection.Watching)
+            
+            return
+        }
+        
+        // If any step above fails, this error statement will be logged
+        log.debug("Failed to Delete Price Alert.")
+    }
+    
+    private func deleteAlert(indexPath: NSIndexPath, alertSection tableSection: TableSection)
+    {
         var index = indexPath.row
         
         // Handle seperators
@@ -213,76 +230,98 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         {
             index = (indexPath.row / 2)
         }
-    
-        if indexPath.section == TableSection.OnSale.rawValue
+        
+        // Define index paths
+        var indexPaths = [indexPath]
+        
+        // Delete item
+        var alertsCopy: Array<ProductResponse>?
+        
+        if tableSection == TableSection.OnSale
         {
-            if var saleAlerts = saleAlerts
+            let saleAlertsCopy = saleAlerts
+            
+            alertsCopy = saleAlertsCopy
+            
+            saleAlerts?.removeAtIndex(index)
+        }
+        else if tableSection == TableSection.Watching
+        {
+            let watchAlertsCopy = watchAlerts
+            
+            alertsCopy = watchAlertsCopy
+            
+            watchAlerts?.removeAtIndex(index)
+        }
+        
+        // Remove bottom seperator too unless last product
+        if alertsCopy?.count != 1
+        {
+            if index == 0
             {
-                if let alertProduct: ProductResponse = saleAlerts[safe: index]
-                {
-                    // Remove row from UI
-                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-                    
-                    deleteAlert(index, product: alertProduct, inAlerts: &saleAlerts)
-                    
-                    return
-                }
+                indexPaths.append(NSIndexPath(forRow: indexPath.row + 1, inSection: indexPath.section))
+            }
+            else
+            {
+                indexPaths.append(NSIndexPath(forRow: indexPath.row - 1, inSection: indexPath.section))
             }
         }
-        else if indexPath.section == TableSection.Watching.rawValue
+        else
         {
-            if var watchAlerts = watchAlerts
-            {
-                if let alertProduct: ProductResponse = watchAlerts[safe: index]
-                {
-                    // Remove row from UI
-                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            indexPaths.append(NSIndexPath(forRow: indexPath.row + 1, inSection: indexPath.section))
+        }
 
-                    deleteAlert(index, product: alertProduct, inAlerts: &watchAlerts)
-                    
-                    return
-                }
-            }
+        // Remove row from UI
+        
+        tableView.beginUpdates()
+        tableView.deleteRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
+        tableView.endUpdates()
+        
+        if tableView.contentSize.height > tableView.bounds.size.height
+        {
+            let cellHeight = CGFloat(112.0 + 8.0)
+            
+            tableView.contentSize = CGSizeMake(tableView.contentSize.width, tableView.contentSize.height - cellHeight)
         }
         
-        // If any step above fails, this error statement will be logged
-        log.debug("Failed to Delete Price Alert.")
-    }
-    
-    func deleteAlert(index: Int, product: ProductResponse, inout inAlerts alerts: Array<ProductResponse>)
-    {
-        let alertsCopy = alerts
-        
-        alerts.removeAtIndex(index)
-        
-        if let productId = product.productId
+        if let alertProduct: ProductResponse = alertsCopy?[safe: index]
         {
-            LRSessionManager.sharedManager.deleteSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
-                
-                if success
-                {
-                    log.debug("Sale alert deleted.")
-                }
-                else
-                {
-                    if let errorMessage = error
+            if let productId = alertProduct.productId
+            {
+                LRSessionManager.sharedManager.deleteSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
+                    
+                    if success
                     {
-                        log.error(errorMessage)
+                        log.debug("Sale alert deleted.")
                     }
-                    
-                    // Reset UI to state before deletion
-                    alerts = alertsCopy
-                    
-                    self.tableView.reloadData()
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    else
+                    {
+                        if let errorMessage = error
+                        {
+                            log.error(errorMessage)
+                        }
                         
-                        let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                        self.presentViewController(alert, animated: true, completion: nil)
-                    })
-                }
-            })
+                        // Reset UI to state before deletion
+                        if tableSection == TableSection.OnSale
+                        {
+                            self.saleAlerts = alertsCopy
+                        }
+                        else if tableSection == TableSection.Watching
+                        {
+                            self.watchAlerts = alertsCopy
+                        }
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.tableView.reloadData()
+
+                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
+                        })
+                    }
+                })
+            }
         }
     }
     
@@ -321,25 +360,6 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
         return 2
-//        var sections = 0
-//        
-//        if let saleAlerts = saleAlerts
-//        {
-//            if saleAlerts.count > 0
-//            {
-//                sections += 1
-//            }
-//        }
-//        
-//        if let watchAlerts = watchAlerts
-//        {
-//            if watchAlerts.count > 0
-//            {
-//                sections += 1
-//            }
-//        }
-//        
-//        return sections
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -590,7 +610,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        
+
         if indexPath.row % 2 == false
         {
             // Normal Cell
@@ -693,7 +713,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         
-        if indexPath.row % 2 == false
+        if indexPath.row % 2 == 0
         {
             return true
         }
@@ -704,6 +724,12 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
         
         return .Delete
+    }
+    
+    override func setEditing(editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        
+        tableView.setEditing(editing, animated: animated)
     }
     
     // MARK: Navigation
