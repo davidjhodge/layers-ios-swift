@@ -52,8 +52,6 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         
 //        tableView.allowsMultipleSelectionDuringEditing = true
         
-        navigationItem.leftBarButtonItem = editButtonItem()
-        
         spinner.color = Color.grayColor()
         spinner.hidesWhenStopped = true
         view.addSubview(spinner)
@@ -166,6 +164,25 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                         })
                     }
                 }
+                
+                // Show/hide Edit button as needed
+                if self.navigationItem.leftBarButtonItem == nil
+                    && (self.saleAlerts?.count > 0 || self.watchAlerts?.count > 0)
+                {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.navigationItem.leftBarButtonItem = self.editButtonItem()
+                        self.navigationItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName:Font.OxygenRegular(size: 16.0)], forState: .Normal)
+                    })
+                }
+                else if self.navigationItem.leftBarButtonItem != nil
+                && (self.saleAlerts?.count > 0 || self.watchAlerts?.count > 0)
+                {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.navigationItem.leftBarButtonItem = nil
+                    })
+                }
             }
             else
             {
@@ -273,9 +290,31 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
 
         // Remove row from UI
         
-        tableView.beginUpdates()
-        tableView.deleteRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
-        tableView.endUpdates()
+        if alertsCopy?.count == 1
+        {
+            // If 1 alert, reload enire table. If no alerts are left, show empty state
+            tableView.reloadData()
+            
+            if let saleAlerts = self.saleAlerts,
+                let watchAlerts = self.watchAlerts
+            {
+                if saleAlerts.count == 0 && watchAlerts.count == 0
+                {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.tableView.hidden = true
+                        
+                        self.emptyStateView.hidden = false
+                    })
+                }
+            }
+        }
+        else
+        {
+            tableView.beginUpdates()
+            tableView.deleteRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
+            tableView.endUpdates()
+        }
         
         if tableView.contentSize.height > tableView.bounds.size.height
         {

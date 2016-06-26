@@ -58,7 +58,7 @@ class LRSessionManager: NSObject
         // Clear existing persisted credentials
         if !hasCompletedFirstLaunch()
         {
-            logout()
+            logout(nil)
         }
         
         resumeSession()
@@ -83,7 +83,7 @@ class LRSessionManager: NSObject
                         log.debug(errorMessage)
                         
                         // If identityId does not exist, clear all existing credentials to avoid an incomplete state
-                        self.logout()
+                        self.logout(nil)
                         
                     }
                 }
@@ -95,48 +95,60 @@ class LRSessionManager: NSObject
         return AWSManager.defaultManager.isAuthenticated()
     }
 
-    func logout()
+    func logout(completionHandler: LRCompletionBlock?)
     {
-        // Clear Facebook Token if needed
-        if FBSDKAccessToken.currentAccessToken() != nil
-        {
-            FBSDKLoginManager().logOut()
-        }
-                
-        AWSManager.defaultManager.clearAWSCache()
-        
-        AWSManager.defaultManager.openIdToken = nil
-        
-        //Register new unauthenticated identity
-        AWSManager.defaultManager.fetchIdentityId({ (success, error, response) -> Void in
+        // Sync user data. Regardless of result, clear local storage and log out
+        UserDataManager.defaultManager.syncImmediately({ (success, error, response) -> Void in
             
-            if success
+            UserDataManager.defaultManager.resetLocalStorage()
+            
+            // Clear Facebook Token if needed
+            if FBSDKAccessToken.currentAccessToken() != nil
             {
-                log.debug("Successfully retrieved new identity token from AWS.")
+                FBSDKLoginManager().logOut()
+            }
+            
+            AWSManager.defaultManager.clearAWSCache()
+            
+            AWSManager.defaultManager.openIdToken = nil
+            
+            //Register new unauthenticated identity
+            AWSManager.defaultManager.fetchIdentityId({ (success, error, response) -> Void in
                 
-                self.registerIdentity({ (success, error, response) -> Void in
-                    
-                    if success
-                    {
-                        log.debug("New identity registered.")
-                    }
-                    else
-                    {
-                        log.error(error)
-                    }
-                })
-            }
-            else
-            {
-                if let errorMessage = error
+                if success
                 {
-                    log.debug(errorMessage)
+                    log.debug("Successfully retrieved new identity token from AWS.")
                     
-                    // If identityId does not exist, clear all existing credentials to avoid an incomplete state
-                    self.logout()
-                    
+                    self.registerIdentity({ (success, error, response) -> Void in
+                        
+                        if success
+                        {
+                            log.debug("New identity registered.")
+                        }
+                        else
+                        {
+                            log.error(error)
+                        }
+                    })
                 }
-            }
+                else
+                {
+                    if let errorMessage = error
+                    {
+                        log.debug(errorMessage)
+                        
+                        // If identityId does not exist, clear all existing credentials to avoid an incomplete state
+                        self.logout(nil)
+                        
+                        AppStateTransitioner.transitionToLoginStoryboard(true)
+                    }
+                }
+                
+                if let completion = completionHandler
+                {
+                    completion(success: true, error: nil, response: nil)
+                }
+            })
         })
     }
     
@@ -936,7 +948,7 @@ class LRSessionManager: NSObject
     {
         if let productId = productId
         {
-            let request = sendRequest(self.jsonRequest(APIUrlAtEndpoint("watch/products/\(productId.stringValue)"), HTTPMethod:  "DELETE", json: []), authorization: true, completion: { (success, error, response) -> Void in
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("watch/products/\(productId.stringValue)"), HTTPMethod:  "DELETE", json: []), authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {

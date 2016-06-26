@@ -401,69 +401,73 @@ class AWSManager: NSObject, AWSIdentityProviderManager
     }
     
     // MARK: Cognito Sync
-    func syncCognitoData(data: NSData?, forKey key: String?, dataset: String?, completionHandler: LRCompletionBlock?)
+    func syncCognitoData(data: NSData?, completionHandler: LRCompletionBlock?)
     {
-        if let data = data,
-            let key = key,
-            let dataset = dataset
+        if let data = data
         {
             // Valid Params
             
             // Configure dataset
             let syncClient = AWSCognito(forKey: "USEast1Cognito")
             
-            let dataset = syncClient.openOrCreateDataset(dataset)
-
-//                if let dataDict = JSON(data: data).dictionaryObject as? Dictionary<String,String>
-//                {
-//                    if dataset.stringForKey(key) != nil
-//                    {
-//                        var newDictionary = Dictionary<String,String>()
-//
-//                        if let existingDict = JSON(dataset.stringForKey(key)).dictionaryObject as? Dictionary<String,String>
-//                        {
-//                            newDictionary = existingDict
-//                            
-//                            let jsonString = JSON(newDictionary).rawString()
-//                            
-//                            dataset.setString(jsonString, forKey: key)
-//                            
-//                            synchronizeDataSet(dataset, completionHandler: { (success, error, response) -> Void in
-//                                
-//                                if let completion = completionHandler
-//                                {
-//                                    completion(success: success, error: error, response: response)
-//                                }
-//                            })
-//                        }
-//                    }
-//                }
-            if let dataArray = JSON(data: data).arrayObject
+            let cognitoDataset = syncClient.openOrCreateDataset("user_data")
+            
+            // Convert data to dictionary
+            if var dataDict = JSON(data: data).dictionaryObject
             {
-                var newArray: Array<AnyObject> = dataArray
-                
-                if dataset.stringForKey(key) != nil
+                // For each key in the dict from data, which represents a dataset
+                for (datasetName, _) in dataDict
                 {
-                    if let existingArray = JSON(dataset.stringForKey(key)).arrayObject
+                    // For each key in the subdict, get the array if one exists or create a new one
+                    if var datasetValue = dataDict[datasetName] as? Dictionary<String,AnyObject>
                     {
-                        newArray = existingArray
+                        for (key, arrayValue) in datasetValue
+                        {
+                            if let dataArray = arrayValue as? Array<Dictionary<String,AnyObject>>
+                            {
+                                var newArray: Array<Dictionary<String,AnyObject>> = dataArray
+                                
+                                if cognitoDataset.stringForKey(key) != nil
+                                {
+                                    if let existingArray = JSON(cognitoDataset.stringForKey(key)).arrayObject as? Array<Dictionary<String,AnyObject>>
+                                    {
+                                        newArray = existingArray
+                                    }
+                                }
+                                
+                                newArray.appendContentsOf(dataArray)
+                                
+                                datasetValue[key] = newArray
+                            }
+                        }
                     }
+                    
+                    let jsonString = JSON(dataDict).rawString()
+                    
+                    // To use only one cognito dataset, each key at the parent level represents an internal data set
+                    cognitoDataset.setString(jsonString, forKey: datasetName)
                 }
-                newArray.appendContentsOf(dataArray)
+            }
+            
+            // Sync the data with cognito
+            synchronizeDataSet(cognitoDataset, completionHandler: { (success, error, response) -> Void in
                 
-                let jsonString = JSON(newArray).rawString()
-                
-                dataset.setString(jsonString, forKey: key)
-                
-                synchronizeDataSet(dataset, completionHandler: { (success, error, response) -> Void in
+                if success
+                {
+                    log.debug("Temporary Data Store successfully pushed data to cognito.")
+                    
                     
                     if let completion = completionHandler
                     {
-                        completion(success: success, error: error, response: response)
+                        completion(success: true, error: nil, response: nil)
                     }
-                })
+                }
                 
-            }
+                if let completion = completionHandler
+                {
+                    completion(success: success, error: error, response: response)
+                }
+            })
         }
         else
         {
@@ -473,6 +477,61 @@ class AWSManager: NSObject, AWSIdentityProviderManager
             }
         }
     }
+
+    
+//    func syncCognitoData(data: NSData?, forKey key: String?, dataset: String?, completionHandler: LRCompletionBlock?)
+//    {
+//        if let data = data,
+//            let key = key,
+//            let dataset = dataset
+//        {
+//            // Valid Params
+//            
+//            // Configure dataset
+//            let syncClient = AWSCognito(forKey: "USEast1Cognito")
+//            
+//            let dataset = syncClient.openOrCreateDataset(dataset)
+//
+//            if let dataArray = JSON(data: data).arrayObject
+//            {
+//                var newArray: Array<AnyObject> = dataArray
+//                
+//                if dataset.stringForKey(key) != nil
+//                {
+//                    if let existingArray = JSON(dataset.stringForKey(key)).arrayObject
+//                    {
+//                        newArray = existingArray
+//                    }
+//                }
+//                newArray.appendContentsOf(dataArray)
+//                
+//                let jsonString = JSON(newArray).rawString()
+//                
+//                dataset.setString(jsonString, forKey: key)
+//                
+//                synchronizeDataSet(dataset, completionHandler: { (success, error, response) -> Void in
+//                    
+//                    if success
+//                    {
+//                        log.debug("Temporary Data Store successfully pushed data to cognito.")
+//                    }
+//                    
+//                    if let completion = completionHandler
+//                    {
+//                        completion(success: success, error: error, response: response)
+//                    }
+//                })
+//                
+//            }
+//        }
+//        else
+//        {
+//            if let completion = completionHandler
+//            {
+//                completion(success: false, error: "Invalid parameters passed to Cognito sync.", response: nil)
+//            }
+//        }
+//    }
 
     func synchronizeDataSet(dataset: AWSCognitoDataset, completionHandler: LRCompletionBlock?)
     {

@@ -425,30 +425,43 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                     else
                     {
+                        let loadingHUD = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                        loadingHUD.mode = .Indeterminate
+
+                        
                         //Clear Credentials
-                        LRSessionManager.sharedManager.logout()
-                        
-                        // Completely reset all view controllers in heirarchy
-                        AppStateTransitioner.transitionToMainStoryboard(false)
-                        
-                        if let tabBarVc = UIApplication.sharedApplication().keyWindow?.rootViewController as? UITabBarController
-                        {
-                            tabBarVc.selectedIndex = 3
+                        LRSessionManager.sharedManager.logout({ (success, error, response) -> Void in
                             
-                            if let nav = tabBarVc.selectedViewController as? UINavigationController
-                            {
-                                if let accountVc = nav.viewControllers[0] as? AccountViewController
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                
+                                loadingHUD.hide(false)
+                                
+                                // Completely reset all view controllers in heirarchy
+                                AppStateTransitioner.transitionToMainStoryboard(false)
+                                
+                                if let tabBarVc = UIApplication.sharedApplication().keyWindow?.rootViewController as? UITabBarController
                                 {
-                                    let hud = MBProgressHUD.showHUDAddedTo(accountVc.view, animated: true)
-                                    hud.mode = .CustomView
-                                    hud.customView = UIImageView(image: UIImage(named: "checkmark"))
+                                    tabBarVc.selectedIndex = 3
                                     
-                                    hud.labelText = "Successfully Logged Out"
-                                    hud.labelFont = Font.OxygenBold(size: 17.0)
-                                    hud.hide(true, afterDelay: 1.5)
+                                    if let nav = tabBarVc.selectedViewController as? UINavigationController
+                                    {
+                                        if let accountVc = nav.viewControllers[0] as? AccountViewController
+                                        {
+                                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                                
+                                                let hud = MBProgressHUD.showHUDAddedTo(accountVc.view, animated: true)
+                                                hud.mode = .CustomView
+                                                hud.customView = UIImageView(image: UIImage(named: "checkmark"))
+                                                
+                                                hud.labelText = "Successfully Logged Out"
+                                                hud.labelFont = Font.OxygenBold(size: 17.0)
+                                                hud.hide(true, afterDelay: 1.5)
+                                            })
+                                        }
+                                    }
                                 }
-                            }
-                        }
+                            })
+                        })
                     }
                 }
                  
