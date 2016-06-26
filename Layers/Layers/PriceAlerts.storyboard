@@ -8,8 +8,12 @@
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
+            <string>Oxygen-Bold</string>
+            <string>Oxygen-Bold</string>
+            <string>Oxygen-Bold</string>
         </mutableArray>
         <mutableArray key="Oxygen-Regular.ttf">
+            <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
         </mutableArray>
@@ -65,7 +69,7 @@
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hCd-Fj-tdk">
                                                     <rect key="frame" x="116" y="37" width="464" height="27"/>
-                                                    <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -159,12 +163,161 @@ you'll see it here.</string>
                         <outlet property="emptyStateView" destination="4Cq-9F-4fN" id="BfS-aF-e3f"/>
                         <outlet property="startDiscoveringButton" destination="VzI-1c-yYz" id="Hsb-cx-veh"/>
                         <outlet property="tableView" destination="9Wu-0p-pW0" id="Qau-tS-TyC"/>
-                        <segue destination="qNC-BS-LPj" kind="show" identifier="ShowProductWebViewController" id="UWU-pN-EQc"/>
+                        <segue destination="qNC-BS-LPj" kind="show" identifier="ShowProductWebViewController" id="QdL-jc-jvj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1ZX-Qy-xXf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1221" y="346"/>
+            <point key="canvasLocation" x="1187" y="346"/>
+        </scene>
+        <!--Sale Alerts View Controller-->
+        <scene sceneID="10v-Re-QbL">
+            <objects>
+                <viewController id="aJC-2C-GQh" customClass="SaleAlertsViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="k9o-ef-gcf"/>
+                        <viewControllerLayoutGuide type="bottom" id="G3a-f9-e8b"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="TRQ-2A-NG2">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="IgE-CC-y5d">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="nnC-e4-bgb">
+                                    <size key="itemSize" width="399" height="112"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SaleAlertCell" id="DG8-QR-3gP" customClass="SaleAlertCell" customModule="Layers" customModuleProvider="target">
+                                        <rect key="frame" x="100.5" y="0.0" width="399" height="112"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="399" height="112"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="A8x-uZ-Rkf">
+                                                    <rect key="frame" x="12" y="16" width="80" height="80"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="80" id="HCa-rx-z3t"/>
+                                                        <constraint firstAttribute="width" constant="80" id="T1a-gj-06i"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rX0-87-9Yf">
+                                                    <rect key="frame" x="116" y="37" width="275" height="30"/>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="14"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o86-67-PFd">
+                                                    <rect key="frame" x="116" y="75" width="275" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="7aD-k3-1pf"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="16"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Brand" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ucp-H2-F01">
+                                                    <rect key="frame" x="116" y="16" width="275" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="2wS-zd-f3X"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="14"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="rX0-87-9Yf" firstAttribute="leading" secondItem="A8x-uZ-Rkf" secondAttribute="trailing" constant="24" id="02I-dz-boY"/>
+                                            <constraint firstItem="rX0-87-9Yf" firstAttribute="top" secondItem="ucp-H2-F01" secondAttribute="bottom" id="06E-rm-du2"/>
+                                            <constraint firstItem="ucp-H2-F01" firstAttribute="top" secondItem="DG8-QR-3gP" secondAttribute="top" constant="16" id="5ho-CZ-bbc"/>
+                                            <constraint firstItem="A8x-uZ-Rkf" firstAttribute="leading" secondItem="DG8-QR-3gP" secondAttribute="leading" constant="12" id="64P-H6-bhk"/>
+                                            <constraint firstItem="o86-67-PFd" firstAttribute="top" secondItem="rX0-87-9Yf" secondAttribute="bottom" constant="8" id="8Hu-sV-EPi"/>
+                                            <constraint firstItem="ucp-H2-F01" firstAttribute="leading" secondItem="A8x-uZ-Rkf" secondAttribute="trailing" constant="24" id="9sq-Qv-Q2g"/>
+                                            <constraint firstItem="o86-67-PFd" firstAttribute="leading" secondItem="A8x-uZ-Rkf" secondAttribute="trailing" constant="24" id="F7y-T8-KdG"/>
+                                            <constraint firstItem="A8x-uZ-Rkf" firstAttribute="centerY" secondItem="DG8-QR-3gP" secondAttribute="centerY" id="VbW-mp-gcj"/>
+                                            <constraint firstAttribute="trailing" secondItem="o86-67-PFd" secondAttribute="trailing" constant="8" id="Wiv-n1-r3K"/>
+                                            <constraint firstAttribute="trailing" secondItem="ucp-H2-F01" secondAttribute="trailing" constant="8" id="bja-r1-fcv"/>
+                                            <constraint firstAttribute="trailing" secondItem="rX0-87-9Yf" secondAttribute="trailing" constant="8" id="npH-7a-25n"/>
+                                            <constraint firstAttribute="bottom" secondItem="o86-67-PFd" secondAttribute="bottom" constant="16" id="zJt-GN-szl"/>
+                                        </constraints>
+                                        <size key="customSize" width="399" height="112"/>
+                                        <connections>
+                                            <outlet property="brandLabel" destination="ucp-H2-F01" id="Qj6-Uk-KVP"/>
+                                            <outlet property="priceLabel" destination="o86-67-PFd" id="nWb-yc-RwK"/>
+                                            <outlet property="productImageView" destination="A8x-uZ-Rkf" id="k0T-d6-0mK"/>
+                                            <outlet property="productLabel" destination="rX0-87-9Yf" id="d3l-dd-i1K"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="aJC-2C-GQh" id="eQX-eG-y6x"/>
+                                    <outlet property="delegate" destination="aJC-2C-GQh" id="9cU-fm-QIv"/>
+                                </connections>
+                            </collectionView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="he9-Nt-NYZ">
+                                <rect key="frame" x="48" y="208" width="504" height="152"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eUg-Lj-Ol5">
+                                        <rect key="frame" x="0.0" y="104" width="504" height="48"/>
+                                        <color key="backgroundColor" red="0.29803921570000003" green="0.52156862749999999" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="48" id="B3j-1h-MrC"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="15"/>
+                                        <state key="normal" title="START DISCOVERING">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zmo-xC-St0">
+                                        <rect key="frame" x="0.0" y="0.0" width="504" height="41"/>
+                                        <string key="text">When you create a sale alert,
+you'll see it here.</string>
+                                        <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="16"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="152" id="IKn-6O-YZt"/>
+                                    <constraint firstItem="zmo-xC-St0" firstAttribute="leading" secondItem="he9-Nt-NYZ" secondAttribute="leading" id="MUN-Be-MFx"/>
+                                    <constraint firstItem="eUg-Lj-Ol5" firstAttribute="top" relation="greaterThanOrEqual" secondItem="zmo-xC-St0" secondAttribute="bottom" constant="56" id="QlU-z2-PDM"/>
+                                    <constraint firstAttribute="trailing" secondItem="eUg-Lj-Ol5" secondAttribute="trailing" id="awb-j2-odb"/>
+                                    <constraint firstAttribute="trailing" secondItem="zmo-xC-St0" secondAttribute="trailing" id="hXg-5h-tL2"/>
+                                    <constraint firstItem="eUg-Lj-Ol5" firstAttribute="leading" secondItem="he9-Nt-NYZ" secondAttribute="leading" id="k9j-ZS-t32"/>
+                                    <constraint firstItem="zmo-xC-St0" firstAttribute="top" secondItem="he9-Nt-NYZ" secondAttribute="top" id="mVa-os-ePK"/>
+                                    <constraint firstAttribute="bottom" secondItem="eUg-Lj-Ol5" secondAttribute="bottom" id="naq-i6-Qxw"/>
+                                    <constraint firstAttribute="height" constant="152" id="tBL-Ms-lad"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="G3a-f9-e8b" firstAttribute="top" secondItem="IgE-CC-y5d" secondAttribute="bottom" id="6JP-sj-dCj"/>
+                            <constraint firstAttribute="trailing" secondItem="he9-Nt-NYZ" secondAttribute="trailing" constant="48" id="AVj-LK-UGH"/>
+                            <constraint firstItem="IgE-CC-y5d" firstAttribute="leading" secondItem="TRQ-2A-NG2" secondAttribute="leading" id="O1w-4r-MkQ"/>
+                            <constraint firstItem="IgE-CC-y5d" firstAttribute="top" secondItem="TRQ-2A-NG2" secondAttribute="top" id="T5T-vb-Quw"/>
+                            <constraint firstAttribute="trailing" secondItem="IgE-CC-y5d" secondAttribute="trailing" id="g2f-ka-8G7"/>
+                            <constraint firstItem="he9-Nt-NYZ" firstAttribute="centerY" secondItem="TRQ-2A-NG2" secondAttribute="centerY" constant="-16" id="lsp-qe-ADx"/>
+                            <constraint firstItem="he9-Nt-NYZ" firstAttribute="leading" secondItem="TRQ-2A-NG2" secondAttribute="leading" constant="48" id="tkR-sh-DPQ"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="1pO-MU-c3P"/>
+                    <connections>
+                        <outlet property="collectionView" destination="IgE-CC-y5d" id="oPu-ot-0Sn"/>
+                        <outlet property="emptyStateView" destination="he9-Nt-NYZ" id="ygj-YJ-GD1"/>
+                        <outlet property="startDiscoveringButton" destination="eUg-Lj-Ol5" id="sz1-tA-EvD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vKr-F1-EfH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1836" y="1060"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="BN1-0G-wBS">
@@ -177,7 +330,7 @@ you'll see it here.</string>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="2F7-pm-9rl" kind="relationship" relationship="rootViewController" id="Go4-0f-taP"/>
+                        <segue destination="2F7-pm-9rl" kind="relationship" relationship="rootViewController" id="NsD-W5-g2u"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HZk-vy-lhC" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -215,7 +368,7 @@ you'll see it here.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NfU-Ba-j4P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1878" y="346"/>
+            <point key="canvasLocation" x="1849" y="346"/>
         </scene>
     </scenes>
 </document>

@@ -29,8 +29,10 @@
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
+            <string>Oxygen-Bold</string>
         </mutableArray>
         <mutableArray key="Oxygen-Regular.ttf">
+            <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
@@ -553,11 +555,51 @@
                                     <outlet property="delegate" destination="224-Ec-WVJ" id="Rwv-xk-NbO"/>
                                 </connections>
                             </collectionView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Ov-sT-2kw">
+                                <rect key="frame" x="43" y="176" width="514" height="184"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JdV-l7-Aa0">
+                                        <rect key="frame" x="0.0" y="136" width="514" height="48"/>
+                                        <color key="backgroundColor" red="0.29803921570000003" green="0.52156862749999999" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="48" id="zr9-82-hL9"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="15"/>
+                                        <state key="normal" title="SEARCH LAYERS">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ql3-42-loT">
+                                        <rect key="frame" x="0.0" y="0.0" width="514" height="81"/>
+                                        <string key="text">Wow! You've seen every
+item on Layers.
+
+To keep browsing, try Search.</string>
+                                        <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="16"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="184" id="1Nj-2h-2Af"/>
+                                    <constraint firstAttribute="trailing" secondItem="JdV-l7-Aa0" secondAttribute="trailing" id="M29-Az-7BU"/>
+                                    <constraint firstAttribute="bottom" secondItem="JdV-l7-Aa0" secondAttribute="bottom" id="Sox-j1-sgq"/>
+                                    <constraint firstItem="JdV-l7-Aa0" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Ql3-42-loT" secondAttribute="bottom" constant="32" id="T7n-K7-FOY"/>
+                                    <constraint firstItem="Ql3-42-loT" firstAttribute="leading" secondItem="8Ov-sT-2kw" secondAttribute="leading" id="ULh-bY-n6s"/>
+                                    <constraint firstItem="Ql3-42-loT" firstAttribute="top" secondItem="8Ov-sT-2kw" secondAttribute="top" id="WYU-Bm-GUf"/>
+                                    <constraint firstItem="JdV-l7-Aa0" firstAttribute="leading" secondItem="8Ov-sT-2kw" secondAttribute="leading" id="aFV-kK-oWc"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ql3-42-loT" secondAttribute="trailing" id="rV1-pB-KWr"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Jwm-Ff-KJQ" firstAttribute="leading" secondItem="kkq-HO-POX" secondAttribute="leading" id="2Ub-3d-8Wt"/>
+                            <constraint firstItem="8Ov-sT-2kw" firstAttribute="centerY" secondItem="kkq-HO-POX" secondAttribute="centerY" constant="-32" id="9FG-EY-ujS"/>
+                            <constraint firstItem="8Ov-sT-2kw" firstAttribute="leading" secondItem="kkq-HO-POX" secondAttribute="leading" constant="43" id="Cc6-PH-tqh"/>
                             <constraint firstItem="CbE-Ut-Yxw" firstAttribute="top" secondItem="Jwm-Ff-KJQ" secondAttribute="bottom" id="gfr-hr-Etb"/>
+                            <constraint firstAttribute="trailing" secondItem="8Ov-sT-2kw" secondAttribute="trailing" constant="43" id="tgI-ET-ciS"/>
                             <constraint firstAttribute="trailing" secondItem="Jwm-Ff-KJQ" secondAttribute="trailing" id="tyb-2C-PxY"/>
                             <constraint firstItem="Jwm-Ff-KJQ" firstAttribute="top" secondItem="kkq-HO-POX" secondAttribute="top" id="zlI-Nv-eR1"/>
                         </constraints>
@@ -566,6 +608,8 @@
                     <connections>
                         <outlet property="collectionView" destination="Jwm-Ff-KJQ" id="AGi-0U-3hm"/>
                         <outlet property="collectionViewBottomLayoutConstraint" destination="gfr-hr-Etb" id="uYZ-70-Tue"/>
+                        <outlet property="emptyStateButton" destination="JdV-l7-Aa0" id="vkY-h3-FUf"/>
+                        <outlet property="emptyStateView" destination="8Ov-sT-2kw" id="qUf-Wq-aFm"/>
                         <segue destination="K2o-10-SPo" kind="show" identifier="ShowProductViewController" id="w26-AX-dDf"/>
                         <segue destination="iAW-BK-2cD" kind="presentation" identifier="PresentModalFilterViewController" id="OVd-Xa-dJD"/>
                         <segue destination="PI8-l8-9ZZ" kind="presentation" identifier="ShowSearchViewController" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="xPG-gZ-mGR"/>

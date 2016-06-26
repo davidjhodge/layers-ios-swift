@@ -936,11 +936,7 @@ class LRSessionManager: NSObject
     {
         if let productId = productId
         {
-            let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("watch/products/\(productId.stringValue)"))
-            
-            request.HTTPMethod = "DELETE"
-            
-            sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+            let request = sendRequest(self.jsonRequest(APIUrlAtEndpoint("watch/products/\(productId.stringValue)"), HTTPMethod:  "DELETE", json: []), authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
@@ -949,30 +945,6 @@ class LRSessionManager: NSObject
                         if let completion = completionHandler
                         {
                             completion(success: true, error: error, response: jsonResponse.dictionaryObject)
-                        }
-                    }
-                }
-                else
-                {
-                    if let completion = completionHandler
-                    {
-                        completion(success: false, error: error, response: nil)
-                    }
-                }
-            })
-
-            sendRequest(self.jsonRequest(APIUrlAtEndpoint("watch/products/\(productId.stringValue)"), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
-                
-                if success
-                {
-                    if let jsonResponse = response
-                    {
-                        
-                        let colors = Mapper<ColorResponse>().mapArray(jsonResponse.arrayObject)
-                        
-                        if let completion = completionHandler
-                        {
-                            completion(success: true, error: error, response: colors)
                         }
                     }
                 }
@@ -1094,7 +1066,10 @@ class LRSessionManager: NSObject
                     
                     let milliseconds = Int(round(requestTimestamp * 1000))
                     
-                    log.verbose("Request: \(requestUrlString!) returned in: \(milliseconds) ms")
+                    var statusCode = response.response?.statusCode
+                    if statusCode == nil { statusCode = 0 }
+                    
+                    log.verbose("Request: \(requestUrlString!) returned status of \(statusCode!) in: \(milliseconds) ms")
                     
                     if let data = response.result.value?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
                     {
