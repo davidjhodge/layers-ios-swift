@@ -15,6 +15,7 @@ private let kBrowsingHistoryDataset = "browsing_history"
 private let kProductViews = "product_views"
 private let kProductClicks = "product_clicks"
 private let kSizeSelections = "sizes"
+private let kUserData = "user_data"
 
 private let kLastSyncDate = "kLastSyncDate"
 
@@ -30,7 +31,7 @@ class UserDataManager: NSObject
     {
         super.init()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(syncIfNeeded), name: UIApplicationWillResignActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(syncImmediately), name: UIApplicationWillResignActiveNotification, object: nil)
     }
     
     func syncIfNeeded()
@@ -182,6 +183,52 @@ class UserDataManager: NSObject
         }
     }
     
+    func facebookLogin(firstName: String?, lastName: String?, gender: String?, predictedAge: NSNumber?, email: String?, completionHandler: LRCompletionBlock?)
+    {
+        // Set default values if variables are nil
+        var firstName = firstName
+        var lastName = lastName
+        var gender = gender
+        var predictedAge = predictedAge
+        var email = email
+        
+        if firstName == nil { firstName = "" }
+        if lastName == nil { lastName = "" }
+        if gender == nil { gender = "" }
+        if predictedAge == nil { predictedAge = 0}
+        if email == nil { email = "" }
+        
+        if let firstName = firstName,
+            let lastName = lastName,
+            let gender = gender,
+            let predictedAge = predictedAge,
+            let email = email
+        {
+            let array = [
+                ["first_name":  firstName,
+                "last_name":    lastName,
+                "gender":       gender,
+                "predicted_age":predictedAge,
+                "email":        email]
+            ]
+            
+            storeInfo(array, key: kUserData, dataset: kUserInfoDataset, completionHandler: { (success, error, response) -> Void in
+                
+                if let completion = completionHandler
+                {
+                    completion(success: success, error: error, response: response)
+                }
+            })
+        }
+        else
+        {
+            if let completion = completionHandler
+            {
+                completion(success: false, error: "Viewed Product Invalid Parameters.", response: nil)
+            }
+        }
+    }
+
     func viewedProduct(productId: NSNumber?, variantId: String?, completionHandler: LRCompletionBlock?)
     {
         if let productId = productId,
