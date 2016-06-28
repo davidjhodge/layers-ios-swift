@@ -110,19 +110,52 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
     // MARK: Actions
     func submit()
     {
-        completeFirstLaunchExperience()
+        if let nameCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Name.rawValue, inSection: 0)) as? TwoTextFieldCell,
+            
+            let genderAgeCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.GenderAge.rawValue, inSection: 0)) as? TwoTextFieldCell,
+            
+            let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Email.rawValue, inSection: 0)) as? TextFieldCell
+        {
+            let firstName = nameCell.firstTextField.text
+            let lastName = nameCell.secondTextField.text
+            let gender = genderAgeCell.firstTextField.text
+            let age = NSNumber.aws_numberFromString(genderAgeCell.secondTextField.text)
+            let email = emailCell.textField.text
+            
+            UserDataManager.defaultManager.facebookLogin(firstName, lastName: lastName, gender: gender, predictedAge: age, email: email, completionHandler: { (success, error, response) -> Void in
+                
+                if success
+                {
+                    self.completeFirstLaunchExperience()
+                }
+                else
+                {
+                    log.error(error)
+                }
+            })
+        }
+        else
+        {
+            completeFirstLaunchExperience()
+        }
     }
     
     func completeFirstLaunchExperience()
     {
         LRSessionManager.sharedManager.completeFirstLaunch()
         
-        view.endEditing(true)
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            self.view.endEditing(true)
+        })
         
         if isModal
         {
             // Logged in on Account Page
-            dismissViewControllerAnimated(true, completion: nil)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+
+                self.dismissViewControllerAnimated(true, completion: nil)
+            })
         
             if let authDelegate = delegate
             {
