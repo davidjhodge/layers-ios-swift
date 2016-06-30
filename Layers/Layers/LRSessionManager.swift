@@ -1110,7 +1110,10 @@ class LRSessionManager: NSObject
                                 if errors["invalid_token"] != nil
                                 {
                                     // Identity Unauthorized
-                                    self.handleInvalidIdentity()
+//                                    self.handleInvalidIdentity()
+                                    LRSessionManager.sharedManager.logout(nil)
+                                    
+                                    AppStateTransitioner.transitionToLoginStoryboard(true)
                                     
                                     if let completionHandler = completion
                                     {

@@ -783,10 +783,10 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                 {
                     print("AWSCognito Identity changed from: \(userInfo[AWSCognitoNotificationPreviousId]) to: \(newId)")
                     
-                    if credentialsProvider.identityProvider.identityId != nil
-                    {
-                        credentialsProvider.identityProvider.identityId = newId
-                    }
+//                    if credentialsProvider.identityProvider.identityId != nil
+//                    {
+//                        credentialsProvider.identityProvider.identityId = newId
+//                    }
                     
                     openIdToken = nil
                 }
