@@ -176,7 +176,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                     })
                 }
                 else if self.navigationItem.leftBarButtonItem != nil
-                && (self.saleAlerts?.count > 0 || self.watchAlerts?.count > 0)
+                && (self.saleAlerts?.count == 0 && self.watchAlerts?.count == 0)
                 {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         

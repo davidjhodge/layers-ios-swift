@@ -31,7 +31,7 @@ class UserDataManager: NSObject
     {
         super.init()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(syncImmediately), name: UIApplicationWillResignActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(syncIfNeeded), name: UIApplicationWillResignActiveNotification, object: nil)
     }
     
     func syncIfNeeded()
