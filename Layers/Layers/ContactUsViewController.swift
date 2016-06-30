@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import UITextView_Placeholder
+import MBProgressHUD
 
 private enum TableSection: Int
 {
@@ -37,10 +38,61 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
     
     func send()
     {
-        // If Success
-        view.endEditing(true)
+        if let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: TableSection.Email.rawValue)) as? TextViewCell,
+            let contentCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: TableSection.Description.rawValue)) as? TextViewCell
+        {
+            if let email = emailCell.textView.text,
+                let content = contentCell.textView.text
+            {
+                LRSessionManager.sharedManager.submitContactForm(email, content: content, completionHandler: { (success, error, response) -> Void in
+                    
+                    if success
+                    {
+                        // Show success hud for 1.5 seconds. Hide it, end editing, and pop
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                
+                                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                                hud.mode = .CustomView
+                                hud.customView = UIImageView(image: UIImage(named: "checkmark"))
+                                
+                                hud.labelText = "Successfully Logged Out"
+                                hud.labelFont = Font.OxygenBold(size: 17.0)
+                                hud.hide(true, afterDelay: 1.5)
+                                
+                                self.performSelector(#selector(self.done), withObject: nil, afterDelay: 1.5)
+                            })
+                        })
+                    }
+                    else
+                    {
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
+                        })
+                    }
+                    
+                    return
+                })
+
+            }
+        }
         
-        navigationController?.popViewControllerAnimated(true)
+        // Invalid parameters
+        let alert = UIAlertController(title: "INVALID_PARAMETERS".localized, message: nil, preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func done()
+    {
+        self.view.endEditing(true)
+        
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     // MARK: Table View Data Source
