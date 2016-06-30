@@ -11,12 +11,15 @@ import Alamofire
 import SwiftyJSON
 import ObjectMapper
 import MBProgressHUD
+import KeychainAccess
 
 import FBSDKLoginKit
 
 let kLRAPIBase = "http://52.22.85.12:8000/"
 let kAccessToken = "kAccessToken"
 let kCurrentUser = "kCurrentUser"
+
+let kDeviceId = "kDeviceId"
 
 let productCollectionPageSize = 12
 
@@ -32,11 +35,18 @@ class LRSessionManager: NSObject
     // Static variable to handle all networking and caching activities
     static let sharedManager: LRSessionManager = LRSessionManager()
     
+    // Access the Keychain
+    private let keychain: Keychain = Keychain(service: NSBundle.mainBundle().bundleIdentifier!)
+    
     // Intialized in the init method and is never deallocated. It is assumed to always exist
     var networkManager: Manager!
     
     // Background queue to handle API responses
     private let backgroundQueue: dispatch_queue_t = dispatch_queue_create("Session Background", DISPATCH_QUEUE_CONCURRENT)
+    
+    var deviceKey: String?
+    
+    var refreshToken: String?
     
     var isShowingAlert = false
     
@@ -62,33 +72,59 @@ class LRSessionManager: NSObject
         }
         
         resumeSession()
+        
+        registerDevice(nil)
+    }
+    
+    // MARK: New Account Credential Management
+    func resumeSession()
+    {
+        registerDeviceIfNeeded()
+    }
+    
+    func registerDeviceIfNeeded()
+    {
+        if keychain[kDeviceId] == nil
+        {
+            registerDevice({ (success, error, response) -> Void in
+                
+                if success
+                {
+                    log.debug("Successfully registered new device: \(self.deviceId())")
+                }
+                else
+                {
+                    log.error("Failed to register new device.")
+                }
+            })
+        }
     }
     
     //MARK: Managing Account Credentials
     
-    func resumeSession()
-    {
-        // Retrieves cognito identity locally if one is cached, and from the AWS Cognito Remote service if none exists
-        
-            AWSManager.defaultManager.fetchIdentityId({ (success, error, response) -> Void in
-                
-                if success
-                {
-                    log.debug("Successfully retrieved identity token from AWS.")
-                }
-                else
-                {
-                    if let errorMessage = error
-                    {
-                        log.debug(errorMessage)
-                        
-                        // If identityId does not exist, clear all existing credentials to avoid an incomplete state
-                        self.logout(nil)
-                        
-                    }
-                }
-        })
-    }
+//    func resumeSession()
+//    {
+//        // Retrieves cognito identity locally if one is cached, and from the AWS Cognito Remote service if none exists
+//        
+//            AWSManager.defaultManager.fetchIdentityId({ (success, error, response) -> Void in
+//                
+//                if success
+//                {
+//                    log.debug("Successfully retrieved identity token from AWS.")
+//                }
+//                else
+//                {
+//                    if let errorMessage = error
+//                    {
+//                        log.debug(errorMessage)
+//                        
+//                        // If identityId does not exist, clear all existing credentials to avoid an incomplete state
+//                        self.logout(nil)
+//                        
+//                    }
+//                }
+//        })
+//    }
     
     func isAuthenticated() -> Bool
     {
@@ -247,6 +283,252 @@ class LRSessionManager: NSObject
 //        return false
 //    }
     
+    // MARK: New Authorization
+    func deviceId() -> String
+    {
+        if let device = deviceKey
+        {
+            // Device id exists
+            return device
+        }
+        else if let deviceIdentifier = keychain[kDeviceId]
+        {
+            // Device id exists in keychain
+            deviceKey = deviceIdentifier
+            
+            return deviceIdentifier
+        }
+        else
+        {
+            // Create unique device id and store it in keychain
+            let uuidString = NSUUID().UUIDString
+            
+            keychain[kDeviceId] = uuidString
+            
+            return uuidString
+        }
+    }
+    
+    func registerDevice(completionHandler: LRJsonCompletionBlock?)
+    {
+        let model = UIDevice.currentDevice().model
+        
+        let systemVersion = UIDevice.currentDevice().systemVersion
+        
+        let timeZone = NSTimeZone.localTimeZone().secondsFromGMT
+     
+        let jsonBody = ["device_id":    deviceId(),
+                        "device_name":  model,
+                        "os_version":   systemVersion,
+                        "timezone":     timeZone]
+        
+        sendRequest(self.jsonRequest(APIUrlAtEndpoint("device"), HTTPMethod: "POST", json: jsonBody), authorization: true, completion: { (success, error, response) -> Void in
+         
+            if success
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: true, error: nil, response: response)
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: false, error: error, response: nil)
+                }
+            }
+        })
+    }
+    
+    func registerWithEmail(email: String, password: String, firstName: String, lastName: String, gender: String, age: NSNumber, completionHandler: LRJsonCompletionBlock?)
+    {
+        let jsonBody = ["email": email,
+                        "password": password,
+                        "first_name": firstName,
+                        "last_name": lastName,
+                        "gender": gender,
+                        "age": age]
+        
+        sendRequest(self.jsonRequest(APIUrlAtEndpoint("user"), HTTPMethod: "PUT", json: jsonBody), authorization: true, completion: { (success, error, response) -> Void in
+         
+            if success
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: true, error: nil, response: response)
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: false, error: error, response: nil)
+                }
+            }
+        })
+    }
+    
+    func registerWithFacebook(email: String, firstName: String, lastName: String, gender: String, age: NSNumber, completionHandler: LRJsonCompletionBlock?)
+    {
+        if let facebookToken = FBSDKAccessToken.currentAccessToken()
+        {
+            let jsonBody = ["facebook_token":   facebookToken,
+                            "email":            email,
+                            "first_name":       firstName,
+                            "last_name":        lastName,
+                            "gender":           gender,
+                            "age":              age]
+            
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user"), HTTPMethod: "PUT", json: jsonBody), authorization: true, completion: { (success, error, response) -> Void in
+                
+                if success
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: true, error: nil, response: response)
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, error: error, response: nil)
+                    }
+                }
+            })
+        }
+        else
+        {
+            if let completion = completionHandler
+            {
+                completion(success: false, error: "Invalid Facebook Token.", response: nil)
+            }
+        }
+    }
+    
+    func loginWithEmail(email: String, password: String, completionHandler: LRJsonCompletionBlock?)
+    {
+        let jsonBody = ["email": email,
+                        "password": password,
+                        "device_id": deviceId()]
+        
+        sendRequest(self.jsonRequest(APIUrlAtEndpoint("user/session"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
+         
+            if success
+            {
+                log.debug("User logged in with email.")
+                
+                if let completion = completionHandler
+                {
+                    completion(success: true, error: nil, response: response)
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: false, error: error, response: nil)
+                }
+            }
+        })
+    }
+
+    func loginWithFacebook(completionHandler: LRJsonCompletionBlock?)
+    {
+        if let facebookToken = FBSDKAccessToken.currentAccessToken()
+        {
+            let jsonBody = ["facebook_token": facebookToken,
+                            "device_id": deviceId()]
+            
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user/session"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
+                
+                if success
+                {
+                    log.debug("User logged in with email.")
+                    
+                    if let completion = completionHandler
+                    {
+                        completion(success: true, error: nil, response: response)
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, error: error, response: nil)
+                    }
+                }
+            })
+        }
+        else
+        {
+            if let completion = completionHandler
+            {
+                completion(success: false, error: "Invalid Facebook Token.", response: nil)
+            }
+        }
+    }
+    
+    func refreshToken(completionHandler: LRJsonCompletionBlock?)
+    {
+        if let currentRefreshToken = refreshToken
+        {
+            let jsonBody = ["refresh_token": currentRefreshToken]
+            
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("refresh"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
+             
+                if success
+                {
+                    log.debug("Successfully refreshed access token.")
+                    
+                    if let completion = completionHandler
+                    {
+                        completion(success: true, error: nil, response: response)
+                    }
+                }
+                else
+                {
+                    log.error(error)
+                    
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, error: error, response: nil)
+                    }
+                }
+            })
+        }
+        else
+        {
+            if let completion = completionHandler
+            {
+                completion(success: false, error: "User cannot retreive a new refresh token because the current refresh token does not exist.", response: nil)
+            }
+        }
+    }
+    
+    func logoutRemotely(completionHandler: LRJsonCompletionBlock?)
+    {
+        sendRequest(self.jsonRequest(APIUrlAtEndpoint("logout"), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
+         
+            if success
+            {
+                log.debug("User successfully logged out.")
+                
+                if let completion = completionHandler
+                {
+                    completion(success: true, error: nil, response: response)
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: false, error: nil, response: nil)
+                }
+            }
+        })
+    }
     
     // MARK: Authorization
     func registerIdentity(completionHandler: LRCompletionBlock?)
@@ -399,9 +681,65 @@ class LRSessionManager: NSObject
     {        
         AWSManager.defaultManager.registerWithSNS(deviceToken, completionHandler: { (success, error, response) -> Void in
             
-            if let completion = completionHandler
+            if success
             {
-                completion(success: success, error: error, response: response)
+                if let endpointARN = response as? String
+                {
+                    self.registerDeviceEndpoint(endpointARN, completionHandler: { (success, error, response) -> Void in
+                     
+                        if let completion = completionHandler
+                        {
+                            completion(success: success, error: error, response: response)
+                        }
+                    })
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, error: "Invalid Endpoint ARN returned from SNS.", response: nil)
+                    }
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: success, error: error, response: response)
+                }
+            }
+        })
+    }
+    
+    private func registerDeviceEndpoint(deviceEndpointARN: String, completionHandler: LRCompletionBlock?)
+    {
+        let jsonBody = ["sns_endpoint": deviceEndpointARN]
+        
+        sendRequest(self.jsonRequest(APIUrlAtEndpoint("device"), HTTPMethod: "PUT", json: jsonBody), authorization: true, completion: { (success, error, response) -> Void in
+         
+            if success
+            {
+                if let dictionaryResponse = response?.dictionaryObject
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: success, error: error, response: dictionaryResponse)
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, error: "SNS Registration returned invalid response.", response: nil)
+                    }
+                }
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: false, error: nil, response: nil)
+                }
             }
         })
     }
@@ -977,6 +1315,21 @@ class LRSessionManager: NSObject
             }
         }
     }
+    
+    // MARK: Contact
+    func submitContactForm(email: String, content: String, completionHandler: LRJsonCompletionBlock?)
+    {
+        let jsonBody = ["email": email,
+                        "content": content]
+        
+        sendRequest(self.jsonRequest(APIUrlAtEndpoint("contact"), HTTPMethod: "POST", json: jsonBody), authorization: true, completion: { (success, error, response) -> Void in
+            
+            if let completion = completionHandler
+            {
+                completion(success: success, error: error, response: response)
+            }
+        })
+    }
         
     // MARK: API Helpers
     func APIUrlAtEndpoint(endpointPath: String?) -> NSURL
@@ -1102,69 +1455,21 @@ class LRSessionManager: NSObject
                             return
                         }
                         
-                        // Handle invalid identity
+                        // Handle Unauthorized Error
                         if response.response?.statusCode == 401
                         {
                             if let errors = jsonObject["errors"].dictionaryObject
                             {
-                                if errors["invalid_token"] != nil
+                                if let expiredErrorMessage = errors["expired_authorization"] as? String
                                 {
-                                    // Identity Unauthorized
-//                                    self.handleInvalidIdentity()
-                                    LRSessionManager.sharedManager.logout(nil)
+                                    log.error(expiredErrorMessage)
                                     
-                                    AppStateTransitioner.transitionToLoginStoryboard(true)
+                                    // Token has expired
                                     
-                                    if let completionHandler = completion
-                                    {
-                                        var errorMessage: String?
-                                        
-                                        if let errorString = errors["invalid_token"] as? String
-                                        {
-                                            errorMessage = "invalid_token: \(errorString)"
-                                        }
-                                        
-                                        completionHandler(success: false, error: errorMessage, response: nil)
-                                    }
+                                    //Refresh Token
                                     
-                                    return
+                                    // Call request again
                                 }
-                                
-                                if errors["user_not_registered"] != nil
-                                {
-                                    // Identity Unauthorized
-                                    self.handleInvalidIdentity()
-                                    
-                                    if let completionHandler = completion
-                                    {
-                                        var errorMessage: String?
-                                        
-                                        if let errorString = errors["user_not_registered"] as? String
-                                        {
-                                            errorMessage = "user_not_registered: \(errorString)"
-                                        }
-                                        
-                                        completionHandler(success: false, error: errorMessage, response: nil)
-                                    }
-                                    
-                                    return
-                                }
-                                
-                                if let authError = errors["Authentication Required"] as? String
-                                {
-                                    log.error("Authentication Required: \(authError)")
-                                    
-                                    if (FBSDKAccessToken.currentAccessToken() != nil)
-                                    {
-                                        // Add this login to an existing cognito identity
-                                        AWSManager.defaultManager.registerFacebookToken()
-                                    }
-                                }
-                                
-//                                if let _ = errors
-//                                {
-//                                    AWSManager.defaultManager.refreshOpenIdToken()
-//                                }
                             }
                         }
                         

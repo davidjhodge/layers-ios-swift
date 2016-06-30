@@ -312,59 +312,63 @@ class AWSManager: NSObject, AWSIdentityProviderManager
                     {
                         if let endpointARN: String = endpointResponse.endpointArn
                         {
-                            let syncClient = AWSCognito(forKey: "USEast1Cognito")
-                            
-                            let dataset = syncClient.openOrCreateDataset("user_info")
-                            
-                            let pushDevicesKey = "push_devices"
-
-                            var pushDevices: Array<String>?
-
-                            if dataset.stringForKey(pushDevicesKey) != nil
+                            if let completion = completionHandler
                             {
-                                if let existingDevices = JSON(dataset.stringForKey(pushDevicesKey)).arrayObject as? Array<String>
-                                {
-                                    pushDevices = existingDevices
-                                        
-                                    pushDevices?.appendContentsOf(existingDevices)
-                                }
-                                else
-                                {
-                                    pushDevices = Array<String>()
-                                }
+                                completion(success: true, error: nil, response: endpointARN)
                             }
-                            else
-                            {
-                                pushDevices = Array<String>()
-                            }
-                            
-                            pushDevices?.append(endpointARN)
-                            
-                            let jsonString = JSON(pushDevices!).rawString()
-                            
-                            dataset.setString(jsonString, forKey: pushDevicesKey)
-                            
-                            dataset.synchronize().continueWithBlock({ (task) -> AnyObject! in
-                             
-                                if task.error != nil
-                                {
-                                    if let completion = completionHandler
-                                    {
-                                        log.debug("SNS Platform Endpoint successfully created.")
-
-                                        completion(success: false, error: task.error?.localizedDescription, response: nil)
-                                    }
-                                }
-                                else
-                                {
-                                    if let completion = completionHandler
-                                    {
-                                        completion(success: true, error: nil, response: task.result)
-                                    }
-                                }
-                                
-                                return nil
-                            })
+//                            let syncClient = AWSCognito(forKey: "USEast1Cognito")
+//                            
+//                            let dataset = syncClient.openOrCreateDataset("user_info")
+//                            
+//                            let pushDevicesKey = "push_devices"
+//
+//                            var pushDevices: Array<String>?
+//
+//                            if dataset.stringForKey(pushDevicesKey) != nil
+//                            {
+//                                if let existingDevices = JSON(dataset.stringForKey(pushDevicesKey)).arrayObject as? Array<String>
+//                                {
+//                                    pushDevices = existingDevices
+//                                        
+//                                    pushDevices?.appendContentsOf(existingDevices)
+//                                }
+//                                else
+//                                {
+//                                    pushDevices = Array<String>()
+//                                }
+//                            }
+//                            else
+//                            {
+//                                pushDevices = Array<String>()
+//                            }
+//                            
+//                            pushDevices?.append(endpointARN)
+//                            
+//                            let jsonString = JSON(pushDevices!).rawString()
+//                            
+//                            dataset.setString(jsonString, forKey: pushDevicesKey)
+//                            
+//                            dataset.synchronize().continueWithBlock({ (task) -> AnyObject! in
+//                             
+//                                if task.error != nil
+//                                {
+//                                    if let completion = completionHandler
+//                                    {
+//                                        log.debug("SNS Platform Endpoint successfully created.")
+//
+//                                        completion(success: false, error: task.error?.localizedDescription, response: nil)
+//                                    }
+//                                }
+//                                else
+//                                {
+//                                    if let completion = completionHandler
+//                                    {
+//                                        completion(success: true, error: nil, response: task.result)
+//                                    }
+//                                }
+//                                
+//                                return nil
+//                            })
                         }
                         else
                         {
