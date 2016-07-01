@@ -37,6 +37,9 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        loginButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+        loginButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        
         loginButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercaseString, style: .Plain, target: self, action: #selector(cancel))
@@ -84,7 +87,7 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
         
         spinner.startAnimating()
         
-        LRSessionManager.sharedManager.signIn(email, password: password, completionHandler: { (success, error, response) -> Void in
+        LRSessionManager.sharedManager.loginWithEmail(email, password: password, completionHandler: { (success, error, response) -> Void in
             
             if success
             {

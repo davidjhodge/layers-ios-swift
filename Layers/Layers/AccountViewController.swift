@@ -23,7 +23,7 @@ private enum LegalTableRow: Int
     case Terms = 0, Privacy, OpenSource
 }
 
-class AccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AuthenticationDelegate
+class AccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AuthenticationDelegate, UIGestureRecognizerDelegate
 {
     @IBOutlet weak var tableView: UITableView!
     
@@ -90,7 +90,27 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         
         ctaView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showAccountActionSheet)))
         
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(highlightCTAView))
+        longPressGesture.delegate = self
+        ctaView.addGestureRecognizer(longPressGesture)
+        
         ctaXButton.addTarget(self, action: #selector(hideCTA), forControlEvents: .TouchUpInside)
+    }
+    
+    func highlightCTAView()
+    {
+        
+    }
+    
+    // MARK: Gesture Recognizer Delegate
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        ctaView.backgroundColor = Color.NeonBlueHighlightedColor
+    }
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        ctaView.backgroundColor = Color.NeonBlueColor
     }
     
     // MARK: Sign Up
@@ -114,7 +134,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 // Facebook token now exists and can be accessed at FBSDKAccessToken.currentAccessToken()
                 
-                LRSessionManager.sharedManager.registerWithFacebook( { (success, error, result) -> Void in
+                LRSessionManager.sharedManager.fetchFacebookUserInfo( { (success, error, result) -> Void in
                     
                     if success
                     {
@@ -136,7 +156,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                 
                                 self.presentViewController(confirmFacebookVc, animated: true, completion: nil)
-                                
                             })
                         }
                     }
@@ -270,8 +289,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: Create Account Delegate
     func authenticationDidSucceed()
     {
-        LRSessionManager.sharedManager.completeLogin()
-        
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
 
             self.hideCTAIfNeeded(false)
@@ -342,7 +359,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                         
                     case .OpenSource:
                         
-                        cell.textLabel!.text = "Open Source Attribution"
+                        cell.textLabel!.text = "Open Source Libraries"
                         cell.accessoryType = .DisclosureIndicator
                     }
                 }

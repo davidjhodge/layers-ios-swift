@@ -152,6 +152,9 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                         cell.productNameLabel.text = productName
                     }
                     
+                    cell.ctaButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+                    cell.ctaButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+                    
                     cell.ctaButton.addTarget(self, action: #selector(ctaSelected), forControlEvents: .TouchUpInside)
                 }
 

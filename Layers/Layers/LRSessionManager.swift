@@ -16,10 +16,9 @@ import KeychainAccess
 import FBSDKLoginKit
 
 let kLRAPIBase = "http://52.22.85.12:8000/"
-let kAccessToken = "kAccessToken"
-let kCurrentUser = "kCurrentUser"
 
 let kDeviceId = "kDeviceId"
+let kTokenObject = "kTokenObject"
 
 let productCollectionPageSize = 12
 
@@ -46,7 +45,7 @@ class LRSessionManager: NSObject
     
     var deviceKey: String?
     
-    var refreshToken: String?
+    var tokenObject: DeviceTokenResponse?
     
     var isShowingAlert = false
     
@@ -65,32 +64,71 @@ class LRSessionManager: NSObject
         
         networkManager = Alamofire.Manager(configuration: configuration)
         
-        // Clear existing persisted credentials
-        if !hasCompletedFirstLaunch()
-        {
-            logout(nil)
-        }
+        keychain[kDeviceId] = nil
         
         resumeSession()
-        
-        registerDevice(nil)
     }
     
-    // MARK: New Account Credential Management
-    func resumeSession()
+    // MARK: First Launch
+    func completeFirstLaunch()
     {
-        registerDeviceIfNeeded()
+        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "kUserDidCompleteFirstLaunch")
+        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
-    func registerDeviceIfNeeded()
+    func hasCompletedFirstLaunch() -> Bool
     {
-        if keychain[kDeviceId] == nil
+        return NSUserDefaults.standardUserDefaults().boolForKey(kUserDidCompleteFirstLaunch)
+    }
+    
+    // MARK: Device Id Management
+
+    func hasDeviceToken() -> Bool
+    {
+        if deviceKey != nil && keychain[kDeviceId] != nil
         {
+            return true
+        }
+        else
+        {
+            return false
+        }
+    }
+    
+    private func saveDeviceToken()
+    {
+        if let deviceId = deviceKey
+        {
+            keychain[kDeviceId] = deviceId
+        }
+        else
+        {
+            log.error("Error saving Device Token.")
+        }
+    }
+    
+    private func restoreDeviceToken()
+    {
+        log.debug("Restoring Device Token")
+        
+        if let storedDeviceId = keychain[kDeviceId]
+        {
+            deviceKey = storedDeviceId
+            
+            log.debug("Device Token successfully restored.")
+        }
+        else
+        {
+            log.debug("Error restoring device token. Registering New Device Token.")
+            
             registerDevice({ (success, error, response) -> Void in
                 
                 if success
                 {
-                    log.debug("Successfully registered new device: \(self.deviceId())")
+                    if let deviceId = self.deviceKey
+                    {
+                        log.debug("Successfully registered new device: \(deviceId)")
+                    }
                 }
                 else
                 {
@@ -100,216 +138,144 @@ class LRSessionManager: NSObject
         }
     }
     
-    //MARK: Managing Account Credentials
+    private func clearDeviceToken()
+    {
+        deviceKey = nil
+        
+        saveDeviceToken()
+    }
     
-//    func resumeSession()
-//    {
-//        // Retrieves cognito identity locally if one is cached, and from the AWS Cognito Remote service if none exists
-//        
-//            AWSManager.defaultManager.fetchIdentityId({ (success, error, response) -> Void in
-//                
-//                if success
-//                {
-//                    log.debug("Successfully retrieved identity token from AWS.")
-//                }
-//                else
-//                {
-//                    if let errorMessage = error
-//                    {
-//                        log.debug(errorMessage)
-//                        
-//                        // If identityId does not exist, clear all existing credentials to avoid an incomplete state
-//                        self.logout(nil)
-//                        
-//                    }
-//                }
-//        })
-//    }
+    //MARK: Managing Account Credentials
+
+    private func resumeSession()
+    {
+        restoreDeviceToken()
+        
+        restoreCredentials()
+    }
     
     func isAuthenticated() -> Bool
     {
-        return AWSManager.defaultManager.isAuthenticated()
-    }
-
-    func logout(completionHandler: LRCompletionBlock?)
-    {
-        // Sync user data. Regardless of result, clear local storage and log out
-        UserDataManager.defaultManager.syncImmediately({ (success, error, response) -> Void in
-            
-            UserDataManager.defaultManager.resetLocalStorage()
-            
-            // Clear Facebook Token if needed
-            if FBSDKAccessToken.currentAccessToken() != nil
+        if let authorized = tokenObject?.isAnonymous
+        {
+            if !authorized
             {
-                FBSDKLoginManager().logOut()
+                return true
             }
-            
-            AWSManager.defaultManager.clearAWSCache()
-            
-            AWSManager.defaultManager.openIdToken = nil
-            
-            //Register new unauthenticated identity
-            AWSManager.defaultManager.fetchIdentityId({ (success, error, response) -> Void in
-                
-                if success
-                {
-                    log.debug("Successfully retrieved new identity token from AWS.")
-                    
-                    self.registerIdentity({ (success, error, response) -> Void in
-                        
-                        if success
-                        {
-                            log.debug("New identity registered.")
-                        }
-                        else
-                        {
-                            log.error(error)
-                        }
-                    })
-                }
-                else
-                {
-                    if let errorMessage = error
-                    {
-                        log.debug(errorMessage)
-                        
-                        // If identityId does not exist, clear all existing credentials to avoid an incomplete state
-                        self.logout(nil)
-                        
-                        AppStateTransitioner.transitionToLoginStoryboard(true)
-                    }
-                }
-                
-                if let completion = completionHandler
-                {
-                    completion(success: true, error: nil, response: nil)
-                }
-            })
-        })
-    }
-    
-    func completeFirstLaunch()
-    {
-        completeLogin()
-        
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "kUserDidCompleteFirstLaunch")
-        NSUserDefaults.standardUserDefaults().synchronize()
-    }
-    
-    func completeLogin()
-    {
-        registerIdentity(nil)
-        
-        AWSManager.defaultManager.syncLoginCredentials({ (success, error, response) -> Void in
-        })
-    }
-    
-    func hasCompletedFirstLaunch() -> Bool
-    {
-        return NSUserDefaults.standardUserDefaults().boolForKey(kUserDidCompleteFirstLaunch)
-    }
-    
-//    /**
-//     Restores the current session credentials from keychain.
-//    */
-//    private func restoreCredentials()
-//    {
-//        log.debug("Attempting to restore session.")
-//        
-//        if let token = keychain[kAccessToken], userJson = keychain[kCurrentUser]
-//        {
-//            currentUser = Mapper<User>().map(userJson)
-//            accessToken = token
-//            
-//            log.debug("Successfully restored session.")
-//        }
-//        else
-//        {
-//            log.warning("Failed to restore session.")
-//            
-//            clearCredentials()
-//        }
-//    }
-//    
-//    /**
-//    Saves the current session credentials to keychain.
-//    */
-//    private func saveCredentials()
-//    {
-//        if let userToken = accessToken, user = currentUser
-//        {
-//            log.debug("Saving session")
-//            
-//            keychain[kAccessToken] = userToken
-//            keychain[kCurrentUser] = Mapper().toJSONString(user, prettyPrint: false)
-//        }
-//        else
-//        {
-//            log.error("Invalid Credentials. Session Cleared")
-//            
-//            keychain[kAccessToken] = nil
-//            keychain[kCurrentUser] = nil
-//        }
-//    }
-//    
-//    private func clearCredentials()
-//    {
-//        accessToken = nil
-//        
-//        currentUser = nil
-//        
-//        saveCredentials()
-//    }
-//    
-//    func logout()
-//    {
-//        clearCredentials()
-//    }
-//    
-//    func isLoggedIn() -> Bool
-//    {
-//        if accessToken != nil && currentUser != nil
-//        {
-//            return true
-//        }
-//        else
-//        {
-//            accessToken = nil
-//            currentUser = nil
-//            
-//            log.debug("User is not logged in.")
-//        }
-//        
-//        return false
-//    }
-    
-    // MARK: New Authorization
-    func deviceId() -> String
-    {
-        if let device = deviceKey
-        {
-            // Device id exists
-            return device
         }
-        else if let deviceIdentifier = keychain[kDeviceId]
+        
+        return false
+    }
+    
+    private func restoreCredentials()
+    {
+        log.debug("Restoring Session.")
+        
+        if let storedTokens = keychain[kTokenObject]
         {
-            // Device id exists in keychain
-            deviceKey = deviceIdentifier
+            if let storedTokenData = storedTokens.dataUsingEncoding(NSUTF8StringEncoding)
+            {
+                if let storedTokenDict = JSON(data: storedTokenData).dictionaryObject
+                {
+                    self.tokenObject = Mapper<DeviceTokenResponse>().map(storedTokenDict)
+                    
+                    log.debug("Tokens successfully retreived. Session Restored.")
+                    
+                    return
+                }
+            }
+        }
+       
+        // If not success
+        log.debug("Failed to restore session.")
             
-            return deviceIdentifier
+        clearCredentials()
+    }
+    
+    private func saveCredentials()
+    {
+        if let tokenObject = tokenObject
+        {
+            keychain[kTokenObject] = Mapper().toJSONString(tokenObject, prettyPrint: false)
         }
         else
         {
-            // Create unique device id and store it in keychain
-            let uuidString = NSUUID().UUIDString
+            log.error("Attempted to save credentials but token object does not exist. Clearing session.")
             
-            keychain[kDeviceId] = uuidString
+            clearCredentials()
+        }
+    }
+
+    private func clearCredentials()
+    {
+        tokenObject = nil
+        
+        saveCredentials()
+    }
+    
+    func logout(completionHandler: LRCompletionBlock?)
+    {
+        logoutRemotely({ (success, error, response) -> Void in
+         
+            if success
+            {
+                self.clearCredentials()
+                
+                self.registerDevice({ (success, error, response) -> Void in
+                    
+                    if success
+                    {
+                        if let deviceId = self.deviceKey
+                        {
+                            log.debug("Successfully registered new device: \(deviceId)")
+                            
+                            if let completion = completionHandler
+                            {
+                                completion(success: true, error: nil, response: response)
+                            }
+                        }
+                    }
+                    else
+                    {
+                        log.error("Failed to register new device.")
+                        
+                        if let completion = completionHandler
+                        {
+                            completion(success: false, error: error, response: nil)
+                        }
+                    }
+                })
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(success: false, error: "Unable to complete logout.", response: nil)
+                }
+            }
+        })
+    }
+    
+    // Determines if the device has registered. Note that this is not the same as creating a fully-authorized account using a login provider. This merely represents notifying the backend that this device exists is allowed to access the API.
+    func deviceIsRegistered() -> Bool
+    {
+        if tokenObject != nil
+        {
+            return true
+        }
+        else
+        {
+            tokenObject = nil
             
-            return uuidString
+            log.debug("Device has not been registered. Tokens cleared.")
+            
+            return false
         }
     }
     
-    func registerDevice(completionHandler: LRJsonCompletionBlock?)
+    // MARK: Authorization
+
+    func registerDevice(completionHandler: LRCompletionBlock?)
     {
         let model = UIDevice.currentDevice().model
         
@@ -317,18 +283,43 @@ class LRSessionManager: NSObject
         
         let timeZone = NSTimeZone.localTimeZone().secondsFromGMT
      
-        let jsonBody = ["device_id":    deviceId(),
+        // Create unique device id and store it in keychain
+        let uuidString = NSUUID().UUIDString
+        
+        deviceKey = uuidString
+        
+        saveDeviceToken()
+
+        let jsonBody = ["device_id":    uuidString,
                         "device_name":  model,
                         "os_version":   systemVersion,
                         "timezone":     timeZone]
         
-        sendRequest(self.jsonRequest(APIUrlAtEndpoint("device"), HTTPMethod: "POST", json: jsonBody), authorization: true, completion: { (success, error, response) -> Void in
+        sendRequest(self.jsonRequest(APIUrlAtEndpoint("device"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
          
             if success
             {
+                if let jsonResponse = response
+                {
+                    if let tokenResponse = Mapper<DeviceTokenResponse>().map(jsonResponse.dictionaryObject)
+                    {
+                        self.tokenObject = tokenResponse
+                        
+                        self.saveCredentials()
+                        
+                        if let completion = completionHandler
+                        {
+                            completion(success: true, error: nil, response: tokenResponse)
+                            
+                            return
+                        }
+                    }
+                }
+                
+                // Invalid Response
                 if let completion = completionHandler
                 {
-                    completion(success: true, error: nil, response: response)
+                    completion(success: false, error: "Invalid token response.", response: nil)
                 }
             }
             else
@@ -341,7 +332,7 @@ class LRSessionManager: NSObject
         })
     }
     
-    func registerWithEmail(email: String, password: String, firstName: String, lastName: String, gender: String, age: NSNumber, completionHandler: LRJsonCompletionBlock?)
+    func registerWithEmail(email: String, password: String, firstName: String, lastName: String, gender: String, age: NSNumber, completionHandler: LRCompletionBlock?)
     {
         let jsonBody = ["email": email,
                         "password": password,
@@ -354,9 +345,27 @@ class LRSessionManager: NSObject
          
             if success
             {
+                if let jsonResponse = response
+                {
+                    if let tokenResponse = Mapper<DeviceTokenResponse>().map(jsonResponse.dictionaryObject)
+                    {
+                        self.tokenObject = tokenResponse
+                        
+                        self.saveCredentials()
+                        
+                        if let completion = completionHandler
+                        {
+                            completion(success: true, error: nil, response: tokenResponse)
+                            
+                            return
+                        }
+                    }
+                }
+                
+                // Invalid Response
                 if let completion = completionHandler
                 {
-                    completion(success: true, error: nil, response: response)
+                    completion(success: false, error: "Invalid token response.", response: nil)
                 }
             }
             else
@@ -369,24 +378,48 @@ class LRSessionManager: NSObject
         })
     }
     
-    func registerWithFacebook(email: String, firstName: String, lastName: String, gender: String, age: NSNumber, completionHandler: LRJsonCompletionBlock?)
+    func registerWithFacebook(email: String, firstName: String?, lastName: String?, gender: String?, age: NSNumber?, completionHandler: LRCompletionBlock?)
     {
         if let facebookToken = FBSDKAccessToken.currentAccessToken()
         {
-            let jsonBody = ["facebook_token":   facebookToken,
-                            "email":            email,
-                            "first_name":       firstName,
-                            "last_name":        lastName,
-                            "gender":           gender,
-                            "age":              age]
+            var jsonBody = ["facebook_token":   facebookToken,
+                            "email":            email]
             
-            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user"), HTTPMethod: "PUT", json: jsonBody), authorization: true, completion: { (success, error, response) -> Void in
+            if firstName != nil { jsonBody["first_name"] = firstName }
+            
+            if lastName != nil { jsonBody["last_name"] = lastName }
+            
+            if gender != nil { jsonBody["gender"] = gender }
+            
+            if age != nil { jsonBody["age"] = age }
+            
+            let httpBody = jsonBody
+            
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user"), HTTPMethod: "PUT", json: httpBody), authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
+                    if let jsonResponse = response
+                    {
+                        if let tokenResponse = Mapper<DeviceTokenResponse>().map(jsonResponse.dictionaryObject)
+                        {
+                            self.tokenObject = tokenResponse
+                            
+                            self.saveCredentials()
+                            
+                            if let completion = completionHandler
+                            {
+                                completion(success: true, error: nil, response: tokenResponse)
+                                
+                                return
+                            }
+                        }
+                    }
+                    
+                    // Invalid Response
                     if let completion = completionHandler
                     {
-                        completion(success: true, error: nil, response: response)
+                        completion(success: false, error: "Invalid token response.", response: nil)
                     }
                 }
                 else
@@ -407,49 +440,89 @@ class LRSessionManager: NSObject
         }
     }
     
-    func loginWithEmail(email: String, password: String, completionHandler: LRJsonCompletionBlock?)
+    func loginWithEmail(email: String, password: String, completionHandler: LRCompletionBlock?)
     {
-        let jsonBody = ["email": email,
-                        "password": password,
-                        "device_id": deviceId()]
-        
-        sendRequest(self.jsonRequest(APIUrlAtEndpoint("user/session"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
-         
-            if success
-            {
-                log.debug("User logged in with email.")
-                
-                if let completion = completionHandler
-                {
-                    completion(success: true, error: nil, response: response)
-                }
-            }
-            else
-            {
-                if let completion = completionHandler
-                {
-                    completion(success: false, error: error, response: nil)
-                }
-            }
-        })
-    }
-
-    func loginWithFacebook(completionHandler: LRJsonCompletionBlock?)
-    {
-        if let facebookToken = FBSDKAccessToken.currentAccessToken()
+        if let deviceId = deviceKey
         {
-            let jsonBody = ["facebook_token": facebookToken,
-                            "device_id": deviceId()]
+            let jsonBody = ["email": email,
+                            "password": password,
+                            "device_id": deviceId]
             
             sendRequest(self.jsonRequest(APIUrlAtEndpoint("user/session"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
-                    log.debug("User logged in with email.")
+                    if let jsonResponse = response
+                    {
+                        if let tokenResponse = Mapper<DeviceTokenResponse>().map(jsonResponse.dictionaryObject)
+                        {
+                            log.debug("User logged in with email.")
+                            
+                            self.tokenObject = tokenResponse
+                            
+                            self.saveCredentials()
+                            
+                            if let completion = completionHandler
+                            {
+                                completion(success: true, error: nil, response: tokenResponse)
+                                
+                                return
+                            }
+                        }
+                    }
                     
+                    // Invalid Response
                     if let completion = completionHandler
                     {
-                        completion(success: true, error: nil, response: response)
+                        completion(success: false, error: "Invalid token response.", response: nil)
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, error: error, response: nil)
+                    }
+                }
+            })
+        }
+    }
+
+    func loginWithFacebook(completionHandler: LRCompletionBlock?)
+    {
+        if let facebookToken = FBSDKAccessToken.currentAccessToken(),
+            let deviceId = deviceKey
+        {
+            let jsonBody = ["facebook_token": facebookToken,
+                            "device_id": deviceId]
+            
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user/session"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
+                
+                if success
+                {
+                    if let jsonResponse = response
+                    {
+                        if let tokenResponse = Mapper<DeviceTokenResponse>().map(jsonResponse.dictionaryObject)
+                        {
+                            log.debug("User logged in with Facebook.")
+                            
+                            self.tokenObject = tokenResponse
+                            
+                            self.saveCredentials()
+                            
+                            if let completion = completionHandler
+                            {
+                                completion(success: true, error: nil, response: tokenResponse)
+                                
+                                return
+                            }
+                        }
+                    }
+                    
+                    // Invalid Response
+                    if let completion = completionHandler
+                    {
+                        completion(success: false, error: "Invalid token response.", response: nil)
                     }
                 }
                 else
@@ -472,7 +545,7 @@ class LRSessionManager: NSObject
     
     func refreshToken(completionHandler: LRJsonCompletionBlock?)
     {
-        if let currentRefreshToken = refreshToken
+        if let currentRefreshToken = tokenObject?.refreshToken
         {
             let jsonBody = ["refresh_token": currentRefreshToken]
             
@@ -481,6 +554,16 @@ class LRSessionManager: NSObject
                 if success
                 {
                     log.debug("Successfully refreshed access token.")
+                    
+                    if let jsonResponse = response
+                    {
+                        if let newRefreshToken: String = jsonResponse["refresh_token"].rawString()
+                        {
+                            self.tokenObject?.refreshToken = newRefreshToken
+                            
+                            self.saveCredentials()
+                        }
+                    }
                     
                     if let completion = completionHandler
                     {
@@ -509,7 +592,7 @@ class LRSessionManager: NSObject
     
     func logoutRemotely(completionHandler: LRJsonCompletionBlock?)
     {
-        sendRequest(self.jsonRequest(APIUrlAtEndpoint("logout"), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
+        sendRequest(self.jsonRequest(APIUrlAtEndpoint("device/logout"), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
          
             if success
             {
@@ -530,117 +613,13 @@ class LRSessionManager: NSObject
         })
     }
     
-    // MARK: Authorization
-    func registerIdentity(completionHandler: LRCompletionBlock?)
-    {
-        AWSManager.defaultManager.fetchIdentityId({ (success, error, response) -> Void in
-            
-            if success
-            {
-                if let identityId = response as? String
-                {
-                    let jsonDict: Dictionary<String,String> = ["identity_id": identityId]
-                    
-                    self.sendRequest(self.jsonRequest(self.APIUrlAtEndpoint("identity"), HTTPMethod: "POST", json: jsonDict), authorization: true, completion: { (success, error, response) -> Void in
-                        
-                        if success
-                        {
-                            log.debug("User identity registration successful.")
-                        }
-                        else
-                        {
-                            self.handleInvalidIdentity()
-                            
-                            log.error("Unable to register user identity.")
-                        }
-                    })
-                }
-            }
-            else
-            {
-                log.error("Could not fetch identityId.")
-            }
-        })
-    }
+    // MARK: Old Authorization
     
-    func handleInvalidIdentity()
-    {
-        let errorString = "We're having trouble on our end. Try refreshing the session."
-        
-        let alert = UIAlertController(title: errorString, message: nil, preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) -> Void in
-            
-                LRSessionManager.sharedManager.isShowingAlert = false
-        }))
-        
-        alert.addAction(UIAlertAction(title: "Refresh", style: .Default, handler: { (action) -> Void in
-            
-            LRSessionManager.sharedManager.isShowingAlert = false
-
-            LRSessionManager.sharedManager.registerIdentity({ (success, error, response) -> Void in
-                
-                if success
-                {
-                    // Successfully registered Identity
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        if let rootVc = UIApplication.sharedApplication().keyWindow?.rootViewController
-                        {
-                            let hud = MBProgressHUD.showHUDAddedTo(rootVc.view, animated: true)
-                            hud.mode = .CustomView
-                            hud.customView = UIImageView(image: UIImage(named: "checkmark"))
-                            
-                            hud.labelText = "Identity Registered"
-                            hud.labelFont = Font.OxygenBold(size: 17.0)
-                            hud.hide(true, afterDelay: 1.5)
-                        }
-                    })
-                }
-            })
-        
-        }))
-        
-        if !LRSessionManager.sharedManager.isShowingAlert
-        {
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
-                alert.show()
-            })
-        }
-    }
-
-    func register(email: String, password: String, completionHandler: LRCompletionBlock?)
-    {
-        AWSManager.defaultManager.registerToUserPool(email, password: password, completionHandler: { (success, error, response) -> Void in
-            
-            if let completion = completionHandler
-            {
-                // Pass completion block returned from AWS Service
-                completion(success: success, error: error, response: response)
-            }
-        })
-    }
-
-    func signIn(email: String, password: String, completionHandler: LRCompletionBlock?)
-    {
-        AWSManager.defaultManager.signInToUserPool(email, password: password, completionHandler: { (success, error, response) -> Void in
-         
-            if let completion = completionHandler
-            {
-                // Pass completion block returned from AWS Service
-                completion(success: success, error: error, response: response)
-            }
-        })
-    }
-    
-    func registerWithFacebook(completion: LRCompletionBlock?)
+    func fetchFacebookUserInfo(completion: LRCompletionBlock?)
     {
         // The currentAccessToken() should be retrieved from Facebook in the View Controller that the login dialogue is shown from.
         if (FBSDKAccessToken.currentAccessToken() != nil)
         {
-            // Add this login to an existing cognito identity            
-            AWSManager.defaultManager.registerFacebookToken()
-            
             // Get user information with Facebook Graph API
             let request = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, age_range, link, gender, locale, picture, timezone, updated_time, verified, friends, email"], HTTPMethod: "GET")
             
@@ -1358,7 +1337,7 @@ class LRSessionManager: NSObject
         do {
             try request.HTTPBody = jsonObject.rawData(options: options)
         } catch {
-            log.verbose("Failed to assign HTTP Post Body to request.")
+            log.verbose("Failed to assign HTTP Body to request.")
         }
         
         return request
@@ -1375,30 +1354,19 @@ class LRSessionManager: NSObject
         {
             if authorization
             {
-                // If user is not authenticated, use open id token to identify user
-                AWSManager.defaultManager.fetchOpenIdToken({ (success, error, response) -> Void in
-                    
-                    if success
-                    {
-                        if let openIdToken = response as? String
-                        {
-                            networkRequest.setValue(openIdToken, forHTTPHeaderField: "Authorization")
-                            
-                            self.performNetworkRequest(request, networkRequest: networkRequest, completion: completion)
-                            
-                            return
-                        }
-                    }
-                    else
-                    {
-                        log.debug(error)
-                    }
-                })
+                if let accessToken = tokenObject?.accessToken
+                {
+                    networkRequest.setValue(accessToken, forHTTPHeaderField: "Authorization")
+                }
             }
-            else
-            {
-                performNetworkRequest(request, networkRequest: networkRequest, completion: completion)
-            }
+            
+            performNetworkRequest(request, networkRequest: networkRequest, completion: { (success, error, response) -> Void in
+                
+                if let completion = completion
+                {
+                    completion(success: success, error: error, response: response)
+                }
+            })
         }
         else
         {
@@ -1418,7 +1386,7 @@ class LRSessionManager: NSObject
         newRequest.setValue("close", forHTTPHeaderField: "Connection")
         
         let startTime = NSDate().timeIntervalSince1970
-
+        
         networkManager.request(newRequest)
             .validate(contentType: ["application/json"])
             .responseString(encoding: NSUTF8StringEncoding) { (response: Response<String, NSError>) -> Void in
@@ -1465,10 +1433,27 @@ class LRSessionManager: NSObject
                                     log.error(expiredErrorMessage)
                                     
                                     // Token has expired
-                                    
-                                    //Refresh Token
-                                    
-                                    // Call request again
+                                    self.refreshToken({ (success, error, response) -> Void in
+                                     
+                                        if success
+                                        {
+                                            // After refreshing token, perform this request again
+                                            self.performNetworkRequest(intialRequest, networkRequest: networkRequest, completion: { (success, error, response) -> Void in
+                                             
+                                                if let completion = completion
+                                                {
+                                                    completion(success: success, error: error, response: response)
+                                                }
+                                            })
+                                        }
+                                        else
+                                        {
+                                            if let completion = completion
+                                            {
+                                                completion(success: false, error: error, response: nil)
+                                            }
+                                        }
+                                    })
                                 }
                             }
                         }

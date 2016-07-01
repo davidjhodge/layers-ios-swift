@@ -79,6 +79,24 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         }
     }
     
+    func validateEmail() -> Bool
+    {
+        let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Email.rawValue, inSection: 0)) as? TextFieldCell
+        
+        if let emailTextField = emailCell?.textField
+        {
+            if let email = emailTextField.text
+            {
+                if email.rangeOfString("@") != nil && email.rangeOfString(".") != nil
+                {
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
+    
 //    func validateInputs() -> Bool
 //    {
 //        if let nameCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Name.rawValue, inSection: 0)) as? TwoTextFieldCell,
@@ -110,6 +128,10 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
     // MARK: Actions
     func submit()
     {
+        if validateEmail()
+        {
+            
+        }
         if let nameCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Name.rawValue, inSection: 0)) as? TwoTextFieldCell,
             
             let genderAgeCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.GenderAge.rawValue, inSection: 0)) as? TwoTextFieldCell,
@@ -122,7 +144,7 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
             let age = NSNumber.aws_numberFromString(genderAgeCell.secondTextField.text)
             let email = emailCell.textField.text
             
-            UserDataManager.defaultManager.facebookLogin(firstName, lastName: lastName, gender: gender, predictedAge: age, email: email, completionHandler: { (success, error, response) -> Void in
+            LRSessionManager.sharedManager.loginWithFacebook({ (success, error, response) -> Void in
                 
                 if success
                 {
@@ -130,13 +152,19 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
                 }
                 else
                 {
-                    log.error(error)
+                    // Try Creating an account with Facebook
+                    if let email = email
+                    {
+                        LRSessionManager.sharedManager.registerWithFacebook(email, firstName: firstName, lastName: lastName, gender: gender, age: age, completionHandler: { (success, error, response) -> Void in
+                            
+                            if success
+                            {
+                                self.completeFirstLaunchExperience()
+                            }
+                        })
+                    }
                 }
             })
-        }
-        else
-        {
-            completeFirstLaunchExperience()
         }
     }
     

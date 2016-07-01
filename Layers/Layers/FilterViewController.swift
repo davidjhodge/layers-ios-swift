@@ -45,6 +45,9 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         
         tableView.backgroundColor = Color.BackgroundGrayColor
         
+        applyButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+        applyButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+
         applyButton.addTarget(self, action: #selector(applyFilter), forControlEvents: .TouchUpInside)
         
         if !newFilter.hasActiveFilters()

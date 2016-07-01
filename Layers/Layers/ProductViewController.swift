@@ -74,6 +74,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
 
         tableView.backgroundColor = Color.BackgroundGrayColor
         
+        tableView.delaysContentTouches = false
+        
         spinner.hidesWhenStopped = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
         
@@ -314,7 +316,11 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         let indexPath = NSIndexPath(forRow: 0, inSection: TableSection.PriceHistory.rawValue)
 
         if let priceHistoryCell = self.tableView.cellForRowAtIndexPath(indexPath) as? PriceGraphCell
-        {
+        {   // Modify scroll view response
+            for case let x as UIScrollView in tableView.subviews
+            {
+                x.delaysContentTouches = false
+            }
             
             if let productId = productIdentifier
             {
@@ -639,8 +645,15 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         }
                     }
                     
-                    cell.ctaButton.setTitle("View Online".uppercaseString, forState: .Normal)
+                    cell.ctaButton.setTitle("View Online".uppercaseString, forState: [.Normal, .Highlighted])
+                    cell.ctaButton.setTitleColor(Color.whiteColor(), forState: [.Normal, .Highlighted])
+                    
                     cell.ctaButton.addTarget(self, action: #selector(buy), forControlEvents: .TouchUpInside)
+
+                    cell.ctaButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+                    cell.ctaButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+    
+                    cell.ctaButton.adjustsImageWhenHighlighted = false
                     
                     cell.shareButton.setImage(UIImage(named: "share"), forState: .Normal)
                     cell.shareButton.setImage(UIImage(named: "share-filled"), forState: .Highlighted)
@@ -755,6 +768,10 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                     
                     cell.createSaleAlertButton.setTitle(buttonTitle, forState: .Normal)
+                    cell.createSaleAlertButton.setTitleColor(Color.whiteColor(), forState: [.Normal, .Highlighted])
+                    
+                    cell.createSaleAlertButton.setBackgroundColor(Color.DarkNavyColor, forState: .Normal)
+                    cell.createSaleAlertButton.setBackgroundColor(Color.VeryDarkNavyColor, forState: .Highlighted)
                     
                     cell.createSaleAlertButton.addTarget(self, action: #selector(toggleSaleAlert), forControlEvents: .TouchUpInside)
                     
@@ -767,6 +784,18 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         return UITableViewCell(style: .Default, reuseIdentifier: "UITableViewCell")
+    }
+    
+    func highlightCTAButton(sender: UIButton)
+    {
+        sender.backgroundColor = Color.NeonBlueColor
+        sender.titleLabel?.textColor = Color.whiteColor()
+    }
+    
+    func unhighlightCTAButton(sender: UIButton)
+    {
+        sender.backgroundColor = Color.NeonBlueHighlightedColor
+        sender.titleLabel?.textColor = Color.whiteColor()
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -1043,14 +1072,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         if view == nil
         {
             // Remove selection indicators
-            pickerView.subviews[1].hidden = false
-            pickerView.subviews[2].hidden = false
-//            pickerView.subviews[3].hidden = true
-            
-            for (index, subview) in pickerView.subviews.enumerate()
-            {
-                print("Index: \(index), \(subview.backgroundColor)")
-            }
+            pickerView.subviews[1].hidden = true
+            pickerView.subviews[2].hidden = true
             
             if let pickerRow: PickerRow = NSBundle.mainBundle().loadNibNamed("PickerRow", owner: self, options: nil)[0] as? PickerRow
             {

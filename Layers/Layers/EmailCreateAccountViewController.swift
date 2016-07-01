@@ -42,6 +42,9 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        createAccountButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+        createAccountButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        
         createAccountButton.addTarget(self, action: #selector(createAccount), forControlEvents: .TouchUpInside)
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercaseString, style: .Plain, target: self, action: #selector(cancel))
@@ -98,8 +101,8 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
                 createAccountButton.userInteractionEnabled = false
                 
                 spinner.startAnimating()
-                
-                LRSessionManager.sharedManager.register(emailInput, password: passwordInput, completionHandler: { (success, error, response) -> Void in
+
+                LRSessionManager.sharedManager.registerWithEmail(emailInput, password: passwordInput, firstName: "", lastName: "", gender: "", age: 0, completionHandler: { (success, error, response) -> Void in
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         

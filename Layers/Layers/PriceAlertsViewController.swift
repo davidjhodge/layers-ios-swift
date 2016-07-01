@@ -63,7 +63,14 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         
         tableView.userInteractionEnabled = false
         
+        startDiscoveringButton.setTitleColor(Color.whiteColor(), forState: [.Normal, .Highlighted])
+
+        startDiscoveringButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+        startDiscoveringButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        
         startDiscoveringButton.addTarget(self, action: #selector(startDiscovering), forControlEvents: .TouchUpInside)
+        
+        startDiscoveringButton.adjustsImageWhenHighlighted = false
         
         // Reload table when new sale alert is created in another View Controller
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(newSaleAlertCreated(_:)), name: kSaleAlertCreatedNotification, object: nil)

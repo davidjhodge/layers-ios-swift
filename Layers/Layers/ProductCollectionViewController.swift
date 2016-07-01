@@ -23,7 +23,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     @IBOutlet weak var emptyStateView: UIView!
     
     @IBOutlet weak var emptyStateButton: UIButton!
-    
+
     var products: Array<SimpleProductResponse>?
     
     var currentPage: Int?
@@ -71,13 +71,16 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         customLayout.sectionInset = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
         collectionView.collectionViewLayout = customLayout
         
+        emptyStateButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+        emptyStateButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        
         emptyStateButton.addTarget(self, action: #selector(showSearchTab), forControlEvents: .TouchUpInside)
         
         spinner.hidesWhenStopped = true
         spinner.hidden = true
         spinner.color = Color.grayColor()
         view.addSubview(spinner)
-
+        
         reloadProducts()
     }
     

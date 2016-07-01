@@ -39,6 +39,8 @@ public class Color: UIColor
     
     static let DarkNavyColor: UIColor = ColorCode(14, green: 36, blue: 106, alpha: 1.0)
     
+    static let VeryDarkNavyColor: UIColor = ColorCode(11, green: 28, blue: 82, alpha: 1.0)
+    
     static let DarkTextColor: UIColor = ColorCode(36, green: 40, blue: 49, alpha: 1.0)
     
     static let RedColor: UIColor = ColorCode(244, green: 67, blue: 54, alpha: 1.0)
@@ -50,7 +52,7 @@ public class Color: UIColor
     static let NeonBlueColor: UIColor = ColorCode(76, green: 133, blue: 238, alpha: 1.0)
 //    static let NeonBlueColor: UIColor = ColorCode(0, green: 146, blue: 255, alpha: 1.0)
 
-    static let NeonBlueHighlightedColor: UIColor = ColorCode(76, green: 133, blue: 238, alpha: 1.0)
+    static let NeonBlueHighlightedColor: UIColor = ColorCode(66, green: 110, blue: 192, alpha: 1.0)
 
     static let LightGray: UIColor = ColorCode(200, green: 200, blue: 200, alpha: 1.0)
     

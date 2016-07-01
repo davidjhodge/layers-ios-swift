@@ -9,37 +9,23 @@
 import Foundation
 import UIKit
 
-class HighlightedButton: UIButton
+extension UIButton
 {
-    var defaultColor: UIColor?
-    
-    var highlightedColor: UIColor?
-    
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
-        
-        self.setTitleColor(Color.whiteColor(), forState: .Normal)
-        self.setTitleColor(Color.whiteColor(), forState: .Highlighted)
+    func setBackgroundColor(backgroundColor: UIColor, forState state: UIControlState)
+    {
+        setBackgroundImage(UIButton.imageFromColor(backgroundColor), forState: state)
     }
     
-    override var highlighted: Bool
+    static func imageFromColor(color: UIColor) -> UIImage
     {
-        didSet
-        {
-            if highlighted
-            {
-                if let highlightedColor = highlightedColor
-                {
-                    self.backgroundColor = highlightedColor
-                }
-            }
-            else
-            {
-                if let defaultColor = defaultColor
-                {
-                    self.backgroundColor = defaultColor
-                }
-            }
-        }
+        let rect = CGRectMake(0,0,1,1)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        CGContextSetFillColorWithColor(context, color.CGColor)
+        CGContextFillRect(context, rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image
     }
 }
