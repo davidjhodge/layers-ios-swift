@@ -344,6 +344,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                                 priceHistoryCell.createSaleAlertButton.setTitle("Watching".uppercaseString, forState: .Normal)
                             })
                         })
+                        
+                        self.product?.isWatching = true
                     }
                     else
                     {

@@ -32,7 +32,13 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
         
         view.sendSubviewToBack(heroImage)
         
+        facebookButton.setBackgroundColor(Color.whiteColor(), forState: .Normal)
+        facebookButton.setBackgroundColor(Color.HighlightedWhiteColor, forState: .Highlighted)
+        
         facebookButton.addTarget(self, action: #selector(connectWithFacebook), forControlEvents: .TouchUpInside)
+        
+        getStartedButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+        getStartedButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
         
         getStartedButton.addTarget(self, action: #selector(startBrowsing), forControlEvents: .TouchUpInside)
 

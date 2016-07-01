@@ -13,7 +13,6 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 
 #import <NHAlignmentFlowLayout/NHAlignmentFlowLayout.h>
-#import <UIButton_ANDYHighlighted/UIButton+ANDYHighlighted.h>
 
 #import <AWSCore/AWSCore.h>
 #import <AWSCognitoIdentityProvider/AWSCognitoIdentityProvider.h>
