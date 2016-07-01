@@ -202,7 +202,7 @@ class LRSessionManager: NSObject
         {
             log.error("Attempted to save credentials but token object does not exist. Clearing session.")
             
-            clearCredentials()
+            keychain[kTokenObject] = nil
         }
     }
 

@@ -51,6 +51,9 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         tableView.tableFooterView = UIView()
         tableView.scrollEnabled = false
         
+        submitButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+        submitButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        
         submitButton.addTarget(self, action: #selector(submit), forControlEvents: .TouchUpInside)
         
         headerLabel.font = Font.OxygenRegular(size: 18.0)

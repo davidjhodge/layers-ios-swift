@@ -21,11 +21,8 @@ import SwiftyJSON
 private let kAWSCognitoAppClientId = "22lne1f5vp57ls55bkmifp06ir"
 private let kAWSCognitoAppClientSecret = "1qq3jup3mg7qq3ekbnok3tgkecbjlkr6gke9fqa8tfa4spdl4qbj"
 private let kAWSCognitoIdentityPoolId = "us-east-1:7a62ae60-d5ab-44a9-a224-c9b5167fc932"
-private let kAWSCognitoUserPoolId = "us-east-1_JrNu7NtLS"
-private let kAWSCognitoUserPoolKey = "kUserPool"
-private let kAWSSNSApplicationARN = "arn:aws:sns:us-east-1:843366835636:app/APNS_SANDBOX/Layers_Development"
 
-private let kAWSCognitoUserPoolProvider = "cognito-idp.us-east-1.amazonaws.com/\(kAWSCognitoUserPoolId)"
+private let kAWSSNSApplicationARN = "arn:aws:sns:us-east-1:843366835636:app/APNS_SANDBOX/Layers_Development"
 
 class AWSManager: NSObject
 {
@@ -40,6 +37,10 @@ class AWSManager: NSObject
         super.init()
         
         AWSLogger.defaultLogger().logLevel = .Error
+        
+        let credentialsProvider = AWSCognitoCredentialsProvider(regionType: .USEast1, identityPoolId: kAWSCognitoIdentityPoolId)
+        let defaultServiceConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: credentialsProvider)
+        AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration
     }
     
     // MARK: SNS
