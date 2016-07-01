@@ -83,6 +83,9 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         
         let filterButton = UIBarButtonItem(image: UIImage(named: "filter"), style: .Plain, target: self, action: #selector(filter))
         
+        editFilterButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+        editFilterButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+
         editFilterButton.addTarget(self, action: #selector(filter), forControlEvents: .TouchUpInside)
         
         navigationItem.rightBarButtonItem = filterButton

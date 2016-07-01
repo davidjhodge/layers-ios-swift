@@ -75,7 +75,7 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
                 
                 // Facebook token now exists and can be accessed at FBSDKAccessToken.currentAccessToken()
                 
-                LRSessionManager.sharedManager.registerWithFacebook( { (success, error, result) -> Void in
+                LRSessionManager.sharedManager.fetchFacebookUserInfo( { (success, error, result) -> Void in
                     
                     if success
                     {

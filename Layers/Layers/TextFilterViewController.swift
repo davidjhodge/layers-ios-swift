@@ -45,6 +45,9 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         // Set the Navigation Title
         setNavTitle()
         
+        selectButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+        selectButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        
         selectButton.addTarget(self, action: #selector(confirmSelection), forControlEvents: .TouchUpInside)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercaseString, style: .Plain, target: self, action:#selector(reset))

@@ -47,7 +47,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Determine intial view controller based on FirstLaunchExperience        
         if LRSessionManager.sharedManager.hasCompletedFirstLaunch() == true
         {
-            AppStateTransitioner.transitionToMainStoryboard(false)
+            if LRSessionManager.sharedManager.hasDeviceToken()
+            {
+                AppStateTransitioner.transitionToMainStoryboard(false)
+            }
+            else
+            {
+                AppStateTransitioner.transitionToLoginStoryboard(false)
+            }
         }
         else
         {

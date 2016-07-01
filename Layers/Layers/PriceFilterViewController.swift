@@ -42,6 +42,9 @@ class PriceFilterViewController: UIViewController
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercaseString, style: .Plain, target: self, action: #selector(reset))
         
+        priceFilterButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+        priceFilterButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        
         priceFilterButton.addTarget(self, action: #selector(selectFilter), forControlEvents: .TouchUpInside)
         
         slider.trackTintColor = Color.LightGray
