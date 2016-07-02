@@ -182,15 +182,4 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
         getStartedButton.userInteractionEnabled = true
         alreadyHasAccountButton.userInteractionEnabled = true
     }
-    
-    // MARK: Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if segue.identifier == "ShowOnboardingContainerViewController"
-        {
-            navigationController?.setNavigationBarHidden(true, animated: false)
-            
-            UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .None)
-        }
-    }
 }

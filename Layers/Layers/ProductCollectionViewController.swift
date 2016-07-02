@@ -50,8 +50,6 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .None)
-        
         collectionView.backgroundColor = Color.BackgroundGrayColor
         collectionView.alwaysBounceVertical = true
         collectionView.showsVerticalScrollIndicator = false
@@ -80,7 +78,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         spinner.hidden = true
         spinner.color = Color.grayColor()
         view.addSubview(spinner)
-        
+                
         reloadProducts()
     }
     
@@ -88,6 +86,10 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         super.viewDidLayoutSubviews()
         
         spinner.center = collectionView.center
+    }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return false
     }
     
     // MARK: Networking
