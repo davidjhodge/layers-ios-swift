@@ -562,8 +562,6 @@ class LRSessionManager: NSObject
              
                 if success
                 {
-                    log.debug("Successfully refreshed access token.")
-                    
                     if let jsonResponse = response
                     {
                         if let tokenResponse = Mapper<DeviceTokenResponse>().map(jsonResponse.dictionaryObject)
@@ -571,6 +569,8 @@ class LRSessionManager: NSObject
                             self.tokenObject = tokenResponse
                             
                             self.saveCredentials()
+                            
+                            log.debug("Successfully refreshed access token.")
                         }
                     }
                     
@@ -1384,7 +1384,7 @@ class LRSessionManager: NSObject
         }
     }
     
-    func performNetworkRequest(intialRequest: NSURLRequest, networkRequest: NSMutableURLRequest, completionHandler: LRJsonCompletionBlock?)
+    func performNetworkRequest(initialRequest: NSURLRequest, networkRequest: NSMutableURLRequest, completionHandler: LRJsonCompletionBlock?)
     {
         let newRequest = networkRequest
         
@@ -1401,7 +1401,7 @@ class LRSessionManager: NSObject
                 //Process responses in a queue
                 dispatch_async(self.backgroundQueue, { () -> Void in
                     
-                    let requestUrlString = intialRequest.URL?.absoluteString
+                    let requestUrlString = initialRequest.URL?.absoluteString
                     let requestTimestamp = NSDate().timeIntervalSince1970 - startTime
                     
                     let milliseconds = Int(round(requestTimestamp * 1000))
@@ -1445,7 +1445,7 @@ class LRSessionManager: NSObject
                                         if success
                                         {
                                             // After refreshing token, perform this request again
-                                            self.performNetworkRequest(intialRequest, networkRequest: networkRequest, completionHandler: { (success, error, response) -> Void in
+                                            self.sendRequest(initialRequest, authorization: true, completion: { (success, error, response) -> Void in
                                              
                                                 if let completion = completionHandler
                                                 {
@@ -1461,6 +1461,8 @@ class LRSessionManager: NSObject
                                             }
                                         }
                                     })
+                                    
+                                    return
                                 }
                             }
                         }
