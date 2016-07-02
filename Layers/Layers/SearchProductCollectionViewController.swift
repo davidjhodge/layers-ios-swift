@@ -240,7 +240,13 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                                         
                                         if newProducts.count < productCollectionPageSize
                                         {
-                                            for i in index+1...index + newProducts.count
+                                            
+                                            // Delete loading cell
+                                            let loadingCellIndexPath =  NSIndexPath(forRow: index, inSection: 0)
+
+                                            self.collectionView.deleteItemsAtIndexPaths([loadingCellIndexPath])
+
+                                            for i in index...index + newProducts.count - 1
                                             {
                                                 indexPaths.append(NSIndexPath(forRow: i, inSection: 0))
                                             }
@@ -417,6 +423,10 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
             let product: ProductResponse = items[indexPath.row]
             
             let cell: ProductCell = collectionView.dequeueReusableCellWithReuseIdentifier(kProductCellIdentfier, forIndexPath: indexPath) as! ProductCell
+            
+            cell.brandLabel.text = ""
+            cell.priceLabel.text = ""
+            cell.productImageView.image = nil
             
             // If no color filters are activated, use the first variant. Else, use the first variant with a matching color.
             var variant: Variant?
