@@ -38,32 +38,29 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
     
     func send()
     {
-        if let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: TableSection.Email.rawValue)) as? TextViewCell,
+        if let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: TableSection.Email.rawValue)) as? TextFieldCell,
             let contentCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: TableSection.Description.rawValue)) as? TextViewCell
         {
-            if let email = emailCell.textView.text,
+            if let email = emailCell.textField.text,
                 let content = contentCell.textView.text
             {
                 LRSessionManager.sharedManager.submitContactForm(email, content: content, completionHandler: { (success, error, response) -> Void in
                     
-                    if success
+                    if !success
                     {
                         // Show success hud for 1.5 seconds. Hide it, end editing, and pop
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                
-                                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                                hud.mode = .CustomView
-                                hud.customView = UIImageView(image: UIImage(named: "checkmark"))
-                                
-                                hud.labelText = "Successfully Logged Out"
-                                hud.labelFont = Font.OxygenBold(size: 17.0)
-                                hud.hide(true, afterDelay: 1.5)
-                                
-                                self.performSelector(#selector(self.done), withObject: nil, afterDelay: 1.5)
-                            })
+                            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                            hud.mode = .CustomView
+                            hud.customView = UIImageView(image: UIImage(named: "checkmark"))
+                            
+                            hud.labelText = "Message Sent".uppercaseString
+                            hud.labelFont = Font.OxygenBold(size: 17.0)
+                            hud.hide(true, afterDelay: 1.5)
+                            
+                            self.performSelector(#selector(self.done), withObject: nil, afterDelay: 1.5)
                         })
                     }
                     else
@@ -75,10 +72,9 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
                             self.presentViewController(alert, animated: true, completion: nil)
                         })
                     }
-                    
-                    return
                 })
-
+                
+                return
             }
         }
         

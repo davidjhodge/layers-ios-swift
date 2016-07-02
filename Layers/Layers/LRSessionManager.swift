@@ -15,7 +15,8 @@ import KeychainAccess
 
 import FBSDKLoginKit
 
-let kLRAPIBase = "http://52.22.85.12:8000/"
+let kLRAPIBase = "https://api.trylayers.com/"
+//let kLRAPIBase = "http://52.22.85.12:8000/"
 
 let kDeviceId = "kDeviceId"
 let kTokenObject = "kTokenObject"
@@ -557,7 +558,7 @@ class LRSessionManager: NSObject
         {
             let jsonBody = ["refresh_token": currentRefreshToken]
             
-            sendRequest(self.jsonRequest(APIUrlAtEndpoint("refresh"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("device/refresh"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
              
                 if success
                 {
@@ -565,9 +566,9 @@ class LRSessionManager: NSObject
                     
                     if let jsonResponse = response
                     {
-                        if let newRefreshToken: String = jsonResponse["refresh_token"].rawString()
+                        if let tokenResponse = Mapper<DeviceTokenResponse>().map(jsonResponse.dictionaryObject)
                         {
-                            self.tokenObject?.refreshToken = newRefreshToken
+                            self.tokenObject = tokenResponse
                             
                             self.saveCredentials()
                         }
@@ -620,9 +621,7 @@ class LRSessionManager: NSObject
             }
         })
     }
-    
-    // MARK: Old Authorization
-    
+        
     func fetchFacebookUserInfo(completion: LRCompletionBlock?)
     {
         // The currentAccessToken() should be retrieved from Facebook in the View Controller that the login dialogue is shown from.
@@ -1368,7 +1367,7 @@ class LRSessionManager: NSObject
                 }
             }
             
-            performNetworkRequest(request, networkRequest: networkRequest, completion: { (success, error, response) -> Void in
+            performNetworkRequest(request, networkRequest: networkRequest, completionHandler: { (success, error, response) -> Void in
                 
                 if let completion = completion
                 {
@@ -1385,7 +1384,7 @@ class LRSessionManager: NSObject
         }
     }
     
-    func performNetworkRequest(intialRequest: NSURLRequest, networkRequest: NSMutableURLRequest, completion: LRJsonCompletionBlock?)
+    func performNetworkRequest(intialRequest: NSURLRequest, networkRequest: NSMutableURLRequest, completionHandler: LRJsonCompletionBlock?)
     {
         let newRequest = networkRequest
         
@@ -1420,11 +1419,11 @@ class LRSessionManager: NSObject
                         // Check if json error exists. If so, valid data cannot be extracted, so the error must be returned.
                         if let jsonParsingError = jsonError
                         {
-                            if let completionHandler = completion
+                            if let completion = completionHandler
                             {
                                 log.error("Networking Error: ", jsonParsingError.localizedDescription)
                                 
-                                completionHandler(success: false, error: jsonParsingError.localizedDescription, response: nil)
+                                completion(success: false, error: jsonParsingError.localizedDescription, response: nil)
                             }
                             
                             // A JSON error occured so the method returns after passing the error back through the completion block
@@ -1446,9 +1445,9 @@ class LRSessionManager: NSObject
                                         if success
                                         {
                                             // After refreshing token, perform this request again
-                                            self.performNetworkRequest(intialRequest, networkRequest: networkRequest, completion: { (success, error, response) -> Void in
+                                            self.performNetworkRequest(intialRequest, networkRequest: networkRequest, completionHandler: { (success, error, response) -> Void in
                                              
-                                                if let completion = completion
+                                                if let completion = completionHandler
                                                 {
                                                     completion(success: success, error: error, response: response)
                                                 }
@@ -1456,7 +1455,7 @@ class LRSessionManager: NSObject
                                         }
                                         else
                                         {
-                                            if let completion = completion
+                                            if let completion = completionHandler
                                             {
                                                 completion(success: false, error: error, response: nil)
                                             }
@@ -1478,9 +1477,9 @@ class LRSessionManager: NSObject
                                     {
                                         let errorString = "\(key): \(value)"
                                         
-                                        if let completionHandler = completion
+                                        if let completion = completionHandler
                                         {
-                                            completionHandler(success: false, error: errorString, response: nil)
+                                            completion(success: false, error: errorString, response: nil)
                                             
                                             log.error(errors)
                                             
@@ -1489,11 +1488,11 @@ class LRSessionManager: NSObject
                                     }
                                 }
                                 
-                                if let completionHandler = completion
+                                if let completion = completionHandler
                                 {
                                     let errorMessage = "Unknown Server Error."
                                     
-                                    completionHandler(success: false, error: errorMessage, response: nil)
+                                    completion(success: false, error: errorMessage, response: nil)
                                     
                                     log.error(errorMessage)
                                     
@@ -1503,25 +1502,25 @@ class LRSessionManager: NSObject
                         }
                         
                         // The request succeeded and returned valid data
-                        if let completionHandler = completion
+                        if let completion = completionHandler
                         {
-                            completionHandler(success: true, error: nil, response: jsonObject)
+                            completion(success: true, error: nil, response: jsonObject)
                         }
                     }
                     else
                     {
-                        if let completionHandler = completion
+                        if let completion = completionHandler
                         {
                             if let errorMessage: String = response.result.error?.localizedDescription
                             {
                                 log.error("Networking Error: \(errorMessage)")
                                 
-                                completionHandler(success: false, error: errorMessage, response: nil)
+                                completion(success: false, error: errorMessage, response: nil)
                             }
                             else
                             {
                                 log.error("NETWORK_ERROR_UNKNOWN".localized)
-                                completionHandler(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
+                                completion(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
                             }
                         }
                     }

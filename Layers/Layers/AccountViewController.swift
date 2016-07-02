@@ -574,7 +574,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                     case .Privacy:
                         
                         vcTitle = "Privacy Policy"
-                        webUrlString = "http://trylayers.com/privacy-policy/"
+                        webUrlString = "https://trylayers.com/privacy-policy/"
                         
                     case .OpenSource:
                         
