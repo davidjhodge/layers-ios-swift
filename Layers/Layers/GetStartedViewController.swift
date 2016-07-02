@@ -98,7 +98,10 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
                                 confirmFacebookVc.facebookResponse = facebookResponse
                             }
                             
-                            self.navigationController?.pushViewController(confirmFacebookVc, animated: true)
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                
+                                self.navigationController?.pushViewController(confirmFacebookVc, animated: true)
+                            })
                         }
                     }
                     else

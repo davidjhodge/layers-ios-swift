@@ -99,7 +99,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func highlightCTAView()
     {
-        
+        // Handled in touches began/ended
     }
     
     // MARK: Gesture Recognizer Delegate
