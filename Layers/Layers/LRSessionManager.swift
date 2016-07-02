@@ -64,8 +64,8 @@ class LRSessionManager: NSObject
         
         networkManager = Alamofire.Manager(configuration: configuration)
         
-        keychain[kDeviceId] = nil
-        keychain[kTokenObject] = nil
+//        keychain[kDeviceId] = nil
+//        keychain[kTokenObject] = nil
         
         resumeSession()
     }
