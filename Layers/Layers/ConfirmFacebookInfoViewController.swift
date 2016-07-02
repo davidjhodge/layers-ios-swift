@@ -122,6 +122,8 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
                     if success
                     {
                         self.completeFirstLaunchExperience()
+                        
+                        return
                     }
                     else
                     {
@@ -133,10 +135,20 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
                                 if success
                                 {
                                     self.completeFirstLaunchExperience()
+                                    
+                                    return
                                 }
                             })
                         }
                     }
+                    
+                    //Failure
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                      
+                        let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                        self.presentViewController(alert, animated: true, completion: nil)
+                    })
                 })
             }
         }
