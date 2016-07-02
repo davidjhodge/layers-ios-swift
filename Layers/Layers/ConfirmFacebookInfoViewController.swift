@@ -100,74 +100,51 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         return false
     }
     
-//    func validateInputs() -> Bool
-//    {
-//        if let nameCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Name.rawValue, inSection: 0)) as? TwoTextFieldCell,
-//            
-//            let genderAgeCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.GenderAge.rawValue, inSection: 0)) as? TwoTextFieldCell,
-//        
-//                let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Email.rawValue, inSection: 0)) as? TextFieldCell
-//        {
-//            if let firstNameTextField = nameCell.firstTextField,
-//                let lastNameTextField = nameCell.secondTextField,
-//                let genderTextField = genderAgeCell.firstTextField,
-//                let ageTextField = genderAgeCell.secondTextField,
-//                let emailTextField = emailCell.textField
-//            {
-//                if firstNameTextField.text?.characters.count > 0
-//                && lastNameTextField.text?.characters.count > 0
-//                && genderTextField.text?.characters.count > 0
-//                && ageTextField.text?.characters.count > 0
-//                && emailTextField.text?.characters.count > 0
-//                {
-//                    return true
-//                }
-//            }
-//        }
-//        
-//        return false
-//    }
-    
     // MARK: Actions
     func submit()
     {
         if validateEmail()
         {
-            
-        }
-        if let nameCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Name.rawValue, inSection: 0)) as? TwoTextFieldCell,
-            
-            let genderAgeCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.GenderAge.rawValue, inSection: 0)) as? TwoTextFieldCell,
-            
-            let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Email.rawValue, inSection: 0)) as? TextFieldCell
-        {
-            let firstName = nameCell.firstTextField.text
-            let lastName = nameCell.secondTextField.text
-            let gender = genderAgeCell.firstTextField.text
-            let age = NSNumber.aws_numberFromString(genderAgeCell.secondTextField.text)
-            let email = emailCell.textField.text
-            
-            LRSessionManager.sharedManager.loginWithFacebook({ (success, error, response) -> Void in
+            if let nameCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Name.rawValue, inSection: 0)) as? TwoTextFieldCell,
                 
-                if success
-                {
-                    self.completeFirstLaunchExperience()
-                }
-                else
-                {
-                    // Try Creating an account with Facebook
-                    if let email = email
+                let genderAgeCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.GenderAge.rawValue, inSection: 0)) as? TwoTextFieldCell,
+                
+                let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Email.rawValue, inSection: 0)) as? TextFieldCell
+            {
+                let firstName = nameCell.firstTextField.text
+                let lastName = nameCell.secondTextField.text
+                let gender = genderAgeCell.firstTextField.text
+                let age = NSNumber.aws_numberFromString(genderAgeCell.secondTextField.text)
+                let email = emailCell.textField.text
+                
+                LRSessionManager.sharedManager.loginWithFacebook({ (success, error, response) -> Void in
+                    
+                    if success
                     {
-                        LRSessionManager.sharedManager.registerWithFacebook(email, firstName: firstName, lastName: lastName, gender: gender, age: age, completionHandler: { (success, error, response) -> Void in
-                            
-                            if success
-                            {
-                                self.completeFirstLaunchExperience()
-                            }
-                        })
+                        self.completeFirstLaunchExperience()
                     }
-                }
-            })
+                    else
+                    {
+                        // Try Creating an account with Facebook
+                        if let email = email
+                        {
+                            LRSessionManager.sharedManager.registerWithFacebook(email, firstName: firstName, lastName: lastName, gender: gender, age: age, completionHandler: { (success, error, response) -> Void in
+                                
+                                if success
+                                {
+                                    self.completeFirstLaunchExperience()
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+        }
+        else
+        {
+            let alert = UIAlertController(title: "Whoops! Check to make sure you entered a valid email.", message: nil, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
         }
     }
     
@@ -196,7 +173,10 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         else
         {
             // Logged in on Get Started Screen
-            AppStateTransitioner.transitionToMainStoryboard(true)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                AppStateTransitioner.transitionToMainStoryboard(true)
+            })
         }
     }
     

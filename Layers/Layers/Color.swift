@@ -58,6 +58,6 @@ public class Color: UIColor
     
     static let HighlightedGrayColor: UIColor = ColorCode(230, green: 230, blue: 230, alpha: 1.0)
     
-    static let HighlightedWhiteColor: UIColor = ColorCode(247, green: 247, blue: 247, alpha: 1.0)
+    static let HighlightedWhiteColor: UIColor = ColorCode(239, green: 239, blue: 239, alpha: 1.0)
 
 }

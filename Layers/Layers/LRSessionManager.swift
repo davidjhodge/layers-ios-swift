@@ -65,6 +65,7 @@ class LRSessionManager: NSObject
         networkManager = Alamofire.Manager(configuration: configuration)
         
         keychain[kDeviceId] = nil
+        keychain[kTokenObject] = nil
         
         resumeSession()
     }
@@ -177,11 +178,17 @@ class LRSessionManager: NSObject
             {
                 if let storedTokenDict = JSON(data: storedTokenData).dictionaryObject
                 {
-                    self.tokenObject = Mapper<DeviceTokenResponse>().map(storedTokenDict)
-                    
-                    log.debug("Tokens successfully retreived. Session Restored.")
-                    
-                    return
+                    if let storedToken = Mapper<DeviceTokenResponse>().map(storedTokenDict)
+                    {
+                        if storedToken.accessToken != nil
+                        {
+                            self.tokenObject = storedToken
+                            
+                            log.debug("Tokens successfully retreived. Session Restored.")
+                            
+                            return
+                        }
+                    }
                 }
             }
         }
@@ -380,10 +387,11 @@ class LRSessionManager: NSObject
     
     func registerWithFacebook(email: String, firstName: String?, lastName: String?, gender: String?, age: NSNumber?, completionHandler: LRCompletionBlock?)
     {
-        if let facebookToken = FBSDKAccessToken.currentAccessToken()
+        if let facebookToken = FBSDKAccessToken.currentAccessToken().tokenString
         {
-            var jsonBody = ["facebook_token":   facebookToken,
-                            "email":            email]
+            var jsonBody: Dictionary<String,AnyObject> = [
+                "facebook_token":   facebookToken,
+                "email":            email]
             
             if firstName != nil { jsonBody["first_name"] = firstName }
             
@@ -490,12 +498,12 @@ class LRSessionManager: NSObject
 
     func loginWithFacebook(completionHandler: LRCompletionBlock?)
     {
-        if let facebookToken = FBSDKAccessToken.currentAccessToken(),
+        if let facebookToken = FBSDKAccessToken.currentAccessToken().tokenString,
             let deviceId = deviceKey
         {
             let jsonBody = ["facebook_token": facebookToken,
                             "device_id": deviceId]
-            
+
             sendRequest(self.jsonRequest(APIUrlAtEndpoint("user/session"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
                 
                 if success
@@ -1464,16 +1472,32 @@ class LRSessionManager: NSObject
                             // If status code is not in the 200s, return error
                             if statusCode < 200 || statusCode > 299
                             {
-                                if let errors = jsonObject["errors"].string
+                                if let errors = jsonObject["errors"].dictionaryObject
                                 {
-                                    if let completionHandler = completion
+                                    for (key, value) in errors
                                     {
-                                        completionHandler(success: false, error: errors, response: nil)
+                                        let errorString = "\(key): \(value)"
                                         
-                                        log.error(errors)
-                                        
-                                        return
+                                        if let completionHandler = completion
+                                        {
+                                            completionHandler(success: false, error: errorString, response: nil)
+                                            
+                                            log.error(errors)
+                                            
+                                            return
+                                        }
                                     }
+                                }
+                                
+                                if let completionHandler = completion
+                                {
+                                    let errorMessage = "Unknown Server Error."
+                                    
+                                    completionHandler(success: false, error: errorMessage, response: nil)
+                                    
+                                    log.error(errorMessage)
+                                    
+                                    return
                                 }
                             }
                         }
