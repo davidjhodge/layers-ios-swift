@@ -659,7 +659,38 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
     // MARK: UITableView Delegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        performSegueWithIdentifier("ShowProductWebViewController", sender: indexPath)
+        if let navigationVc = navigationController
+        {
+            let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+            
+            if let productVc = storyboard.instantiateViewControllerWithIdentifier("ProductViewController") as? ProductViewController
+            {
+                var index = indexPath.row
+                
+                if indexPath.row > 0
+                {
+                    index = (indexPath.row / 2)
+                }
+                
+                var product: ProductResponse?
+                
+                if indexPath.section == TableSection.OnSale.rawValue
+                {
+                    product = saleAlerts?[index]
+                }
+                else if indexPath.section == TableSection.Watching.rawValue
+                {
+                    product = watchAlerts?[index]
+                }
+                
+                if let productId = product?.productId
+                {
+                    productVc.productIdentifier = productId
+                }
+                
+                navigationVc.pushViewController(productVc, animated: true)
+            }
+        }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -767,7 +798,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         
         if indexPath.row % 2 == 0
-        {
+        { 
             return true
         }
         
