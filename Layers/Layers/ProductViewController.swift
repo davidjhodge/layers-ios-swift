@@ -1225,6 +1225,12 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     {
                         destinationViewController.brandName = brandName
                     }
+                    
+                    if let productName = currentProduct.productName,
+                        let productId = currentProduct.productId
+                    {
+                        FBSDKAppEvents.logEvent("Sale Alert On Sale Product Views", parameters: ["Product Name":productName, "Product ID":productId])
+                    }
                 }
             }
         }

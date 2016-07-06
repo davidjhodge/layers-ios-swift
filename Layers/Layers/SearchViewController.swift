@@ -12,14 +12,8 @@ import FBSDKCoreKit
 class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
     @IBOutlet weak var tableView: UITableView!
-//    
-//    @IBOutlet weak var searchTextField: UITextField!
-//
-//    @IBOutlet weak var cancelButton: UIButton!
-//    
+
     @IBOutlet weak var tableViewBottomConstraint: NSLayoutConstraint!
-    
-//    @IBOutlet weak var searchNavButton: UIButton!
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -46,13 +40,13 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchBar.backgroundColor = Color.clearColor()
         
         searchBar.delegate = self
-
+        
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = Color.BackgroundGrayColor
         tableView.separatorColor = Color.clearColor()
         
         tableView.scrollIndicatorInsets = UIEdgeInsetsMake(-20, 0, 0, 0)
-
+        
         spinner.color = Color.grayColor()
         spinner.hidesWhenStopped = true
         spinner.hidden = true
@@ -219,13 +213,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         if shouldShowCategories()
         {
-//            var tabBarHeight: CGFloat = 0
-//            
-//            if let tabBar = tabBarController?.tabBar
-//            {
-//                tabBarHeight = tabBar.bounds.size.height
-//            }
-            
             tableView.contentInset = UIEdgeInsets(top: 48, left: tableView.contentInset.left, bottom: 48, right: tableView.contentInset.right)
             
             tableView.backgroundColor = Color.whiteColor()
@@ -552,7 +539,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             
             guard let keyboardFrameInViewCoordiantes = self?.view.convertRect(frame, fromView: nil), bounds = self?.view.bounds else { return; }
             
-            let constantModification = CGRectGetHeight(bounds) - keyboardFrameInViewCoordiantes.origin.y
+            var constantModification = CGRectGetHeight(bounds) - keyboardFrameInViewCoordiantes.origin.y
+            
+            if constantModification < 0
+            {
+                constantModification = 0
+            }
             
             let duration:NSTimeInterval = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
             let animationCurveRawNSN = notification.userInfo?[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
