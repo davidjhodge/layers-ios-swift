@@ -710,7 +710,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         
                         if let firstRating = product.rating
                         {
-                            if let ratingScore = firstRating.score?.integerValue,
+                            if let ratingScore = firstRating.score?.stringValue,
                                 let ratingTotal = firstRating.total?.integerValue
                             {
                                 cell.ratingLabel.text = "\(ratingScore) / \(ratingTotal)"

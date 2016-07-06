@@ -987,9 +987,9 @@ To keep browsing, try Search.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 / 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZV-CN-C63">
-                                                    <rect key="frame" x="24" y="11" width="44" height="21"/>
+                                                    <rect key="frame" x="24" y="11" width="0.0" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="44" id="KJg-4P-WUP"/>
+                                                        <constraint firstAttribute="width" id="KJg-4P-WUP"/>
                                                         <constraint firstAttribute="height" constant="21" id="mDJ-Hm-gFL"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="16"/>
@@ -997,7 +997,7 @@ To keep browsing, try Search.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="smj-rI-ntw" customClass="CosmosView" customModule="Cosmos">
-                                                    <rect key="frame" x="84" y="14" width="80" height="16"/>
+                                                    <rect key="frame" x="40" y="14" width="80" height="16"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="80" id="qwb-PK-nm8"/>
@@ -1330,13 +1330,13 @@ To keep browsing, try Search.</string>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jhf-Y8-gpm">
-                                                    <rect key="frame" x="104" y="49" width="472" height="18"/>
+                                                    <rect key="frame" x="104" y="41" width="472" height="18"/>
                                                     <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="14"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BRAND" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d5e-Dt-gvA">
-                                                    <rect key="frame" x="104" y="24" width="472" height="21"/>
+                                                    <rect key="frame" x="104" y="16" width="472" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="mJu-SM-sCF"/>
                                                     </constraints>
@@ -1357,9 +1357,9 @@ To keep browsing, try Search.</string>
                                                 </button>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="d5e-Dt-gvA" firstAttribute="top" secondItem="7O4-QN-3qF" secondAttribute="top" constant="16" id="5EY-bj-0CN"/>
                                                 <constraint firstItem="KLx-gw-j05" firstAttribute="top" relation="greaterThanOrEqual" secondItem="AAC-0Q-wgV" secondAttribute="bottom" constant="16" id="646-0A-EBX"/>
                                                 <constraint firstItem="d5e-Dt-gvA" firstAttribute="leading" secondItem="AAC-0Q-wgV" secondAttribute="trailing" constant="16" id="6ci-oM-85Z"/>
-                                                <constraint firstItem="d5e-Dt-gvA" firstAttribute="top" secondItem="7O4-QN-3qF" secondAttribute="top" constant="24" id="G14-mn-L0I"/>
                                                 <constraint firstItem="AAC-0Q-wgV" firstAttribute="leading" secondItem="7O4-QN-3qF" secondAttribute="leading" constant="24" id="GfS-J0-UwE"/>
                                                 <constraint firstItem="Jhf-Y8-gpm" firstAttribute="leading" secondItem="AAC-0Q-wgV" secondAttribute="trailing" constant="16" id="KYF-sx-crc"/>
                                                 <constraint firstAttribute="trailing" secondItem="d5e-Dt-gvA" secondAttribute="trailing" constant="24" id="NF0-28-59K"/>
