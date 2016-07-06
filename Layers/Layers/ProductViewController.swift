@@ -1229,7 +1229,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     if let productName = currentProduct.productName,
                         let productId = currentProduct.productId
                     {
-                        FBSDKAppEvents.logEvent("Sale Alert On Sale Product Views", parameters: ["Product Name":productName, "Product ID":productId])
+                        FBSDKAppEvents.logEvent("Product Page Clickthrough Web Views", parameters: ["Product Name":productName, "Product ID":productId])
                     }
                 }
             }
