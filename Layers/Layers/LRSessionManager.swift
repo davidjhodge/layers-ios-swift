@@ -15,8 +15,8 @@ import KeychainAccess
 
 import FBSDKLoginKit
 
-//let kLRAPIBase = "https://api.trylayers.com/"
-let kLRAPIBase = "http://52.22.85.12:8000/"
+let kLRAPIBase = "https://api.trylayers.com/"
+//let kLRAPIBase = "http://52.22.85.12:8000/"
 
 let kDeviceId = "kDeviceId"
 let kTokenObject = "kTokenObject"

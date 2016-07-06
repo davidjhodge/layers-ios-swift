@@ -677,10 +677,22 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                 if indexPath.section == TableSection.OnSale.rawValue
                 {
                     product = saleAlerts?[index]
+                    
+                    if let productName = product?.productName,
+                        let productId = product?.productId
+                    {
+                        FBSDKAppEvents.logEvent("Sale Alert On Sale Product Views", parameters: ["Product Name":productName, "Product ID":productId])
+                    }
                 }
                 else if indexPath.section == TableSection.Watching.rawValue
                 {
                     product = watchAlerts?[index]
+                    
+                    if let productName = product?.productName,
+                        let productId = product?.productId
+                    {
+                        FBSDKAppEvents.logEvent("Watch Alert On Sale Product Views", parameters: ["Product Name":productName, "Product ID":productId])
+                    }
                 }
                 
                 if let productId = product?.productId
@@ -814,79 +826,6 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         super.setEditing(editing, animated: animated)
         
         tableView.setEditing(editing, animated: animated)
-    }
-    
-    // MARK: Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if segue.identifier == "ShowProductWebViewController"
-        {
-            if let destinationVC = segue.destinationViewController as? ProductWebViewController
-            {
-                if let indexPath = sender as? NSIndexPath
-                {
-                    // Integrates with dummy seperator cells
-                    var row = 0
-                    
-                    if indexPath.row == 0
-                    {
-                        row = 0
-                    }
-                    else if indexPath.row > 0
-                    {
-                        row = Int(floor(Double(indexPath.row)  * 0.5))
-                    }
-                    
-                    if indexPath.section == TableSection.OnSale.rawValue
-                    {
-                        if let alertProduct = saleAlerts?[safe: row] as ProductResponse?
-                        {
-                            if let brandName = alertProduct.brand?.brandName
-                            {
-                                destinationVC.brandName = brandName
-                            }
-                            
-                            if let coupon = alertProduct.variants?[safe: 0]?.sizes?[safe: 0]?.altPrice?.couponCode
-                            {
-                                destinationVC.couponCode = coupon
-                            }
-
-                            if let url = alertProduct.outboundUrl
-                            {
-                                destinationVC.webURL = NSURL(string: url)
-                            }
-                            
-                            if let productName = alertProduct.productName,
-                            let productId = alertProduct.productId
-                            {
-                                FBSDKAppEvents.logEvent("Sale Alert On Sale Product Views", parameters: ["Product Name":productName, "Product ID":productId])
-                            }
-                        }
-                    }
-                    else if indexPath.section == TableSection.Watching.rawValue
-                    {
-                        if let alertProduct = watchAlerts?[safe: row] as ProductResponse?
-                        {
-                            if let brandName = alertProduct.brand?.brandName
-                            {
-                                destinationVC.brandName = brandName
-                            }
-                            
-                            if let url = alertProduct.outboundUrl
-                            {
-                                destinationVC.webURL = NSURL(string: url)
-                            }
-                            
-                            if let productName = alertProduct.productName,
-                                let productId = alertProduct.productId
-                            {
-                                FBSDKAppEvents.logEvent("Sale Alert Watching Product Views", parameters: ["Product Name":productName, "Product ID":productId])
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
     
     deinit
