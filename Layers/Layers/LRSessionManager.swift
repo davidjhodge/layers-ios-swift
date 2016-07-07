@@ -1517,7 +1517,7 @@ class LRSessionManager: NSObject
                             {
                                 log.error("Networking Error: \(errorMessage)")
                                 
-                                completion(success: false, error: errorMessage, response: nil)
+                                completion(success: false, error: "Whoops! \(errorMessage)", response: nil)
                             }
                             else
                             {
