@@ -25,7 +25,7 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
     
     @IBOutlet weak var shareButton: UIButton!
     
-    var imageViews: Array<UIImageView> = Array<UIImageView>()
+    var imageViews: Array<AnimatedImageView> = Array<AnimatedImageView>()
     
     override var frame: CGRect
     {
@@ -78,7 +78,7 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
             {
                 for imageUrl in images
                 {
-                    let imageView = UIImageView()
+                    let imageView = AnimatedImageView()
                     imageView.clipsToBounds = true
                     imageView.contentMode = UIViewContentMode.ScaleAspectFit
                     
