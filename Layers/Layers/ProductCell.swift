@@ -11,7 +11,7 @@ import UIKit
 
 class ProductCell: UICollectionViewCell
 {
-    @IBOutlet weak var productImageView: UIImageView!
+    @IBOutlet weak var productImageView: AnimatedImageView!
 
     @IBOutlet weak var brandLabel: UILabel!
     

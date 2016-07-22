@@ -476,7 +476,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="148" height="226"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="t8R-Jd-aHu">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="t8R-Jd-aHu" customClass="AnimatedImageView" customModule="Layers" customModuleProvider="target">
                                                     <rect key="frame" x="16" y="16" width="116" height="132"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BRAND" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PI2-LH-4gB">
@@ -517,7 +517,7 @@
                                         <connections>
                                             <outlet property="brandLabel" destination="PI2-LH-4gB" id="dLy-8X-bI1"/>
                                             <outlet property="priceLabel" destination="pA7-4x-j8k" id="Vvf-y6-Cs9"/>
-                                            <outlet property="productImageView" destination="t8R-Jd-aHu" id="7oW-Zw-tbE"/>
+                                            <outlet property="productImageView" destination="t8R-Jd-aHu" id="VEg-E5-uKc"/>
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LoadingCell" id="TwJ-CH-LdQ" customClass="LoadingCell" customModule="Layers" customModuleProvider="target">
@@ -706,7 +706,7 @@ To keep browsing, try Search.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qS9-Ra-UZn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2885" y="1154"/>
+            <point key="canvasLocation" x="2885" y="1223"/>
         </scene>
         <!--Product View Controller-->
         <scene sceneID="j5y-eI-2pK">
@@ -728,7 +728,7 @@ To keep browsing, try Search.</string>
                                 <color key="sectionIndexTrackingBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ProductHeaderCell" rowHeight="441" id="cd5-GB-Q0Q" customClass="ProductHeaderCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="113.5" width="584" height="441"/>
+                                        <rect key="frame" x="0.0" y="49.5" width="584" height="441"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cd5-GB-Q0Q" id="nd5-i7-KSw">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="440.5"/>
@@ -863,7 +863,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StyleCell" rowHeight="44" id="ddo-Uu-Zxs" customClass="StyleCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="554.5" width="584" height="44"/>
+                                        <rect key="frame" x="0.0" y="490.5" width="584" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ddo-Uu-Zxs" id="EjI-KJ-Xex">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="43.5"/>
@@ -922,7 +922,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SizeCell" rowHeight="44" id="4X7-nF-41r" customClass="SizeCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="598.5" width="584" height="44"/>
+                                        <rect key="frame" x="0.0" y="534.5" width="584" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4X7-nF-41r" id="nHh-US-KD7">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="43.5"/>
@@ -970,7 +970,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="OverallReviewCell" rowHeight="44" id="ftz-Pa-HB0" customClass="OverallReviewCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="642.5" width="584" height="44"/>
+                                        <rect key="frame" x="0.0" y="578.5" width="584" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ftz-Pa-HB0" id="VIW-fY-dcr">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="43.5"/>
@@ -1048,7 +1048,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AlternateReviewCell" rowHeight="32" id="IUu-Fu-zcP" customClass="AlternateReviewCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="686.5" width="584" height="32"/>
+                                        <rect key="frame" x="0.0" y="622.5" width="584" height="32"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IUu-Fu-zcP" id="RHa-dy-2l8">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="31.5"/>
@@ -1125,7 +1125,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PriceGraphCell" rowHeight="166" id="Fo9-NN-dEN" customClass="PriceGraphCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="718.5" width="584" height="166"/>
+                                        <rect key="frame" x="0.0" y="654.5" width="584" height="166"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Fo9-NN-dEN" id="YLb-cT-iWP">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="165.5"/>
@@ -1316,7 +1316,7 @@ To keep browsing, try Search.</string>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SimpleProductHeaderCell" rowHeight="169" id="CcX-nR-QZE" customClass="SimpleProductHeaderCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="113.5" width="600" height="169"/>
+                                        <rect key="frame" x="0.0" y="49.5" width="600" height="169"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CcX-nR-QZE" id="7O4-QN-3qF">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="168.5"/>
@@ -1380,7 +1380,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="OverallReviewCell" rowHeight="44" id="Nbg-Ia-Crp" customClass="OverallReviewCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="282.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="218.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Nbg-Ia-Crp" id="bl6-9y-yTl">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -1457,7 +1457,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ReviewCell" rowHeight="92" id="cln-RT-lle" customClass="ReviewCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="326.5" width="600" height="92"/>
+                                        <rect key="frame" x="0.0" y="262.5" width="600" height="92"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cln-RT-lle" id="4bI-zk-bK8">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="91.5"/>
@@ -1541,7 +1541,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UITableViewCell" id="JeN-8V-qNw">
-                                        <rect key="frame" x="0.0" y="418.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="354.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JeN-8V-qNw" id="Mx0-b4-lqT">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -1584,7 +1584,7 @@ To keep browsing, try Search.</string>
                         <rect key="frame" x="0.0" y="0.0" width="600" height="1050"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="47O-G0-KOU">
+                            <webView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="47O-G0-KOU">
                                 <rect key="frame" x="0.0" y="64" width="600" height="986"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
                             </webView>
@@ -1648,7 +1648,7 @@ To keep browsing, try Search.</string>
         <image name="share" width="82" height="15"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="w26-AX-dDf"/>
+        <segue reference="K3r-1i-u5G"/>
         <segue reference="Oev-VQ-CAY"/>
     </inferredMetricsTieBreakers>
 </document>

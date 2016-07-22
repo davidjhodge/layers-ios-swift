@@ -818,9 +818,9 @@ class LRSessionManager: NSObject
         })
     }
     
-    func loadProduct(productId: NSNumber, completionHandler: LRCompletionBlock?)
+    func loadProduct(productId: NSNumber?, completionHandler: LRCompletionBlock?)
     {
-        if productId.integerValue >= 0
+        if let productId = productId
         {
             let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/\(productId.stringValue)"))
             

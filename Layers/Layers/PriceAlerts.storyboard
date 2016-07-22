@@ -37,7 +37,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="112"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vwX-Gz-gb6">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vwX-Gz-gb6" customClass="AnimatedImageView" customModule="Layers" customModuleProvider="target">
                                                     <rect key="frame" x="12" y="16" width="80" height="80"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="80" id="ll1-g6-EgF"/>
@@ -87,7 +87,7 @@
                                         <connections>
                                             <outlet property="brandLabel" destination="8BN-ZM-SdQ" id="Ali-I6-Huz"/>
                                             <outlet property="priceLabel" destination="jif-aa-sis" id="5ds-f2-fga"/>
-                                            <outlet property="productImageView" destination="vwX-Gz-gb6" id="dU3-94-CQF"/>
+                                            <outlet property="productImageView" destination="vwX-Gz-gb6" id="A0n-Bb-zOV"/>
                                             <outlet property="productLabel" destination="hCd-Fj-tdk" id="K1A-Eg-agh"/>
                                         </connections>
                                     </tableViewCell>
