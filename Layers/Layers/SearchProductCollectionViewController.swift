@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import FBSDKCoreKit
 import NHAlignmentFlowLayout
+import SDWebImage
 
 class SearchProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FilterDelegate
 {
@@ -455,18 +456,20 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 {
                     if let primaryUrl = firstImage.primaryUrl
                     {
-                        let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize224)
-
-                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                        let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize232)
+                        
+                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
                             
-                            if image != nil && cacheType != .Memory
-                            {
-                                cell.productImageView.alpha = 0.0
-                                
-                                UIView.animateWithDuration(0.3, animations: {
-                                    cell.productImageView.alpha = 1.0
-                                })
-                            }
+                            //                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                            
+//                            if image != nil && cacheType != .Memory
+//                            {
+//                                cell.productImageView.alpha = 0.0
+//                                
+//                                UIView.animateWithDuration(0.3, animations: {
+//                                    cell.productImageView.alpha = 1.0
+//                                })
+//                            }
                         })
                     }
                 }

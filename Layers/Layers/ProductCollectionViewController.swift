@@ -302,6 +302,8 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
             {
                 let loadingCell = collectionView.dequeueReusableCellWithReuseIdentifier("LoadingCell", forIndexPath: indexPath) as! LoadingCell
                 
+                loadingCell.backgroundColor = Color.whiteColor()
+                
                 return loadingCell
             }
             
@@ -340,20 +342,20 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 {
                     if let primaryUrl = firstImage.primaryUrl
                     {
-                        let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize112)
+                        let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize116)
                         
-//                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
+                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
 
-                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
-                            
-                            if image != nil && cacheType != .Memory
-                            {
-                                cell.productImageView.alpha = 0.0
-                                
-                                UIView.animateWithDuration(0.3, animations: {
-                                    cell.productImageView.alpha = 1.0
-                                    })
-                            }
+//                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                        
+//                            if image != nil && cacheType != .Memory
+//                            {
+//                                cell.productImageView.alpha = 0.0
+//                                
+//                                UIView.animateWithDuration(0.3, animations: {
+//                                    cell.productImageView.alpha = 1.0
+//                                    })
+//                            }
                         })
                     }
                 }

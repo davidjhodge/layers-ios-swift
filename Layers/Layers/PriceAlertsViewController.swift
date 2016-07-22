@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import FBSDKCoreKit
+import SDWebImage
 
 private enum TableSection: Int
 {
@@ -521,16 +522,20 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                             
                             if let primaryImageUrl = firstVariant.images?[safe: 0]?.primaryUrl
                             {
-                                cell.productImageView.sd_setImageWithURL(primaryImageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
-                                    
-                                    if image != nil && cacheType != .Memory
-                                    {
-                                        cell.productImageView.alpha = 0.0
-                                        
-                                        UIView.animateWithDuration(0.3, animations: {
-                                            cell.productImageView.alpha = 1.0
-                                        })
-                                    }
+                                let resizedPrimaryUrl = NSURL.imageAtUrl(primaryImageUrl, imageSize: ImageSize.kImageSize116)
+
+                                cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
+
+//                                cell.productImageView.sd_setImageWithURL(primaryImageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                                
+//                                    if image != nil && cacheType != .Memory
+//                                    {
+//                                        cell.productImageView.alpha = 0.0
+//                                        
+//                                        UIView.animateWithDuration(0.3, animations: {
+//                                            cell.productImageView.alpha = 1.0
+//                                        })
+//                                    }
                                 })
                             }
                         }
@@ -592,16 +597,20 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
                             // Primary Image
                             if let primaryImageUrl = firstVariant.images?[safe: 0]?.primaryUrl
                             {
-                                cell.productImageView.sd_setImageWithURL(primaryImageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
-                                    
-                                    if image != nil && cacheType != .Memory
-                                    {
-                                        cell.productImageView.alpha = 0.0
-                                        
-                                        UIView.animateWithDuration(0.3, animations: {
-                                            cell.productImageView.alpha = 1.0
-                                        })
-                                    }
+                                let resizedPrimaryUrl = NSURL.imageAtUrl(primaryImageUrl, imageSize: ImageSize.kImageSize116)
+
+                                cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
+
+//                                cell.productImageView.sd_setImageWithURL(primaryImageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                                
+//                                    if image != nil && cacheType != .Memory
+//                                    {
+//                                        cell.productImageView.alpha = 0.0
+//                                        
+//                                        UIView.animateWithDuration(0.3, animations: {
+//                                            cell.productImageView.alpha = 1.0
+//                                        })
+//                                    }
                                 })
                             }
 

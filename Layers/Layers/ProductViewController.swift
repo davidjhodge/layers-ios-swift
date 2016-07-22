@@ -567,7 +567,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     {
                         if let primaryUrl = imageDict.primaryUrl
                         {
-                            let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize224)
+                            let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize232)
                             
                             productImages.append(resizedPrimaryUrl)
                             
@@ -575,7 +575,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             {
                                 for alternateUrl in alternateUrls
                                 {
-                                    let resizedAlternateUrl = NSURL.imageAtUrl(alternateUrl, imageSize: ImageSize.kImageSize224)
+                                    let resizedAlternateUrl = NSURL.imageAtUrl(alternateUrl, imageSize: ImageSize.kImageSize232)
                                     
                                     productImages.append(resizedAlternateUrl)
                                 }
