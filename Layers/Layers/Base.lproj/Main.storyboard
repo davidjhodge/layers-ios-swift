@@ -1144,7 +1144,7 @@ To keep browsing, try Search.</string>
                                                         <constraint firstAttribute="height" constant="21" id="DyI-6P-S0n"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="16"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xgi-wb-IuD">
@@ -1161,7 +1161,7 @@ To keep browsing, try Search.</string>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Because this brand's items are known to go on sale frequently, recommend waiting until the price drops." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4BY-83-WY0">
                                                     <rect key="frame" x="24" y="45" width="536" height="36"/>
                                                     <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="12"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>

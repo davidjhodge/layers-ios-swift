@@ -10,7 +10,7 @@ import Foundation
 
 enum ImageSize: NSNumber
 {
-    case kImageSize32 = 32, kImageSize64 = 64, kImageSize112 = 112, kImageSize164 = 164, kImageSize224 = 224, kImageSize328 = 328, kImageSize656 = 656, kImageSize900 = 900
+    case kImageSize116 = 112, kImageSize200 = 200, kImageSize232 = 232, kImageSize348 = 348, kImageSize400 = 400, kImageSize600 = 600, kImageSize = 1242
 }
 
 extension NSURL
@@ -49,25 +49,25 @@ extension CGFloat
         //@2x
         if scale == 2.0
         {
-            if size == .kImageSize112
+            if size == .kImageSize116
             {
-                imageSize = .kImageSize224
+                imageSize = .kImageSize232
             }
-            else if size == .kImageSize224
+            else if size == .kImageSize232
             {
-                imageSize = .kImageSize656
+                imageSize = .kImageSize600
             }
         }
         //@3x
         else if scale == 3.0
         {
-            if size == .kImageSize112
+            if size == .kImageSize116
             {
-                imageSize = .kImageSize656
+                imageSize = .kImageSize348
             }
-            else if size == .kImageSize224
+            else if size == .kImageSize232
             {
-                imageSize = .kImageSize656
+                imageSize = .kImageSize600
             }
         }
         

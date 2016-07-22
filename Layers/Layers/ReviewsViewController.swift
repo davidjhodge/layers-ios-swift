@@ -129,16 +129,18 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     if let imageUrl = product.variants?[safe: 0]?.images?[safe: 0]?.primaryUrl
                     {
-                        cell.productImageView.sd_setImageWithURL(imageUrl, completed: { (image, error, cacheType, url) -> Void in
+                        let resizedPrimaryUrl = NSURL.imageAtUrl(imageUrl, imageSize: ImageSize.kImageSize116)
+
+                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, completed: { (image, error, cacheType, url) -> Void in
                             
-                            if image != nil && cacheType != .Memory
-                            {
-                                cell.productImageView.alpha = 0.0
-                                
-                                UIView.animateWithDuration(0.3, animations: {
-                                    cell.productImageView.alpha = 1.0
-                                })
-                            }
+//                            if image != nil && cacheType != .Memory
+//                            {
+//                                cell.productImageView.alpha = 0.0
+//                                
+//                                UIView.animateWithDuration(0.3, animations: {
+//                                    cell.productImageView.alpha = 1.0
+//                                })
+//                            }
                         })
                     }
                     

@@ -227,30 +227,11 @@ class LRSessionManager: NSObject
          
             if success
             {
-                self.clearCredentials()
-                
-                self.registerDevice({ (success, error, response) -> Void in
+                self.abortSessionAndRegisterNewDevice({ (success, error, response) -> Void in
                     
-                    if success
+                    if let completion = completionHandler
                     {
-                        if let deviceId = self.deviceKey
-                        {
-                            log.debug("Successfully registered new device: \(deviceId)")
-                            
-                            if let completion = completionHandler
-                            {
-                                completion(success: true, error: nil, response: response)
-                            }
-                        }
-                    }
-                    else
-                    {
-                        log.error("Failed to register new device.")
-                        
-                        if let completion = completionHandler
-                        {
-                            completion(success: false, error: error, response: nil)
-                        }
+                        completion(success: success, error: error, response: response)
                     }
                 })
             }
@@ -259,6 +240,36 @@ class LRSessionManager: NSObject
                 if let completion = completionHandler
                 {
                     completion(success: false, error: "Unable to complete logout.", response: nil)
+                }
+            }
+        })
+    }
+    
+    func abortSessionAndRegisterNewDevice(completionHandler: LRCompletionBlock?)
+    {
+        self.clearCredentials()
+        
+        self.registerDevice({ (success, error, response) -> Void in
+            
+            if success
+            {
+                if let deviceId = self.deviceKey
+                {
+                    log.debug("Successfully registered new device: \(deviceId)")
+                    
+                    if let completion = completionHandler
+                    {
+                        completion(success: true, error: nil, response: response)
+                    }
+                }
+            }
+            else
+            {
+                log.error("Failed to register new device.")
+                
+                if let completion = completionHandler
+                {
+                    completion(success: false, error: error, response: nil)
                 }
             }
         })
@@ -583,10 +594,16 @@ class LRSessionManager: NSObject
                 {
                     log.error(error)
                     
-                    if let completion = completionHandler
-                    {
-                        completion(success: false, error: error, response: nil)
-                    }
+                    // If refresh token is invalid, clear credential cache and return to login screen
+                    self.abortSessionAndRegisterNewDevice({ (success, error, response) -> Void in
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            AppStateTransitioner.transitionToLoginStoryboard(true)
+                        })
+                    })
+                    
+                    return
                 }
             })
         }
@@ -1461,9 +1478,21 @@ class LRSessionManager: NSObject
                                             }
                                         }
                                     })
-                                    
-                                    return
+                                } else if let invalidCredentialsError = errors["Authentication Required"] as? String
+                                {
+                                    log.error(invalidCredentialsError)
+
+                                    // If refresh token is invalid, clear credential cache and return to login screen
+                                    self.abortSessionAndRegisterNewDevice({ (success, error, response) -> Void in
+                                        
+                                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                            
+                                            AppStateTransitioner.transitionToLoginStoryboard(true)
+                                        })
+                                    })
                                 }
+                                
+                                return
                             }
                         }
                         
