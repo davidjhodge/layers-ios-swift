@@ -19,7 +19,7 @@ private enum CellType: Int
     case Email, Password, RetypePassword, Count
 }
 
-class EmailCreateAccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
+class EmailCreateAccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate
 {
     @IBOutlet weak var tableView: UITableView!
     
@@ -42,10 +42,10 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        createAccountButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
-        createAccountButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
-        
         createAccountButton.addTarget(self, action: #selector(createAccount), forControlEvents: .TouchUpInside)
+        
+        // By default, CTA is disabled until valid input is entered
+        disableCTA()
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercaseString, style: .Plain, target: self, action: #selector(cancel))
         
@@ -80,6 +80,43 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
         view.endEditing(true)
 
         dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // All text fields in view trigger this method on each text change
+    func textFieldChanged()
+    {
+        let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.Email.rawValue, inSection: 0)) as! TextFieldCell
+        let emailInput = emailCell.textField.text!
+        
+        let passwordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.Password.rawValue, inSection: 0)) as! TextFieldCell
+        let passwordInput = passwordCell.textField.text!
+        
+        let retypePasswordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.RetypePassword.rawValue, inSection: 0)) as! TextFieldCell
+        let retypePasswordInput = retypePasswordCell.textField.text!
+        
+        if isValidEmail(emailInput) && isValidPassword(passwordInput) && isValidPassword(retypePasswordInput) && passwordInput == retypePasswordInput
+        {
+            enableCTA()
+        }
+        else
+        {
+            disableCTA()
+        }
+    }
+    
+    func disableCTA()
+    {
+        createAccountButton.userInteractionEnabled = false
+        
+        createAccountButton.setBackgroundColor(Color.lightGrayColor(), forState: .Normal)
+    }
+    
+    func enableCTA()
+    {
+        createAccountButton.userInteractionEnabled = true
+        
+        createAccountButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+        createAccountButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
     }
     
     func createAccount()
@@ -159,15 +196,27 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
         
     }
     
-    // MARK: Helpers
-    private func isValidEmail(email: String) -> Bool
-    {
-        return (email.containsString("@") && email.containsString("."))
-    }
-    
-    private func isValidPassword(password: String) -> Bool
-    {
-        return password.characters.count > 6
+    // MARK: Text Field Delegate
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        
+        if textField.tag == CellType.Email.rawValue
+        {
+            let passwordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.Password.rawValue, inSection: 0)) as! TextFieldCell
+            
+            passwordCell.textField.becomeFirstResponder()
+        }
+        else if textField.tag == CellType.Password.rawValue
+        {
+            let retypePasswordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.RetypePassword.rawValue, inSection: 0)) as! TextFieldCell
+            
+            retypePasswordCell.textField.becomeFirstResponder()
+        }
+        else if textField.tag == CellType.RetypePassword.rawValue
+        {
+            view.endEditing(true)
+        }
+        
+        return true
     }
     
     // MARK: Table View Data Source
@@ -185,23 +234,35 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
         
         cell.textField.textColor = Color.DarkTextColor
         cell.selectionStyle = .None
+    
+        cell.textField.delegate = self
+        cell.textField.addTarget(self, action: #selector(textFieldChanged), forControlEvents: .EditingChanged)
         
         //Email
         if indexPath.row == CellType.Email.rawValue
         {
             cell.textField.placeholder = "Email"
+            cell.textField.tag = CellType.Email.rawValue
+            
+            cell.textField.returnKeyType = .Next
         }
         //Password
         else if indexPath.row == CellType.Password.rawValue
         {
             cell.textField.placeholder = "Password"
             cell.textField.secureTextEntry = true
+            cell.textField.tag = CellType.Password.rawValue
+
+            cell.textField.returnKeyType = .Next
         }
         //Retype password
         else if indexPath.row == CellType.RetypePassword.rawValue
         {
             cell.textField.placeholder = "Retype your password"
             cell.textField.secureTextEntry = true
+            cell.textField.tag = CellType.RetypePassword.rawValue
+            
+            cell.textField.returnKeyType = .Done
         }
         else
         {
@@ -250,7 +311,6 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
                 
                 self?.createAccountButtonBottomConstraint.constant = constantModification
                 
-                self?.view.layoutIfNeeded()
                 }, completion: nil)
         }
     }

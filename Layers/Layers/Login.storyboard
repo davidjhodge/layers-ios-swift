@@ -182,9 +182,9 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="C5r-8o-Pxg" firstAttribute="leading" secondItem="Glo-9a-K64" secondAttribute="leading" constant="24" id="5pC-Yr-V1E"/>
-                                                <constraint firstAttribute="bottom" secondItem="C5r-8o-Pxg" secondAttribute="bottom" constant="4" id="Ch3-Hv-ZzM"/>
+                                                <constraint firstAttribute="bottom" secondItem="C5r-8o-Pxg" secondAttribute="bottom" constant="3.5" id="mkG-fc-dOm"/>
                                                 <constraint firstItem="C5r-8o-Pxg" firstAttribute="top" secondItem="Glo-9a-K64" secondAttribute="top" constant="4" id="n7Z-u2-gzW"/>
-                                                <constraint firstAttribute="trailing" secondItem="C5r-8o-Pxg" secondAttribute="trailing" constant="4" id="oIg-ao-Ow8"/>
+                                                <constraint firstAttribute="trailing" secondItem="C5r-8o-Pxg" secondAttribute="trailing" constant="4" id="s13-gS-LhY"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -204,7 +204,7 @@
                                     <constraint firstAttribute="height" constant="48" id="N6N-Rq-bCD"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="16"/>
-                                <state key="normal" title="CREATE ACCOUNT">
+                                <state key="normal" title="SUBMIT">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
@@ -499,14 +499,16 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="x2j-u1-57e">
-                                                    <rect key="frame" x="24" y="4" width="572" height="40"/>
+                                                    <rect key="frame" x="24" y="4" width="300" height="40"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="300" id="eOC-0J-YiF"/>
+                                                    </constraints>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="x2j-u1-57e" secondAttribute="trailing" constant="4" id="VYJ-AX-CsR"/>
                                                 <constraint firstAttribute="bottom" secondItem="x2j-u1-57e" secondAttribute="bottom" constant="4" id="sGj-3g-hlg"/>
                                                 <constraint firstItem="x2j-u1-57e" firstAttribute="top" secondItem="57w-hv-naa" secondAttribute="top" constant="4" id="tHT-bL-xQu"/>
                                                 <constraint firstItem="x2j-u1-57e" firstAttribute="leading" secondItem="57w-hv-naa" secondAttribute="leading" constant="24" id="znP-tF-wel"/>

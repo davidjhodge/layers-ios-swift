@@ -14,7 +14,7 @@ private enum TextField: Int
     case Email, Password, Count
 }
 
-class EmailLoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
+class EmailLoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate
 {
     @IBOutlet weak var loginButton: UIButton!
     
@@ -37,10 +37,9 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loginButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
-        loginButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
-        
         loginButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
+        
+        disableCTA()
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercaseString, style: .Plain, target: self, action: #selector(cancel))
         
@@ -77,6 +76,40 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    // All text fields in view trigger this method on each text change
+    func textFieldChanged()
+    {
+        let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TextField.Email.rawValue, inSection: 0)) as! TextFieldCell
+        let emailInput = emailCell.textField.text!
+        
+        let passwordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TextField.Password.rawValue, inSection: 0)) as! TextFieldCell
+        let passwordInput = passwordCell.textField.text!
+        
+        if isValidEmail(emailInput) && isValidPassword(passwordInput)
+        {
+            enableCTA()
+        }
+        else
+        {
+            disableCTA()
+        }
+    }
+    
+    func disableCTA()
+    {
+        loginButton.userInteractionEnabled = false
+        
+        loginButton.setBackgroundColor(Color.lightGrayColor(), forState: .Normal)
+    }
+    
+    func enableCTA()
+    {
+        loginButton.userInteractionEnabled = true
+        
+        loginButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
+        loginButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+    }
+    
     func login()
     {
         view.endEditing(true)
@@ -85,38 +118,64 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
         
         let password = stringFromTextFieldCellAtIndex(TextField.Password.rawValue)
         
-        spinner.startAnimating()
-        
-        LRSessionManager.sharedManager.loginWithEmail(email, password: password, completionHandler: { (success, error, response) -> Void in
-            
-            if success
+        if isValidEmail(email)
+        {
+            if isValidPassword(password)
             {
-                // Login to user pool succeeded
-                self.delegate?.authenticationDidSucceed()
+                spinner.startAnimating()
                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                        
-                    self.view.endEditing(true)
+                LRSessionManager.sharedManager.loginWithEmail(email, password: password, completionHandler: { (success, error, response) -> Void in
                     
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                    if success
+                    {
+                        // Login to user pool succeeded
+                        self.delegate?.authenticationDidSucceed()
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.view.endEditing(true)
+                            
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        })
+                    }
+                    else
+                    {
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
+                            
+                            self.view.endEditing(false)
+                        })
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.spinner.stopAnimating()
+                    })
                 })
             }
             else
             {
+                // Invalid Password
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     
-                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                    let alert = UIAlertController(title: "ENTER_VALID_PASSWORD".localized, message: nil, preferredStyle: .Alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
                     self.presentViewController(alert, animated: true, completion: nil)
-                    
-                    self.view.endEditing(false)
                 })
             }
-            
+        }
+        else
+        {
+            // Invalid Email
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.spinner.stopAnimating()
+                
+                let alert = UIAlertController(title: "ENTER_VALID_EMAIL".localized, message: nil, preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
             })
-        })
+        }
     }
     
     // Helper method to access cell text fields
@@ -135,6 +194,23 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
         return ""
     }
     
+    // MARK: Text Field Delegate
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        
+        if textField.tag == TextField.Email.rawValue
+        {
+            let passwordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TextField.Password.rawValue, inSection: 0)) as! TextFieldCell
+            
+            passwordCell.textField.becomeFirstResponder()
+        }
+        else if textField.tag == TextField.Password.rawValue
+        {
+            view.endEditing(true)
+        }
+        
+        return true
+    }
+    
     // MARK: Table View Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -151,13 +227,16 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
         cell.textField.textColor = Color.DarkTextColor
         cell.selectionStyle = .None
         
+        cell.textField.delegate = self
+        cell.textField.addTarget(self, action: #selector(textFieldChanged), forControlEvents: .EditingChanged)
+                
         //Email
         if indexPath.row == TextField.Email.rawValue
         {
             cell.textField.placeholder = "Email"
             cell.textField.tag = TextField.Email.rawValue
             
-            cell.textField.text = "dhodge416@gmail.com"
+            cell.textField.returnKeyType = .Next
         }
         //Password
         else if indexPath.row == TextField.Password.rawValue
@@ -166,7 +245,7 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
             cell.textField.secureTextEntry = true
             cell.textField.tag = TextField.Password.rawValue
             
-            cell.textField.text = "password123"
+            cell.textField.returnKeyType = .Done
         }
         else
         {
@@ -215,7 +294,6 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
                 
                 self?.signInButtonBottomConstraint.constant = constantModification
                 
-                self?.view.layoutIfNeeded()
                 }, completion: nil)
         }
     }

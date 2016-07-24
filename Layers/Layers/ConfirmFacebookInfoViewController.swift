@@ -472,7 +472,6 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
                 
                 self?.submitButtonBottomConstraint.constant = constantModification
                 
-                self?.view.layoutIfNeeded()
                 }, completion: nil)
         }
     }
