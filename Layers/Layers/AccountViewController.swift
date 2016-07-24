@@ -501,7 +501,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             {
                 
             case .Contact:
-                
                 return 24.0
                 
             case .Legal:
