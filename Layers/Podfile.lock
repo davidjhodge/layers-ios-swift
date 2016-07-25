@@ -16,16 +16,22 @@ PODS:
   - Cosmos (1.2.2)
   - Crashlytics (3.7.1):
     - Fabric (~> 1.6.3)
+  - DACircularProgress (2.3.1)
   - DeepLinkKit (1.2.1)
   - Fabric (1.6.7)
   - FBSDKCoreKit (4.11.0):
     - Bolts (~> 1.7)
   - FBSDKLoginKit (4.11.0):
     - FBSDKCoreKit
+  - IDMPhotoBrowser (1.8.4):
+    - DACircularProgress
+    - pop
+    - SDWebImage
   - KeychainAccess (2.3.5)
   - MBProgressHUD (0.9.2)
   - NHAlignmentFlowLayout (0.1.0)
   - ObjectMapper (1.2.0)
+  - pop (1.0.9)
   - SDWebImage (3.7.5):
     - SDWebImage/Core (= 3.7.5)
   - SDWebImage/Core (3.7.5)
@@ -46,6 +52,7 @@ DEPENDENCIES:
   - Fabric
   - FBSDKCoreKit (~> 4.11)
   - FBSDKLoginKit (~> 4.11)
+  - IDMPhotoBrowser
   - KeychainAccess
   - MBProgressHUD
   - NHAlignmentFlowLayout
@@ -65,14 +72,17 @@ SPEC CHECKSUMS:
   Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
   Cosmos: 87c49100c69d2cb2eebfa4eb8d1e801fe29ff774
   Crashlytics: 3cdd4c9655be68032a0cf0379e0fb5ef6af22cad
+  DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   DeepLinkKit: 4c3a713b7ecc6c6e25ba56c87d0c728f6035a9ef
   Fabric: caf7580c725e64db144f610ac65cd60956911dc7
   FBSDKCoreKit: 686ac982723a14ec9ddb85e2f81235d7706c891b
   FBSDKLoginKit: bade9fc78277764149ccc5bfaadbf13c83175c6a
+  IDMPhotoBrowser: b574fe3229754e701f32df271afbc4ac7e4e1997
   KeychainAccess: e283c1981a6c5655e1984cd411c6faf16fa165ae
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   NHAlignmentFlowLayout: 7f7e9bd79774a7c733e7ac232f2a131a0ce095b9
   ObjectMapper: b1e9c7c8a9f6400b72690c80072c131504caa66f
+  pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
   SwiftRangeSlider: a199ea521ba1ef57fa8bae26ffbdeb33c4c8f6eb
   SwiftyBeaver: 3eced9aabe4f10b975453cc1baaa2d523a5eaeae

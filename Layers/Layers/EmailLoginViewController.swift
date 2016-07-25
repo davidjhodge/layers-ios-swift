@@ -124,6 +124,8 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
             {
                 spinner.startAnimating()
                 
+                disableCTA()
+                
                 LRSessionManager.sharedManager.loginWithEmail(email, password: password, completionHandler: { (success, error, response) -> Void in
                     
                     if success
@@ -147,6 +149,8 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
                             self.presentViewController(alert, animated: true, completion: nil)
                             
                             self.view.endEditing(false)
+                            
+                            self.enableCTA()
                         })
                     }
                     

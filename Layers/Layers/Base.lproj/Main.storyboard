@@ -46,7 +46,6 @@
             <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
-            <string>Oxygen-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -610,103 +609,11 @@ To keep browsing, try Search.</string>
                         <outlet property="emptyStateView" destination="8Ov-sT-2kw" id="wPU-C9-FRr"/>
                         <segue destination="K2o-10-SPo" kind="show" identifier="ShowProductViewController" id="w26-AX-dDf"/>
                         <segue destination="iAW-BK-2cD" kind="presentation" identifier="PresentModalFilterViewController" id="OVd-Xa-dJD"/>
-                        <segue destination="PI8-l8-9ZZ" kind="presentation" identifier="ShowSearchViewController" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="xPG-gZ-mGR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nPr-P9-DW2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2885" y="475"/>
-        </scene>
-        <!--Search Modal View Controller-->
-        <scene sceneID="GJs-Mg-DQq">
-            <objects>
-                <viewController id="MsZ-hj-vYs" customClass="SearchModalViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Krv-6l-9ue"/>
-                        <viewControllerLayoutGuide type="bottom" id="mFo-Pr-T1d"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="M5I-Ca-Vdd">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dvR-jy-HRP">
-                                <rect key="frame" x="0.0" y="40" width="600" height="560"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchResultCell" textLabel="gD5-aO-XDV" style="IBUITableViewCellStyleDefault" id="xj1-U6-6P4">
-                                        <rect key="frame" x="0.0" y="28" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xj1-U6-6P4" id="Jfq-ab-VCa">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gD5-aO-XDV">
-                                                    <rect key="frame" x="15" y="0.0" width="570" height="43.5"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    </tableViewCell>
-                                </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="MsZ-hj-vYs" id="YhG-WF-WkB"/>
-                                    <outlet property="delegate" destination="MsZ-hj-vYs" id="2F4-oX-lbf"/>
-                                </connections>
-                            </tableView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mP4-ar-5C5">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
-                                <color key="backgroundColor" red="0.054901960780000002" green="0.14117647059999999" blue="0.41568627450000001" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
-                            <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="ioL-hd-3bm">
-                                <rect key="frame" x="0.0" y="20" width="538" height="44"/>
-                                <color key="backgroundColor" red="0.054901960780000002" green="0.14117647059999999" blue="0.41568627450000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="gcx-TK-D4P"/>
-                                </constraints>
-                                <color key="barTintColor" red="0.054901960780000002" green="0.14117647059999999" blue="0.41568627450000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </searchBar>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MJL-6d-ciz">
-                                <rect key="frame" x="546" y="27" width="46" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="46" id="FcG-HI-vUJ"/>
-                                    <constraint firstAttribute="height" constant="30" id="UPh-r6-cdO"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="15"/>
-                                <state key="normal" title="Cancel">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstItem="ioL-hd-3bm" firstAttribute="top" secondItem="M5I-Ca-Vdd" secondAttribute="top" constant="20" id="BqJ-8Y-rAF"/>
-                            <constraint firstItem="dvR-jy-HRP" firstAttribute="leading" secondItem="M5I-Ca-Vdd" secondAttribute="leading" id="DKE-Od-i3X"/>
-                            <constraint firstItem="dvR-jy-HRP" firstAttribute="top" secondItem="M5I-Ca-Vdd" secondAttribute="top" constant="40" id="OuD-Y6-d4I"/>
-                            <constraint firstItem="MJL-6d-ciz" firstAttribute="centerY" secondItem="ioL-hd-3bm" secondAttribute="centerY" id="UKQ-6b-RD0"/>
-                            <constraint firstItem="ioL-hd-3bm" firstAttribute="leading" secondItem="M5I-Ca-Vdd" secondAttribute="leading" id="e0R-8g-ECX"/>
-                            <constraint firstItem="mFo-Pr-T1d" firstAttribute="top" secondItem="dvR-jy-HRP" secondAttribute="bottom" id="enR-Dk-RSn"/>
-                            <constraint firstAttribute="trailing" secondItem="MJL-6d-ciz" secondAttribute="trailing" constant="8" id="fMA-iw-PGZ"/>
-                            <constraint firstAttribute="trailing" secondItem="dvR-jy-HRP" secondAttribute="trailing" id="gil-q6-kve"/>
-                            <constraint firstItem="MJL-6d-ciz" firstAttribute="leading" secondItem="ioL-hd-3bm" secondAttribute="trailing" constant="8" id="wB4-Po-PJF"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="NFM-A4-JL9"/>
-                    <nil key="simulatedTopBarMetrics"/>
-                    <connections>
-                        <outlet property="cancelButton" destination="MJL-6d-ciz" id="g82-u3-dkc"/>
-                        <outlet property="searchBar" destination="ioL-hd-3bm" id="nMC-p0-5hF"/>
-                        <outlet property="tableView" destination="dvR-jy-HRP" id="MSa-wr-yHo"/>
-                        <segue destination="K2o-10-SPo" kind="show" identifier="ShowProductViewController" id="K3r-1i-u5G"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qS9-Ra-UZn" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2885" y="1223"/>
         </scene>
         <!--Product View Controller-->
         <scene sceneID="j5y-eI-2pK">
@@ -728,7 +635,7 @@ To keep browsing, try Search.</string>
                                 <color key="sectionIndexTrackingBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ProductHeaderCell" rowHeight="441" id="cd5-GB-Q0Q" customClass="ProductHeaderCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="49.5" width="584" height="441"/>
+                                        <rect key="frame" x="0.0" y="113.5" width="584" height="441"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cd5-GB-Q0Q" id="nd5-i7-KSw">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="440.5"/>
@@ -863,7 +770,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StyleCell" rowHeight="44" id="ddo-Uu-Zxs" customClass="StyleCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="490.5" width="584" height="44"/>
+                                        <rect key="frame" x="0.0" y="554.5" width="584" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ddo-Uu-Zxs" id="EjI-KJ-Xex">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="43.5"/>
@@ -922,7 +829,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SizeCell" rowHeight="44" id="4X7-nF-41r" customClass="SizeCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="534.5" width="584" height="44"/>
+                                        <rect key="frame" x="0.0" y="598.5" width="584" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4X7-nF-41r" id="nHh-US-KD7">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="43.5"/>
@@ -970,7 +877,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="OverallReviewCell" rowHeight="44" id="ftz-Pa-HB0" customClass="OverallReviewCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="578.5" width="584" height="44"/>
+                                        <rect key="frame" x="0.0" y="642.5" width="584" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ftz-Pa-HB0" id="VIW-fY-dcr">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="43.5"/>
@@ -1048,7 +955,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AlternateReviewCell" rowHeight="32" id="IUu-Fu-zcP" customClass="AlternateReviewCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="622.5" width="584" height="32"/>
+                                        <rect key="frame" x="0.0" y="686.5" width="584" height="32"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IUu-Fu-zcP" id="RHa-dy-2l8">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="31.5"/>
@@ -1125,7 +1032,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PriceGraphCell" rowHeight="166" id="Fo9-NN-dEN" customClass="PriceGraphCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="654.5" width="584" height="166"/>
+                                        <rect key="frame" x="0.0" y="718.5" width="584" height="166"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Fo9-NN-dEN" id="YLb-cT-iWP">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="165.5"/>
@@ -1316,7 +1223,7 @@ To keep browsing, try Search.</string>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SimpleProductHeaderCell" rowHeight="169" id="CcX-nR-QZE" customClass="SimpleProductHeaderCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="49.5" width="600" height="169"/>
+                                        <rect key="frame" x="0.0" y="113.5" width="600" height="169"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CcX-nR-QZE" id="7O4-QN-3qF">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="168.5"/>
@@ -1380,7 +1287,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="OverallReviewCell" rowHeight="44" id="Nbg-Ia-Crp" customClass="OverallReviewCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="218.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="282.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Nbg-Ia-Crp" id="bl6-9y-yTl">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -1457,7 +1364,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ReviewCell" rowHeight="92" id="cln-RT-lle" customClass="ReviewCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="262.5" width="600" height="92"/>
+                                        <rect key="frame" x="0.0" y="326.5" width="600" height="92"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cln-RT-lle" id="4bI-zk-bK8">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="91.5"/>
@@ -1541,7 +1448,7 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UITableViewCell" id="JeN-8V-qNw">
-                                        <rect key="frame" x="0.0" y="354.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="418.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JeN-8V-qNw" id="Mx0-b4-lqT">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -1585,7 +1492,7 @@ To keep browsing, try Search.</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="47O-G0-KOU">
-                                <rect key="frame" x="0.0" y="64" width="600" height="986"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="1030"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
                             </webView>
                         </subviews>
@@ -1623,24 +1530,6 @@ To keep browsing, try Search.</string>
             </objects>
             <point key="canvasLocation" x="2169" y="-268"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="P0M-aR-Lgg">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="PI8-l8-9ZZ" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="eyf-u2-9oE">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="MsZ-hj-vYs" kind="relationship" relationship="rootViewController" id="Nxn-ht-1Ef"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wkU-rL-mfS" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2169" y="1154"/>
-        </scene>
     </scenes>
     <resources>
         <image name="checkmark-circle" width="32" height="32"/>
@@ -1648,7 +1537,6 @@ To keep browsing, try Search.</string>
         <image name="share" width="82" height="15"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="K3r-1i-u5G"/>
         <segue reference="Oev-VQ-CAY"/>
     </inferredMetricsTieBreakers>
 </document>

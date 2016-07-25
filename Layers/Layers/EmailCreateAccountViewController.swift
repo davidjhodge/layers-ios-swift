@@ -135,7 +135,8 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
                 view.endEditing(true)
                 
                 tableView.userInteractionEnabled = false
-                createAccountButton.userInteractionEnabled = false
+                
+                disableCTA()
                 
                 spinner.startAnimating()
 
@@ -168,6 +169,8 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
                             let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
                             alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
                             self.presentViewController(alert, animated: true, completion: nil)
+                            
+                            self.enableCTA()
                         })
                     }
                 })

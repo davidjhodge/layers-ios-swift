@@ -87,7 +87,6 @@
 		70AF1A211CE1651A00C0518C /* PickerRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70AF1A201CE1651A00C0518C /* PickerRow.xib */; };
 		70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A221CE1676200C0518C /* PickerRow.swift */; };
 		70AF1A261CE199BF00C0518C /* LoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A251CE199BF00C0518C /* LoadingCell.swift */; };
-		70AF1A291CE255BF00C0518C /* SearchModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A281CE255BF00C0518C /* SearchModalViewController.swift */; };
 		70AF1A2B1CE2D17B00C0518C /* RetailerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2A1CE2D17B00C0518C /* RetailerResponse.swift */; };
 		70AF1A2D1CE3C57500C0518C /* TextFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2C1CE3C57500C0518C /* TextFilterViewController.swift */; };
 		70AF1A2F1CE3C6A800C0518C /* SubtitleFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2E1CE3C6A800C0518C /* SubtitleFilterCell.swift */; };
@@ -200,7 +199,6 @@
 		70AF1A201CE1651A00C0518C /* PickerRow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PickerRow.xib; sourceTree = "<group>"; };
 		70AF1A221CE1676200C0518C /* PickerRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerRow.swift; sourceTree = "<group>"; };
 		70AF1A251CE199BF00C0518C /* LoadingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingCell.swift; sourceTree = "<group>"; };
-		70AF1A281CE255BF00C0518C /* SearchModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchModalViewController.swift; sourceTree = "<group>"; };
 		70AF1A2A1CE2D17B00C0518C /* RetailerResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetailerResponse.swift; sourceTree = "<group>"; };
 		70AF1A2C1CE3C57500C0518C /* TextFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFilterViewController.swift; sourceTree = "<group>"; };
 		70AF1A2E1CE3C6A800C0518C /* SubtitleFilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubtitleFilterCell.swift; sourceTree = "<group>"; };
@@ -399,7 +397,6 @@
 				70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */,
 				707F48DC1D07A84900E82A4C /* SearchProductCollectionViewController.swift */,
 				70AF1A241CE199B400C0518C /* Cells */,
-				70AF1A271CE255AC00C0518C /* Search Modal */,
 				70987C311CB9C9FC00D86FBA /* Product Detail */,
 			);
 			name = "Product Collection";
@@ -584,14 +581,6 @@
 				70AF1A251CE199BF00C0518C /* LoadingCell.swift */,
 			);
 			name = Cells;
-			sourceTree = "<group>";
-		};
-		70AF1A271CE255AC00C0518C /* Search Modal */ = {
-			isa = PBXGroup;
-			children = (
-				70AF1A281CE255BF00C0518C /* SearchModalViewController.swift */,
-			);
-			name = "Search Modal";
 			sourceTree = "<group>";
 		};
 		70D84A921CB9557200A70485 = {
@@ -825,7 +814,6 @@
 			files = (
 				7022F2F11CFB65120097DDF9 /* ColorResponse.swift in Sources */,
 				7022F2F51CFCAD100097DDF9 /* AWSManager.swift in Sources */,
-				70AF1A291CE255BF00C0518C /* SearchModalViewController.swift in Sources */,
 				70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */,
 				706FF89A1CBD6E7A007B26AD /* AlternateReviewCell.swift in Sources */,
 				703D463F1D15CA7E00AB25C0 /* OpenSource.swift in Sources */,

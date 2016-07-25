@@ -11,6 +11,7 @@ import UIKit
 import MBProgressHUD
 import DeepLinkKit
 import FBSDKCoreKit
+import IDMPhotoBrowser
 
 private enum TableSection: Int
 {
@@ -27,7 +28,7 @@ private enum Picker: Int
     case Style = 0, Size
 }
 
-class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, DPLTargetViewController
+class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, DPLTargetViewController, PaginatedImageViewDelegate
 {
     @IBOutlet weak var tableView: UITableView!
         
@@ -497,6 +498,34 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    // MARK: Paginated Image View Delegate
+    func showPhotoFullscreen(imageView: UIImageView, photos: Array<NSURL>, selectedIndex: Int)
+    {
+        let photoBrowser = IDMPhotoBrowser(photoURLs: photos, animatedFromView: imageView)
+        
+        photoBrowser.scaleImage = imageView.image
+        
+        photoBrowser.view.tintColor = Color.whiteColor()
+
+        photoBrowser.displayArrowButton = false
+        
+        photoBrowser.displayCounterLabel = false
+        
+        photoBrowser.forceHideStatusBar = true
+        
+        photoBrowser.useWhiteBackgroundColor = false
+        
+        photoBrowser.usePopAnimation = true
+        
+        photoBrowser.displayActionButton = false
+        
+        photoBrowser.displayDoneButton = false
+        
+        photoBrowser.setInitialPageIndex(UInt(selectedIndex))
+        
+        presentViewController(photoBrowser, animated: true, completion: nil)
+    }
+    
     // MARK: UITableView Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int
     {
@@ -561,9 +590,11 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     cell.nameLabel.text = ""
                     
+                    cell.delegate = self
+                    
                     var productImages: Array<NSURL> = Array<NSURL>()
                     
-                    if let imageDict = selectedVariant?.images?[0]
+                    if let imageDict = selectedVariant?.images?[safe: 0]
                     {
                         if let primaryUrl = imageDict.primaryUrl
                         {
