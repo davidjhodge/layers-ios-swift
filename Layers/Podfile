@@ -25,6 +25,7 @@ pod 'SwiftRangeSlider'
 pod 'NHAlignmentFlowLayout'
 pod 'Fabric'
 pod 'Crashlytics'
+pod 'IDMPhotoBrowser'
 
 end
 

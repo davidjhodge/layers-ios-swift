@@ -10,6 +10,11 @@ import Foundation
 import UIKit
 import SDWebImage
 
+protocol PaginatedImageViewDelegate
+{
+    func showPhotoFullscreen(imageView: UIImageView, photos: Array<NSURL>, selectedIndex: Int)
+}
+
 class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
 {
     @IBOutlet weak var scrollView: UIScrollView!
@@ -27,6 +32,10 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
     
     var imageViews: Array<AnimatedImageView> = Array<AnimatedImageView>()
     
+    var delegate: PaginatedImageViewDelegate?
+    
+    var productImages: Array<NSURL>?
+
     override var frame: CGRect
     {
         // If frame changes, relayout image views
@@ -35,13 +44,24 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
         }
     }
     
-    var productImages: Array<NSURL>?
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func awakeFromNib()
+    {
+        super.awakeFromNib()
+        
+//        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapPhoto(_:)))
+//        tapRecognizer.cancelsTouchesInView = false
+//        tapRecognizer.numberOfTapsRequired = 1
+//        tapRecognizer.enabled = true
+//        tapRecognizer.cancelsTouchesInView = false
+//        scrollView.addGestureRecognizer(tapRecognizer)
         
         scrollView.delegate = self
 
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
         // If view changes and must layout again, reset image view layout
         layoutImageViews(false)
     }
@@ -81,6 +101,9 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
                     let imageView = AnimatedImageView()
                     imageView.clipsToBounds = true
                     imageView.contentMode = UIViewContentMode.ScaleAspectFit
+                    imageView.userInteractionEnabled = true
+                    
+                    imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapPhoto(_:))))
                     
                     // Set Image
                     imageView.sd_setImageWithURL(imageUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, url) -> Void in
@@ -118,6 +141,10 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
     }
     
     // MARK : Scroll View Delegate
+    override func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
     func scrollViewDidScroll(scrollView: UIScrollView) {
         updatePageControl()
     }
@@ -135,6 +162,36 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
             
             // If only 1 page, hide page control
             pageControl.hidden = pageControl.numberOfPages == 1 ? true : false
+        }
+    }
+    
+    // MARK: Expand Photo
+    func tapPhoto(recognizer: UITapGestureRecognizer)
+    {
+        if recognizer.state == .Ended
+        {
+            for (index, imageView) in imageViews.enumerate()
+            {
+                // Detect which photo we're at based on the scroll view offset
+                if CGRectContainsPoint(imageView.bounds, recognizer.locationInView(imageView))
+                {
+                    if let productImages = productImages
+                    {
+                        var images = Array<NSURL>()
+                        
+                        for image in productImages
+                        {
+                            images.append(image)
+                        }
+                        
+                        // Old and New arrays match
+                        if images.count == productImages.count
+                        {
+                            delegate?.showPhotoFullscreen(imageView, photos: images, selectedIndex: index)
+                        }
+                    }
+                }
+            }
         }
     }
 }
