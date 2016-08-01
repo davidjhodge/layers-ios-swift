@@ -13,6 +13,8 @@ class ProductWebViewController: UIViewController, UIWebViewDelegate, UITextField
 {
     @IBOutlet weak var webView: UIWebView!
     
+    @IBOutlet weak var progressView: FakeProgressView!
+    
     var webURL: NSURL?
 
     var brandName: String?
@@ -21,8 +23,6 @@ class ProductWebViewController: UIViewController, UIWebViewDelegate, UITextField
     
     var couponTextField: UITextField?
     
-    let spinner: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .White)
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -68,10 +68,6 @@ class ProductWebViewController: UIViewController, UIWebViewDelegate, UITextField
             let request: NSURLRequest = NSURLRequest(URL: url, cachePolicy: .ReloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 20.0)
             webView.loadRequest(request)
         }
-        
-        spinner.hidesWhenStopped = true
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -98,15 +94,13 @@ class ProductWebViewController: UIViewController, UIWebViewDelegate, UITextField
         navigationController?.popViewControllerAnimated(true)
     }
     
-    func startNetworkActivitySpinners()
+    func startNetworkActivitySpinner()
     {
-        spinner.startAnimating()
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
     }
     
-    func stopNetworkActivitySpinners()
+    func stopNetworkActivitySpinner()
     {
-        spinner.stopAnimating()
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
     }
     
@@ -123,17 +117,20 @@ class ProductWebViewController: UIViewController, UIWebViewDelegate, UITextField
     // MARK: Web View Delegate
     func webViewDidStartLoad(webView: UIWebView) {
 //        spinner.hidden = false
-        startNetworkActivitySpinners()
+        startNetworkActivitySpinner()
     }
     
     func webViewDidFinishLoad(webView: UIWebView) {
-        stopNetworkActivitySpinners()
+        stopNetworkActivitySpinner()
+        
+        // Triggers progress load completion
+        progressView.isComplete = true
     }
     
     func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
         log.debug(error?.localizedDescription)
         
-        stopNetworkActivitySpinners()
+        stopNetworkActivitySpinner()
         
         let alert: UIAlertController = UIAlertController(title: error?.localizedDescription, message: nil, preferredStyle: .Alert)
         alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
