@@ -1491,20 +1491,30 @@ To keep browsing, try Search.</string>
                         <rect key="frame" x="0.0" y="0.0" width="600" height="1050"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="47O-G0-KOU">
-                                <rect key="frame" x="0.0" y="20" width="600" height="1030"/>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="47O-G0-KOU">
+                                <rect key="frame" x="0.0" y="64" width="600" height="986"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
                             </webView>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="H3f-tS-HTT" customClass="FakeProgressView" customModule="Layers" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="600" height="2"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="2" id="F2c-nB-CzO"/>
+                                </constraints>
+                            </progressView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="47O-G0-KOU" firstAttribute="leading" secondItem="fJa-dc-Vep" secondAttribute="leading" id="7tN-Le-Chc"/>
                             <constraint firstAttribute="trailing" secondItem="47O-G0-KOU" secondAttribute="trailing" id="QpW-JO-DEY"/>
-                            <constraint firstItem="47O-G0-KOU" firstAttribute="top" secondItem="ljY-1h-0EN" secondAttribute="bottom" id="bRf-Mj-qXA"/>
+                            <constraint firstItem="H3f-tS-HTT" firstAttribute="top" secondItem="ljY-1h-0EN" secondAttribute="bottom" id="ZgP-su-CQT"/>
+                            <constraint firstAttribute="trailing" secondItem="H3f-tS-HTT" secondAttribute="trailing" id="bEe-yA-a3Y"/>
                             <constraint firstItem="5PV-NV-xaw" firstAttribute="top" secondItem="47O-G0-KOU" secondAttribute="bottom" id="ncg-4H-8Fd"/>
+                            <constraint firstItem="47O-G0-KOU" firstAttribute="top" secondItem="ljY-1h-0EN" secondAttribute="bottom" id="oEi-EW-ESq"/>
+                            <constraint firstItem="H3f-tS-HTT" firstAttribute="leading" secondItem="fJa-dc-Vep" secondAttribute="leading" id="u5P-X8-rMk"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="progressView" destination="H3f-tS-HTT" id="s6h-jI-fbz"/>
                         <outlet property="webView" destination="47O-G0-KOU" id="n1G-Hh-yhY"/>
                     </connections>
                 </viewController>

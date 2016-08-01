@@ -10,6 +10,7 @@
 		35D2CA6AC9BC70A0D97C9B38 /* Pods_Layers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29055E7EACEA98F3107E42C /* Pods_Layers.framework */; };
 		7003C1A81D446E9200FB531B /* LoginValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C1A71D446E9200FB531B /* LoginValidation.swift */; };
 		70059C951CD672990094B454 /* FacebookUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70059C941CD672990094B454 /* FacebookUserResponse.swift */; };
+		701B59D01D4F925300354C68 /* FakeProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701B59CF1D4F925300354C68 /* FakeProgressView.swift */; };
 		70204A611CBF5E9B00868C00 /* ProductWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */; };
 		7022F2F11CFB65120097DDF9 /* ColorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7022F2F01CFB65120097DDF9 /* ColorResponse.swift */; };
 		7022F2F31CFB6A740097DDF9 /* CategoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7022F2F21CFB6A740097DDF9 /* CategoryResponse.swift */; };
@@ -119,6 +120,7 @@
 		3FCE59FA6B494AAB3C36EE8C /* Pods-Layers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Layers.release.xcconfig"; path = "Pods/Target Support Files/Pods-Layers/Pods-Layers.release.xcconfig"; sourceTree = "<group>"; };
 		7003C1A71D446E9200FB531B /* LoginValidation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginValidation.swift; sourceTree = "<group>"; };
 		70059C941CD672990094B454 /* FacebookUserResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookUserResponse.swift; sourceTree = "<group>"; };
+		701B59CF1D4F925300354C68 /* FakeProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeProgressView.swift; sourceTree = "<group>"; };
 		70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWebViewController.swift; sourceTree = "<group>"; };
 		7022F2F01CFB65120097DDF9 /* ColorResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorResponse.swift; sourceTree = "<group>"; };
 		7022F2F21CFB6A740097DDF9 /* CategoryResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryResponse.swift; sourceTree = "<group>"; };
@@ -456,6 +458,7 @@
 				70C0CC3E1D1A31B100B738CF /* SizeSorter.swift */,
 				70CB9E121D42DCAC008F46B7 /* AnimatedImageView.swift */,
 				7003C1A71D446E9200FB531B /* LoginValidation.swift */,
+				701B59CF1D4F925300354C68 /* FakeProgressView.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -874,6 +877,7 @@
 				70A40FF91CD6A16300CB515B /* Rating.swift in Sources */,
 				70AF1A2F1CE3C6A800C0518C /* SubtitleFilterCell.swift in Sources */,
 				70204A611CBF5E9B00868C00 /* ProductWebViewController.swift in Sources */,
+				701B59D01D4F925300354C68 /* FakeProgressView.swift in Sources */,
 				70A410011CD6A8FB00CB515B /* Price.swift in Sources */,
 				70D9019E1D0FA15F0078298B /* ConfirmFacebookInfoViewController.swift in Sources */,
 				706FF8A31CBDF771007B26AD /* SimpleProductHeaderCell.swift in Sources */,

@@ -135,7 +135,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         {
                             self.selectedVariant = variant
                             
-                            if let firstSize = variant.sizes?[0]
+                            if let firstSize = variant.sizes?[safe: 0]
                             {
                                 self.selectedSize = firstSize
                             }
@@ -1201,7 +1201,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             //Should be index of product.styles
             if let product = self.product
             {
-                if let variant = product.variants?[row]
+                if let variant = product.variants?[safe: row]
                 {
                     selectedVariant = variant
                 }
@@ -1212,7 +1212,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             //Should be index of product.sizes
             if let currentVariant = selectedVariant
             {
-                if let size = currentVariant.sizes?[row]
+                if let size = currentVariant.sizes?[safe: row]
                 {
                     selectedSize = size
                 }
