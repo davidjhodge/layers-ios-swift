@@ -1495,10 +1495,10 @@ To keep browsing, try Search.</string>
                                 <rect key="frame" x="0.0" y="64" width="600" height="986"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
                             </webView>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="H3f-tS-HTT" customClass="FakeProgressView" customModule="Layers" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="600" height="2"/>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" misplaced="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="H3f-tS-HTT" customClass="FakeProgressView" customModule="Layers" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="600" height="4"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="2" id="F2c-nB-CzO"/>
+                                    <constraint firstAttribute="height" constant="4" id="F2c-nB-CzO"/>
                                 </constraints>
                             </progressView>
                         </subviews>
