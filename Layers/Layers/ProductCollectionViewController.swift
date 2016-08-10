@@ -20,7 +20,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     
     @IBOutlet weak var collectionViewBottomLayoutConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var emptyStateView: UIView!
+    @IBOutlet weak var emptyStateView: EmptyStateView!
     
     @IBOutlet weak var emptyStateButton: UIButton!
 
@@ -58,6 +58,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         refreshControl = UIRefreshControl()
         refreshControl?.tintColor = Color.lightGrayColor()
         refreshControl?.addTarget(self, action: #selector(refresh), forControlEvents: .ValueChanged)
+        refreshControl?.layer.zPosition = -1
         collectionView.addSubview(refreshControl!)
         
         // Flow Layout
@@ -97,11 +98,14 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
+        if self.products == nil || self.products?.count == 0
+        {
+            self.spinner.startAnimating()
+        }
+        
         if emptyStateView.hidden == false
         {
-            collectionView.hidden = false
-            
-            emptyStateView.hidden = true
+            toggleErrorState(true)
         }
         
         LRSessionManager.sharedManager.loadDiscoverProducts({ (success, error, response) -> Void in
@@ -150,31 +154,28 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 
                 if self.products == nil || self.products?.count == 0
                 {
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        self.collectionView.hidden = true
-                        
-                        self.emptyStateView.hidden = false
-                    })
+                    self.toggleErrorState(false)
                 }
             }
             else
             {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
-                })
+                log.error(error)
+                
+                self.toggleErrorState(false)
             }
             
-            if let refresh = self.refreshControl
-            {
-                if refresh.refreshing
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                self.spinner.stopAnimating()
+                
+                if let refresh = self.refreshControl
                 {
-                    refresh.endRefreshing()
+                    if refresh.refreshing
+                    {
+                        refresh.endRefreshing()
+                    }
                 }
-            }
+            })
         })
     }
     
@@ -239,6 +240,45 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 })
             }
         })
+    }
+    
+    func toggleErrorState(hidden: Bool)
+    {
+        if hidden == true
+        {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                self.collectionView.hidden = false
+                
+                self.emptyStateView.emptyStateButton.setTitle("Search Layers".uppercaseString, forState: .Normal)
+                self.emptyStateView.emptyStateButton.setTitle("Search Layers".uppercaseString, forState: .Highlighted)
+                
+                // Replace old action with new action
+                self.emptyStateView.emptyStateButton.removeTarget(self, action: #selector(self.reloadProducts), forControlEvents: .TouchUpInside)
+                self.emptyStateView.emptyStateButton.addTarget(self, action: #selector(self.showSearchTab), forControlEvents: .TouchUpInside)
+                
+                self.emptyStateView.descriptionLabel.text = "Wow! You've seen every item on Layers." + "\n\n" + "To keep browsing, try Search."
+                
+                self.emptyStateView.hidden = true
+            })
+        }
+        else
+        {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                self.emptyStateView.emptyStateButton.setTitle("Retry".uppercaseString, forState: .Normal)
+                self.emptyStateView.emptyStateButton.setTitle("Retry".uppercaseString, forState: .Highlighted)
+                
+                // Replace old action with new action
+                self.emptyStateView.emptyStateButton.removeTarget(self, action: #selector(self.showSearchTab), forControlEvents: .TouchUpInside)
+                self.emptyStateView.emptyStateButton.addTarget(self, action: #selector(self.reloadProducts), forControlEvents: .TouchUpInside)
+                self.emptyStateView.descriptionLabel.text = "\n\n" + "Whoops! There was an error loading new products."
+                
+                self.collectionView.hidden = true
+
+                self.emptyStateView.hidden = false
+            })
+        }
     }
     
     func hardReloadCollectionView()

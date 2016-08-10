@@ -553,13 +553,9 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                 case .Reviews:
                     
-                    if let reviewCount = product.reviewCount?.integerValue
+                    if product.rating?.score != nil
                     {
-                        if reviewCount > 0
-                        {
-                            return 1
-
-                        }
+                        return 1
                     }
                     
                     return 0
@@ -740,12 +736,16 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         // Header Cell
                         let cell: OverallReviewCell = tableView.dequeueReusableCellWithIdentifier("OverallReviewCell") as! OverallReviewCell
                         
+                        cell.rightLabel.font = Font.OxygenBold(size: 12.0)
+                        cell.rightLabel.textColor = Color.grayColor()
+                        
                         if let firstRating = product.rating
                         {
-                            if let ratingScore = firstRating.score?.stringValue,
-                                let ratingTotal = firstRating.total?.integerValue
+                            if let rating = firstRating.score
                             {
-                                cell.ratingLabel.text = "\(ratingScore) / \(ratingTotal)"
+                                cell.ratingLabel.text = rating.stringValue
+                                
+                                cell.starView.rating = rating.doubleValue
                             }
                             
                             if let reviewCount = product.reviewCount
