@@ -519,33 +519,6 @@
                                             <outlet property="productImageView" destination="t8R-Jd-aHu" id="VEg-E5-uKc"/>
                                         </connections>
                                     </collectionViewCell>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LoadingCell" id="TwJ-CH-LdQ" customClass="LoadingCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="164" y="165" width="270" height="40"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="270" height="40"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="h8U-J0-Nyf">
-                                                    <rect key="frame" x="125" y="10" width="20" height="20"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="20" id="BNd-Xs-agn"/>
-                                                        <constraint firstAttribute="width" constant="20" id="eu6-KL-wPm"/>
-                                                    </constraints>
-                                                </activityIndicatorView>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="h8U-J0-Nyf" firstAttribute="centerX" secondItem="TwJ-CH-LdQ" secondAttribute="centerX" id="FLD-BB-qcj"/>
-                                            <constraint firstItem="h8U-J0-Nyf" firstAttribute="centerY" secondItem="TwJ-CH-LdQ" secondAttribute="centerY" id="IhT-D3-JcW"/>
-                                        </constraints>
-                                        <size key="customSize" width="270" height="40"/>
-                                        <connections>
-                                            <outlet property="spinner" destination="h8U-J0-Nyf" id="7uz-Zq-SMF"/>
-                                        </connections>
-                                    </collectionViewCell>
                                 </cells>
                                 <connections>
                                     <outlet property="dataSource" destination="224-Ec-WVJ" id="vrd-pl-vav"/>

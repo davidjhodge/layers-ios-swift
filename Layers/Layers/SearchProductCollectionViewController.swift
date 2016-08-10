@@ -184,11 +184,6 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                                 self.products = newProducts
 
                                 self.hardReloadCollectionView()
-                                
-                                if newProducts.count != productCollectionPageSize
-                                {
-//                                    self.hideLoadingCell()
-                                }
                             }
                             else
                             {
@@ -224,47 +219,26 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                                     
                                     self.collectionView.performBatchUpdates({ () -> Void in
                                         
-                                        // Remove loading cell if needed
-                                        if newProducts.count % productCollectionPageSize != 0
-                                        {
-//                                            self.hideLoadingCell()
-                                        }
-                                        
                                         var indexPaths = Array<NSIndexPath>()
                                         
-                                        // (Page - 1) represents the first index we want to insert into
-                                        let index: Int = (page - 1) * productCollectionPageSize
-                                        
-                                        // When less items than the productCollectionPageSize are returned, newProducts.count ensures we only try to insert the number of products we have. This avoids an indexOutOfBounds error
-                                        
-                                        if newProducts.count < productCollectionPageSize
+                                        // The first index to insert into
+                                        if let productCount = self.products?.count
                                         {
-                                            
-                                            // Delete loading cell
-                                            let loadingCellIndexPath =  NSIndexPath(forRow: index, inSection: 0)
-
-                                            self.collectionView.deleteItemsAtIndexPaths([loadingCellIndexPath])
-
+                                            let index = productCount - newProducts.count
+                                                                                        
                                             for i in index...index + newProducts.count - 1
                                             {
                                                 indexPaths.append(NSIndexPath(forRow: i, inSection: 0))
                                             }
+                                            
+                                            self.collectionView.insertItemsAtIndexPaths(indexPaths)
+                                            
                                         }
-                                        else
-                                        {
-                                            for i in index...index+newProducts.count-1
-                                            {
-                                                indexPaths.append(NSIndexPath(forRow: i, inSection: 0))
-                                            }
-                                        }
-                                        
-                                        self.collectionView.insertItemsAtIndexPaths(indexPaths)
-                                        
                                         }, completion: { (finished) -> Void in
-
+                                            
                                             // Set correct content offset
                                             self.collectionView.contentOffset = CGPointMake(0, topOffset)
-                                
+                                            
                                             CATransaction.commit()
                                     })
                                 })
@@ -281,12 +255,6 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                                     
                                     self.collectionView.performBatchUpdates({ () -> Void in
                                         
-                                        // Remove loading cell if needed
-                                        if newProducts.count % productCollectionPageSize != 0
-                                        {
-                                            self.hideLoadingCell()
-                                        }
-                                        
                                         }, completion: { (finished) -> Void in
                                             
                                             // Set correct content offset
@@ -300,14 +268,6 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 }
                 else
                 {
-                    if let products = self.products where self.products?.count > 0
-                    {
-                        if let loadingCell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: products.count, inSection: 0)) as? LoadingCell
-                        {
-                            loadingCell.spinner.stopAnimating()
-                        }
-                    }
-                    
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
@@ -334,25 +294,6 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
             
             self.collectionView.setContentOffset(CGPointZero, animated: false)
         })
-    }
-    
-    func hideLoadingCell()
-    {
-        self.hasMore = false
-        
-        if let products = self.products
-        {
-            let loadingCellIndexPath = NSIndexPath(forRow: products.count, inSection: 0)
-            
-            if let _ = self.collectionView.cellForItemAtIndexPath(loadingCellIndexPath) as? LoadingCell
-            {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                    self.collectionView.deleteItemsAtIndexPaths([loadingCellIndexPath])
-                    
-                })
-            }
-        }
     }
     
     // MARK: Actions
@@ -390,14 +331,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         
         if let items = products where items.count > 0
         {
-            if items.count % productCollectionPageSize == 0
-            {
-                return items.count + 1
-            }
-            else
-            {
-                return items.count
-            }
+            return items.count
         }
         
         return 0
@@ -407,13 +341,6 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         
         if let items = products
         {
-            if indexPath.row == items.count
-            {
-                let loadingCell = collectionView.dequeueReusableCellWithReuseIdentifier("LoadingCell", forIndexPath: indexPath) as! LoadingCell
-                
-                return loadingCell
-            }
-            
             let product: SimpleProductResponse = items[indexPath.row]
             
             let cell: ProductCell = collectionView.dequeueReusableCellWithReuseIdentifier(kProductCellIdentfier, forIndexPath: indexPath) as! ProductCell
@@ -448,7 +375,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 {
                     if let primaryUrl = firstImage.primaryUrl
                     {
-                        let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize232)
+                        let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize116)
                         
                         cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
                             
@@ -508,32 +435,11 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         
         if let products = products
         {
-            // Next Pagination Request will not return any results. Return
-            if products.count % productCollectionPageSize != 0
-            {
-                return
-            }
-            
             // Insert next page of items as we near the end of the current list
             if indexPath.row == products.count - 3
             {
                 // Auto-increments page, so no <page> parameter is required
                 reloadProducts()
-            }
-        }
-    }
-    
-    func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        
-        if let products = products
-        {
-            if indexPath.row == products.count
-            {
-                // Start Spinner on Loading Cell
-                if let loadingCell = cell as? LoadingCell
-                {
-                    loadingCell.spinner.startAnimating()
-                }
             }
         }
     }

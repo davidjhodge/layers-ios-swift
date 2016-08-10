@@ -519,7 +519,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         
         photoBrowser.displayActionButton = false
         
-        photoBrowser.displayDoneButton = false
+        // Show Done Button
+        photoBrowser.displayDoneButton = true
         
         photoBrowser.setInitialPageIndex(UInt(selectedIndex))
         
