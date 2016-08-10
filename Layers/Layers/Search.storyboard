@@ -224,7 +224,7 @@
                                     <outlet property="delegate" destination="4uE-h6-L4a" id="cLo-1m-wm2"/>
                                 </connections>
                             </collectionView>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RdG-OL-TDe">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RdG-OL-TDe" customClass="EmptyStateView" customModule="Layers" customModuleProvider="target">
                                 <rect key="frame" x="48" y="176" width="504" height="152"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kyE-du-scX">
@@ -277,7 +277,7 @@ products that match your search.</string>
                         <outlet property="collectionView" destination="Vee-EY-MlP" id="l9r-Ro-HgM"/>
                         <outlet property="collectionViewBottomLayoutConstraint" destination="eOs-kQ-y3G" id="zdv-oT-iDt"/>
                         <outlet property="editFilterButton" destination="kyE-du-scX" id="ny9-eQ-INx"/>
-                        <outlet property="emptyStateView" destination="RdG-OL-TDe" id="N9b-MT-kCR"/>
+                        <outlet property="emptyStateView" destination="RdG-OL-TDe" id="hrp-nC-lr7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7bh-rQ-4kq" userLabel="First Responder" sceneMemberID="firstResponder"/>

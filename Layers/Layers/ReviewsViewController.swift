@@ -50,7 +50,6 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
-                            
                             self.tableView.reloadData()
                         })
                     }
@@ -93,7 +92,13 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 return 1
                 
             case .OverallReviews:
-                return 1
+                
+                if product?.rating?.score != nil
+                {
+                    return 1
+                }
+                
+                return 0
                 
             case .Reviews:
                 
@@ -172,9 +177,9 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                     cell.starView.rating = 0.0
                     cell.rightLabel.text = ""
                     
-                    if let rating = product?.rating?.score, totalRating = product?.rating?.total, reviews = reviews
+                    if let rating = product?.rating?.score, reviews = reviews
                     {
-                        cell.ratingLabel.text = "\(rating.stringValue) / \(totalRating)"
+                        cell.ratingLabel.text = rating.stringValue
                         
                         cell.starView.rating = rating.doubleValue
                         

@@ -20,7 +20,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     
     @IBOutlet weak var collectionViewBottomLayoutConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var emptyStateView: UIView!
+    @IBOutlet weak var emptyStateView: EmptyStateView!
 
     @IBOutlet weak var editFilterButton: UIButton!
     
