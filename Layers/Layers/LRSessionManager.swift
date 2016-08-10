@@ -65,11 +65,7 @@ class LRSessionManager: NSObject
         
         networkManager = Alamofire.Manager(configuration: configuration)
         
-//        keychain[kDeviceId] = nil
-//        keychain[kTokenObject] = nil
-        
         resumeSession()
-        
     }
     
     // MARK: First Launch
@@ -84,74 +80,10 @@ class LRSessionManager: NSObject
         return NSUserDefaults.standardUserDefaults().boolForKey(kUserDidCompleteFirstLaunch)
     }
     
-    // MARK: Device Id Management
-//
-//    func hasDeviceToken() -> Bool
-//    {
-//        if deviceKey != nil && keychain[kDeviceId] != nil
-//        {
-//            return true
-//        }
-//        else
-//        {
-//            return false
-//        }
-//    }
-//    
-//    private func saveDeviceToken()
-//    {
-//        if let deviceId = deviceKey
-//        {
-//            keychain[kDeviceId] = deviceId
-//        }
-//        else
-//        {
-//            log.error("Error saving Device Token.")
-//            
-//            clearDeviceToken()
-//        }
-//    }
-//    
-//    private func restoreDeviceToken()
-//    {
-//        log.debug("Restoring Device Token")
-//        
-//        if let storedDeviceId = keychain[kDeviceId]
-//        {
-//            deviceKey = storedDeviceId
-//            
-//            log.debug("Device Token successfully restored.")
-//        }
-//        else
-//        {
-//            log.debug("Error restoring device token. Registering New Device Token.")
-//            
-//            registerDevice({ (success, error, response) -> Void in
-//                
-//                if success
-//                {
-//                    if let deviceId = self.deviceKey
-//                    {
-//                        log.debug("Successfully registered new device: \(deviceId)")
-//                    }
-//                }
-//            })
-//        }
-//    }
-//    
-//    private func clearDeviceToken()
-//    {
-//        deviceKey = nil
-//        
-//        saveDeviceToken()
-//    }
-    
     //MARK: Managing Account Credentials
 
     private func resumeSession()
     {
-//        restoreDeviceToken()
-        
         restoreCredentials()
     }
     
@@ -1012,7 +944,7 @@ class LRSessionManager: NSObject
                 {
                     if let jsonResponse = response
                     {
-                        let products = Mapper<ProductResponse>().mapArray(jsonResponse.arrayObject)
+                        let products = Mapper<SimpleProductResponse>().mapArray(jsonResponse.arrayObject)
                         
                         if let completion = completionHandler
                         {
@@ -1036,7 +968,6 @@ class LRSessionManager: NSObject
                 completion(success: false, error: "INVALID_PARAMETERS".localized, response: nil)
             }
         }
-
     }
     
     func loadReviewsForProduct(productId: NSNumber, completionHandler: LRCompletionBlock?)
