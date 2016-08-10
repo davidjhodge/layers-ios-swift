@@ -84,74 +84,72 @@ class LRSessionManager: NSObject
     }
     
     // MARK: Device Id Management
-
-    func hasDeviceToken() -> Bool
-    {
-        if deviceKey != nil && keychain[kDeviceId] != nil
-        {
-            return true
-        }
-        else
-        {
-            return false
-        }
-    }
-    
-    private func saveDeviceToken()
-    {
-        if let deviceId = deviceKey
-        {
-            keychain[kDeviceId] = deviceId
-        }
-        else
-        {
-            log.error("Error saving Device Token.")
-        }
-    }
-    
-    private func restoreDeviceToken()
-    {
-        log.debug("Restoring Device Token")
-        
-        if let storedDeviceId = keychain[kDeviceId]
-        {
-            deviceKey = storedDeviceId
-            
-            log.debug("Device Token successfully restored.")
-        }
-        else
-        {
-            log.debug("Error restoring device token. Registering New Device Token.")
-            
-            registerDevice({ (success, error, response) -> Void in
-                
-                if success
-                {
-                    if let deviceId = self.deviceKey
-                    {
-                        log.debug("Successfully registered new device: \(deviceId)")
-                    }
-                }
-                else
-                {
-                    log.error("Failed to register new device.")
-                }
-            })
-        }
-    }
-    
-    private func clearDeviceToken()
-    {
-        deviceKey = nil
-        
-        saveDeviceToken()
-    }
+//
+//    func hasDeviceToken() -> Bool
+//    {
+//        if deviceKey != nil && keychain[kDeviceId] != nil
+//        {
+//            return true
+//        }
+//        else
+//        {
+//            return false
+//        }
+//    }
+//    
+//    private func saveDeviceToken()
+//    {
+//        if let deviceId = deviceKey
+//        {
+//            keychain[kDeviceId] = deviceId
+//        }
+//        else
+//        {
+//            log.error("Error saving Device Token.")
+//            
+//            clearDeviceToken()
+//        }
+//    }
+//    
+//    private func restoreDeviceToken()
+//    {
+//        log.debug("Restoring Device Token")
+//        
+//        if let storedDeviceId = keychain[kDeviceId]
+//        {
+//            deviceKey = storedDeviceId
+//            
+//            log.debug("Device Token successfully restored.")
+//        }
+//        else
+//        {
+//            log.debug("Error restoring device token. Registering New Device Token.")
+//            
+//            registerDevice({ (success, error, response) -> Void in
+//                
+//                if success
+//                {
+//                    if let deviceId = self.deviceKey
+//                    {
+//                        log.debug("Successfully registered new device: \(deviceId)")
+//                    }
+//                }
+//            })
+//        }
+//    }
+//    
+//    private func clearDeviceToken()
+//    {
+//        deviceKey = nil
+//        
+//        saveDeviceToken()
+//    }
     
     //MARK: Managing Account Credentials
 
     private func resumeSession()
     {
-        restoreDeviceToken()
+//        restoreDeviceToken()
         
         restoreCredentials()
     }
@@ -169,21 +167,38 @@ class LRSessionManager: NSObject
         return false
     }
     
+    func hasCredentials() -> Bool
+    {
+        if deviceKey != nil && keychain[kDeviceId] != nil
+            && tokenObject != nil && keychain[kTokenObject] != nil
+        {
+            return true
+        }
+        else
+        {
+            return false
+        }
+    }
+    
     private func restoreCredentials()
     {
         log.debug("Restoring Session.")
         
-        if let storedTokens = keychain[kTokenObject]
+        // Check if tokens and device id exist
+        if let storedTokens = keychain[kTokenObject] where keychain[kDeviceId] != nil
         {
             if let storedTokenData = storedTokens.dataUsingEncoding(NSUTF8StringEncoding)
             {
                 if let storedTokenDict = JSON(data: storedTokenData).dictionaryObject
                 {
-                    if let storedToken = Mapper<DeviceTokenResponse>().map(storedTokenDict)
+                    if let storedToken = Mapper<DeviceTokenResponse>().map(storedTokenDict),
+                        let deviceKey = keychain[kDeviceId]
                     {
                         if storedToken.accessToken != nil
                         {
                             self.tokenObject = storedToken
+                            
+                            self.deviceKey = deviceKey
                             
                             log.debug("Tokens successfully retreived. Session Restored.")
                             
@@ -194,7 +209,7 @@ class LRSessionManager: NSObject
             }
         }
        
-        // If not success
+        // If failure, clear cache
         log.debug("Failed to restore session.")
             
         clearCredentials()
@@ -202,23 +217,43 @@ class LRSessionManager: NSObject
     
     private func saveCredentials()
     {
-        if let tokenObject = tokenObject
+        if let tokenObject = tokenObject,
+            let deviceKey = deviceKey
         {
             keychain[kTokenObject] = Mapper().toJSONString(tokenObject, prettyPrint: false)
+            
+            keychain[kDeviceId] = deviceKey
         }
         else
         {
             log.error("Attempted to save credentials but token object does not exist. Clearing session.")
             
+            tokenObject = nil
+            deviceKey = nil
+            
             keychain[kTokenObject] = nil
+            keychain[kDeviceId] = nil
         }
     }
 
     private func clearCredentials()
     {
         tokenObject = nil
+        deviceKey = nil
         
         saveCredentials()
+        
+        // Register new unauthorized device
+        self.registerDevice({ (success, error, response) -> Void in
+            
+            if success
+            {
+                if let deviceId = self.deviceKey
+                {
+                    log.debug("Successfully registered new device: \(deviceId)")
+                }
+            }
+        })
     }
     
     func logout(completionHandler: LRCompletionBlock?)
@@ -275,6 +310,20 @@ class LRSessionManager: NSObject
         })
     }
     
+    func abortRequestAndLogout()
+    {
+        // Clear credentials
+        self.clearCredentials()
+        
+        // Return to login screen
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            AppStateTransitioner.transitionToLoginStoryboard(true)
+        })
+        
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+    }
+    
     // Determines if the device has registered. Note that this is not the same as creating a fully-authorized account using a login provider. This merely represents notifying the backend that this device exists is allowed to access the API.
     func deviceIsRegistered() -> Bool
     {
@@ -284,7 +333,8 @@ class LRSessionManager: NSObject
         }
         else
         {
-            tokenObject = nil
+            // tokenObject is already nil. Save to keychain to ensure persistent nil state
+            saveCredentials()
             
             log.debug("Device has not been registered. Tokens cleared.")
             
@@ -307,7 +357,7 @@ class LRSessionManager: NSObject
         
         deviceKey = uuidString
         
-        saveDeviceToken()
+//        saveDeviceToken()
 
         let jsonBody = ["device_id":    uuidString,
                         "device_name":  model,
@@ -343,6 +393,13 @@ class LRSessionManager: NSObject
             }
             else
             {
+                log.error("Failed to register new device.")
+
+                // Clear Device Id
+                self.deviceKey = nil
+                
+                self.saveCredentials()
+                
                 if let completion = completionHandler
                 {
                     completion(success: false, error: error, response: nil)
@@ -595,15 +652,12 @@ class LRSessionManager: NSObject
                     log.error(error)
                     
                     // If refresh token is invalid, clear credential cache and return to login screen
-                    self.abortSessionAndRegisterNewDevice({ (success, error, response) -> Void in
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            AppStateTransitioner.transitionToLoginStoryboard(true)
-                        })
-                    })
+                    self.clearCredentials()
                     
-                    return
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        AppStateTransitioner.transitionToLoginStoryboard(true)
+                    })
                 }
             })
         }
@@ -1478,19 +1532,25 @@ class LRSessionManager: NSObject
                                             }
                                         }
                                     })
+                                    
+                                    return
+                                    
                                 } else if let invalidCredentialsError = errors["Authentication Required"] as? String
                                 {
                                     log.error(invalidCredentialsError)
 
                                     // If refresh token is invalid, clear credential cache and return to login screen
-                                    self.abortSessionAndRegisterNewDevice({ (success, error, response) -> Void in
-                                        
-                                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                            
-                                            AppStateTransitioner.transitionToLoginStoryboard(true)
-                                        })
-                                    })
+                                    self.abortRequestAndLogout()
+                                    
+                                    return
                                 }
+                                
+                                // Unknown 401. Abort request and logout
+                                let error401 = "401 User is not authorized."
+                            
+                                log.debug(error401)
+                                
+                                self.abortRequestAndLogout()
                                 
                                 return
                             }

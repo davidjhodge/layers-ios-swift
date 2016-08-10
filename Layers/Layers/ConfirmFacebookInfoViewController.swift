@@ -117,39 +117,26 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
                 let age = NSNumber.aws_numberFromString(genderAgeCell.secondTextField.text)
                 let email = emailCell.textField.text
                 
-                LRSessionManager.sharedManager.loginWithFacebook({ (success, error, response) -> Void in
-                    
-                    if success
-                    {
-                        self.completeFirstLaunchExperience()
+                if let email = email
+                {
+                    LRSessionManager.sharedManager.registerWithFacebook(email, firstName: firstName, lastName: lastName, gender: gender, age: age, completionHandler: { (success, error, response) -> Void in
                         
-                        return
-                    }
-                    else
-                    {
-                        // Try Creating an account with Facebook
-                        if let email = email
+                        if success
                         {
-                            LRSessionManager.sharedManager.registerWithFacebook(email, firstName: firstName, lastName: lastName, gender: gender, age: age, completionHandler: { (success, error, response) -> Void in
+                            self.completeFirstLaunchExperience()
+                        }
+                        else
+                        {
+                            //Failure
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                 
-                                if success
-                                {
-                                    self.completeFirstLaunchExperience()
-                                    
-                                    return
-                                }
+                                let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                                self.presentViewController(alert, animated: true, completion: nil)
                             })
                         }
-                    }
-                    
-                    //Failure
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                      
-                        let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                        self.presentViewController(alert, animated: true, completion: nil)
                     })
-                })
+                }
             }
         }
         else
