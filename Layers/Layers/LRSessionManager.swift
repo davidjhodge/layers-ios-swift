@@ -944,7 +944,13 @@ class LRSessionManager: NSObject
                 {
                     if let jsonResponse = response
                     {
-                        let products = Mapper<SimpleProductResponse>().mapArray(jsonResponse.arrayObject)
+                        var products = Mapper<SimpleProductResponse>().mapArray(jsonResponse.arrayObject)
+                        
+                        // Incomplete Product Patch
+                        if products?.count > 0
+                        {
+                            products = products?.filter({ $0.isValid() })
+                        }
                         
                         if let completion = completionHandler
                         {
