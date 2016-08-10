@@ -30,7 +30,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     
     var filterItem: AnyObject?
     
-    var products: Array<ProductResponse>?
+    var products: Array<SimpleProductResponse>?
     
     var currentPage: Int?
     
@@ -90,8 +90,6 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         editFilterButton.addTarget(self, action: #selector(filter), forControlEvents: .TouchUpInside)
         
         navigationItem.rightBarButtonItem = filterButton
-//        let searchButton = UIBarButtonItem(image: UIImage(named: "search"), style: .Plain, target: self, action: #selector(search))
-//        navigationItem.rightBarButtonItems = [filterButton, searchButton]
         
         collectionView.backgroundColor = Color.BackgroundGrayColor
         collectionView.alwaysBounceVertical = true
@@ -173,7 +171,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 
                 if success
                 {
-                    if let newProducts: Array<ProductResponse> = response as? Array<ProductResponse>
+                    if let newProducts: Array<SimpleProductResponse> = response as? Array<SimpleProductResponse>
                     {
                         self.currentPage = page + 1
                         
@@ -184,7 +182,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                             {
                                 // Update products and reload collection
                                 self.products = newProducts
-                                
+
                                 self.hardReloadCollectionView()
                                 
                                 if newProducts.count != productCollectionPageSize
@@ -374,11 +372,6 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         }
     }
     
-    func search()
-    {
-        
-    }
-    
     // MARK: Filter Delegate
     func didUpdateFilter()
     {
@@ -421,13 +414,12 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 return loadingCell
             }
             
-            let product: ProductResponse = items[indexPath.row]
+            let product: SimpleProductResponse = items[indexPath.row]
             
             let cell: ProductCell = collectionView.dequeueReusableCellWithReuseIdentifier(kProductCellIdentfier, forIndexPath: indexPath) as! ProductCell
             
             cell.brandLabel.text = ""
             cell.priceLabel.text = ""
-            cell.productImageView.image = nil
             
             // If no color filters are activated, use the first variant. Else, use the first variant with a matching color.
             var variant: Variant?
@@ -555,7 +547,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         {
             if let productCollection = products
             {
-                if let product = productCollection[indexPath.row] as ProductResponse?
+                if let product = productCollection[indexPath.row] as SimpleProductResponse?
                 {
                     if let productId = product.productId
                     {

@@ -21,6 +21,7 @@ class BrandResponse: Mappable
     
     func mapping(map: Map) {
         brandName        <-  map["brand_name"]
-        brandId          <- map["id"]
+        brandId          <-  map["id"]
+
     }
 }

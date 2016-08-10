@@ -22,9 +22,9 @@ class FilterObjectConverter
                     filter.name = name
                 }
                 
-                if let key = categoryResponse.categoryId?.integerValue
+                if let key = categoryResponse.categoryId?.longLongValue
                 {
-                    filter.key = key
+                    filter.key = NSNumber(longLong: key)
                 }
             }
             else if let brandResponse = filterResponse as? BrandResponse
@@ -34,9 +34,9 @@ class FilterObjectConverter
                     filter.name = name
                 }
                 
-                if let key = brandResponse.brandId?.integerValue
+                if let key = brandResponse.brandId?.longLongValue
                 {
-                    filter.key = key
+                    filter.key = NSNumber(longLong: key)
                 }
             }
             else if let retailerResponse = filterResponse as? RetailerResponse
@@ -46,9 +46,9 @@ class FilterObjectConverter
                     filter.name = name
                 }
                 
-                if let key = retailerResponse.retailerId?.integerValue
+                if let key = retailerResponse.retailerId?.longLongValue
                 {
-                    filter.key = key
+                    filter.key = NSNumber(longLong: key)
                 }
             }
             

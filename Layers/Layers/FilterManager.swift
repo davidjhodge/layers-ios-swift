@@ -26,7 +26,7 @@ public struct FilterObject
     
     var name: String?
     
-    var key: Int?
+    var key: NSNumber?
 }
 
 struct Filter

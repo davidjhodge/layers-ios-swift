@@ -99,8 +99,10 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                 {
                     var parentCategories = Array<CategoryResponse>()
                     
-                    // Parent Categories have a parentId of 1
-                    parentCategories = categories.filter({ $0.parentId == 1})
+                    // Parent Categories have a parentId of 1291772459766252500
+                    parentCategories = categories.filter({
+                        $0.parentId == NSNumber(longLong: 1291772459766252500)
+                    })
                     
                     self.categories = parentCategories
                     
