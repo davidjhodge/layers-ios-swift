@@ -134,6 +134,25 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 // Facebook token now exists and can be accessed at FBSDKAccessToken.currentAccessToken()
                 
+                // Disable UI
+                self.tableView.userInteractionEnabled = false
+                
+                self.handleFacebookLogin()
+            }
+        })
+    }
+    
+    func handleFacebookLogin()
+    {
+        LRSessionManager.sharedManager.loginWithFacebook({ (success, error, response) -> Void in
+            
+            if success
+            {
+                // User login succeeded
+                self.authenticationDidSucceed()
+            }
+            else
+            {
                 LRSessionManager.sharedManager.fetchFacebookUserInfo( { (success, error, result) -> Void in
                     
                     if success
@@ -161,6 +180,9 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                     else
                     {
+                        // Enable UI
+                        self.tableView.userInteractionEnabled = true
+
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
                             let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
@@ -294,6 +316,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             self.hideCTAIfNeeded(false)
         
             self.tableView.reloadData()
+            
+            self.tableView.userInteractionEnabled = true
             
         })
     }
@@ -444,7 +468,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                     {
                         let loadingHUD = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                         loadingHUD.mode = .Indeterminate
-
                         
                         //Clear Credentials
                         LRSessionManager.sharedManager.logout({ (success, error, response) -> Void in
