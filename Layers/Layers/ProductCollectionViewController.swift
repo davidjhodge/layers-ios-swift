@@ -146,10 +146,6 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                             self.hardReloadCollectionView()
                         }
                     }
-                    else
-                    {
-                        // hideLoadingCell()
-                    }
                 }
                 
                 if self.products == nil || self.products?.count == 0
@@ -242,14 +238,6 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                     self.presentViewController(alert, animated: true, completion: nil)
                 })
             }
-            
-            if let products = self.products where self.products?.count > 0
-            {
-                if let loadingCell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: products.count, inSection: 0)) as? LoadingCell
-                {
-                    loadingCell.spinner.stopAnimating()
-                }
-            }
         })
     }
     
@@ -288,7 +276,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         if let items = products where items.count > 0
         {
-            return items.count + 1
+            return items.count
         }
         
         return 0
@@ -298,15 +286,6 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         if let items = products
         {
-            if indexPath.row == items.count
-            {
-                let loadingCell = collectionView.dequeueReusableCellWithReuseIdentifier("LoadingCell", forIndexPath: indexPath) as! LoadingCell
-                
-                loadingCell.backgroundColor = Color.whiteColor()
-                
-                return loadingCell
-            }
-            
             let product: SimpleProductResponse = items[indexPath.row]
             
             let cell: ProductCell = collectionView.dequeueReusableCellWithReuseIdentifier(kProductCellIdentfier, forIndexPath: indexPath) as! ProductCell
@@ -406,25 +385,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
             if indexPath.row == products.count - 4
             {
                 // If last page returned a full list of products, it's highly likely the next page is not empty. This is not perfect, but will reduce unnecessary API calls
-                if products.count % productCollectionPageSize == 0
-                {
-                    loadMoreProducts()
-                }
-            }
-        }
-    }
-    
-    func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        
-        if let products = products
-        {
-            if indexPath.row == products.count
-            {
-                // Start Spinner on Loading Cell
-                if let loadingCell = cell as? LoadingCell
-                {
-                    loadingCell.spinner.startAnimating()
-                }
+                loadMoreProducts()
             }
         }
     }
@@ -437,20 +398,12 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
-        if indexPath.row == products?.count
-        {
-            // Size for Loading Cell
-            return CGSizeMake(collectionView.bounds.size.width - 16, 40.0)
-        }
-        else
-        {
-            // Size for Product Cell
-            let flowLayout: UICollectionViewFlowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-            
-            let width: CGFloat = (collectionView.bounds.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right - 8) * 0.5
-            
-            return CGSizeMake(width, 226.0)
-        }
+        // Size for Product Cell
+        let flowLayout: UICollectionViewFlowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        
+        let width: CGFloat = (collectionView.bounds.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right - 8) * 0.5
+        
+        return CGSizeMake(width, 226.0)
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
