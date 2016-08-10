@@ -81,6 +81,28 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
                 
                 // Facebook token now exists and can be accessed at FBSDKAccessToken.currentAccessToken()
                 
+                self.handleFacebookLogin()
+            }
+        })
+    }
+    
+    func handleFacebookLogin()
+    {
+        LRSessionManager.sharedManager.loginWithFacebook({ (success, error, response) -> Void in
+            
+            if success
+            {
+                // User login succeeded. Note that this means an account already existed
+                self.authenticationDidSucceed()
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                  
+                    AppStateTransitioner.transitionToMainStoryboard(true)
+                })
+            }
+            else
+            {
+                //User login failed, continue with registration
                 LRSessionManager.sharedManager.fetchFacebookUserInfo( { (success, error, result) -> Void in
                     
                     if success
@@ -88,7 +110,7 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
                         log.debug("Facebook Registration Integration Complete.")
                         
                         FBSDKAppEvents.logEvent("Get Started Facebook Registrations")
-
+                        
                         // Show Confirmation Screen
                         let loginStoryboard = UIStoryboard(name: "Login", bundle: NSBundle.mainBundle())
                         if let confirmFacebookVc = loginStoryboard.instantiateViewControllerWithIdentifier("ConfirmFacebookInfoViewController") as? ConfirmFacebookInfoViewController
