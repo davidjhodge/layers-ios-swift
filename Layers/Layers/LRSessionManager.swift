@@ -701,34 +701,37 @@ class LRSessionManager: NSObject
             // Get user information with Facebook Graph API
             let request = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, age_range, link, gender, locale, picture, timezone, updated_time, verified, friends, email"], HTTPMethod: "GET")
             
-            request.startWithCompletionHandler({(connection:FBSDKGraphRequestConnection!, result: AnyObject!, error: NSError!) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
-                if error == nil
-                {                    
-                    if let response = Mapper<FacebookUserResponse>().map(JSON(result).dictionaryObject)
+                request.startWithCompletionHandler({(connection:FBSDKGraphRequestConnection!, result: AnyObject!, error: NSError!) -> Void in
+                    
+                    if error == nil
                     {
-                        if let gender = response.gender
+                        if let response = Mapper<FacebookUserResponse>().map(JSON(result).dictionaryObject)
                         {
-                            // If gender exists but is not male or female
-                            if gender.characters.count > 0 && gender.lowercaseString != "male" && gender.lowercaseString != "female"
+                            if let gender = response.gender
                             {
-                                response.gender = "other specific"
+                                // If gender exists but is not male or female
+                                if gender.characters.count > 0 && gender.lowercaseString != "male" && gender.lowercaseString != "female"
+                                {
+                                    response.gender = "other specific"
+                                }
+                            }
+                            
+                            if let completionBlock = completion
+                            {
+                                completionBlock(success: true, error: nil, response: response)
                             }
                         }
-                        
+                    }
+                    else
+                    {
                         if let completionBlock = completion
                         {
-                            completionBlock(success: true, error: nil, response: response)
+                            completionBlock(success: true, error: error.localizedDescription, response: nil)
                         }
                     }
-                }
-                else
-                {
-                    if let completionBlock = completion
-                    {
-                        completionBlock(success: true, error: error.localizedDescription, response: nil)
-                    }
-                }
+                })
             })
         }
     }
