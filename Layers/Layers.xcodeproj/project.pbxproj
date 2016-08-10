@@ -112,6 +112,7 @@
 		70D901B41D151DAC0078298B /* GlobalAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D901B31D151DAC0078298B /* GlobalAlert.swift */; };
 		70DD853F1CFFA08F00319716 /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70DD853E1CFFA08F00319716 /* Search.storyboard */; };
 		70DD85411CFFA0C900319716 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DD85401CFFA0C900319716 /* SearchViewController.swift */; };
+		70EEEDBA1D57D65D0028F0DF /* ProductPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EEEDB91D57D65D0028F0DF /* ProductPatch.swift */; };
 		70FF31CE1D0CDDB800F19C9E /* PriceFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FF31CD1D0CDDB800F19C9E /* PriceFilterViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -227,6 +228,7 @@
 		70D901B31D151DAC0078298B /* GlobalAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalAlert.swift; sourceTree = "<group>"; };
 		70DD853E1CFFA08F00319716 /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
 		70DD85401CFFA0C900319716 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		70EEEDB91D57D65D0028F0DF /* ProductPatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductPatch.swift; sourceTree = "<group>"; };
 		70FF31CD1D0CDDB800F19C9E /* PriceFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceFilterViewController.swift; sourceTree = "<group>"; };
 		C29055E7EACEA98F3107E42C /* Pods_Layers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Layers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -459,6 +461,7 @@
 				70CB9E121D42DCAC008F46B7 /* AnimatedImageView.swift */,
 				7003C1A71D446E9200FB531B /* LoginValidation.swift */,
 				701B59CF1D4F925300354C68 /* FakeProgressView.swift */,
+				70EEEDB91D57D65D0028F0DF /* ProductPatch.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -901,6 +904,7 @@
 				703D463A1D15C21700AB25C0 /* OpenSourceViewController.swift in Sources */,
 				70A71B9C1CC593D800B58B74 /* PickerAccessoryView.swift in Sources */,
 				703D46431D16261900AB25C0 /* DeviceComparison.swift in Sources */,
+				70EEEDBA1D57D65D0028F0DF /* ProductPatch.swift in Sources */,
 				70776FD31CC8A9FF002E6F25 /* Localization.swift in Sources */,
 				70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */,
 				70D901A51D10FA220078298B /* Constants.swift in Sources */,
@@ -1022,6 +1026,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.layers.Layers;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "/Users/davidhodge/Documents/Github Repos/layers-ios-swift/Layers/Layers/Layers-BridgingHeader.h";
 			};
 			name = Debug;
@@ -1041,6 +1046,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.layers.Layers;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "/Users/davidhodge/Documents/Github Repos/layers-ios-swift/Layers/Layers/Layers-BridgingHeader.h";
 			};
 			name = Release;

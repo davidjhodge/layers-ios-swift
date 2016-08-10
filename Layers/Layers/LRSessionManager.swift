@@ -69,6 +69,7 @@ class LRSessionManager: NSObject
 //        keychain[kTokenObject] = nil
         
         resumeSession()
+        
     }
     
     // MARK: First Launch
@@ -663,6 +664,15 @@ class LRSessionManager: NSObject
         }
         else
         {
+            // If refresh token is invalid, clear credential cache and return to login screen
+            self.abortSessionAndRegisterNewDevice({ (success, error, response) -> Void in
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    AppStateTransitioner.transitionToLoginStoryboard(true)
+                })
+            })
+            
             if let completion = completionHandler
             {
                 completion(success: false, error: "User cannot retreive a new refresh token because the current refresh token does not exist.", response: nil)
@@ -857,7 +867,13 @@ class LRSessionManager: NSObject
             {
                 if let jsonResponse = response
                 {
-                    let products = Mapper<SimpleProductResponse>().mapArray(jsonResponse.arrayObject)
+                    var products = Mapper<SimpleProductResponse>().mapArray(jsonResponse.arrayObject)
+                    
+                    // Incomplete Product Patch
+                    if products != nil
+                    {
+                        products = products?.filter({ $0.isValid() })
+                    }
                     
                     if let completion = completionHandler
                     {
@@ -1503,7 +1519,7 @@ class LRSessionManager: NSObject
                             // A JSON error occured so the method returns after passing the error back through the completion block
                             return
                         }
-                        
+                    
                         // Handle Unauthorized Error
                         if response.response?.statusCode == 401
                         {
