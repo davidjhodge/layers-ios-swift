@@ -27,10 +27,8 @@
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
-            <string>Oxygen-Bold</string>
         </mutableArray>
         <mutableArray key="Oxygen-Regular.ttf">
-            <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
             <string>Oxygen-Regular</string>
@@ -1007,66 +1005,43 @@ To keep browsing, try Search.</string>
                                             <outlet property="titleLabel" destination="CB8-cE-QDj" id="Ec0-d7-cIz"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PriceGraphCell" rowHeight="166" id="Fo9-NN-dEN" customClass="PriceGraphCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="718.5" width="584" height="166"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PriceGraphCell" rowHeight="81" id="Fo9-NN-dEN" customClass="PriceGraphCell" customModule="Layers" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="718.5" width="584" height="81"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Fo9-NN-dEN" id="YLb-cT-iWP">
-                                            <rect key="frame" x="0.0" y="0.0" width="584" height="165.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="584" height="80.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="ivV-IT-Rck">
-                                                    <rect key="frame" x="282" y="117" width="20" height="20"/>
+                                                    <rect key="frame" x="282" y="30" width="20" height="20"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="20" id="X3g-rw-EfP"/>
                                                         <constraint firstAttribute="height" constant="20" id="a7K-lr-BhY"/>
                                                     </constraints>
                                                 </activityIndicatorView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ADVICE: WATCH" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RmK-QV-jZ5">
-                                                    <rect key="frame" x="24" y="16" width="536" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="DyI-6P-S0n"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="16"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xgi-wb-IuD">
-                                                    <rect key="frame" x="24" y="105" width="536" height="44"/>
+                                                    <rect key="frame" x="24" y="16" width="536" height="48"/>
                                                     <color key="backgroundColor" red="0.054901960780000002" green="0.14117647059999999" blue="0.41568627450000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="44" id="0nK-cC-Rpz"/>
+                                                        <constraint firstAttribute="height" constant="48" id="0nK-cC-Rpz"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="Oxygen-Bold" family="Oxygen" pointSize="16"/>
                                                     <state key="normal" title="CREATE A SALE ALERT">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Because this brand's items are known to go on sale frequently, recommend waiting until the price drops." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4BY-83-WY0">
-                                                    <rect key="frame" x="24" y="45" width="536" height="36"/>
-                                                    <fontDescription key="fontDescription" name="Oxygen-Regular" family="Oxygen" pointSize="12"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="RmK-QV-jZ5" secondAttribute="trailing" constant="24" id="4dh-XQ-dMm"/>
-                                                <constraint firstItem="RmK-QV-jZ5" firstAttribute="leading" secondItem="YLb-cT-iWP" secondAttribute="leading" constant="24" id="AFz-Fu-1Hp"/>
+                                                <constraint firstItem="xgi-wb-IuD" firstAttribute="top" secondItem="YLb-cT-iWP" secondAttribute="top" constant="16" id="BM3-n3-uM1"/>
                                                 <constraint firstAttribute="bottom" secondItem="xgi-wb-IuD" secondAttribute="bottom" constant="16" id="Dpq-L0-rSn"/>
                                                 <constraint firstItem="ivV-IT-Rck" firstAttribute="centerY" secondItem="xgi-wb-IuD" secondAttribute="centerY" id="HFK-wL-Kkw"/>
-                                                <constraint firstItem="4BY-83-WY0" firstAttribute="top" secondItem="RmK-QV-jZ5" secondAttribute="bottom" constant="8" id="Xea-fD-GL8"/>
                                                 <constraint firstItem="ivV-IT-Rck" firstAttribute="centerX" secondItem="xgi-wb-IuD" secondAttribute="centerX" id="YP9-yS-ZhH"/>
                                                 <constraint firstItem="xgi-wb-IuD" firstAttribute="leading" secondItem="YLb-cT-iWP" secondAttribute="leading" constant="24" id="dSz-dC-0QT"/>
-                                                <constraint firstItem="RmK-QV-jZ5" firstAttribute="top" secondItem="YLb-cT-iWP" secondAttribute="top" constant="16" id="eap-N2-i84"/>
-                                                <constraint firstItem="xgi-wb-IuD" firstAttribute="top" secondItem="4BY-83-WY0" secondAttribute="bottom" constant="24" id="mXf-J5-loO"/>
-                                                <constraint firstItem="4BY-83-WY0" firstAttribute="leading" secondItem="YLb-cT-iWP" secondAttribute="leading" constant="24" id="ofj-Iw-95D"/>
                                                 <constraint firstAttribute="trailing" secondItem="xgi-wb-IuD" secondAttribute="trailing" constant="24" id="sB9-zZ-IPv"/>
-                                                <constraint firstAttribute="trailing" secondItem="4BY-83-WY0" secondAttribute="trailing" constant="24" id="uCI-ZC-sVb"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="adviceLabel" destination="RmK-QV-jZ5" id="gOH-mU-AwJ"/>
                                             <outlet property="createSaleAlertButton" destination="xgi-wb-IuD" id="SkH-Lg-A0j"/>
-                                            <outlet property="explanationTextLabel" destination="4BY-83-WY0" id="iEv-OO-3Uv"/>
                                             <outlet property="spinner" destination="ivV-IT-Rck" id="dyB-Tq-spm"/>
                                         </connections>
                                     </tableViewCell>
