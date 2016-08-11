@@ -85,7 +85,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             navigationController?.setNavigationBarHidden(false, animated: true)
         }
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(createSaleAlert), name: kUserDidRegisterForNotifications, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(toggleSaleAlert), name: kUserDidRegisterForNotifications, object: nil)
         
         setupPickers()
         
@@ -351,88 +351,87 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func toggleSaleAlert()
     {
-        if let isWatching = product?.isWatching
+        // Register for remote notification if needed
+        if !LRSessionManager.sharedManager.userHasEnabledNotifications()
         {
-            let indexPath = NSIndexPath(forRow: 0, inSection: TableSection.PriceHistory.rawValue)
-
-            if let priceHistoryCell = self.tableView.cellForRowAtIndexPath(indexPath) as? PriceGraphCell
+            // Register user for notifications
+            LRSessionManager.sharedManager.registerForRemoteNotificationsIfNeeded()
+        }
+        else
+        {
+            if let isWatching = product?.isWatching
             {
-
-                priceHistoryCell.createSaleAlertButton.userInteractionEnabled = false
+                let indexPath = NSIndexPath(forRow: 0, inSection: TableSection.PriceHistory.rawValue)
                 
-                UIView.performWithoutAnimation({ () -> Void in
-
-                    priceHistoryCell.createSaleAlertButton.setTitle(" ", forState: .Normal)
-                    })
-                
-                priceHistoryCell.spinner.startAnimating()
-                
-            if !isWatching
-            {
-                product?.isWatching = true
-                
-                // Create New Alert
-                if let productId = productIdentifier
+                if let priceHistoryCell = self.tableView.cellForRowAtIndexPath(indexPath) as? PriceGraphCell
                 {
-                    FBSDKAppEvents.logEvent("Product Page Create Sale Alert", parameters: ["ProductID":productId])
-                }
-                
-                if LRSessionManager.sharedManager.userHasEnabledNotifications()
-                {
-                    createSaleAlert()
-                }
-                else
-                {
-                    // Reset Sale Alert Button until user is registers for notifications
-                    LRSessionManager.sharedManager.registerForRemoteNotificationsIfNeeded()
                     
-                    product?.isWatching = false
-                }
-            }
-            else
-            {
-                product?.isWatching = false
-                
-                // Delete Alert
-                if let productId = productIdentifier
-                {
-                    FBSDKAppEvents.logEvent("Product Page Delete Sale Alert", parameters: ["ProductID":productId])
-                }
-                
-                if let productId = productIdentifier
-                {
-                    LRSessionManager.sharedManager.deleteSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
+                    priceHistoryCell.createSaleAlertButton.userInteractionEnabled = false
+                    
+                    UIView.performWithoutAnimation({ () -> Void in
                         
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            priceHistoryCell.createSaleAlertButton.userInteractionEnabled = true
-                            priceHistoryCell.spinner.stopAnimating()
-                        })
-                        
-                        if success
-                        {
-                            // Post Notification
-                            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kSaleAlertDeletedNotification, object: nil))
-                            
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                
-                                UIView.performWithoutAnimation({ () -> Void in
-                                    
-                                    priceHistoryCell.createSaleAlertButton.setTitle("Create a Price Alert".uppercaseString, forState: .Normal)
-                                })
-                            })
-                        }
-                        else
-                        {
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                
-                                let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                                self.presentViewController(alert, animated: true, completion: nil)
-                            })
-                        }
+                        priceHistoryCell.createSaleAlertButton.setTitle(" ", forState: .Normal)
                     })
-                }
+                    
+                    priceHistoryCell.spinner.startAnimating()
+                    
+                    if !isWatching
+                    {
+                        product?.isWatching = true
+                        
+                        // Create New Alert
+                        if let productId = productIdentifier
+                        {
+                            FBSDKAppEvents.logEvent("Product Page Create Sale Alert", parameters: ["ProductID":productId])
+                        }
+                        
+                        createSaleAlert()
+                    }
+                    else
+                    {
+                        product?.isWatching = false
+                        
+                        // Delete Alert
+                        if let productId = productIdentifier
+                        {
+                            FBSDKAppEvents.logEvent("Product Page Delete Sale Alert", parameters: ["ProductID":productId])
+                        }
+                        
+                        if let productId = productIdentifier
+                        {
+                            LRSessionManager.sharedManager.deleteSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
+                                
+                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                    
+                                    priceHistoryCell.createSaleAlertButton.userInteractionEnabled = true
+                                    priceHistoryCell.spinner.stopAnimating()
+                                })
+                                
+                                if success
+                                {
+                                    // Post Notification
+                                    NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kSaleAlertDeletedNotification, object: nil))
+                                    
+                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                        
+                                        UIView.performWithoutAnimation({ () -> Void in
+                                            
+                                            priceHistoryCell.createSaleAlertButton.setTitle("Create a Price Alert".uppercaseString, forState: .Normal)
+                                        })
+                                    })
+                                }
+                                else
+                                {
+                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                        
+                                        let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                                        self.presentViewController(alert, animated: true, completion: nil)
+                                    })
+                                }
+                            })
+                        }
+                    }
                 }
             }
         }
