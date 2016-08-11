@@ -925,7 +925,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
                 
             case .PriceHistory:
-                return UITableViewAutomaticDimension
+                return 81.0
                 
             default:
                 return 44.0
@@ -939,10 +939,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         if indexPath.section == TableSection.ProductHeader.rawValue
         {
             return 451.0
-        }
-            else if indexPath.section == TableSection.PriceHistory.rawValue
-        {
-            return 142.0
         }
         else
         {
@@ -963,12 +959,9 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .Reviews:
                 
-                if let reviewCount = product?.reviewCount?.integerValue
+                if product?.rating?.score != nil
                 {
-                    if reviewCount > 0
-                    {
-                        return 4.0
-                    }
+                    return 4.0
                 }
 
                 return 0.01
@@ -977,11 +970,11 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 return 4.0
                 
             default:
-                return 8.0
+                return 4.0
             }
         }
         
-        return 8.0
+        return 4.0
 
     }
     
@@ -998,12 +991,9 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .Reviews:
                 
-                if let reviewCount = product?.reviewCount?.integerValue
+                if product?.rating?.score != nil
                 {
-                    if reviewCount > 0
-                    {
-                        return 4.0
-                    }
+                    return 4.0
                 }
                 
                 return 0.01

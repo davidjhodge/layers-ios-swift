@@ -44,37 +44,52 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
             if let email = emailCell.textField.text,
                 let content = contentCell.textView.text
             {
-                LRSessionManager.sharedManager.submitContactForm(email, content: content, completionHandler: { (success, error, response) -> Void in
-                    
-                    if !success
-                    {
-                        // Show success hud for 1.5 seconds. Hide it, end editing, and pop
+                if isValidEmail(email)
+                {
+                    LRSessionManager.sharedManager.submitContactForm(email, content: content, completionHandler: { (success, error, response) -> Void in
                         
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        if !success
+                        {
+                            // Show success hud for 1.5 seconds. Hide it, end editing, and pop
                             
-                            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                            hud.mode = .CustomView
-                            hud.customView = UIImageView(image: UIImage(named: "checkmark"))
-                            
-                            hud.labelText = "Message Sent".uppercaseString
-                            hud.labelFont = Font.OxygenBold(size: 17.0)
-                            hud.hide(true, afterDelay: 1.5)
-                            
-                            self.performSelector(#selector(self.done), withObject: nil, afterDelay: 1.5)
-                        })
-                    }
-                    else
-                    {
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                            self.presentViewController(alert, animated: true, completion: nil)
-                        })
-                    }
-                })
-                
-                return
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                
+                                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                                hud.mode = .CustomView
+                                hud.customView = UIImageView(image: UIImage(named: "checkmark"))
+                                
+                                hud.labelText = "Message Sent".uppercaseString
+                                hud.labelFont = Font.OxygenBold(size: 17.0)
+                                hud.hide(true, afterDelay: 1.5)
+                                
+                                self.performSelector(#selector(self.done), withObject: nil, afterDelay: 1.5)
+                            })
+                        }
+                        else
+                        {
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                
+                                let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                                self.presentViewController(alert, animated: true, completion: nil)
+                            })
+                        }
+                    })
+
+                    return
+                }
+                else
+                {
+                    // Invalid Email
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        let alert = UIAlertController(title: "ENTER_VALID_EMAIL".localized, message: nil, preferredStyle: .Alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                        self.presentViewController(alert, animated: true, completion: nil)
+                    })
+                    
+                    return
+                }
             }
         }
         
@@ -147,22 +162,11 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
-//        if section == TableSection.Name.rawValue
-//        {
-//            return 0.01
-//        }
-//        else
-//        {
-            return 8
-//        }
+        return 8
     }
     
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         return 0.01
     }
-    
-    // MARK: Table View Delegate
-    
-    
 }
