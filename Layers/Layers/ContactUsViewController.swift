@@ -48,7 +48,7 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
                 {
                     LRSessionManager.sharedManager.submitContactForm(email, content: content, completionHandler: { (success, error, response) -> Void in
                         
-                        if !success
+                        if success
                         {
                             // Show success hud for 1.5 seconds. Hide it, end editing, and pop
                             
@@ -60,9 +60,9 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
                                 
                                 hud.labelText = "Message Sent".uppercaseString
                                 hud.labelFont = Font.OxygenBold(size: 17.0)
-                                hud.hide(true, afterDelay: 1.5)
+                                hud.hide(true, afterDelay: 1.0)
                                 
-                                self.performSelector(#selector(self.done), withObject: nil, afterDelay: 1.5)
+                                self.performSelector(#selector(self.done), withObject: nil, afterDelay: 1.0)
                             })
                         }
                         else

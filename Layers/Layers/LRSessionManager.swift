@@ -1036,17 +1036,6 @@ class LRSessionManager: NSObject
                         "watches & jewelry",
                         "wool"]
                     
-//                    let categoriesToRemove = [
-//                        NSNumber(longLong: 1291772459942413300), // Activewear)
-//                        NSNumber(longLong:1291772461167150300), // Athletic
-//                        NSNumber(longLong:1291772461292979500), // Grooming
-//                        NSNumber(longLong:1291772459992745000), // Jeans
-//                        NSNumber(longLong:1291772460487673000), // Sleepwear
-//                        NSNumber(longLong:1291772460772885800), // Sweats & Hoodies
-//                        NSNumber(longLong:1291772460873549000), // Underwear
-//                        NSNumber(longLong:1291772460965823700), // Watches & Jewelry
-//                        NSNumber(longLong:1291772460219237600)] // Wool
-                    
                     let filteredCategories = sortedCategories?.filter({
                         
                         // Parent Categories have a parentId of 1291772459766252500
@@ -1370,7 +1359,9 @@ class LRSessionManager: NSObject
     func submitContactForm(email: String, content: String, completionHandler: LRJsonCompletionBlock?)
     {
         let jsonBody = ["email": email,
-                        "content": content]
+                        "content": content,
+                        "subject": "iOS Contact Form"
+        ]
         
         sendRequest(self.jsonRequest(APIUrlAtEndpoint("contact"), HTTPMethod: "POST", json: jsonBody), authorization: true, completion: { (success, error, response) -> Void in
             
