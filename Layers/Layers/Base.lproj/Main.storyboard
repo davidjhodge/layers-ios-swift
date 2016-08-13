@@ -704,12 +704,12 @@ To keep browsing, try Search.</string>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="6Gj-KO-hlH" secondAttribute="trailing" constant="24" id="54Q-h1-qbX"/>
+                                                <constraint firstItem="Tim-Rf-eVv" firstAttribute="centerX" secondItem="nd5-i7-KSw" secondAttribute="centerX" id="550-rE-hQq"/>
                                                 <constraint firstAttribute="trailing" secondItem="z0j-ZL-Mtv" secondAttribute="trailing" id="8uW-hQ-jyR"/>
                                                 <constraint firstItem="Wo5-Jm-B2T" firstAttribute="top" secondItem="MD0-im-jaP" secondAttribute="top" id="Cmc-n6-94t"/>
                                                 <constraint firstAttribute="trailing" secondItem="eUO-54-D0p" secondAttribute="trailing" constant="24" id="G0d-OK-tPV"/>
                                                 <constraint firstItem="ZpN-qF-1Os" firstAttribute="top" secondItem="nd5-i7-KSw" secondAttribute="top" constant="24" id="KU8-Je-CX7"/>
                                                 <constraint firstItem="z0j-ZL-Mtv" firstAttribute="leading" secondItem="nd5-i7-KSw" secondAttribute="leading" id="Lx4-9H-lNE"/>
-                                                <constraint firstItem="Tim-Rf-eVv" firstAttribute="centerX" secondItem="nd5-i7-KSw" secondAttribute="centerX" id="Naf-77-VBJ"/>
                                                 <constraint firstItem="zCn-jQ-rkR" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="qFG-5i-5b0" secondAttribute="trailing" constant="16" id="Pac-0B-zC8"/>
                                                 <constraint firstItem="MD0-im-jaP" firstAttribute="top" secondItem="qFG-5i-5b0" secondAttribute="bottom" constant="4" id="R25-kn-PCF"/>
                                                 <constraint firstItem="ZpN-qF-1Os" firstAttribute="leading" secondItem="nd5-i7-KSw" secondAttribute="leading" id="R9c-mk-eea"/>

@@ -105,7 +105,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         if emptyStateView.hidden == false
         {
-            toggleErrorState(true)
+            toggleErrorState(true, error: false)
         }
         
         LRSessionManager.sharedManager.loadDiscoverProducts({ (success, error, response) -> Void in
@@ -154,14 +154,14 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 
                 if self.products == nil || self.products?.count == 0
                 {
-                    self.toggleErrorState(false)
+                    self.toggleErrorState(false, error: false)
                 }
             }
             else
             {
                 log.error(error)
                 
-                self.toggleErrorState(false)
+                self.toggleErrorState(false, error: true)
             }
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -242,22 +242,13 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         })
     }
     
-    func toggleErrorState(hidden: Bool)
+    func toggleErrorState(hidden: Bool, error: Bool)
     {
         if hidden == true
         {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
                 self.collectionView.hidden = false
-                
-                self.emptyStateView.emptyStateButton.setTitle("Search Layers".uppercaseString, forState: .Normal)
-                self.emptyStateView.emptyStateButton.setTitle("Search Layers".uppercaseString, forState: .Highlighted)
-                
-                // Replace old action with new action
-                self.emptyStateView.emptyStateButton.removeTarget(self, action: #selector(self.reloadProducts), forControlEvents: .TouchUpInside)
-                self.emptyStateView.emptyStateButton.addTarget(self, action: #selector(self.showSearchTab), forControlEvents: .TouchUpInside)
-                
-                self.emptyStateView.descriptionLabel.text = "Wow! You've seen every item on Layers." + "\n\n" + "To keep browsing, try Search."
                 
                 self.emptyStateView.hidden = true
             })
@@ -266,13 +257,28 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
-                self.emptyStateView.emptyStateButton.setTitle("Retry".uppercaseString, forState: .Normal)
-                self.emptyStateView.emptyStateButton.setTitle("Retry".uppercaseString, forState: .Highlighted)
-                
-                // Replace old action with new action
-                self.emptyStateView.emptyStateButton.removeTarget(self, action: #selector(self.showSearchTab), forControlEvents: .TouchUpInside)
-                self.emptyStateView.emptyStateButton.addTarget(self, action: #selector(self.reloadProducts), forControlEvents: .TouchUpInside)
-                self.emptyStateView.descriptionLabel.text = "\n\n" + "Whoops! There was an error loading new products."
+                if error
+                {
+                    self.emptyStateView.emptyStateButton.setTitle("Retry".uppercaseString, forState: .Normal)
+                    self.emptyStateView.emptyStateButton.setTitle("Retry".uppercaseString, forState: .Highlighted)
+                    
+                    // Replace old action with new action
+                    self.emptyStateView.emptyStateButton.removeTarget(self, action: #selector(self.showSearchTab), forControlEvents: .TouchUpInside)
+                    self.emptyStateView.emptyStateButton.addTarget(self, action: #selector(self.reloadProducts), forControlEvents: .TouchUpInside)
+                    self.emptyStateView.descriptionLabel.text = "\n\n" + "Whoops! There was an error loading new products."
+                }
+                else
+                {
+                    // User has browsed all items in Discover
+                    self.emptyStateView.emptyStateButton.setTitle("Search Layers".uppercaseString, forState: .Normal)
+                    self.emptyStateView.emptyStateButton.setTitle("Search Layers".uppercaseString, forState: .Highlighted)
+                    
+                    // Replace old action with new action
+                    self.emptyStateView.emptyStateButton.removeTarget(self, action: #selector(self.reloadProducts), forControlEvents: .TouchUpInside)
+                    self.emptyStateView.emptyStateButton.addTarget(self, action: #selector(self.showSearchTab), forControlEvents: .TouchUpInside)
+                    
+                    self.emptyStateView.descriptionLabel.text = "Wow! You've seen every item on Layers." + "\n\n" + "To keep browsing, try Search."
+                }
                 
                 self.collectionView.hidden = true
 

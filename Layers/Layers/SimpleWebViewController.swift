@@ -20,6 +20,8 @@ class SimpleWebViewController: UIViewController, UIWebViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = Color.whiteColor()
+        
         spinner.hidesWhenStopped = true
         spinner.hidden = true
         navigationItem.rightBarButtonItem?.customView = spinner

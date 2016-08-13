@@ -322,6 +322,48 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         })
     }
     
+    // MARK: Logout
+    
+    func logout()
+    {
+        let loadingHUD = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        loadingHUD.mode = .Indeterminate
+        
+        //Clear Credentials
+        LRSessionManager.sharedManager.logout({ (success, error, response) -> Void in
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                loadingHUD.hide(false)
+                
+                // Completely reset all view controllers in heirarchy
+                AppStateTransitioner.transitionToMainStoryboard(false)
+                
+                if let tabBarVc = UIApplication.sharedApplication().keyWindow?.rootViewController as? UITabBarController
+                {
+                    tabBarVc.selectedIndex = 3
+                    
+                    if let nav = tabBarVc.selectedViewController as? UINavigationController
+                    {
+                        if let accountVc = nav.viewControllers[0] as? AccountViewController
+                        {
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                
+                                let hud = MBProgressHUD.showHUDAddedTo(accountVc.view, animated: true)
+                                hud.mode = .CustomView
+                                hud.customView = UIImageView(image: UIImage(named: "checkmark"))
+                                
+                                hud.labelText = "Successfully Logged Out"
+                                hud.labelFont = Font.OxygenBold(size: 17.0)
+                                hud.hide(true, afterDelay: 1.5)
+                            })
+                        }
+                    }
+                }
+            })
+        })
+    }
+    
     // MARK: Table View Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int
     {
@@ -466,41 +508,19 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                     else
                     {
-                        let loadingHUD = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                        loadingHUD.mode = .Indeterminate
+                        // Show alert to confirm logout
+                        let alertController = UIAlertController(title: "Are you sure you want to sign out?", message: nil, preferredStyle: .Alert)
                         
-                        //Clear Credentials
-                        LRSessionManager.sharedManager.logout({ (success, error, response) -> Void in
+                        alertController.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
+                        
+                        alertController.addAction(UIAlertAction(title: "Sign Out", style: .Destructive, handler: { (action) -> Void in
                             
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                
-                                loadingHUD.hide(false)
-                                
-                                // Completely reset all view controllers in heirarchy
-                                AppStateTransitioner.transitionToMainStoryboard(false)
-                                
-                                if let tabBarVc = UIApplication.sharedApplication().keyWindow?.rootViewController as? UITabBarController
-                                {
-                                    tabBarVc.selectedIndex = 3
-                                    
-                                    if let nav = tabBarVc.selectedViewController as? UINavigationController
-                                    {
-                                        if let accountVc = nav.viewControllers[0] as? AccountViewController
-                                        {
-                                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                                
-                                                let hud = MBProgressHUD.showHUDAddedTo(accountVc.view, animated: true)
-                                                hud.mode = .CustomView
-                                                hud.customView = UIImageView(image: UIImage(named: "checkmark"))
-                                                
-                                                hud.labelText = "Successfully Logged Out"
-                                                hud.labelFont = Font.OxygenBold(size: 17.0)
-                                                hud.hide(true, afterDelay: 1.5)
-                                            })
-                                        }
-                                    }
-                                }
-                            })
+                                self.logout()
+                            }))
+                            
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                          
+                            self.presentViewController(alertController, animated: true, completion: nil)
                         })
                     }
                 }

@@ -73,7 +73,26 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: Actions
     func ctaSelected()
     {
-        performSegueWithIdentifier("ShowProductWebViewController", sender: self)
+        if let productUrlString = product?.outboundUrl
+        {
+            if let productUrl = NSURL(string: productUrlString)
+            {
+                showWebBrowser(productUrl)
+            }
+        }
+    }
+    
+    // MARK: SFSafariViewController
+    
+    func showWebBrowser(url: NSURL)
+    {
+        let webView = ProductWebViewController(URL: url)
+        
+        let navController = ProductWebNavigationController(rootViewController: webView)
+        navController.setNavigationBarHidden(true, animated: false)
+        navController.modalPresentationStyle = .OverFullScreen
+        
+        presentViewController(navController, animated: true, completion: nil)
     }
     
     // MARK: Table View Data Source
