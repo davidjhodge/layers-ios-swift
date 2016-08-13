@@ -526,16 +526,13 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
 
                                 cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
 
-//                                cell.productImageView.sd_setImageWithURL(primaryImageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
-                                
-//                                    if image != nil && cacheType != .Memory
-//                                    {
-//                                        cell.productImageView.alpha = 0.0
-//                                        
-//                                        UIView.animateWithDuration(0.3, animations: {
-//                                            cell.productImageView.alpha = 1.0
-//                                        })
-//                                    }
+                                    if error != nil
+                                    {
+                                        if let placeholderImage = UIImage(named: "image-placeholder-small")
+                                        {
+                                            cell.productImageView.image = placeholderImage
+                                        }
+                                    }
                                 })
                             }
                         }

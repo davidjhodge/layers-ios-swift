@@ -1024,9 +1024,46 @@ class LRSessionManager: NSObject
                     
                     let sortedCategories = categories?.sort{ $0.categoryName < $1.categoryName }
                     
+                    // Empty Category Patch
+                    let categoriesToRemove = [
+                        "activewear",
+                        "athletic",
+                        "grooming",
+                        "jeans",
+                        "sleepwear",
+                        "sweats & hoodies",
+                        "underwear",
+                        "watches & jewelry",
+                        "wool"]
+                    
+//                    let categoriesToRemove = [
+//                        NSNumber(longLong: 1291772459942413300), // Activewear)
+//                        NSNumber(longLong:1291772461167150300), // Athletic
+//                        NSNumber(longLong:1291772461292979500), // Grooming
+//                        NSNumber(longLong:1291772459992745000), // Jeans
+//                        NSNumber(longLong:1291772460487673000), // Sleepwear
+//                        NSNumber(longLong:1291772460772885800), // Sweats & Hoodies
+//                        NSNumber(longLong:1291772460873549000), // Underwear
+//                        NSNumber(longLong:1291772460965823700), // Watches & Jewelry
+//                        NSNumber(longLong:1291772460219237600)] // Wool
+                    
+                    let filteredCategories = sortedCategories?.filter({
+                        
+                        // Parent Categories have a parentId of 1291772459766252500
+                        if $0.parentId == NSNumber(longLong: 1291772459766252500)
+                        {
+                            if let categoryName = $0.categoryName?.lowercaseString
+                            {
+                                return !categoriesToRemove.contains(categoryName)
+                            }
+                        }
+                        
+                        return true
+                    })
+                    
                     if let completion = completionHandler
                     {
-                        completion(success: true, error: error, response: sortedCategories)
+                        completion(success: true, error: error, response: filteredCategories)
                     }
                 }
             }

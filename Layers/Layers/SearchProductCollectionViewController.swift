@@ -379,16 +379,19 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                         
                         cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
                             
-                            //                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
-                            
-//                            if image != nil && cacheType != .Memory
-//                            {
-//                                cell.productImageView.alpha = 0.0
-//                                
-//                                UIView.animateWithDuration(0.3, animations: {
-//                                    cell.productImageView.alpha = 1.0
-//                                })
-//                            }
+                            if error != nil
+                            {
+                                if let placeholderImage = UIImage(named: "image-placeholder")
+                                {
+                                    cell.productImageView.contentMode = .Center
+
+                                    cell.productImageView.image = placeholderImage
+                                }
+                            }
+                            else
+                            {
+                                cell.productImageView.contentMode = .ScaleAspectFit
+                            }
                         })
                     }
                 }

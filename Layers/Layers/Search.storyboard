@@ -147,7 +147,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="148" height="226"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue-polo" translatesAutoresizingMaskIntoConstraints="NO" id="GAF-pI-vd8">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GAF-pI-vd8" customClass="AnimatedImageView" customModule="Layers" customModuleProvider="target">
                                                     <rect key="frame" x="16" y="16" width="116" height="132"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BRAND" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hhp-IA-aAS">
@@ -286,7 +286,6 @@ products that match your search.</string>
         </scene>
     </scenes>
     <resources>
-        <image name="blue-polo" width="220" height="279"/>
         <image name="nav-bar" width="375" height="64"/>
     </resources>
 </document>

@@ -26,8 +26,6 @@ class AnimatedImageView: UIImageView {
                     self.alpha = 1.0
                 })
             }
-            
-            super.image = image
         }
     }
 }

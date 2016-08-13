@@ -11,7 +11,6 @@
 		7003C1A81D446E9200FB531B /* LoginValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C1A71D446E9200FB531B /* LoginValidation.swift */; };
 		70059C951CD672990094B454 /* FacebookUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70059C941CD672990094B454 /* FacebookUserResponse.swift */; };
 		701B59D01D4F925300354C68 /* FakeProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701B59CF1D4F925300354C68 /* FakeProgressView.swift */; };
-		70204A611CBF5E9B00868C00 /* ProductWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */; };
 		7022F2F11CFB65120097DDF9 /* ColorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7022F2F01CFB65120097DDF9 /* ColorResponse.swift */; };
 		7022F2F31CFB6A740097DDF9 /* CategoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7022F2F21CFB6A740097DDF9 /* CategoryResponse.swift */; };
 		7022F2F51CFCAD100097DDF9 /* AWSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7022F2F41CFCAD100097DDF9 /* AWSManager.swift */; };
@@ -20,6 +19,8 @@
 		702FC2FC1CC344960012969C /* EmailCreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */; };
 		702FC3011CC3FE6D0012969C /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */; };
 		702FC3031CC408FC0012969C /* TextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC3021CC408FC0012969C /* TextViewCell.swift */; };
+		7033C7401D5E707E0035A13D /* ProductWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033C73F1D5E707E0035A13D /* ProductWebViewController.swift */; };
+		7033C7421D5E7C780035A13D /* ProductWebNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033C7411D5E7C780035A13D /* ProductWebNavigationController.swift */; };
 		703D463A1D15C21700AB25C0 /* OpenSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703D46391D15C21700AB25C0 /* OpenSourceViewController.swift */; };
 		703D463C1D15C75300AB25C0 /* OpenSourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703D463B1D15C75300AB25C0 /* OpenSourceCell.swift */; };
 		703D463F1D15CA7E00AB25C0 /* OpenSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703D463E1D15CA7E00AB25C0 /* OpenSource.swift */; };
@@ -122,7 +123,6 @@
 		7003C1A71D446E9200FB531B /* LoginValidation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginValidation.swift; sourceTree = "<group>"; };
 		70059C941CD672990094B454 /* FacebookUserResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookUserResponse.swift; sourceTree = "<group>"; };
 		701B59CF1D4F925300354C68 /* FakeProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeProgressView.swift; sourceTree = "<group>"; };
-		70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWebViewController.swift; sourceTree = "<group>"; };
 		7022F2F01CFB65120097DDF9 /* ColorResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorResponse.swift; sourceTree = "<group>"; };
 		7022F2F21CFB6A740097DDF9 /* CategoryResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryResponse.swift; sourceTree = "<group>"; };
 		7022F2F41CFCAD100097DDF9 /* AWSManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSManager.swift; sourceTree = "<group>"; };
@@ -132,6 +132,8 @@
 		702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailCreateAccountViewController.swift; sourceTree = "<group>"; };
 		702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
 		702FC3021CC408FC0012969C /* TextViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViewCell.swift; sourceTree = "<group>"; };
+		7033C73F1D5E707E0035A13D /* ProductWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWebViewController.swift; sourceTree = "<group>"; };
+		7033C7411D5E7C780035A13D /* ProductWebNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWebNavigationController.swift; sourceTree = "<group>"; };
 		703D46391D15C21700AB25C0 /* OpenSourceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSourceViewController.swift; sourceTree = "<group>"; };
 		703D463B1D15C75300AB25C0 /* OpenSourceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSourceCell.swift; sourceTree = "<group>"; };
 		703D463E1D15CA7E00AB25C0 /* OpenSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSource.swift; sourceTree = "<group>"; };
@@ -256,7 +258,8 @@
 		70204A621CBF5EB700868C00 /* Web */ = {
 			isa = PBXGroup;
 			children = (
-				70204A601CBF5E9B00868C00 /* ProductWebViewController.swift */,
+				7033C73F1D5E707E0035A13D /* ProductWebViewController.swift */,
+				7033C7411D5E7C780035A13D /* ProductWebNavigationController.swift */,
 			);
 			name = Web;
 			sourceTree = "<group>";
@@ -860,6 +863,7 @@
 				70CC927C1CFFDF1A000AD403 /* VariantColorMatcher.swift in Sources */,
 				70FF31CE1D0CDDB800F19C9E /* PriceFilterViewController.swift in Sources */,
 				705390311CD7D38600DA8E15 /* PriceAlertsViewController.swift in Sources */,
+				7033C7401D5E707E0035A13D /* ProductWebViewController.swift in Sources */,
 				706FF8911CBD6B6C007B26AD /* SizeCell.swift in Sources */,
 				70CECA821CEE31E600FF7B8F /* FilterManager.swift in Sources */,
 				70CECA871CF7AD2400FF7B8F /* FilterObjectConverter.swift in Sources */,
@@ -879,7 +883,6 @@
 				70D901A91D1220C80078298B /* ProductCollectionViewFlowLayout.swift in Sources */,
 				70A40FF91CD6A16300CB515B /* Rating.swift in Sources */,
 				70AF1A2F1CE3C6A800C0518C /* SubtitleFilterCell.swift in Sources */,
-				70204A611CBF5E9B00868C00 /* ProductWebViewController.swift in Sources */,
 				701B59D01D4F925300354C68 /* FakeProgressView.swift in Sources */,
 				70A410011CD6A8FB00CB515B /* Price.swift in Sources */,
 				70D9019E1D0FA15F0078298B /* ConfirmFacebookInfoViewController.swift in Sources */,
@@ -888,6 +891,7 @@
 				70987BFA1CB9749700D86FBA /* Color.swift in Sources */,
 				70CC927A1CFFD56A000AD403 /* ColorObject.swift in Sources */,
 				70987C331CB9CA1300D86FBA /* ProductHeaderCell.swift in Sources */,
+				7033C7421D5E7C780035A13D /* ProductWebNavigationController.swift in Sources */,
 				70776FC61CC5F881002E6F25 /* FilterViewController.swift in Sources */,
 				707F48841D013D9D00E82A4C /* CallToActionCell.swift in Sources */,
 				70C386D81D5BB9770045C86E /* EmptyStateView.swift in Sources */,
