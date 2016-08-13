@@ -363,7 +363,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                     {
                         let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize116)
                         
-                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: UIImage(named: "image-placeholder"), options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
+                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
 
                             if error != nil
                             {

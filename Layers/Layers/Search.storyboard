@@ -60,7 +60,7 @@
                                     <outlet property="delegate" destination="1gX-Ib-B4I" id="WVZ-2x-TX3"/>
                                 </connections>
                             </tableView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nav-bar" translatesAutoresizingMaskIntoConstraints="NO" id="1Zy-3S-7sS">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1Zy-3S-7sS">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="64" id="qQu-Q7-Gs3"/>
@@ -90,6 +90,7 @@
                     <navigationItem key="navigationItem" id="FZX-Y4-Zc5"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="navBarImageView" destination="1Zy-3S-7sS" id="Nkc-Wu-7il"/>
                         <outlet property="searchBar" destination="Ltp-wb-zet" id="Fuq-Ce-FLy"/>
                         <outlet property="tableView" destination="abR-fo-ruL" id="1zv-Vv-RKM"/>
                         <outlet property="tableViewBottomConstraint" destination="6JP-iw-cS4" id="t8B-fE-4Yi"/>
@@ -285,7 +286,4 @@ products that match your search.</string>
             <point key="canvasLocation" x="1921" y="1073"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="nav-bar" width="375" height="64"/>
-    </resources>
 </document>

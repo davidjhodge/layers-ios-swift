@@ -17,6 +17,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     @IBOutlet weak var searchBar: UISearchBar!
     
+    @IBOutlet weak var navBarImageView: UIImageView!
+    
     var searchResults: Array<AnyObject>?
     
     var categories: Array<CategoryResponse>?
@@ -35,6 +37,9 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Draw gradient
+        navBarImageView.image = UIImage.navigationBarImage()
         
         searchBar.backgroundImage = UIImage()
         searchBar.backgroundColor = Color.clearColor()
