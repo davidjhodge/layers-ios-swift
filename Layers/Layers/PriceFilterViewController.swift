@@ -80,6 +80,10 @@ class PriceFilterViewController: UIViewController
                 }
             }
         }
+        else
+        {
+            priceFilter = PriceFilter()
+        }
         
         slider.addTarget(self, action: #selector(sliderValueChanged), forControlEvents: .ValueChanged)
         
@@ -145,6 +149,10 @@ class PriceFilterViewController: UIViewController
         if let lowerValue = lookupDict()[Int(slider.lowerValue)],
             let upperValue = lookupDict()[Int(slider.upperValue)]
         {
+            priceFilter?.minPrice = NSNumber(integer: lowerValue)
+                
+            priceFilter?.maxPrice = NSNumber(integer: upperValue)
+            
             lowerLabel.text = String(lowerValue)
             
             upperLabel.text = String(upperValue)

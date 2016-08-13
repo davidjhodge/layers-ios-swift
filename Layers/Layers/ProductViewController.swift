@@ -255,7 +255,22 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     {
         FBSDKAppEvents.logEvent("Product Page CTA Taps")
         
-        performSegueWithIdentifier("ShowProductWebViewController", sender: self)
+        if let currentProduct = self.product
+        {
+            if let urlString = currentProduct.outboundUrl
+            {
+                if let url = NSURL(string: urlString)
+                {
+                    showWebBrowser(url)
+                }
+            }
+            
+            if let productName = currentProduct.productName,
+                let productId = currentProduct.productId
+            {
+                FBSDKAppEvents.logEvent("Product Page Clickthrough Web Views", parameters: ["Product Name":productName, "Product ID":productId])
+            }
+        }
     }
     
     func like(sender: AnyObject)
@@ -784,7 +799,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                     else
                     {
-                        buttonTitle = "Create a Price Alert".uppercaseString
+                        buttonTitle = "Create a Sale Alert".uppercaseString
                     }
                     
                     cell.createSaleAlertButton.setTitle(buttonTitle, forState: .Normal)
@@ -925,7 +940,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
                 
             case .PriceHistory:
-                return 81.0
+                return 80.0
                 
             default:
                 return 44.0
@@ -1210,6 +1225,19 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    // MARK: SFSafariViewController
+    
+    func showWebBrowser(url: NSURL)
+    {
+        let webView = ProductWebViewController(URL: url)
+        
+        let navController = ProductWebNavigationController(rootViewController: webView)
+        navController.setNavigationBarHidden(true, animated: false)
+        navController.modalPresentationStyle = .OverFullScreen
+        
+        presentViewController(navController, animated: true, completion: nil)
+    }
+    
     // MARK: Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
@@ -1222,36 +1250,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     destinationViewController.productId = currentProduct.productId
                     
                     destinationViewController.product = product
-                }
-            }
-        }
-        
-        if segue.identifier == "ShowProductWebViewController"
-        {
-            if let currentProduct = self.product
-            {
-                if let destinationViewController = segue.destinationViewController as? ProductWebViewController
-                {
-                    if let url = currentProduct.outboundUrl
-                    {
-                        destinationViewController.webURL = NSURL(string: url)
-                    }
-                    
-                    if let coupon = selectedSize?.altPrice?.couponCode
-                    {
-                        destinationViewController.couponCode = coupon
-                    }
-                    
-                    if let brandName = currentProduct.brand?.brandName
-                    {
-                        destinationViewController.brandName = brandName
-                    }
-                    
-                    if let productName = currentProduct.productName,
-                        let productId = currentProduct.productId
-                    {
-                        FBSDKAppEvents.logEvent("Product Page Clickthrough Web Views", parameters: ["Product Name":productName, "Product ID":productId])
-                    }
                 }
             }
         }

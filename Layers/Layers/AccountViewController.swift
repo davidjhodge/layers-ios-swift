@@ -591,17 +591,15 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                     case .Terms:
                         
                         vcTitle = "Terms & Conditions"
-                        webUrlString = "https://www.google.com/?gfe_rd=ssl"
+                        webUrlString = "https://trylayers.com/terms-and-conditions/"
                         
                     case .Privacy:
                         
                         vcTitle = "Privacy Policy"
                         webUrlString = "https://trylayers.com/privacy-policy/"
                         
-                    case .OpenSource:
-                        
-                        vcTitle = "Open Source Libraries"
-                        webUrlString = "https://www.google.com/?gfe_rd=ssl"
+                    default:
+                        break
                     }
                 }
             }

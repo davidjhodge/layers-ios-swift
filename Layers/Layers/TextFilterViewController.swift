@@ -103,10 +103,6 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
                         
                         delegate.textFilterChanged(filterArray, filterType: FilterType.Brand)
                         
-                    case .Retailer:
-                        
-                        delegate.textFilterChanged(filterArray, filterType: FilterType.Retailer)
-                        
                     default:
                         break
                     }
@@ -129,10 +125,6 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
             case .Brand:
                 
                 title = "Brand".uppercaseString
-                
-            case .Retailer:
-                
-                title = "Retailer".uppercaseString
                 
             default:
                 title = ""
@@ -173,24 +165,6 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
                 
                 //Need to fetch brands
                 FilterManager.defaultManager.fetchBrands( { (success, results) -> Void in
-                    
-                    if success
-                    {
-                        if let categories = results
-                        {
-                            self.items = categories
-                            
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                self.tableView.reloadData()
-                            })
-                        }
-                    }
-                })
-                
-            case .Retailer:
-                
-                // Need to fetch retailers
-                FilterManager.defaultManager.fetchRetailers( { (success, results) -> Void in
                     
                     if success
                     {

@@ -11,7 +11,7 @@ import UIKit
 
 enum FilterType: Int
 {
-    case Category = 0, Brand, Retailer, Price, Color, Count
+    case Category = 0, Brand, Price, Color, Count
 }
 
 protocol FilterDelegate {
@@ -123,10 +123,6 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             case .Brand:
                 
                 newFilter.brands.selections = filters
-                
-            case .Retailer:
-                
-                newFilter.retailers.selections = filters
                 
             default:
                 break
@@ -256,39 +252,6 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                     cell.selectedCircleView.hidden = true
                 }
                 
-            case .Retailer:
-                
-                cell.filterTypeLabel.text = "Retailer".uppercaseString
-                
-                if let retailerSelections = newFilter.retailers.selections
-                {
-                    if retailerSelections.count == 1
-                    {
-                        if let firstRetailerName = retailerSelections.first?.name
-                        {
-                            cell.filterSelectionLabel.text = firstRetailerName.capitalizedString
-                        }
-                    }
-                    else
-                    {
-                        cell.filterSelectionLabel.text = "Many Retailers"
-                    }
-                }
-                else
-                {
-                    cell.filterSelectionLabel.text = "All Retailers"
-                }
-
-                // If filter selected, show blue dot
-                if newFilter.retailers.selections != nil
-                {
-                    cell.selectedCircleView.hidden = false
-                }
-                else
-                {
-                    cell.selectedCircleView.hidden = true
-                }
-                
             case .Price:
                 
                 cell.filterTypeLabel.text = "Price".uppercaseString
@@ -362,15 +325,11 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             switch filterType {
  
             case .Category:
-                // Use the logic for .Retailer
+                // Use the logic for .Brand
                 fallthrough
                 
             case .Brand:
-                // Use the logic for .Retailer
-                fallthrough
-                
-            case .Retailer:
-                
+
                 performSegueWithIdentifier("ShowTextFilterViewController", sender:filterType.rawValue)
                 
             case .Price:
@@ -449,20 +408,6 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                                 destinationVc.selectedItems = array
                             }
                             
-                        case .Retailer:
-                            
-                            if let currentFilters = newFilter.retailers.selections
-                            {
-                                var array = Array<FilterObject>()
-                                
-                                for currFilter in currentFilters
-                                {
-                                    array.append(currFilter)
-                                }
-                                
-                                destinationVc.selectedItems = array
-                            }
-                        
                         default:
                             break
                         }

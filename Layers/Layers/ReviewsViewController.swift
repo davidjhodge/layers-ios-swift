@@ -137,15 +137,20 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                         let resizedPrimaryUrl = NSURL.imageAtUrl(imageUrl, imageSize: ImageSize.kImageSize116)
 
                         cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, completed: { (image, error, cacheType, url) -> Void in
-                            
-//                            if image != nil && cacheType != .Memory
-//                            {
-//                                cell.productImageView.alpha = 0.0
-//                                
-//                                UIView.animateWithDuration(0.3, animations: {
-//                                    cell.productImageView.alpha = 1.0
-//                                })
-//                            }
+                          
+                            if error != nil
+                            {
+                                if let placeholderImage = UIImage(named: "image-placeholder-small")
+                                {
+                                    cell.productImageView.contentMode = .ScaleAspectFit
+                                    
+                                    cell.productImageView.image = placeholderImage
+                                }
+                            }
+                            else
+                            {
+                                cell.productImageView.contentMode = .ScaleAspectFit
+                            }
                         })
                     }
                     
@@ -353,29 +358,6 @@ class ReviewsViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
                 
                 }, completion: nil)
-        }
-    }
-    
-    // MARK: Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if segue.identifier == "ShowProductWebViewController"
-        {
-            if let currentProduct = self.product
-            {
-                if let destinationViewController = segue.destinationViewController as? ProductWebViewController
-                {
-                    if let url = currentProduct.outboundUrl
-                    {
-                        destinationViewController.webURL = NSURL(string: url)
-                    }
-                    
-                    if let brandName = currentProduct.brand?.brandName
-                    {
-                        destinationViewController.brandName = brandName
-                    }
-                }
-            }
         }
     }
 }

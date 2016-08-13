@@ -107,17 +107,20 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
                     
                     // Set Image
                     imageView.sd_setImageWithURL(imageUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, url) -> Void in
-                    
-//                    imageView.sd_setImageWithURL(imageUrl, placeholderImage: nil, completed: { (image, error, cacheType, url) -> Void in
                         
-//                        if image != nil && cacheType != .Memory
-//                        {
-//                            imageView.alpha = 0.0
-//                            
-//                            UIView.animateWithDuration(0.3, animations: {
-//                                imageView.alpha = 1.0
-//                            })
-//                        }
+                        if error != nil
+                        {
+                            if let placeholderImage = UIImage(named: "image-placeholder")
+                            {
+                                imageView.contentMode = .Center
+                                
+                                imageView.image = placeholderImage
+                            }
+                        }
+                        else
+                        {
+                            imageView.contentMode = .ScaleAspectFit
+                        }
                     })
                     
                     scrollView.addSubview(imageView)

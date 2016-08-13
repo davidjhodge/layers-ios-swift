@@ -1005,11 +1005,11 @@ To keep browsing, try Search.</string>
                                             <outlet property="titleLabel" destination="CB8-cE-QDj" id="Ec0-d7-cIz"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PriceGraphCell" rowHeight="81" id="Fo9-NN-dEN" customClass="PriceGraphCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="718.5" width="584" height="81"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PriceGraphCell" rowHeight="80" id="Fo9-NN-dEN" customClass="PriceGraphCell" customModule="Layers" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="718.5" width="584" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Fo9-NN-dEN" id="YLb-cT-iWP">
-                                            <rect key="frame" x="0.0" y="0.0" width="584" height="80.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="584" height="79.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="ivV-IT-Rck">
@@ -1033,7 +1033,7 @@ To keep browsing, try Search.</string>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="xgi-wb-IuD" firstAttribute="top" secondItem="YLb-cT-iWP" secondAttribute="top" constant="16" id="BM3-n3-uM1"/>
-                                                <constraint firstAttribute="bottom" secondItem="xgi-wb-IuD" secondAttribute="bottom" constant="16" id="Dpq-L0-rSn"/>
+                                                <constraint firstAttribute="bottom" secondItem="xgi-wb-IuD" secondAttribute="bottom" priority="750" constant="16" id="Dpq-L0-rSn"/>
                                                 <constraint firstItem="ivV-IT-Rck" firstAttribute="centerY" secondItem="xgi-wb-IuD" secondAttribute="centerY" id="HFK-wL-Kkw"/>
                                                 <constraint firstItem="ivV-IT-Rck" firstAttribute="centerX" secondItem="xgi-wb-IuD" secondAttribute="centerX" id="YP9-yS-ZhH"/>
                                                 <constraint firstItem="xgi-wb-IuD" firstAttribute="leading" secondItem="YLb-cT-iWP" secondAttribute="leading" constant="24" id="dSz-dC-0QT"/>
@@ -1069,7 +1069,6 @@ To keep browsing, try Search.</string>
                         <outletCollection property="pickers" destination="W3M-mx-Hdo" collectionClass="NSMutableArray" id="Kg5-lm-PPM"/>
                         <outletCollection property="pickers" destination="lZx-PT-ebg" collectionClass="NSMutableArray" id="Tq6-1H-InS"/>
                         <segue destination="G5L-Mh-ExR" kind="show" identifier="ShowReviewsViewController" id="ozX-vy-Ljf"/>
-                        <segue destination="3QV-tG-676" kind="show" identifier="ShowProductWebViewController" id="Oev-VQ-CAY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5T-JH-dtQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1423,55 +1422,11 @@ To keep browsing, try Search.</string>
                     </view>
                     <connections>
                         <outlet property="tableView" destination="eLK-nE-4Qv" id="mbJ-tO-W9o"/>
-                        <segue destination="3QV-tG-676" kind="show" identifier="ShowProductWebViewController" id="E1j-L3-Nh8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pxp-tq-zgK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5912" y="325"/>
-        </scene>
-        <!--Product Web View Controller-->
-        <scene sceneID="dSX-N8-WN6">
-            <objects>
-                <viewController id="3QV-tG-676" customClass="ProductWebViewController" customModule="Layers" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ljY-1h-0EN"/>
-                        <viewControllerLayoutGuide type="bottom" id="5PV-NV-xaw"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="fJa-dc-Vep">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="1050"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="47O-G0-KOU">
-                                <rect key="frame" x="0.0" y="64" width="600" height="986"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
-                            </webView>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" misplaced="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="H3f-tS-HTT" customClass="FakeProgressView" customModule="Layers" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="600" height="4"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="4" id="F2c-nB-CzO"/>
-                                </constraints>
-                            </progressView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="47O-G0-KOU" firstAttribute="leading" secondItem="fJa-dc-Vep" secondAttribute="leading" id="7tN-Le-Chc"/>
-                            <constraint firstAttribute="trailing" secondItem="47O-G0-KOU" secondAttribute="trailing" id="QpW-JO-DEY"/>
-                            <constraint firstItem="H3f-tS-HTT" firstAttribute="top" secondItem="ljY-1h-0EN" secondAttribute="bottom" id="ZgP-su-CQT"/>
-                            <constraint firstAttribute="trailing" secondItem="H3f-tS-HTT" secondAttribute="trailing" id="bEe-yA-a3Y"/>
-                            <constraint firstItem="5PV-NV-xaw" firstAttribute="top" secondItem="47O-G0-KOU" secondAttribute="bottom" id="ncg-4H-8Fd"/>
-                            <constraint firstItem="47O-G0-KOU" firstAttribute="top" secondItem="ljY-1h-0EN" secondAttribute="bottom" id="oEi-EW-ESq"/>
-                            <constraint firstItem="H3f-tS-HTT" firstAttribute="leading" secondItem="fJa-dc-Vep" secondAttribute="leading" id="u5P-X8-rMk"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="progressView" destination="H3f-tS-HTT" id="s6h-jI-fbz"/>
-                        <outlet property="webView" destination="47O-G0-KOU" id="n1G-Hh-yhY"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="KLN-rC-9fO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5100" y="675"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="mEa-7Z-dmX">
@@ -1497,7 +1452,4 @@ To keep browsing, try Search.</string>
         <image name="dropdown-chevron" width="15" height="9"/>
         <image name="share" width="82" height="15"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="Oev-VQ-CAY"/>
-    </inferredMetricsTieBreakers>
 </document>
