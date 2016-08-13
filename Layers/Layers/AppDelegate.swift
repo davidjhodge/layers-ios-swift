@@ -71,8 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func configureDefaultAppearances()
     {
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).translucent = false
-        //        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).barTintColor = Color.DarkNavyColor
-        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).setBackgroundImage(UIImage(named: "nav-bar"), forBarMetrics: .Default)
+        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).setBackgroundImage(UIImage.navigationBarImage(), forBarMetrics: .Default)
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.whiteColor()
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).titleTextAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),
                                                                                                             NSFontAttributeName: Font.OxygenBold(size: 16.0)]

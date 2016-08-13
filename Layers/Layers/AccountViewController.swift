@@ -591,7 +591,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                     case .Terms:
                         
                         vcTitle = "Terms & Conditions"
-                        webUrlString = "https://trylayers.com/terms-and-conditions/"
+                        webUrlString = "https://sites.google.com/site/trylayers/terms-and-conditions/"
                         
                     case .Privacy:
                         

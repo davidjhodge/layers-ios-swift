@@ -62,6 +62,11 @@ class OpenSource
                 libraries.append(OpenSourceLibrary(name: "Cosmos", licenseDescription: content))
             }
             
+            if let content = dict["DACircularProgress"] as? String
+            {
+                libraries.append(OpenSourceLibrary(name: "DACircularProgress", licenseDescription: content))
+            }
+            
             if let content = dict["DeepLinkKit"] as? String
             {
                 libraries.append(OpenSourceLibrary(name: "DeepLinkKit", licenseDescription: content))
@@ -70,6 +75,11 @@ class OpenSource
             if let content = dict["Facebook SDK for iOS"] as? String
             {
                 libraries.append(OpenSourceLibrary(name: "Facebook SDK for iOS", licenseDescription: content))
+            }
+            
+            if let content = dict["IDMPhotoBrowser"] as? String
+            {
+                libraries.append(OpenSourceLibrary(name: "IDMPhotoBrowser", licenseDescription: content))
             }
             
             if let content = dict["KeychainAccess"] as? String
@@ -90,6 +100,11 @@ class OpenSource
             if let content = dict["ObjectMapper"] as? String
             {
                 libraries.append(OpenSourceLibrary(name: "ObjectMapper", licenseDescription: content))
+            }
+            
+            if let content = dict["pop"] as? String
+            {
+                libraries.append(OpenSourceLibrary(name: "pop", licenseDescription: content))
             }
             
             if let content = dict["SDWebImage"] as? String
