@@ -10,11 +10,14 @@
 #define Layers_BridgingHeader_h
 
 #import "NSAttributedString+Pricing.h"
+
 #import <SDWebImage/UIImageView+WebCache.h>
 
 #import <NHAlignmentFlowLayout/NHAlignmentFlowLayout.h>
 
 #import <AWSCore/AWSCore.h>
 #import <AWSCognitoIdentityProvider/AWSCognitoIdentityProvider.h>
+
+#import <KLCPopup/KLCPopup.h>
 
 #endif /* Layers_BridgingHeader_h */

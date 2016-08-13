@@ -28,6 +28,7 @@ PODS:
     - pop
     - SDWebImage
   - KeychainAccess (2.3.5)
+  - KLCPopup (1.0)
   - MBProgressHUD (0.9.2)
   - NHAlignmentFlowLayout (0.1.0)
   - ObjectMapper (1.2.0)
@@ -54,6 +55,7 @@ DEPENDENCIES:
   - FBSDKLoginKit (~> 4.11)
   - IDMPhotoBrowser
   - KeychainAccess
+  - KLCPopup
   - MBProgressHUD
   - NHAlignmentFlowLayout
   - ObjectMapper
@@ -79,6 +81,7 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: bade9fc78277764149ccc5bfaadbf13c83175c6a
   IDMPhotoBrowser: b574fe3229754e701f32df271afbc4ac7e4e1997
   KeychainAccess: e283c1981a6c5655e1984cd411c6faf16fa165ae
+  KLCPopup: 76c5a19227977f1e53d85236f9ef42257c168d98
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   NHAlignmentFlowLayout: 7f7e9bd79774a7c733e7ac232f2a131a0ce095b9
   ObjectMapper: b1e9c7c8a9f6400b72690c80072c131504caa66f

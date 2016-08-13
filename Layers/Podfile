@@ -26,6 +26,7 @@ pod 'NHAlignmentFlowLayout'
 pod 'Fabric'
 pod 'Crashlytics'
 pod 'IDMPhotoBrowser'
+pod 'KLCPopup'
 
 end
 

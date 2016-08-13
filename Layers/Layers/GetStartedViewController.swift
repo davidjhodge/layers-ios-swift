@@ -65,6 +65,8 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
 
         disableButttons()
         
+        UIApplication.sharedApplication().setStatusBarStyle(.Default, animated: true)
+
         let loginManager: FBSDKLoginManager = FBSDKLoginManager()
         
         loginManager.logInWithReadPermissions(["public_profile", "user_friends", "email"], fromViewController: self, handler: {(result:FBSDKLoginManagerLoginResult!, error:NSError!) -> Void in
@@ -94,6 +96,11 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
                     self.disableButttons()
                 })
             }
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+              
+                UIApplication.sharedApplication().setStatusBarStyle(.LightContent, animated: false)
+            })
         })
     }
     
