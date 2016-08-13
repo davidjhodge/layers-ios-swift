@@ -29,6 +29,7 @@ typealias LRJsonCompletionBlock = ((success: Bool, error: String?, response:JSON
 private let kUserPoolLoginProvider = "kUserPoolLoginProvider"
 
 private let kUserDidCompleteFirstLaunch = "kUserDidCompleteFirstLaunch"
+private let kDiscoverPopupShown = "kDiscoverPopupShown"
 
 class LRSessionManager: NSObject
 {
@@ -71,13 +72,25 @@ class LRSessionManager: NSObject
     // MARK: First Launch
     func completeFirstLaunch()
     {
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "kUserDidCompleteFirstLaunch")
+        NSUserDefaults.standardUserDefaults().setBool(true, forKey: kUserDidCompleteFirstLaunch)
         NSUserDefaults.standardUserDefaults().synchronize()
     }
     
     func hasCompletedFirstLaunch() -> Bool
     {
         return NSUserDefaults.standardUserDefaults().boolForKey(kUserDidCompleteFirstLaunch)
+    }
+    
+    // MARK: Discover Popup
+    func completeDiscoverPopupExperience()
+    {
+        NSUserDefaults.standardUserDefaults().setBool(true, forKey: kDiscoverPopupShown)
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
+    func hasSeenDiscoverPopup() -> Bool
+    {
+        return NSUserDefaults.standardUserDefaults().boolForKey(kDiscoverPopupShown)
     }
     
     //MARK: Managing Account Credentials

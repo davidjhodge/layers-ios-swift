@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		35D2CA6AC9BC70A0D97C9B38 /* Pods_Layers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29055E7EACEA98F3107E42C /* Pods_Layers.framework */; };
 		70032F511D5F7D8A00BCA625 /* BarGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70032F501D5F7D8A00BCA625 /* BarGradient.swift */; };
+		70032F541D5F9CCC00BCA625 /* DiscoverPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70032F531D5F9CCC00BCA625 /* DiscoverPopup.xib */; };
+		70032F561D5F9F1200BCA625 /* DiscoverPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70032F551D5F9F1200BCA625 /* DiscoverPopupView.swift */; };
 		7003C1A81D446E9200FB531B /* LoginValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C1A71D446E9200FB531B /* LoginValidation.swift */; };
 		70059C951CD672990094B454 /* FacebookUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70059C941CD672990094B454 /* FacebookUserResponse.swift */; };
 		701B59D01D4F925300354C68 /* FakeProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701B59CF1D4F925300354C68 /* FakeProgressView.swift */; };
@@ -122,6 +124,8 @@
 		2617CC4AE1CA59B7C7DFB253 /* Pods-Layers.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Layers.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Layers/Pods-Layers.debug.xcconfig"; sourceTree = "<group>"; };
 		3FCE59FA6B494AAB3C36EE8C /* Pods-Layers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Layers.release.xcconfig"; path = "Pods/Target Support Files/Pods-Layers/Pods-Layers.release.xcconfig"; sourceTree = "<group>"; };
 		70032F501D5F7D8A00BCA625 /* BarGradient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarGradient.swift; sourceTree = "<group>"; };
+		70032F531D5F9CCC00BCA625 /* DiscoverPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiscoverPopup.xib; sourceTree = "<group>"; };
+		70032F551D5F9F1200BCA625 /* DiscoverPopupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverPopupView.swift; sourceTree = "<group>"; };
 		7003C1A71D446E9200FB531B /* LoginValidation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginValidation.swift; sourceTree = "<group>"; };
 		70059C941CD672990094B454 /* FacebookUserResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookUserResponse.swift; sourceTree = "<group>"; };
 		701B59CF1D4F925300354C68 /* FakeProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeProgressView.swift; sourceTree = "<group>"; };
@@ -255,6 +259,15 @@
 				C29055E7EACEA98F3107E42C /* Pods_Layers.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		70032F521D5F9C9100BCA625 /* Popup */ = {
+			isa = PBXGroup;
+			children = (
+				70032F531D5F9CCC00BCA625 /* DiscoverPopup.xib */,
+				70032F551D5F9F1200BCA625 /* DiscoverPopupView.swift */,
+			);
+			name = Popup;
 			sourceTree = "<group>";
 		};
 		70204A621CBF5EB700868C00 /* Web */ = {
@@ -406,7 +419,7 @@
 				70987BE91CB95F1900D86FBA /* ProductCollectionViewController.swift */,
 				707F48DC1D07A84900E82A4C /* SearchProductCollectionViewController.swift */,
 				70AF1A241CE199B400C0518C /* Cells */,
-				70987C311CB9C9FC00D86FBA /* Product Detail */,
+				70032F521D5F9C9100BCA625 /* Popup */,
 			);
 			name = "Product Collection";
 			sourceTree = "<group>";
@@ -422,6 +435,7 @@
 				70987C3E1CBBF07F00D86FBA /* Login */,
 				70776FC41CC5F872002E6F25 /* Filter */,
 				70987BF21CB9705C00D86FBA /* Product Collection */,
+				70987C311CB9C9FC00D86FBA /* Product Detail */,
 				70DD85421CFFA38800319716 /* Search */,
 				705390321CD7D3A000DA8E15 /* Price Alerts */,
 				70987C2B1CB9A4C200D86FBA /* Account */,
@@ -723,6 +737,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70032F541D5F9CCC00BCA625 /* DiscoverPopup.xib in Resources */,
 				70987C141CB9832E00D86FBA /* Charter-Roman.ttf in Resources */,
 				70D84AA61CB9557300A70485 /* Assets.xcassets in Resources */,
 				70D84AA41CB9557300A70485 /* Main.storyboard in Resources */,
@@ -883,6 +898,7 @@
 				7003C1A81D446E9200FB531B /* LoginValidation.swift in Sources */,
 				70AF1A2B1CE2D17B00C0518C /* RetailerResponse.swift in Sources */,
 				70A40FFF1CD6A4FD00CB515B /* Size.swift in Sources */,
+				70032F561D5F9F1200BCA625 /* DiscoverPopupView.swift in Sources */,
 				70D901A91D1220C80078298B /* ProductCollectionViewFlowLayout.swift in Sources */,
 				70A40FF91CD6A16300CB515B /* Rating.swift in Sources */,
 				70AF1A2F1CE3C6A800C0518C /* SubtitleFilterCell.swift in Sources */,

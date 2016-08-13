@@ -116,6 +116,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: Sign Up
     func connectWithFacebook()
     {
+        UIApplication.sharedApplication().setStatusBarStyle(.Default, animated: true)
+        
         let loginManager: FBSDKLoginManager = FBSDKLoginManager()
         
         loginManager.logInWithReadPermissions(["public_profile", "user_friends", "email"], fromViewController: self, handler: {(result:FBSDKLoginManagerLoginResult!, error:NSError!) -> Void in
@@ -139,6 +141,11 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 self.handleFacebookLogin()
             }
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+              
+                UIApplication.sharedApplication().setStatusBarStyle(.LightContent, animated: false)
+            })
         })
     }
     

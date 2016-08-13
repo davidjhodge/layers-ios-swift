@@ -11,6 +11,7 @@ import UIKit
 import FBSDKCoreKit
 import NHAlignmentFlowLayout
 import SDWebImage
+import KLCPopup
 
 class ProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
@@ -31,7 +32,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     var refreshControl: UIRefreshControl?
     
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
-        
+            
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -81,6 +82,22 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         view.addSubview(spinner)
                 
         reloadProducts()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if !LRSessionManager.sharedManager.hasSeenDiscoverPopup()
+        {
+            if let popupView = NSBundle.mainBundle().loadNibNamed("DiscoverPopup", owner: self, options: nil)[0] as? DiscoverPopupView
+            {
+                let discoverPopup = KLCPopup(contentView: popupView, showType: .BounceIn, dismissType: .BounceOut, maskType: .Dimmed, dismissOnBackgroundTouch: true, dismissOnContentTouch: true)
+                
+                discoverPopup!.show()
+                
+                LRSessionManager.sharedManager.completeDiscoverPopupExperience()
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {
