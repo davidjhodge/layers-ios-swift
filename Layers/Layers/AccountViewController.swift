@@ -341,7 +341,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
-                loadingHUD.hide(false)
+                loadingHUD.hideAnimated(false)
                 
                 // Completely reset all view controllers in heirarchy
                 AppStateTransitioner.transitionToMainStoryboard(false)
@@ -360,9 +360,9 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                                 hud.mode = .CustomView
                                 hud.customView = UIImageView(image: UIImage(named: "checkmark"))
                                 
-                                hud.labelText = "Successfully Logged Out"
-                                hud.labelFont = Font.OxygenBold(size: 17.0)
-                                hud.hide(true, afterDelay: 1.5)
+                                hud.label.text = "Successfully Logged Out"
+                                hud.label.font = Font.OxygenBold(size: 17.0)
+                                hud.hideAnimated(true, afterDelay: 1.5)
                             })
                         }
                     }

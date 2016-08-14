@@ -58,9 +58,9 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
                                 hud.mode = .CustomView
                                 hud.customView = UIImageView(image: UIImage(named: "checkmark"))
                                 
-                                hud.labelText = "Message Sent".uppercaseString
-                                hud.labelFont = Font.OxygenBold(size: 17.0)
-                                hud.hide(true, afterDelay: 1.0)
+                                hud.label.text = "Message Sent".uppercaseString
+                                hud.label.font = Font.OxygenBold(size: 17.0)
+                                hud.hideAnimated(true, afterDelay: 1.0)
                                 
                                 self.performSelector(#selector(self.done), withObject: nil, afterDelay: 1.0)
                             })

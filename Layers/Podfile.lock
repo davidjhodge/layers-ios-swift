@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (3.3.1)
+  - Alamofire (3.4.1)
   - AWSCognito (2.4.0):
     - AWSCore (= 2.4.0)
   - AWSCognitoIdentityProvider (2.4.0):
@@ -29,44 +29,44 @@ PODS:
     - SDWebImage
   - KeychainAccess (2.3.5)
   - KLCPopup (1.0)
-  - MBProgressHUD (0.9.2)
+  - MBProgressHUD (1.0.0)
   - NHAlignmentFlowLayout (0.1.0)
-  - ObjectMapper (1.2.0)
+  - ObjectMapper (1.4.0)
   - pop (1.0.9)
-  - SDWebImage (3.7.5):
-    - SDWebImage/Core (= 3.7.5)
-  - SDWebImage/Core (3.7.5)
+  - SDWebImage (3.8.1):
+    - SDWebImage/Core (= 3.8.1)
+  - SDWebImage/Core (3.8.1)
   - SwiftRangeSlider (0.3.2)
-  - SwiftyBeaver (0.4.2)
+  - SwiftyBeaver (0.6.5)
   - SwiftyJSON (2.3.2)
   - UITextView+Placeholder (1.2.0)
 
 DEPENDENCIES:
-  - Alamofire
-  - AWSCognito
-  - AWSCognitoIdentityProvider
-  - AWSCore
-  - AWSSNS
+  - Alamofire (~> 3.4)
+  - AWSCognito (~> 2.4)
+  - AWSCognitoIdentityProvider (~> 2.4)
+  - AWSCore (~> 2.4)
+  - AWSSNS (~> 2.4)
   - Cosmos (~> 1.2)
-  - Crashlytics
-  - DeepLinkKit
-  - Fabric
+  - Crashlytics (~> 3.7)
+  - DeepLinkKit (~> 1.2)
+  - Fabric (~> 1.6)
   - FBSDKCoreKit (~> 4.11)
   - FBSDKLoginKit (~> 4.11)
-  - IDMPhotoBrowser
-  - KeychainAccess
-  - KLCPopup
-  - MBProgressHUD
-  - NHAlignmentFlowLayout
-  - ObjectMapper
-  - SDWebImage
-  - SwiftRangeSlider
-  - SwiftyBeaver
-  - SwiftyJSON
+  - IDMPhotoBrowser (~> 1.8)
+  - KeychainAccess (~> 2.3)
+  - KLCPopup (~> 1.0)
+  - MBProgressHUD (~> 1.0)
+  - NHAlignmentFlowLayout (~> 0.1)
+  - ObjectMapper (~> 1.4)
+  - SDWebImage (~> 3.8)
+  - SwiftRangeSlider (~> 0.3)
+  - SwiftyBeaver (~> 0.6)
+  - SwiftyJSON (~> 2.3)
   - UITextView+Placeholder (~> 1.2)
 
 SPEC CHECKSUMS:
-  Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
+  Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
   AWSCognito: 1d96bd3ccda48918b00862895561dcb2a6080acf
   AWSCognitoIdentityProvider: 64410d394f6ea498c6741cd4dc7488f85b0f82c7
   AWSCore: 7e0da755786280a76ed4ab4ed8c1d38ced09b460
@@ -82,13 +82,13 @@ SPEC CHECKSUMS:
   IDMPhotoBrowser: b574fe3229754e701f32df271afbc4ac7e4e1997
   KeychainAccess: e283c1981a6c5655e1984cd411c6faf16fa165ae
   KLCPopup: 76c5a19227977f1e53d85236f9ef42257c168d98
-  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   NHAlignmentFlowLayout: 7f7e9bd79774a7c733e7ac232f2a131a0ce095b9
-  ObjectMapper: b1e9c7c8a9f6400b72690c80072c131504caa66f
+  ObjectMapper: a07ad0462c5adf014adc0f89ef04c29b626e855e
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
-  SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
+  SDWebImage: 35f9627a3e44b4f292a8a8ce6a531fa488239b91
   SwiftRangeSlider: a199ea521ba1ef57fa8bae26ffbdeb33c4c8f6eb
-  SwiftyBeaver: 3eced9aabe4f10b975453cc1baaa2d523a5eaeae
+  SwiftyBeaver: 1f7e6378e75bae631bb219fa0a351ce6f34a40da
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
   UITextView+Placeholder: 77680995fcdd07c3f52ec92fe1150874a2ac89ff
 
