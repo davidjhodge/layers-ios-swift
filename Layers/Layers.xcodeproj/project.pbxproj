@@ -36,6 +36,7 @@
 		705390341CD7D3C700DA8E15 /* PriceAlerts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 705390331CD7D3C700DA8E15 /* PriceAlerts.storyboard */; };
 		705390361CD7D49500DA8E15 /* PriceAlertCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705390351CD7D49500DA8E15 /* PriceAlertCell.swift */; };
 		7053903A1CD7ED9100DA8E15 /* SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705390391CD7ED9100DA8E15 /* SafeIndex.swift */; };
+		70676BA31D61798E00219E9C /* Layers.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 70676BA21D61798E00219E9C /* Layers.entitlements */; };
 		706FF88A1CBC54F8007B26AD /* EmailLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */; };
 		706FF88C1CBC57D6007B26AD /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */; };
 		706FF8911CBD6B6C007B26AD /* SizeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8901CBD6B6C007B26AD /* SizeCell.swift */; };
@@ -152,6 +153,7 @@
 		705390331CD7D3C700DA8E15 /* PriceAlerts.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PriceAlerts.storyboard; sourceTree = "<group>"; };
 		705390351CD7D49500DA8E15 /* PriceAlertCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceAlertCell.swift; sourceTree = "<group>"; };
 		705390391CD7ED9100DA8E15 /* SafeIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeIndex.swift; sourceTree = "<group>"; };
+		70676BA21D61798E00219E9C /* Layers.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Layers.entitlements; sourceTree = "<group>"; };
 		706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailLoginViewController.swift; sourceTree = "<group>"; };
 		706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldCell.swift; sourceTree = "<group>"; };
 		706FF8901CBD6B6C007B26AD /* SizeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SizeCell.swift; sourceTree = "<group>"; };
@@ -612,6 +614,7 @@
 		70D84A921CB9557200A70485 = {
 			isa = PBXGroup;
 			children = (
+				70676BA21D61798E00219E9C /* Layers.entitlements */,
 				70D84A9D1CB9557300A70485 /* Layers */,
 				70D84A9C1CB9557200A70485 /* Products */,
 				C4EC2D873913FC477A8BD06D /* Pods */,
@@ -737,6 +740,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70676BA31D61798E00219E9C /* Layers.entitlements in Resources */,
 				70032F541D5F9CCC00BCA625 /* DiscoverPopup.xib in Resources */,
 				70987C141CB9832E00D86FBA /* Charter-Roman.ttf in Resources */,
 				70D84AA61CB9557300A70485 /* Assets.xcassets in Resources */,
@@ -1041,7 +1045,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = Layers.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
@@ -1063,7 +1067,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = Layers.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = Layers/Info.plist;
