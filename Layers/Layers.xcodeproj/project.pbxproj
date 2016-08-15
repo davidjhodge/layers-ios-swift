@@ -1054,7 +1054,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.layers.Layers;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "6a30ec9f-351c-400d-b1a2-2f20bce223ab";
 				SWIFT_OBJC_BRIDGING_HEADER = "Layers/Layers-BridgingHeader.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1075,7 +1075,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.layers.Layers;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "8aa7aa7a-14f2-4855-a71d-d4af0d55f570";
 				SWIFT_OBJC_BRIDGING_HEADER = "Layers/Layers-BridgingHeader.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
