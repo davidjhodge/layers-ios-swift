@@ -42,13 +42,16 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         
         title = "Account".uppercaseString
         
-        tabBarItem.title = "account".uppercaseString
+        tabBarItem.title = "Account"
         tabBarItem.image = UIImage(named: "person")
         tabBarItem.image = UIImage(named: "person-filled")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Change status bar style to .LightContent
+        navigationController?.navigationBar.barStyle = .Black
         
         tableView.tableFooterView = UIView()
         
@@ -329,6 +332,11 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         })
     }
     
+    func userDidCancelAuthentication()
+    {
+        print("User cancelled authentication.")
+    }
+    
     // MARK: Logout
     
     func logout()
@@ -453,7 +461,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                         // Not logged in
                         cell.textLabel?.text = "Sign In"
                         cell.textLabel?.textAlignment = .Center
-                        cell.textLabel?.textColor = Color.DarkNavyColor
+                        cell.textLabel?.textColor = Color.PrimaryAppColor
                     }
                 }
             

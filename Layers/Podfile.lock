@@ -17,12 +17,14 @@ PODS:
   - Crashlytics (3.7.1):
     - Fabric (~> 1.6.3)
   - DACircularProgress (2.3.1)
+  - DateTools (1.7.0)
   - DeepLinkKit (1.2.1)
   - Fabric (1.6.7)
   - FBSDKCoreKit (4.11.0):
     - Bolts (~> 1.7)
   - FBSDKLoginKit (4.11.0):
     - FBSDKCoreKit
+  - FRHyperLabel (1.0.2)
   - IDMPhotoBrowser (1.8.4):
     - DACircularProgress
     - pop
@@ -49,10 +51,12 @@ DEPENDENCIES:
   - AWSSNS (~> 2.4)
   - Cosmos (~> 1.2)
   - Crashlytics (~> 3.7)
+  - DateTools (~> 1.7)
   - DeepLinkKit (~> 1.2)
   - Fabric (~> 1.6)
   - FBSDKCoreKit (~> 4.11)
   - FBSDKLoginKit (~> 4.11)
+  - FRHyperLabel (~> 1.0)
   - IDMPhotoBrowser (~> 1.8)
   - KeychainAccess (~> 2.3)
   - KLCPopup (~> 1.0)
@@ -75,10 +79,12 @@ SPEC CHECKSUMS:
   Cosmos: 87c49100c69d2cb2eebfa4eb8d1e801fe29ff774
   Crashlytics: 3cdd4c9655be68032a0cf0379e0fb5ef6af22cad
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
+  DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
   DeepLinkKit: 4c3a713b7ecc6c6e25ba56c87d0c728f6035a9ef
   Fabric: caf7580c725e64db144f610ac65cd60956911dc7
   FBSDKCoreKit: 686ac982723a14ec9ddb85e2f81235d7706c891b
   FBSDKLoginKit: bade9fc78277764149ccc5bfaadbf13c83175c6a
+  FRHyperLabel: 967b8b7ffdd86b9f2d44f2981a5688c4d3faa9ac
   IDMPhotoBrowser: b574fe3229754e701f32df271afbc4ac7e4e1997
   KeychainAccess: e283c1981a6c5655e1984cd411c6faf16fa165ae
   KLCPopup: 76c5a19227977f1e53d85236f9ef42257c168d98

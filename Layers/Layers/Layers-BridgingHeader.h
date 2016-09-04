@@ -20,4 +20,6 @@
 
 #import <KLCPopup/KLCPopup.h>
 
+#import <FRHyperLabel/FRHyperLabel.h>
+
 #endif /* Layers_BridgingHeader_h */

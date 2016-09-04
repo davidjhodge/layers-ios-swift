@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		35D2CA6AC9BC70A0D97C9B38 /* Pods_Layers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29055E7EACEA98F3107E42C /* Pods_Layers.framework */; };
-		70032F511D5F7D8A00BCA625 /* BarGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70032F501D5F7D8A00BCA625 /* BarGradient.swift */; };
 		70032F541D5F9CCC00BCA625 /* DiscoverPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70032F531D5F9CCC00BCA625 /* DiscoverPopup.xib */; };
 		70032F561D5F9F1200BCA625 /* DiscoverPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70032F551D5F9F1200BCA625 /* DiscoverPopupView.swift */; };
 		7003C1A81D446E9200FB531B /* LoginValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C1A71D446E9200FB531B /* LoginValidation.swift */; };
@@ -22,6 +21,14 @@
 		702FC2FC1CC344960012969C /* EmailCreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */; };
 		702FC3011CC3FE6D0012969C /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */; };
 		702FC3031CC408FC0012969C /* TextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702FC3021CC408FC0012969C /* TextViewCell.swift */; };
+		703143AA1D7B84EE0032D54F /* Montserrat-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 703143A71D7B84EE0032D54F /* Montserrat-Light.otf */; };
+		703143AB1D7B84EE0032D54F /* Montserrat-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 703143A81D7B84EE0032D54F /* Montserrat-Regular.otf */; };
+		703143AC1D7B84EE0032D54F /* Montserrat-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 703143A91D7B84EE0032D54F /* Montserrat-SemiBold.otf */; };
+		703143B01D7B8B1E0032D54F /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703143AF1D7B8B1E0032D54F /* NotificationsViewController.swift */; };
+		703143B21D7B8BA80032D54F /* Notifications.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 703143B11D7B8BA80032D54F /* Notifications.storyboard */; };
+		703143B41D7B8EA70032D54F /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703143B31D7B8EA70032D54F /* NotificationCell.swift */; };
+		703143B61D7B8F410032D54F /* NotificationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703143B51D7B8F410032D54F /* NotificationResponse.swift */; };
+		703143B81D7BD13F0032D54F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703143B71D7BD13F0032D54F /* LoginViewController.swift */; };
 		7033C7401D5E707E0035A13D /* ProductWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033C73F1D5E707E0035A13D /* ProductWebViewController.swift */; };
 		7033C7421D5E7C780035A13D /* ProductWebNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033C7411D5E7C780035A13D /* ProductWebNavigationController.swift */; };
 		703D463A1D15C21700AB25C0 /* OpenSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703D46391D15C21700AB25C0 /* OpenSourceViewController.swift */; };
@@ -67,9 +74,6 @@
 		70987C051CB980B300D86FBA /* Oxygen-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 70987C021CB980B300D86FBA /* Oxygen-Bold.ttf */; };
 		70987C061CB980B300D86FBA /* Oxygen-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 70987C031CB980B300D86FBA /* Oxygen-Light.ttf */; };
 		70987C071CB980B300D86FBA /* Oxygen-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 70987C041CB980B300D86FBA /* Oxygen-Regular.ttf */; };
-		70987C0F1CB9832E00D86FBA /* Charter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 70987C091CB9832D00D86FBA /* Charter-Black.ttf */; };
-		70987C111CB9832E00D86FBA /* Charter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 70987C0B1CB9832E00D86FBA /* Charter-Bold.ttf */; };
-		70987C141CB9832E00D86FBA /* Charter-Roman.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 70987C0E1CB9832E00D86FBA /* Charter-Roman.ttf */; };
 		70987C171CB985DE00D86FBA /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987C161CB985DE00D86FBA /* Font.swift */; };
 		70987C1B1CB98A7700D86FBA /* NSAttributedString+Pricing.m in Sources */ = {isa = PBXBuildFile; fileRef = 70987C1A1CB98A7700D86FBA /* NSAttributedString+Pricing.m */; };
 		70987C281CB9A4A500D86FBA /* Account.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70987C271CB9A4A500D86FBA /* Account.storyboard */; };
@@ -95,6 +99,7 @@
 		70AF1A2B1CE2D17B00C0518C /* RetailerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2A1CE2D17B00C0518C /* RetailerResponse.swift */; };
 		70AF1A2D1CE3C57500C0518C /* TextFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2C1CE3C57500C0518C /* TextFilterViewController.swift */; };
 		70AF1A2F1CE3C6A800C0518C /* SubtitleFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AF1A2E1CE3C6A800C0518C /* SubtitleFilterCell.swift */; };
+		70B311A31D7C955900303D39 /* FontAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B311A21D7C955900303D39 /* FontAttributes.swift */; };
 		70BE79BF1CFCFFD200AABE8A /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BE79BE1CFCFFD200AABE8A /* ErrorMessage.swift */; };
 		70BE79C51CFE89D900AABE8A /* BrandResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BE79C41CFE89D900AABE8A /* BrandResponse.swift */; };
 		70C0CC381D178B3400B738CF /* PricingResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C0CC371D178B3400B738CF /* PricingResponse.swift */; };
@@ -124,7 +129,6 @@
 /* Begin PBXFileReference section */
 		2617CC4AE1CA59B7C7DFB253 /* Pods-Layers.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Layers.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Layers/Pods-Layers.debug.xcconfig"; sourceTree = "<group>"; };
 		3FCE59FA6B494AAB3C36EE8C /* Pods-Layers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Layers.release.xcconfig"; path = "Pods/Target Support Files/Pods-Layers/Pods-Layers.release.xcconfig"; sourceTree = "<group>"; };
-		70032F501D5F7D8A00BCA625 /* BarGradient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarGradient.swift; sourceTree = "<group>"; };
 		70032F531D5F9CCC00BCA625 /* DiscoverPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiscoverPopup.xib; sourceTree = "<group>"; };
 		70032F551D5F9F1200BCA625 /* DiscoverPopupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverPopupView.swift; sourceTree = "<group>"; };
 		7003C1A71D446E9200FB531B /* LoginValidation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginValidation.swift; sourceTree = "<group>"; };
@@ -139,6 +143,14 @@
 		702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailCreateAccountViewController.swift; sourceTree = "<group>"; };
 		702FC3001CC3FE6D0012969C /* ContactUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
 		702FC3021CC408FC0012969C /* TextViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViewCell.swift; sourceTree = "<group>"; };
+		703143A71D7B84EE0032D54F /* Montserrat-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Light.otf"; sourceTree = "<group>"; };
+		703143A81D7B84EE0032D54F /* Montserrat-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.otf"; sourceTree = "<group>"; };
+		703143A91D7B84EE0032D54F /* Montserrat-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.otf"; sourceTree = "<group>"; };
+		703143AF1D7B8B1E0032D54F /* NotificationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
+		703143B11D7B8BA80032D54F /* Notifications.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Notifications.storyboard; sourceTree = "<group>"; };
+		703143B31D7B8EA70032D54F /* NotificationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
+		703143B51D7B8F410032D54F /* NotificationResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationResponse.swift; sourceTree = "<group>"; };
+		703143B71D7BD13F0032D54F /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		7033C73F1D5E707E0035A13D /* ProductWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWebViewController.swift; sourceTree = "<group>"; };
 		7033C7411D5E7C780035A13D /* ProductWebNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWebNavigationController.swift; sourceTree = "<group>"; };
 		703D46391D15C21700AB25C0 /* OpenSourceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSourceViewController.swift; sourceTree = "<group>"; };
@@ -184,9 +196,6 @@
 		70987C021CB980B300D86FBA /* Oxygen-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Oxygen-Bold.ttf"; sourceTree = "<group>"; };
 		70987C031CB980B300D86FBA /* Oxygen-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Oxygen-Light.ttf"; sourceTree = "<group>"; };
 		70987C041CB980B300D86FBA /* Oxygen-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Oxygen-Regular.ttf"; sourceTree = "<group>"; };
-		70987C091CB9832D00D86FBA /* Charter-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Charter-Black.ttf"; sourceTree = "<group>"; };
-		70987C0B1CB9832E00D86FBA /* Charter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Charter-Bold.ttf"; sourceTree = "<group>"; };
-		70987C0E1CB9832E00D86FBA /* Charter-Roman.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Charter-Roman.ttf"; sourceTree = "<group>"; };
 		70987C161CB985DE00D86FBA /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		70987C181CB98A3300D86FBA /* Layers-BridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Layers-BridgingHeader.h"; sourceTree = "<group>"; };
 		70987C191CB98A7700D86FBA /* NSAttributedString+Pricing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Pricing.h"; sourceTree = "<group>"; };
@@ -214,6 +223,7 @@
 		70AF1A2A1CE2D17B00C0518C /* RetailerResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetailerResponse.swift; sourceTree = "<group>"; };
 		70AF1A2C1CE3C57500C0518C /* TextFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFilterViewController.swift; sourceTree = "<group>"; };
 		70AF1A2E1CE3C6A800C0518C /* SubtitleFilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubtitleFilterCell.swift; sourceTree = "<group>"; };
+		70B311A21D7C955900303D39 /* FontAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontAttributes.swift; sourceTree = "<group>"; };
 		70BE79BE1CFCFFD200AABE8A /* ErrorMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 		70BE79C41CFE89D900AABE8A /* BrandResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandResponse.swift; sourceTree = "<group>"; };
 		70C0CC371D178B3400B738CF /* PricingResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PricingResponse.swift; sourceTree = "<group>"; };
@@ -323,8 +333,28 @@
 				707F48D61D052B7100E82A4C /* SearchResponse.swift */,
 				70D901A11D10C0620078298B /* SaleAlertResponse.swift */,
 				70C0CC371D178B3400B738CF /* PricingResponse.swift */,
+				703143B51D7B8F410032D54F /* NotificationResponse.swift */,
 			);
 			name = Responses;
+			sourceTree = "<group>";
+		};
+		703143AD1D7B84FC0032D54F /* Montserrat */ = {
+			isa = PBXGroup;
+			children = (
+				703143A71D7B84EE0032D54F /* Montserrat-Light.otf */,
+				703143A81D7B84EE0032D54F /* Montserrat-Regular.otf */,
+				703143A91D7B84EE0032D54F /* Montserrat-SemiBold.otf */,
+			);
+			name = Montserrat;
+			sourceTree = "<group>";
+		};
+		703143AE1D7B8AEA0032D54F /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				703143AF1D7B8B1E0032D54F /* NotificationsViewController.swift */,
+				703143B31D7B8EA70032D54F /* NotificationCell.swift */,
+			);
+			name = Notifications;
 			sourceTree = "<group>";
 		};
 		703D463D1D15C75900AB25C0 /* Cells */ = {
@@ -433,12 +463,14 @@
 				70D84AA21CB9557300A70485 /* Main.storyboard */,
 				70DD853E1CFFA08F00319716 /* Search.storyboard */,
 				705390331CD7D3C700DA8E15 /* PriceAlerts.storyboard */,
+				703143B11D7B8BA80032D54F /* Notifications.storyboard */,
 				70987C271CB9A4A500D86FBA /* Account.storyboard */,
 				70987C3E1CBBF07F00D86FBA /* Login */,
 				70776FC41CC5F872002E6F25 /* Filter */,
 				70987BF21CB9705C00D86FBA /* Product Collection */,
 				70987C311CB9C9FC00D86FBA /* Product Detail */,
 				70DD85421CFFA38800319716 /* Search */,
+				703143AE1D7B8AEA0032D54F /* Notifications */,
 				705390321CD7D3A000DA8E15 /* Price Alerts */,
 				70987C2B1CB9A4C200D86FBA /* Account */,
 			);
@@ -484,7 +516,6 @@
 				701B59CF1D4F925300354C68 /* FakeProgressView.swift */,
 				70EEEDB91D57D65D0028F0DF /* ProductPatch.swift */,
 				70C386D71D5BB9770045C86E /* EmptyStateView.swift */,
-				70032F501D5F7D8A00BCA625 /* BarGradient.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -492,7 +523,7 @@
 		70987BFF1CB9804C00D86FBA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				70987C151CB9835100D86FBA /* Charter */,
+				703143AD1D7B84FC0032D54F /* Montserrat */,
 				70987C081CB980B800D86FBA /* Oxygen */,
 			);
 			name = Resources;
@@ -502,6 +533,7 @@
 			isa = PBXGroup;
 			children = (
 				70987C161CB985DE00D86FBA /* Font.swift */,
+				70B311A21D7C955900303D39 /* FontAttributes.swift */,
 				70987BFF1CB9804C00D86FBA /* Resources */,
 			);
 			name = Fonts;
@@ -523,16 +555,6 @@
 				70987C041CB980B300D86FBA /* Oxygen-Regular.ttf */,
 			);
 			name = Oxygen;
-			sourceTree = "<group>";
-		};
-		70987C151CB9835100D86FBA /* Charter */ = {
-			isa = PBXGroup;
-			children = (
-				70987C091CB9832D00D86FBA /* Charter-Black.ttf */,
-				70987C0B1CB9832E00D86FBA /* Charter-Bold.ttf */,
-				70987C0E1CB9832E00D86FBA /* Charter-Roman.ttf */,
-			);
-			name = Charter;
 			sourceTree = "<group>";
 		};
 		70987C1C1CB98A7B00D86FBA /* NSAttributedString+Pricing */ = {
@@ -583,6 +605,7 @@
 		70987C3E1CBBF07F00D86FBA /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				703143B71D7BD13F0032D54F /* LoginViewController.swift */,
 				70987C3C1CBBF07B00D86FBA /* GetStartedViewController.swift */,
 				706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */,
 				702FC2FB1CC344960012969C /* EmailCreateAccountViewController.swift */,
@@ -742,10 +765,10 @@
 			files = (
 				70676BA31D61798E00219E9C /* Layers.entitlements in Resources */,
 				70032F541D5F9CCC00BCA625 /* DiscoverPopup.xib in Resources */,
-				70987C141CB9832E00D86FBA /* Charter-Roman.ttf in Resources */,
+				703143AB1D7B84EE0032D54F /* Montserrat-Regular.otf in Resources */,
 				70D84AA61CB9557300A70485 /* Assets.xcassets in Resources */,
 				70D84AA41CB9557300A70485 /* Main.storyboard in Resources */,
-				70987C0F1CB9832E00D86FBA /* Charter-Black.ttf in Resources */,
+				703143AA1D7B84EE0032D54F /* Montserrat-Light.otf in Resources */,
 				70AF1A211CE1651A00C0518C /* PickerRow.xib in Resources */,
 				705390341CD7D3C700DA8E15 /* PriceAlerts.storyboard in Resources */,
 				70987C281CB9A4A500D86FBA /* Account.storyboard in Resources */,
@@ -753,7 +776,8 @@
 				70987C371CB9D15100D86FBA /* Login.storyboard in Resources */,
 				70776FD11CC8A90C002E6F25 /* Localizable.strings in Resources */,
 				70987C051CB980B300D86FBA /* Oxygen-Bold.ttf in Resources */,
-				70987C111CB9832E00D86FBA /* Charter-Bold.ttf in Resources */,
+				703143AC1D7B84EE0032D54F /* Montserrat-SemiBold.otf in Resources */,
+				703143B21D7B8BA80032D54F /* Notifications.storyboard in Resources */,
 				70987C061CB980B300D86FBA /* Oxygen-Light.ttf in Resources */,
 				70DD853F1CFFA08F00319716 /* Search.storyboard in Resources */,
 				703D46411D15CCCA00AB25C0 /* OpenSourceList.plist in Resources */,
@@ -846,6 +870,7 @@
 				7022F2F11CFB65120097DDF9 /* ColorResponse.swift in Sources */,
 				7022F2F51CFCAD100097DDF9 /* AWSManager.swift in Sources */,
 				70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */,
+				703143B01D7B8B1E0032D54F /* NotificationsViewController.swift in Sources */,
 				706FF89A1CBD6E7A007B26AD /* AlternateReviewCell.swift in Sources */,
 				703D463F1D15CA7E00AB25C0 /* OpenSource.swift in Sources */,
 				70D901A21D10C0620078298B /* SaleAlertResponse.swift in Sources */,
@@ -854,6 +879,7 @@
 				70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */,
 				70DD85411CFFA0C900319716 /* SearchViewController.swift in Sources */,
 				70D901A71D12176A0078298B /* AgeRange.swift in Sources */,
+				703143B81D7BD13F0032D54F /* LoginViewController.swift in Sources */,
 				70987BF51CB970CA00D86FBA /* LRSessionManager.swift in Sources */,
 				70987C2A1CB9A4BF00D86FBA /* AccountViewController.swift in Sources */,
 				70987C301CB9B4E400D86FBA /* ProductViewController.swift in Sources */,
@@ -885,7 +911,9 @@
 				70CC927C1CFFDF1A000AD403 /* VariantColorMatcher.swift in Sources */,
 				70FF31CE1D0CDDB800F19C9E /* PriceFilterViewController.swift in Sources */,
 				705390311CD7D38600DA8E15 /* PriceAlertsViewController.swift in Sources */,
+				70B311A31D7C955900303D39 /* FontAttributes.swift in Sources */,
 				7033C7401D5E707E0035A13D /* ProductWebViewController.swift in Sources */,
+				703143B41D7B8EA70032D54F /* NotificationCell.swift in Sources */,
 				706FF8911CBD6B6C007B26AD /* SizeCell.swift in Sources */,
 				70CECA821CEE31E600FF7B8F /* FilterManager.swift in Sources */,
 				70CECA871CF7AD2400FF7B8F /* FilterObjectConverter.swift in Sources */,
@@ -927,11 +955,11 @@
 				70BE79BF1CFCFFD200AABE8A /* ErrorMessage.swift in Sources */,
 				70D901B41D151DAC0078298B /* GlobalAlert.swift in Sources */,
 				70987BEE1CB9658200D86FBA /* User.swift in Sources */,
+				703143B61D7B8F410032D54F /* NotificationResponse.swift in Sources */,
 				70488C541CE63C640085BAE9 /* ColorFilterViewController.swift in Sources */,
 				703D463A1D15C21700AB25C0 /* OpenSourceViewController.swift in Sources */,
 				70A71B9C1CC593D800B58B74 /* PickerAccessoryView.swift in Sources */,
 				703D46431D16261900AB25C0 /* DeviceComparison.swift in Sources */,
-				70032F511D5F7D8A00BCA625 /* BarGradient.swift in Sources */,
 				70EEEDBA1D57D65D0028F0DF /* ProductPatch.swift in Sources */,
 				70776FD31CC8A9FF002E6F25 /* Localization.swift in Sources */,
 				70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */,

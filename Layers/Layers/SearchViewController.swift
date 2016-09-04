@@ -30,7 +30,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        tabBarItem.title = "Search".uppercaseString
+        tabBarItem.title = "Search"
         tabBarItem.image = UIImage(named: "search")
         tabBarItem.selectedImage = UIImage(named: "search-filled")
     }
@@ -38,8 +38,10 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Draw gradient
-        navBarImageView.image = UIImage.navigationBarImage()
+        // Change status bar style to .LightContent
+        navigationController?.navigationBar.barStyle = .Black
+        
+        navBarImageView.image = UIButton.imageFromColor(Color.PrimaryAppColor)
         
         searchBar.backgroundImage = UIImage()
         searchBar.backgroundColor = Color.clearColor()
@@ -335,7 +337,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             {
                 cell.textLabel?.font = Font.OxygenRegular(size: 16.0)
 
-                cell.textLabel?.textColor = Color.DarkNavyColor
+                cell.textLabel?.textColor = Color.PrimaryAppColor
                 
                 if let categories = categories
                 {

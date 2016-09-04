@@ -27,7 +27,7 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        logoLabel.attributedText = NSAttributedString(string: "LAYERS".uppercaseString, attributes: [NSFontAttributeName:Font.CharterBold(size: 30.0),
+        logoLabel.attributedText = NSAttributedString(string: "LAYERS".uppercaseString, attributes: [NSFontAttributeName:Font.PrimaryFontSemiBold(size: 30.0),
             NSKernAttributeName:3])
         
         view.sendSubviewToBack(heroImage)
@@ -212,6 +212,11 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
         FBSDKAppEvents.logEvent("Get Started Email Registrations")
 
         completeFirstLaunchExperience()
+    }
+    
+    func userDidCancelAuthentication()
+    {
+        print("User cancelled authentication.")
     }
     
     // MARK: Handle UI Interactivity

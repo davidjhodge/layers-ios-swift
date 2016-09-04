@@ -659,7 +659,7 @@ class PriceAlertsViewController: UIViewController, UITableViewDataSource, UITabl
         let header = view as! UITableViewHeaderFooterView
         header.contentView.backgroundColor = Color.clearColor()
         header.textLabel?.font = Font.OxygenBold(size: 14.0)
-        header.textLabel?.textColor = Color.DarkNavyColor
+        header.textLabel?.textColor = Color.PrimaryAppColor
     }
     
     // MARK: UITableView Delegate

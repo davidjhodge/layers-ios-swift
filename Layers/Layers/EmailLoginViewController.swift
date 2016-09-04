@@ -68,9 +68,19 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
         }
     }
     
+    override func prefersStatusBarHidden() -> Bool {
+        return false
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
+    
     // MARK: Actions
     func cancel()
     {
+        delegate?.userDidCancelAuthentication()
+        
         view.endEditing(true)
         
         dismissViewControllerAnimated(true, completion: nil)

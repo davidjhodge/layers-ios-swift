@@ -42,7 +42,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>3257</string>
+	<string>3322</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -69,6 +69,8 @@
 	<string>982100215236828</string>
 	<key>FacebookDisplayName</key>
 	<string>Layers</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -109,12 +111,12 @@
 	</dict>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Montserrat-Light.otf</string>
+		<string>Montserrat-Regular.otf</string>
+		<string>Montserrat-SemiBold.otf</string>
 		<string>Oxygen-Light.ttf</string>
 		<string>Oxygen-Regular.ttf</string>
 		<string>Oxygen-Bold.ttf</string>
-		<string>Charter-Roman.ttf</string>
-		<string>Charter-Bold.ttf</string>
-		<string>Charter-Black.ttf</string>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
@@ -136,6 +138,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+	<true/>
 </dict>
 </plist>

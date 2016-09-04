@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Fabric.with([Crashlytics.self])
         
         window = LRWindow(frame: UIScreen.mainScreen().bounds)
-        window?.tintColor = Color.DarkNavyColor
+        window?.tintColor = Color.PrimaryAppColor
         
         // Swifty Beaver
         log.addDestination(ConsoleDestination())
@@ -45,21 +45,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         registerRoutes()
         
         // Determine intial view controller based on FirstLaunchExperience        
-        if LRSessionManager.sharedManager.hasCompletedFirstLaunch() == true
-        {
-            if LRSessionManager.sharedManager.hasCredentials()
-            {
-                AppStateTransitioner.transitionToMainStoryboard(false)
-            }
-            else
-            {
-                AppStateTransitioner.transitionToLoginStoryboard(false)
-            }
-        }
-        else
-        {
+//        if LRSessionManager.sharedManager.hasCompletedFirstLaunch() == true
+//        {
+//            if LRSessionManager.sharedManager.hasCredentials()
+//            {
+//                AppStateTransitioner.transitionToMainStoryboard(false)
+//            }
+//            else
+//            {
+//                AppStateTransitioner.transitionToLoginStoryboard(false)
+//            }
+//        }
+//        else
+//        {
             AppStateTransitioner.transitionToLoginStoryboard(false)
-        }
+//        }
 
         window?.makeKeyAndVisible()
                 
@@ -71,14 +71,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func configureDefaultAppearances()
     {
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).translucent = false
-        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).setBackgroundImage(UIImage.navigationBarImage(), forBarMetrics: .Default)
+        UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).setBackgroundImage(UIButton.imageFromColor(Color.PrimaryAppColor), forBarMetrics: .Default)
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.whiteColor()
         UINavigationBar.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).titleTextAttributes = [NSForegroundColorAttributeName: Color.whiteColor(),
-                                                                                                            NSFontAttributeName: Font.OxygenBold(size: 16.0)]
+                                                                                                            NSFontAttributeName: Font.PrimaryFontRegular(size: 16.0),
+                                                                                                            NSKernAttributeName:1.5]
         UIBarButtonItem.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).setTitleTextAttributes([NSForegroundColorAttributeName: Color.whiteColor(),
-            NSFontAttributeName: Font.OxygenRegular(size: 16.0)], forState: .Normal)
+            NSFontAttributeName: Font.PrimaryFontRegular(size: 16.0)], forState: .Normal)
         
-        UITableViewCell.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.DarkNavyColor
+        UITableViewCell.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.PrimaryAppColor
     }
     
     func registerRoutes()

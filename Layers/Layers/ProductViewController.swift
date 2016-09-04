@@ -805,8 +805,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     cell.createSaleAlertButton.setTitle(buttonTitle, forState: .Normal)
                     cell.createSaleAlertButton.setTitleColor(Color.whiteColor(), forState: [.Normal, .Highlighted])
                     
-                    cell.createSaleAlertButton.setBackgroundColor(Color.DarkNavyColor, forState: .Normal)
-                    cell.createSaleAlertButton.setBackgroundColor(Color.VeryDarkNavyColor, forState: .Highlighted)
+                    cell.createSaleAlertButton.setBackgroundColor(Color.PrimaryAppColor, forState: .Normal)
+                    cell.createSaleAlertButton.setBackgroundColor(Color.HighlightedPrimaryAppColor, forState: .Highlighted)
                     
                     cell.createSaleAlertButton.addTarget(self, action: #selector(toggleSaleAlert), forControlEvents: .TouchUpInside)
                     

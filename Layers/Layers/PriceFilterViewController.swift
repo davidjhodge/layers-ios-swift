@@ -48,7 +48,7 @@ class PriceFilterViewController: UIViewController
         priceFilterButton.addTarget(self, action: #selector(selectFilter), forControlEvents: .TouchUpInside)
         
         slider.trackTintColor = Color.LightGray
-        slider.trackHighlightTintColor = Color.DarkNavyColor
+        slider.trackHighlightTintColor = Color.PrimaryAppColor
         slider.thumbTintColor = Color.whiteColor()
         
         slider.minimumValue = 0

@@ -11,6 +11,8 @@ import UIKit
 
 protocol AuthenticationDelegate {
     
+    func userDidCancelAuthentication()
+    
     func authenticationDidSucceed()
 }
 
@@ -74,9 +76,19 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
         }
     }
     
+    override func prefersStatusBarHidden() -> Bool {
+        return false
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
+    
     // MARK: Actions
     func cancel()
     {
+        delegate?.userDidCancelAuthentication()
+
         view.endEditing(true)
 
         dismissViewControllerAnimated(true, completion: nil)

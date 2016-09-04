@@ -37,12 +37,20 @@ public class Color: UIColor
         return UIColor.whiteColor()
     }
     
-    static let DarkNavyColor: UIColor = ColorCode(14, green: 36, blue: 106, alpha: 1.0)
+    // MARK: New Colors
+    static let PrimaryAppColor: UIColor = ColorCode(76, green: 133, blue: 238, alpha: 1.0)
     
-    static let VeryDarkNavyColor: UIColor = ColorCode(7, green: 22, blue: 69, alpha: 1.0)
+    static let HighlightedPrimaryAppColor: UIColor = ColorCode(37, green: 114, blue: 212, alpha: 1.0)
     
-    static let DarkTextColor: UIColor = ColorCode(36, green: 40, blue: 49, alpha: 1.0)
+    static let GrayColor: UIColor = ColorCode(0, green: 0, blue: 0, alpha: 0.3)
     
+    static let DarkTextColor: UIColor = ColorCode(40, green: 45, blue: 44, alpha: 1.0)
+
+//    static let DarkNavyColor: UIColor = ColorCode(14, green: 36, blue: 106, alpha: 1.0)
+    
+//    static let VeryDarkNavyColor: UIColor = ColorCode(7, green: 22, blue: 69, alpha: 1.0)
+    
+    // MARK: Old Colors
     static let RedColor: UIColor = ColorCode(244, green: 67, blue: 54, alpha: 1.0)
     
     static let GreenColor: UIColor = ColorCode(90, green: 182, blue: 94, alpha: 1.0)

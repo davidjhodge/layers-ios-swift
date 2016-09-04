@@ -15,7 +15,7 @@ class ProductWebViewController: SFSafariViewController, SFSafariViewControllerDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.tintColor = Color.DarkNavyColor
+        view.tintColor = Color.PrimaryAppColor
         
         modalPresentationStyle = .OverFullScreen
     }

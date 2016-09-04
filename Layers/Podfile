@@ -27,6 +27,8 @@ pod 'Fabric', '~> 1.6'
 pod 'Crashlytics', '~> 3.7'
 pod 'IDMPhotoBrowser', '~> 1.8'
 pod 'KLCPopup', '~> 1.0'
+pod 'FRHyperLabel', '~> 1.0'
+pod 'DateTools', '~> 1.7'
 
 end
 

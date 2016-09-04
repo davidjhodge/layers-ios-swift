@@ -38,18 +38,21 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         let titleLabel = UILabel(frame: CGRectMake(0,0,28,80))
         titleLabel.attributedText = NSAttributedString(string: "Layers".uppercaseString, attributes: [NSForegroundColorAttributeName: Color.whiteColor(),
-            NSFontAttributeName: Font.CharterBold(size: 20.0),
-            NSKernAttributeName: 2.0]
+            NSFontAttributeName: Font.PrimaryFontRegular(size: 18.0),
+            NSKernAttributeName: 2.5]
         )
         navigationItem.titleView = titleLabel
         
-        tabBarItem.title = "Discover".uppercaseString
+        tabBarItem.title = "Discover"
         tabBarItem.image = UIImage(named: "shirt")
         tabBarItem.image = UIImage(named: "shirt-filled")
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Change status bar style to .LightContent
+        navigationController?.navigationBar.barStyle = .Black
         
         collectionView.backgroundColor = Color.BackgroundGrayColor
         collectionView.alwaysBounceVertical = true
@@ -104,10 +107,6 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         super.viewDidLayoutSubviews()
         
         spinner.center = collectionView.center
-    }
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return false
     }
     
     // MARK: Networking
