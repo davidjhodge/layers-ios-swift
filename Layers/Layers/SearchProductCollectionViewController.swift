@@ -30,7 +30,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     
     var filterItem: AnyObject?
     
-    var products: Array<SimpleProductResponse>?
+    var products: Array<Product>?
     
     var currentPage: Int?
     
@@ -48,11 +48,11 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
 
         if let selection = selectedItem
         {
-            if let category = selection as? CategoryResponse
+            if let category = selection as? Category
             {
                 filterItem = category
                 
-                if let categoryTitle = category.categoryName
+                if let categoryTitle = category.name
                 {
                     title = categoryTitle.uppercaseString
                 }
@@ -63,11 +63,11 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                     currentFilter.categories.selections = [filterObject]
                 }
             }
-            else if let brand = selection as? BrandResponse
+            else if let brand = selection as? Brand
             {
                 filterItem = brand
                 
-                if let brandName = brand.brandName
+                if let brandName = brand.name
                 {
                     title = brandName.uppercaseString
                 }
@@ -125,7 +125,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         
         if let selection = selectedItem
         {
-            if let _ = selection as? CategoryResponse
+            if let _ = selection as? Category
             {
                 if let currentSelections = FilterManager.defaultManager.getCurrentFilter().categories.selections
                 {
@@ -171,7 +171,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 
                 if success
                 {
-                    if let newProducts: Array<SimpleProductResponse> = response as? Array<SimpleProductResponse>
+                    if let newProducts: Array<Product> = response as? Array<Product>
                     {
                         self.currentPage = page + 1
                         
@@ -341,7 +341,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         
         if let items = products
         {
-            let product: SimpleProductResponse = items[indexPath.row]
+            let product: Product = items[indexPath.row]
             
             let cell: ProductCell = collectionView.dequeueReusableCellWithReuseIdentifier(kProductCellIdentfier, forIndexPath: indexPath) as! ProductCell
             
@@ -371,59 +371,50 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
             if let variant = variant
             {
                 //Set Image View with first image
-                if let firstImage = variant.images?[safe: 0]
-                {
-                    if let primaryUrl = firstImage.primaryUrl
-                    {
-                        let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize116)
-                        
-                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
-                            
-                            if error != nil
-                            {
-                                if let placeholderImage = UIImage(named: "image-placeholder")
-                                {
-                                    cell.productImageView.contentMode = .Center
 
-                                    cell.productImageView.image = placeholderImage
-                                }
-                            }
-                            else
-                            {
-                                cell.productImageView.contentMode = .ScaleAspectFit
-                            }
-                        })
-                    }
-                }
-                
-                //Set Price for first size
-                if let firstSize = variant.sizes?[safe:  0]
-                {
-                    if let priceInfo = firstSize.price
-                    {
+//                if let firstImage = variant.images?[safe: 0]
+//                {
+//                    if let primaryUrl = firstImage.primaryUrl
+//                    {
+//                        let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize116)
+//                        
+//                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
+//                            
+//                            if error != nil
+//                            {
+//                                if let placeholderImage = UIImage(named: "image-placeholder")
+//                                {
+//                                    cell.productImageView.contentMode = .Center
+//
+//                                    cell.productImageView.image = placeholderImage
+//                                }
+//                            }
+//                            else
+//                            {
+//                                cell.productImageView.contentMode = .ScaleAspectFit
+//                            }
+//                        })
+//                    }
+//                }
+        
+                //Set Price
                         var currentPrice: NSNumber?
                         var retailPrice: NSNumber?
                         
-                        if let altCouponPrice = firstSize.altPrice?.priceAfterCoupon
-                        {
-                            currentPrice = altCouponPrice
-                        }
-                        else if let currPrice = priceInfo.price
+                        if let currPrice = product.altPrice?.salePrice
                         {
                             currentPrice = currPrice
                         }
                         
-                        if let retail = priceInfo.retailPrice
+                        if let retail = product.price?.price
                         {
                             retailPrice = retail
                         }
                         
                         cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(retailPrice, salePrice: currentPrice)
-                    }
-                }
             }
             
-            if let brandName = product.brand?.brandName
+            if let brandName = product.brand?.name
             {
                 cell.brandLabel.text = brandName.uppercaseString
             }
@@ -456,7 +447,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         {
             if let productCollection = products
             {
-                if let product = productCollection[indexPath.row] as SimpleProductResponse?
+                if let product = productCollection[indexPath.row] as Product?
                 {
                     if let productId = product.productId
                     {

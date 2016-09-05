@@ -1,0 +1,60 @@
+//
+//  Product.swift
+//  Layers
+//
+//  Created by David Hodge on 9/4/16.
+//  Copyright © 2016 Layers. All rights reserved.
+//
+
+import UIKit
+import ObjectMapper
+
+class Product: Mappable
+{
+    var productId: NSNumber?
+    
+    var outboundUrl: NSURL?
+    
+    var brandedName: String?
+    
+    var unbrandedName: String?
+    
+    var brand: Brand?
+    
+    var categories: Array<Category>?
+    
+    var price: Price?
+    
+    var altPrice: AltPrice?
+    
+    var variants: Array<Variant>?
+    
+    var images: Images?
+    
+    var retailer: Retailer?
+    
+    var productDescription: String?
+    
+    var inStock: Bool?
+    
+    required init?(_ map: Map) {
+        
+    }
+    
+    func mapping(map: Map) {
+        productId                <-  map["id"]
+        outboundUrl              <-  (map["outbound_url"], URLTransform())
+        brandedName              <-  map["branded_name"]
+        unbrandedName            <-  map["unbranded_name"]
+        brand                    <-  map["brand"]
+        price                    <-  map["price"]
+        altPrice                 <-  map["alt_pricing"]
+        variants                 <-  map["variants"]
+        images                   <-  map["images"]
+        retailer                 <-  map["retailer"]
+        productDescription       <-  map["description"]
+        inStock                  <-  map["in_stock"]
+        
+
+    }
+}

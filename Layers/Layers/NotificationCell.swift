@@ -19,6 +19,10 @@ class NotificationCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        leftImageView.layer.cornerRadius = leftImageView.bounds.size.width * 0.5
+        
+        rightImageView.layer.cornerRadius = rightImageView.bounds.size.width * 0.5
+
         layer.cornerRadius = 4.0
     }
 }

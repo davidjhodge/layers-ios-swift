@@ -31,20 +31,20 @@ public struct FilterObject
 
 struct Filter
 {
-    var categories: (selections: Array<FilterObject>?, all: Array<FilterObject>?, originals: Array<CategoryResponse>?)
+    var categories: (selections: Array<FilterObject>?, all: Array<FilterObject>?, originals: Array<Category>?)
     
-    var brands: (selections: Array<FilterObject>?, all: Array<FilterObject>?, originals: Array<BrandResponse>?)
+    var brands: (selections: Array<FilterObject>?, all: Array<FilterObject>?, originals: Array<Brand>?)
     
     var retailers: (selections: Array<FilterObject>?, all: Array<FilterObject>?)
     
     var priceRange: PriceFilter?
     
-    var colors: (selections: Array<ColorResponse>?, all: Array<ColorResponse>?)
+    var colors: (selections: Array<ColorObject>?, all: Array<ColorObject>?)
 }
 
 typealias FilterOriginalCompletionBlock = ((success: Bool, response:Array<AnyObject>?) -> Void)
 typealias FilterCompletionBlock = ((success: Bool, response:Array<FilterObject>?) -> Void)
-typealias ColorCompletionBlock = ((success: Bool, response:Array<ColorResponse>?) -> Void)
+typealias ColorCompletionBlock = ((success: Bool, response:Array<ColorObject>?) -> Void)
 
 // Compare by keys
 func ==(lhs:FilterObject, rhs:FilterObject) -> Bool { // Implement Equatable
@@ -219,7 +219,7 @@ class FilterManager
             
             for color in colors
             {
-                if let colorName = color.colorName
+                if let colorName = color.name
                 {
                     // First brand
                     if colorParams.characters.count == 0
@@ -298,7 +298,7 @@ class FilterManager
                 {
                     if let completion = completionHandler
                     {
-                        if let categoryArray = response as? Array<CategoryResponse>
+                        if let categoryArray = response as? Array<Category>
                         {
                             // Store an original copy
                             self.filter.categories.originals = categoryArray
@@ -346,7 +346,7 @@ class FilterManager
                 {
                     if let completion = completionHandler
                     {
-                        if let brandArray = response as? Array<BrandResponse>
+                        if let brandArray = response as? Array<Brand>
                         {
                             // Store an original copy
                             self.filter.brands.originals = brandArray
@@ -391,7 +391,7 @@ class FilterManager
                 {
                     if let completion = completionHandler
                     {
-                        if let retailerArray = response as? Array<RetailerResponse>
+                        if let retailerArray = response as? Array<Retailer>
                         {
                             if let filters = FilterObjectConverter.filterObjectArray(retailerArray)
                             {
@@ -431,7 +431,7 @@ class FilterManager
                 {
                     if let completion = completionHandler
                     {
-                        if let colorArray = response as? Array<ColorResponse>
+                        if let colorArray = response as? Array<ColorObject>
                         {
                             completion(success: true, response: colorArray)
                         }

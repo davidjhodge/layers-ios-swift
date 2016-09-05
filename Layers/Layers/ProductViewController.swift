@@ -15,7 +15,7 @@ import IDMPhotoBrowser
 
 private enum TableSection: Int
 {
-    case ProductHeader = 0, Variant, Reviews, PriceHistory, _Count
+    case ProductHeader = 0, Variant, _Count
 }
 
 private enum VariantType: Int
@@ -38,15 +38,13 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var productIdentifier: NSNumber?
     
-    var product: ProductResponse?
+    var product: Product?
     
     var selectedSegmentIndex: Int?
     
     var selectedVariant: Variant?
     
     var selectedSize: Size?
-    
-    var priceData: PricingResponse?
     
     //Dummy text fields to handle input views
     let styleTextField: UITextField = UITextField()
@@ -85,8 +83,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             navigationController?.setNavigationBarHidden(false, animated: true)
         }
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(toggleSaleAlert), name: kUserDidRegisterForNotifications, object: nil)
-        
         setupPickers()
         
         reloadProduct()
@@ -107,9 +103,9 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 if success
                 {
-                    if let productResponse = response as? ProductResponse
+                    if let product = response as? Product
                     {
-                        self.product = productResponse
+                        self.product = product
                         
                         // Set current Variant and size to the first index of each array by default
                         var variant: Variant?
@@ -171,34 +167,13 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         // Product Title
         if let product = self.product
         {
-            if let productTitle = product.productName
+            if let productTitle = product.unbrandedName
             {
                 self.title = productTitle
             }
         }
         
         tableView.reloadData()
-    }
-    
-    func reloadPriceData()
-    {
-        if let productId = product?.productId,
-            let variantId = selectedVariant?.styleId,
-            let sizeId = selectedSize?.specificId
-        {
-            LRSessionManager.sharedManager.loadPriceHistory(productId, variantId: variantId, sizeId: sizeId, completionHandler: { (success, error, response) -> Void in
-                
-                if success
-                {
-                    
-                }
-                else
-                {
-                    log.error(error)
-                }
-            })
-
-        }
     }
     
     func setupPickers()
@@ -257,15 +232,12 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if let currentProduct = self.product
         {
-            if let urlString = currentProduct.outboundUrl
+            if let url = currentProduct.outboundUrl
             {
-                if let url = NSURL(string: urlString)
-                {
-                    showWebBrowser(url)
-                }
+                showWebBrowser(url)
             }
             
-            if let productName = currentProduct.productName,
+            if let productName = currentProduct.brandedName,
                 let productId = currentProduct.productId
             {
                 FBSDKAppEvents.logEvent("Product Page Clickthrough Web Views", parameters: ["Product Name":productName, "Product ID":productId])
@@ -314,144 +286,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         })
     }
     
-    func createSaleAlert()
-    {
-        let indexPath = NSIndexPath(forRow: 0, inSection: TableSection.PriceHistory.rawValue)
-
-        if let priceHistoryCell = self.tableView.cellForRowAtIndexPath(indexPath) as? PriceGraphCell
-        {   // Modify scroll view response
-            for case let x as UIScrollView in tableView.subviews
-            {
-                x.delaysContentTouches = false
-            }
-            
-            if let productId = productIdentifier
-            {
-                LRSessionManager.sharedManager.createSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        priceHistoryCell.createSaleAlertButton.userInteractionEnabled = true
-                        priceHistoryCell.spinner.stopAnimating()
-                    })
-                    
-                    if success
-                    {
-                        // Post Notification
-                        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kSaleAlertCreatedNotification, object: nil))
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            UIView.performWithoutAnimation({ () -> Void in
-                                
-                                priceHistoryCell.createSaleAlertButton.setTitle("Watching".uppercaseString, forState: .Normal)
-                            })
-                        })
-                        
-                        self.product?.isWatching = true
-                    }
-                    else
-                    {
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                            self.presentViewController(alert, animated: true, completion: nil)
-                        })
-                    }
-                })
-            }
-        }
-    }
-    
-    func toggleSaleAlert()
-    {
-        // Register for remote notification if needed
-        if !LRSessionManager.sharedManager.userHasEnabledNotifications()
-        {
-            // Register user for notifications
-            LRSessionManager.sharedManager.registerForRemoteNotificationsIfNeeded()
-        }
-        else
-        {
-            if let isWatching = product?.isWatching
-            {
-                let indexPath = NSIndexPath(forRow: 0, inSection: TableSection.PriceHistory.rawValue)
-                
-                if let priceHistoryCell = self.tableView.cellForRowAtIndexPath(indexPath) as? PriceGraphCell
-                {
-                    
-                    priceHistoryCell.createSaleAlertButton.userInteractionEnabled = false
-                    
-                    UIView.performWithoutAnimation({ () -> Void in
-                        
-                        priceHistoryCell.createSaleAlertButton.setTitle(" ", forState: .Normal)
-                    })
-                    
-                    priceHistoryCell.spinner.startAnimating()
-                    
-                    if !isWatching
-                    {
-                        product?.isWatching = true
-                        
-                        // Create New Alert
-                        if let productId = productIdentifier
-                        {
-                            FBSDKAppEvents.logEvent("Product Page Create Sale Alert", parameters: ["ProductID":productId])
-                        }
-                        
-                        createSaleAlert()
-                    }
-                    else
-                    {
-                        product?.isWatching = false
-                        
-                        // Delete Alert
-                        if let productId = productIdentifier
-                        {
-                            FBSDKAppEvents.logEvent("Product Page Delete Sale Alert", parameters: ["ProductID":productId])
-                        }
-                        
-                        if let productId = productIdentifier
-                        {
-                            LRSessionManager.sharedManager.deleteSaleAlert(productId, completionHandler: { (success, error, response) -> Void in
-                                
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                    
-                                    priceHistoryCell.createSaleAlertButton.userInteractionEnabled = true
-                                    priceHistoryCell.spinner.stopAnimating()
-                                })
-                                
-                                if success
-                                {
-                                    // Post Notification
-                                    NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: kSaleAlertDeletedNotification, object: nil))
-                                    
-                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                        
-                                        UIView.performWithoutAnimation({ () -> Void in
-                                            
-                                            priceHistoryCell.createSaleAlertButton.setTitle("Create a Price Alert".uppercaseString, forState: .Normal)
-                                        })
-                                    })
-                                }
-                                else
-                                {
-                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                        
-                                        let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                                        self.presentViewController(alert, animated: true, completion: nil)
-                                    })
-                                }
-                            })
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
     func showPicker(textField: UITextField?)
     {
         // If an existing picker is already in view, remove it
@@ -473,8 +307,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         if let product = product
         {
             if let productId = product.productId,
-            let productName = product.productName,
-            let category = product.category?.categoryName
+            let productName = product.brandedName,
+                let category = product.categories?[safe: 0]?.name
             {
                 FBSDKAppEvents.logEvent("Product Page Photo Taps", parameters: ["Product ID":productId, "Product Name":productName, "Category Name":category])
             }
@@ -554,32 +388,17 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        if let product = product
+        if let tableSection: TableSection = TableSection(rawValue: section)
         {
-            if let tableSection: TableSection = TableSection(rawValue: section)
-            {
-                switch tableSection {
-                case .ProductHeader:
-                    return 1
-                    
-                case .Variant:
-                    return 2
-                    
-                case .Reviews:
-                    
-                    if product.rating?.score != nil
-                    {
-                        return 1
-                    }
-                    
-                    return 0
-                    
-                case .PriceHistory:
-                    return 1
-
-                default:
-                    return 0
-                }
+            switch tableSection {
+            case .ProductHeader:
+                return 1
+                
+            case .Variant:
+                return 2
+                
+            default:
+                return 0
             }
         }
         
@@ -603,39 +422,41 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     cell.delegate = self
                     
-                    var productImages: Array<NSURL> = Array<NSURL>()
-                    
-                    if let imageDict = selectedVariant?.images?[safe: 0]
-                    {
-                        if let primaryUrl = imageDict.primaryUrl
-                        {
-                            let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize232)
-                            
-                            productImages.append(resizedPrimaryUrl)
-                            
-                            if let alternateUrls = imageDict.alternateUrls
-                            {
-                                for alternateUrl in alternateUrls
-                                {
-                                    let resizedAlternateUrl = NSURL.imageAtUrl(alternateUrl, imageSize: ImageSize.kImageSize232)
-                                    
-                                    productImages.append(resizedAlternateUrl)
-                                }
-                            }
-                        }
-                    }
-                    
-                    cell.setImageElements(productImages)
+                    // Set image URLs
+
+//                    var productImages: Array<NSURL> = Array<NSURL>()
+//
+//                    if let imageDict = selectedVariant?.images
+//                    {
+//                        if let primaryUrl = imageDict.primaryUrl
+//                        {
+//                            let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize232)
+//                            
+//                            productImages.append(resizedPrimaryUrl)
+//                            
+//                            if let alternateUrls = imageDict.alternateUrls
+//                            {
+//                                for alternateUrl in alternateUrls
+//                                {
+//                                    let resizedAlternateUrl = NSURL.imageAtUrl(alternateUrl, imageSize: ImageSize.kImageSize232)
+//                                    
+//                                    productImages.append(resizedAlternateUrl)
+//                                }
+//                            }
+//                        }
+//                    }
+//                    
+//                    cell.setImageElements(productImages)
                     
                     // For Analytics
                     cell.scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(photoTap)))
                     
-                    if let brandName = product.brand?.brandName
+                    if let brandName = product.brand?.name
                     {
                         cell.brandLabel.text = brandName.uppercaseString
                     }
                     
-                    if let productName = product.productName
+                    if let productName = product.unbrandedName
                     {
                         cell.nameLabel.text = productName
                     }
@@ -646,18 +467,14 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     var currentPrice: NSNumber?
                     
                     // If a coupon price exists, show it instead of the default price
-                    if let altCouponPrice = selectedSize?.altPrice?.priceAfterCoupon
-                    {
-                        currentPrice = altCouponPrice
-                    }
-                    else if let currPrice = selectedSize?.price?.price
+                    if let currPrice = product.altPrice?.salePrice
                     {
                         currentPrice = currPrice
                     }
                     
                     if let currentPrice = currentPrice
                     {
-                        if let retailPrice = selectedSize?.price?.retailPrice
+                        if let retailPrice = product.price?.price
                         {
                             if (currentPrice.floatValue != retailPrice.floatValue)
                             {
@@ -705,18 +522,12 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             
                             cell.styleLabel.text = ""
                             
-                            if let variantName = selectedVariant?.styleName
+                            if let variantName = selectedVariant?.color
                             {
                                 cell.styleLabel.text = variantName.capitalizedString
                             }
                             
-                            if let selectedColor = selectedVariant?.color
-                            {
-                                if let red = selectedColor.red?.floatValue, blue = selectedColor.blue?.floatValue, green = selectedColor.green?.floatValue
-                                {
-                                    cell.colorSwatchView.backgroundColor = UIColor(colorLiteralRed: red/255.0, green: green/255.0, blue: blue/255.0, alpha: 1.0)
-                                }
-                            }
+                            // Should set color swatches here
                             
                             cell.selectionStyle = .None
                             
@@ -728,7 +539,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             
                             cell.sizeLabel.text = ""
                             
-                            if let sizeName = selectedSize?.sizeTitle
+                            if let sizeName = selectedSize?.sizeName
                             {
                                 cell.sizeLabel.text = sizeName
                             }
@@ -742,75 +553,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             
                         }
                     }
-                    
-                case .Reviews:
-                    
-                    if indexPath.row == 0
-                    {
-                        // Header Cell
-                        let cell: OverallReviewCell = tableView.dequeueReusableCellWithIdentifier("OverallReviewCell") as! OverallReviewCell
-                        
-                        cell.rightLabel.font = Font.OxygenBold(size: 12.0)
-                        cell.rightLabel.textColor = Color.grayColor()
-                        
-                        if let firstRating = product.rating
-                        {
-                            if let rating = firstRating.score
-                            {
-                                cell.ratingLabel.text = rating.stringValue
-                                
-                                cell.starView.rating = rating.doubleValue
-                            }
-                            
-                            if let reviewCount = product.reviewCount
-                            {
-                                if reviewCount.integerValue == 1
-                                {
-                                    cell.rightLabel.text = "See \(reviewCount) review".uppercaseString
-                                }
-                                else if reviewCount.integerValue > 0
-                                {
-                                    cell.rightLabel.text = "See \(reviewCount) reviews".uppercaseString
-                                }
-                                else
-                                {
-                                    cell.rightLabel.text = "No Reviews".uppercaseString
-                                    
-                                    // Just in case
-                                    cell.userInteractionEnabled = false
-                                }
-                            }
-                        }
-                        
-                        return cell
-                    }
-                    
-                case .PriceHistory:
-                    
-                    let cell: PriceGraphCell = tableView.dequeueReusableCellWithIdentifier("PriceGraphCell") as! PriceGraphCell
-                    
-                    cell.selectionStyle = .None
-                    
-                    var buttonTitle = ""
-                    
-                    if product.isWatching
-                    {
-                        buttonTitle = "Watching".uppercaseString
-                    }
-                    else
-                    {
-                        buttonTitle = "Create a Sale Alert".uppercaseString
-                    }
-                    
-                    cell.createSaleAlertButton.setTitle(buttonTitle, forState: .Normal)
-                    cell.createSaleAlertButton.setTitleColor(Color.whiteColor(), forState: [.Normal, .Highlighted])
-                    
-                    cell.createSaleAlertButton.setBackgroundColor(Color.PrimaryAppColor, forState: .Normal)
-                    cell.createSaleAlertButton.setBackgroundColor(Color.HighlightedPrimaryAppColor, forState: .Highlighted)
-                    
-                    cell.createSaleAlertButton.addTarget(self, action: #selector(toggleSaleAlert), forControlEvents: .TouchUpInside)
-                    
-                    return cell
                     
                 default:
                     return UITableViewCell(style: .Default, reuseIdentifier: "UITableViewCell")
@@ -872,8 +614,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         if let product = product
                         {
                             if let productId = product.productId,
-                                let productName = product.productName,
-                                let category = product.category?.categoryName
+                                let productName = product.brandedName,
+                                let category = product.categories?[safe: 0]?.name
                             {
                                 FBSDKAppEvents.logEvent("Product Page Style Taps", parameters: ["ProductID": productId, "Product Name": productName, "Category":category])
                             }
@@ -886,30 +628,12 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         if let product = product
                         {
                             if let productId = product.productId,
-                                let productName = product.productName,
-                                let category = product.category?.categoryName
+                                let productName = product.brandedName,
+                                let category = product.categories?[safe: 0]?.name
                             {
                                 FBSDKAppEvents.logEvent("Product Page Size Taps", parameters: ["ProductID": productId, "Product Name": productName, "Category":category])
                             }
                         }
-                    }
-                }
-                
-            case .Reviews:
-                
-                if indexPath.row == 0
-                {
-                    // Header Cell
-                    tableView.deselectRowAtIndexPath(indexPath, animated: true)
-                    
-                    let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-                    if let reviewsVc = storyboard.instantiateViewControllerWithIdentifier("ReviewsViewController") as? ReviewsViewController, let currentProduct = self.product
-                    {
-                        reviewsVc.productId = currentProduct.productId
-                        
-                        reviewsVc.product = product
-                        
-                        navigationController?.pushViewController(reviewsVc, animated: true)
                     }
                 }
                 
@@ -932,15 +656,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .Variant:
                 return 48.0
-                
-            case .Reviews:
-                if indexPath.row == 0
-                {
-                    return 48.0
-                }
-                
-            case .PriceHistory:
-                return 80.0
                 
             default:
                 return 44.0
@@ -972,18 +687,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             case .Variant:
                 return 4.0
                 
-            case .Reviews:
-                
-                if product?.rating?.score != nil
-                {
-                    return 4.0
-                }
-
-                return 0.01
-                
-            case .PriceHistory:
-                return 4.0
-                
             default:
                 return 4.0
             }
@@ -1003,19 +706,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 
             case .Variant:
                 return 4.0
-                
-            case .Reviews:
-                
-                if product?.rating?.score != nil
-                {
-                    return 4.0
-                }
-                
-                return 0.01
-                
-            case .PriceHistory:
-                return 8.0
-
+            
             default:
                 return 8.0
             }
@@ -1108,18 +799,20 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     {
                         if let variant = product.variants?[row]
                         {
-                            if let variantName = variant.styleName
+                            if let variantName = variant.color
                             {
                                 pickerRow.textLabel.text = variantName.capitalizedString
                             }
                             
-                            if let color = variant.color
-                            {
-                                if let red = color.red?.floatValue, blue = color.blue?.floatValue, green = color.green?.floatValue
-                                {
-                                    pickerRow.colorSwatchView.backgroundColor = UIColor(colorLiteralRed: red/255.0, green: green/255.0, blue: blue/255.0, alpha: 1.0)
-                                }
-                            }
+                            // Set color
+                            
+//                            if let color = variant.color
+//                            {
+//                                if let red = color.red?.floatValue, blue = color.blue?.floatValue, green = color.green?.floatValue
+//                                {
+//                                    pickerRow.colorSwatchView.backgroundColor = UIColor(colorLiteralRed: red/255.0, green: green/255.0, blue: blue/255.0, alpha: 1.0)
+//                                }
+//                            }
                         }
                     }
                 }
@@ -1129,7 +822,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     {
                         if let size = currentVariant.sizes?[row]
                         {
-                            if let sizeName = size.sizeTitle
+                            if let sizeName = size.sizeName
                             {
                                 pickerRow.textLabel.text = sizeName.capitalizedString
                             }
@@ -1175,7 +868,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             {
                 if let variant = product.variants?[row]
                 {
-                    if let variantName = variant.styleName
+                    if let variantName = variant.color
                     {
                         return variantName.capitalizedString
                     }
@@ -1188,7 +881,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             {
                 if let size = currentVariant.sizes?[row]
                 {
-                    if let sizeName = size.sizeTitle
+                    if let sizeName = size.sizeName
                     {
                         return sizeName
                     }
@@ -1236,23 +929,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         navController.modalPresentationStyle = .OverFullScreen
         
         presentViewController(navController, animated: true, completion: nil)
-    }
-    
-    // MARK: Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if segue.identifier == "ShowReviewsViewController"
-        {
-            if let currentProduct = self.product
-            {
-                if let destinationViewController = segue.destinationViewController as? ReviewsViewController
-                {
-                    destinationViewController.productId = currentProduct.productId
-                    
-                    destinationViewController.product = product
-                }
-            }
-        }
     }
     
     deinit

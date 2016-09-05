@@ -21,13 +21,13 @@ extension Variant
                     //Color filtering is active
                     
                     // Determine if first variant matches color filter
-                    if let firstDefinedColor = currVariant.color?.definedColorId
-                    {
-                        if let _: ColorResponse = selectedColors.filter({$0.colorId == firstDefinedColor }).first
-                        {
-                            return currVariant
-                        }
-                    }
+//                    if let firstDefinedColor = currVariant.color?.definedColorId
+//                    {
+//                        if let _: ColorResponse = selectedColors.filter({$0.colorId == firstDefinedColor }).first
+//                        {
+//                            return currVariant
+//                        }
+//                    }
                 }
             }
         }

@@ -42,7 +42,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>3322</string>
+	<string>3337</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -83,7 +83,7 @@
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<false/>
+		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>akamaihd.net</key>

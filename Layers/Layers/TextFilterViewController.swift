@@ -143,14 +143,9 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
                     
                     if success
                     {
-                        if let categories = results as? Array<CategoryResponse>
+                        if let categories = results as? Array<Category>
                         {
-                            // Parent Categories have a parentId of 1291772459766252500
-                            let parentCategories = categories.filter({
-                                $0.parentId == NSNumber(longLong: 1291772459766252500)
-                            })
-                            
-                            let filterObjects = FilterObjectConverter.filterObjectArray(parentCategories)
+                            let filterObjects = FilterObjectConverter.filterObjectArray(categories)
                             
                             self.items = filterObjects
                             

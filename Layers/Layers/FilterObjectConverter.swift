@@ -15,40 +15,40 @@ class FilterObjectConverter
     {
             var filter: FilterObject = FilterObject()
             
-            if let categoryResponse = filterResponse as? CategoryResponse
+//            if let category = filterResponse as? Category
+//            {
+//                if let categoryName = category.name
+//                {
+//                    filter.name = categoryName
+//                }
+//                
+//                if let key = category.categoryId
+//                {
+//                    filter.key = key
+//                }
+//            }
+            if let brand = filterResponse as? Brand
             {
-                if let name = categoryResponse.categoryName
+                if let name = brand.name
                 {
                     filter.name = name
                 }
                 
-                if let key = categoryResponse.categoryId?.longLongValue
+                if let key = brand.brandId
                 {
-                    filter.key = NSNumber(longLong: key)
+                    filter.key = key
                 }
             }
-            else if let brandResponse = filterResponse as? BrandResponse
+            else if let retailer = filterResponse as? Retailer
             {
-                if let name = brandResponse.brandName
+                if let name = retailer.name
                 {
                     filter.name = name
                 }
                 
-                if let key = brandResponse.brandId?.longLongValue
+                if let key = retailer.retailerId
                 {
-                    filter.key = NSNumber(longLong: key)
-                }
-            }
-            else if let retailerResponse = filterResponse as? RetailerResponse
-            {
-                if let name = retailerResponse.retailerName
-                {
-                    filter.name = name
-                }
-                
-                if let key = retailerResponse.retailerId?.longLongValue
-                {
-                    filter.key = NSNumber(longLong: key)
+                    filter.key = key
                 }
             }
             

@@ -2,27 +2,37 @@
 //  Image.swift
 //  Layers
 //
-//  Created by David Hodge on 5/1/16.
+//  Created by David Hodge on 9/4/16.
 //  Copyright © 2016 Layers. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import ObjectMapper
 
-class Image: Mappable
-{
-    var primaryUrl: NSURL?
+class Image: Mappable {
+
+    var actualWidth: NSNumber?
     
-    var alternateUrls: Array<NSURL>?
+    var actualHeight: NSNumber?
+    
+    var width: NSNumber?
+    
+    var url: NSURL?
+    
+    var sizeName: String?
+    
+    var height: NSNumber?
     
     required init?(_ map: Map) {
         
     }
     
-    func mapping(map: Map)
-    {
-        primaryUrl                <- (map["primary_url"], URLTransform())
-        alternateUrls             <- (map["alternate_urls"], URLTransform())
+    func mapping(map: Map) {
+        actualWidth             <-  map["actual_width"]
+        actualHeight            <-  map["actual_height"]
+        width                   <-  map["width"]
+        url                     <-  (map["url"], URLTransform())
+        sizeName                <-  map["size_name"]
+        height                  <-  map["height"]
     }
-    
 }

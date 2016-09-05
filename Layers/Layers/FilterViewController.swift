@@ -39,6 +39,9 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Change status bar style to .LightContent
+        navigationController?.navigationBar.barStyle = .Black
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercaseString, style: .Plain, target: self, action: #selector(cancel))
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercaseString, style: .Plain, target: self, action: #selector(reset))
@@ -154,7 +157,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     }
 
     // MARK: Color Filter Delegate
-    func colorFilterChanged(colors: Array<ColorResponse>?) {
+    func colorFilterChanged(colors: Array<ColorObject>?) {
         
         newFilter.colors.selections = colors
         
@@ -284,7 +287,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 {
                     if colorSelections.count == 1
                     {
-                        if let firstColorName = colorSelections.first?.colorName
+                        if let firstColorName = colorSelections.first?.name
                         {
                             cell.filterSelectionLabel.text = firstColorName.capitalizedString
                         }
@@ -435,7 +438,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 
                 if let currentFilters = newFilter.colors.selections
                 {
-                    var array = Array<ColorResponse>()
+                    var array = Array<ColorObject>()
                     
                     for currFilter in currentFilters
                     {

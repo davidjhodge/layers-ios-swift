@@ -1,5 +1,5 @@
 //
-//  ColorObject.swift
+//  Brand.swift
 //  Layers
 //
 //  Created by David Hodge on 9/4/16.
@@ -9,21 +9,18 @@
 import UIKit
 import ObjectMapper
 
-class ColorObject: Mappable
+class Brand: Mappable
 {
-    var colorId: NSNumber?
+    var brandId: NSNumber?
     
     var name: String?
-    
-    var rank: NSNumber?
     
     required init?(_ map: Map) {
         
     }
     
     func mapping(map: Map) {
-        colorId         <-  map["id"]
-        name            <-  map["name"]
-        rank            <-  map["rank"]
+        brandId              <-  map["id"]
+        name                 <-  map["name"]
     }
 }

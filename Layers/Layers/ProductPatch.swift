@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension SimpleProductResponse
+extension Product
 {
     func isValid() -> Bool
     {
@@ -22,12 +22,9 @@ extension SimpleProductResponse
                 && firstVariant.images?.count > 0
                 {
                     // Check if price information exists
-                    if let firstSize = firstVariant.sizes?[safe: 0]
+                    if price?.price != nil
                     {
-                        if firstSize.price?.price != nil
-                        {
-                            return true
-                        }
+                        return true
                     }
                 }
             }

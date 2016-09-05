@@ -21,4 +21,16 @@ public class FontAttributes: NSObject
         NSFontAttributeName: Font.PrimaryFontSemiBold(size: 14.0),
         NSKernAttributeName: 1.3
     ]
+    
+    static let headerTextAttributes = [
+        NSForegroundColorAttributeName: Color.DarkTextColor,
+        NSFontAttributeName: Font.PrimaryFontSemiBold(size: 14.0),
+        NSKernAttributeName: 1.3
+    ]
+    
+    static let bodyTextAttributes = [
+        NSForegroundColorAttributeName: Color.DarkTextColor,
+        NSFontAttributeName: Font.PrimaryFontSemiBold(size: 14.0),
+        NSKernAttributeName: 1.0
+    ]
 }

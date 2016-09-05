@@ -11,7 +11,7 @@ import UIKit
 
 protocol ColorFilterDelegate
 {
-    func colorFilterChanged(colors: Array<ColorResponse>?)
+    func colorFilterChanged(colors: Array<ColorObject>?)
 }
 
 class ColorFilterViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
@@ -22,9 +22,9 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
     
     var filterType: FilterType?
     
-    var colors: Array<ColorResponse>?
+    var colors: Array<ColorObject>?
     
-    var selectedColors: Array<ColorResponse>?
+    var selectedColors: Array<ColorObject>?
     
     @IBOutlet weak var selectButton: UIButton!
     
@@ -120,7 +120,7 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
             {
                 if selectedColors == nil
                 {
-                    selectedColors = Array<ColorResponse>()
+                    selectedColors = Array<ColorObject>()
                 }
                 
                 selectedColors!.append(colors![index])
@@ -184,42 +184,42 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
         
         if let colors = colors
         {
-            let currentColor: ColorResponse = colors[indexPath.row]
-            
-            if let color = Color.colorFromHex(currentColor.colorHex)
-            {
-                //Darken white so that it's visible on screen
-                if currentColor.colorHex == "FFFFFF"
-                {
-                    cell.colorSwatchView.backgroundColor = UIColor(red: 249/255.0, green: 249/255.0, blue: 249/255.0, alpha: 1.0)
-                }
-                else
-                {
-                    cell.colorSwatchView.backgroundColor = color
-                }
-            }
-            
-            if let colorName = currentColor.colorName
-            {
-                cell.textLabel.text = colorName.capitalizedString
-            }
-            
-            // Show checkmark if selected
-            if let selections = selectedColors
-            {
-                if selections.contains({ $0.colorName == currentColor.colorName })
-                {
-                    cell.checkmarkImageView.hidden = false
-                }
-                else
-                {
-                    cell.checkmarkImageView.hidden = true
-                }
-            }
-            else
-            {
-                cell.checkmarkImageView.hidden = true
-            }
+//            let currentColor: ColorObject = colors[indexPath.row]
+//            
+//            if let color = Color.colorFromHex(currentColor.colorHex)
+//            {
+//                //Darken white so that it's visible on screen
+//                if currentColor.colorHex == "FFFFFF"
+//                {
+//                    cell.colorSwatchView.backgroundColor = UIColor(red: 249/255.0, green: 249/255.0, blue: 249/255.0, alpha: 1.0)
+//                }
+//                else
+//                {
+//                    cell.colorSwatchView.backgroundColor = color
+//                }
+//            }
+//            
+//            if let colorName = currentColor.colorName
+//            {
+//                cell.textLabel.text = colorName.capitalizedString
+//            }
+//            
+//            // Show checkmark if selected
+//            if let selections = selectedColors
+//            {
+//                if selections.contains({ $0.colorName == currentColor.colorName })
+//                {
+//                    cell.checkmarkImageView.hidden = false
+//                }
+//                else
+//                {
+//                    cell.checkmarkImageView.hidden = true
+//                }
+//            }
+//            else
+//            {
+//                cell.checkmarkImageView.hidden = true
+//            }
         }
         
         return cell

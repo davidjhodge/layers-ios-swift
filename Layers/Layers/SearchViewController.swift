@@ -21,7 +21,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     var searchResults: Array<AnyObject>?
     
-    var categories: Array<CategoryResponse>?
+    var categories: Array<Category>?
     
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     
@@ -37,10 +37,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Change status bar style to .LightContent
-        navigationController?.navigationBar.barStyle = .Black
-        
+    
         navBarImageView.image = UIButton.imageFromColor(Color.PrimaryAppColor)
         
         searchBar.backgroundImage = UIImage()
@@ -60,8 +57,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         view.addSubview(spinner)
         
         prepareToHandleKeyboard()
-
-        fetchCategories()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -84,51 +79,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         view.endEditing(true)
     }
     
-    // MARK: Categories
-    func fetchCategories()
-    {
-        spinner.startAnimating()
-        spinner.hidden = false
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        
-        FilterManager.defaultManager.fetchOriginalCategories({ (success, response) -> Void in
-         
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
-                self.spinner.stopAnimating()
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                
-                })
-            
-            if success
-            {
-                if let categories = response as? Array<CategoryResponse>
-                {
-                    var parentCategories = Array<CategoryResponse>()
-                    
-                    // Parent Categories have a parentId of 1291772459766252500
-                    parentCategories = categories.filter({
-                        $0.parentId == NSNumber(longLong: 1291772459766252500)
-                    })
-                    
-                    self.categories = parentCategories
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                      
-                        self.tableView.reloadData()
-                    })
-                }
-            }
-            else
-            {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                    let alert = UIAlertController(title: "We're having trouble fetching categories right now.", message: nil, preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
-                })
-            }
-        })
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
     }
     
     func shouldShowCategories() -> Bool
@@ -280,33 +232,25 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             
             if let searchResults = searchResults
             {
-                if let brand = searchResults[safe: indexPath.row] as? BrandResponse
+                if let brand = searchResults[safe: indexPath.row] as? Brand
                 {
-                    if let brandName = brand.brandName
+                    if let brandName = brand.name
                     {
                         cell.textLabel?.text = brandName
                     }
                 }
-                else if let category = searchResults[safe: indexPath.row] as? CategoryResponse
+                else if let category = searchResults[safe: indexPath.row] as? Category
                 {
-                    if let categoryName = category.categoryName
+                    if let categoryName = category.name
                     {
                         cell.textLabel?.text = categoryName
                     }
                 }
-                else if let product = searchResults[safe: indexPath.row] as? SearchProductResponse
+                else if let product = searchResults[safe: indexPath.row] as? Product
                 {
-                    if let brandName = product.brand?.brandName, let productName = product.productName
+                    if let productName = product.brandedName
                     {
-                        // Avoid repeating the brand twice, if the brand name is contained in both the product name and brand name
-                        if productName.lowercaseString.rangeOfString(brandName.lowercaseString) == nil
-                        {
-                            cell.textLabel?.text = "\(brandName) \(productName)"
-                        }
-                        else
-                        {
-                            cell.textLabel?.text = "\(productName)"
-                        }
+                        cell.textLabel?.text = "\(productName)"
                     }
                 }
             }
@@ -343,7 +287,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                 {
                     if let category = categories[safe: indexPath.row - 1]
                     {
-                        if let categoryTitle = category.categoryName
+                        if let categoryTitle = category.name
                         {
                             cell.textLabel!.text = categoryTitle
                         }
@@ -379,7 +323,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                         
                         navigationController?.pushViewController(searchProductCollectionVc, animated: true)
                         
-                        if let categoryName = category?.categoryName, categoryId = category?.categoryId
+                        if let categoryName = category?.name, categoryId = category?.categoryId
                         {
                             FBSDKAppEvents.logEvent("Search Categories Selected", parameters: ["Category Name":categoryName, "Category ID":categoryId
                                 ])
@@ -390,10 +334,10 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         }
         else if let results = searchResults
         {
-            if results[indexPath.row] is SearchProductResponse
+            if results[indexPath.row] is Product
             {
                 if let searchResults = searchResults,
-                    let product = searchResults[indexPath.row] as? SearchProductResponse
+                    let product = searchResults[indexPath.row] as? Product
                 {
                     if let productId = product.productId
                     {
@@ -405,7 +349,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                             
                             navigationController?.pushViewController(productVc, animated: true)
                             
-                            if let productName = product.productName
+                            if let productName = product.brandedName
                             {
                                 FBSDKAppEvents.logEvent("Search Product Selecttions", parameters: ["Product Name":productName, "Product ID":productId])
                             }
@@ -413,11 +357,11 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                     }
                 }
             }
-            else if results[indexPath.row] is BrandResponse
+            else if results[indexPath.row] is Brand
             {
                 performSegueWithIdentifier("ShowSearchProductCollectionViewController", sender: ["indexPath": indexPath, "filterTypeValue": FilterType.Brand.rawValue])
             }
-            else if results[indexPath.row] is CategoryResponse
+            else if results[indexPath.row] is Category
             {
                 performSegueWithIdentifier("ShowSearchProductCollectionViewController", sender: ["indexPath": indexPath, "filterTypeValue": FilterType.Category.rawValue])
             }
@@ -473,7 +417,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
         if let searchResults = searchResults,
-            let product = searchResults[indexPath.row] as? SearchProductResponse
+            let product = searchResults[indexPath.row] as? Product
         {
             if let productId = product.productId
             {
@@ -506,11 +450,11 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                             {
                                 destinationVc.filterType = filterType
                                 
-                                if let brand = searchResults[indexPath.row] as? BrandResponse
+                                if let brand = searchResults[indexPath.row] as? Brand
                                 {
                                     destinationVc.selectedItem = brand
                                     
-                                    if let brandName = brand.brandName,
+                                    if let brandName = brand.name,
                                     let brandId = brand.brandId
                                     {
                                         FBSDKAppEvents.logEvent("Search Brand Selections", parameters: ["Brand Name":brandName, "Brand ID":brandId])
@@ -521,11 +465,11 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                             {
                                 destinationVc.filterType = filterType
                                 
-                                if let category = searchResults[indexPath.row] as? CategoryResponse
+                                if let category = searchResults[indexPath.row] as? Category
                                 {
                                     destinationVc.selectedItem = category
                                     
-                                    if let categoryName = category.categoryName,
+                                    if let categoryName = category.name,
                                     let categoryId = category.categoryId
                                     {
                                         FBSDKAppEvents.logEvent("Search Category Selections", parameters: ["Category Name":categoryName, "Category ID":categoryId])

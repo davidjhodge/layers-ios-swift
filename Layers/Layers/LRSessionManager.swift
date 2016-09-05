@@ -15,8 +15,8 @@ import KeychainAccess
 
 import FBSDKLoginKit
 
-let kLRAPIBase = "https://api.trylayers.com/"
-//let kLRAPIBase = "http://52.22.85.12:8000/"
+//let kLRAPIBase = "https://api.trylayers.com/"
+let kLRAPIBase = "http://52.24.175.141:8000/"
 
 let kDeviceId = "kDeviceId"
 let kTokenObject = "kTokenObject"
@@ -802,7 +802,7 @@ class LRSessionManager: NSObject
     // MARK: Fetching Server Data
     func loadDiscoverProducts(completionHandler: LRCompletionBlock?)
     {
-        let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("discover"))
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/531614790"))
         
         request.HTTPMethod = "GET"
         
@@ -812,7 +812,7 @@ class LRSessionManager: NSObject
             {
                 if let jsonResponse = response
                 {
-                    var products = Mapper<SimpleProductResponse>().mapArray(jsonResponse.arrayObject)
+                    var products = Mapper<Product>().mapArray(jsonResponse.arrayObject)
                     
                     // Incomplete Product Patch
                     if products != nil
@@ -850,16 +850,19 @@ class LRSessionManager: NSObject
                 {
                     if let jsonResponse = response
                     {
-                        let product = Mapper<ProductResponse>().map(jsonResponse.dictionaryObject)
-                        
-                        if let sortedVariants = SizeSorter.sortSizes(product)
+                        if let product = Mapper<Product>().map(jsonResponse.arrayObject?[safe: 0])
                         {
-                            product?.variants = sortedVariants
+                            if let completion = completionHandler
+                            {
+                                completion(success: success, error: error, response: product)
+                            }
                         }
-                        
-                        if let completion = completionHandler
+                        else
                         {
-                            completion(success: success, error: error, response: product)
+                            if let completion = completionHandler
+                            {
+                                completion(success: success, error: "loadProduct JSON Parsing Error.", response: nil)
+                            }
                         }
                     }
                 }
@@ -886,53 +889,6 @@ class LRSessionManager: NSObject
         }
     }
     
-    func loadPriceHistory(productId: NSNumber?, variantId: String?, sizeId: String?, completionHandler: LRCompletionBlock?)
-    {
-        if let productId = productId,
-            variantId = variantId,
-            sizeId = sizeId
-            where productId.integerValue >= 0
-        {
-            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/\(productId.stringValue)/\(variantId)/\(sizeId)"))
-            
-            request.HTTPMethod = "GET"
-            
-            sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
-                
-                if success
-                {
-                    if let jsonResponse = response
-                    {
-                        let product = Mapper<Price>().map(jsonResponse.dictionaryObject)
-                        
-                        if let completion = completionHandler
-                        {
-                            completion(success: success, error: error, response: product)
-                        }
-                    }
-                }
-                else
-                {
-                    if let completion = completionHandler
-                    {
-                        completion(success: success, error: error, response: nil)
-                    }
-                }
-            })
-        }
-        else
-        {
-            if let completion = completionHandler
-            {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                    completion(success: false, error: "NO_PRODUCT_ID".localized, response: nil)
-                })
-            }
-            
-            return
-        }
-    }
     
     func loadProductCollection(page: Int, completionHandler: LRCompletionBlock?)
     {
@@ -957,7 +913,7 @@ class LRSessionManager: NSObject
                 {
                     if let jsonResponse = response
                     {
-                        var products = Mapper<SimpleProductResponse>().mapArray(jsonResponse.arrayObject)
+                        var products = Mapper<Product>().mapArray(jsonResponse.arrayObject)
                         
                         // Incomplete Product Patch
                         if products?.count > 0
@@ -989,36 +945,6 @@ class LRSessionManager: NSObject
         }
     }
     
-    func loadReviewsForProduct(productId: NSNumber, completionHandler: LRCompletionBlock?)
-    {
-        let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("reviews/\(productId.stringValue)"))
-        
-        request.HTTPMethod = "GET"
-        
-        sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
-            
-            if success
-            {
-                if let jsonResponse = response
-                {
-                    let reviews = Mapper<ReviewResponse>().mapArray(jsonResponse.arrayObject)
-                    
-                    if let completion = completionHandler
-                    {
-                        completion(success: success, error: error, response: reviews)
-                    }
-                }
-            }
-            else
-            {
-                if let completion = completionHandler
-                {
-                    completion(success: success, error: error, response: nil)
-                }
-            }
-        })
-    }
-    
     // MARK: Filtering
     
     func loadCategories(completionHandler: LRCompletionBlock?)
@@ -1033,39 +959,13 @@ class LRSessionManager: NSObject
             {
                 if let jsonResponse = response
                 {
-                    let categories = Mapper<CategoryResponse>().mapArray(jsonResponse.arrayObject)
+                    let categories = Mapper<Category>().mapArray(jsonResponse.arrayObject)
                     
-                    let sortedCategories = categories?.sort{ $0.categoryName < $1.categoryName }
-                    
-                    // Empty Category Patch
-                    let categoriesToRemove = [
-                        "activewear",
-                        "athletic",
-                        "grooming",
-                        "jeans",
-                        "sleepwear",
-                        "sweats & hoodies",
-                        "underwear",
-                        "watches & jewelry",
-                        "wool"]
-                    
-                    let filteredCategories = sortedCategories?.filter({
-                        
-                        // Parent Categories have a parentId of 1291772459766252500
-                        if $0.parentId == NSNumber(longLong: 1291772459766252500)
-                        {
-                            if let categoryName = $0.categoryName?.lowercaseString
-                            {
-                                return !categoriesToRemove.contains(categoryName)
-                            }
-                        }
-                        
-                        return true
-                    })
+                    let sortedCategories = categories?.sort{ $0.name < $1.name }
                     
                     if let completion = completionHandler
                     {
-                        completion(success: true, error: error, response: filteredCategories)
+                        completion(success: true, error: error, response: sortedCategories)
                     }
                 }
             }
@@ -1091,9 +991,9 @@ class LRSessionManager: NSObject
             {
                 if let jsonResponse = response
                 {
-                    let brands = Mapper<BrandResponse>().mapArray(jsonResponse.arrayObject)
+                    let brands = Mapper<Brand>().mapArray(jsonResponse.arrayObject)
                     
-                    let sortedBrands = brands?.sort{ $0.brandName < $1.brandName }
+                    let sortedBrands = brands?.sort{ $0.name < $1.name }
                     
                     if let completion = completionHandler
                     {
@@ -1123,9 +1023,9 @@ class LRSessionManager: NSObject
             {
                 if let jsonResponse = response
                 {
-                    let retailers = Mapper<RetailerResponse>().mapArray(jsonResponse.arrayObject)
+                    let retailers = Mapper<Retailer>().mapArray(jsonResponse.arrayObject)
                     
-                    let sortedRetailers = retailers?.sort{ $0.retailerName < $1.retailerName }
+                    let sortedRetailers = retailers?.sort{ $0.name < $1.name }
                     
                     if let completion = completionHandler
                     {
@@ -1155,9 +1055,9 @@ class LRSessionManager: NSObject
             {
                 if let jsonResponse = response
                 {
-                    let colors = Mapper<ColorResponse>().mapArray(jsonResponse.arrayObject)
+                    let colors = Mapper<ColorObject>().mapArray(jsonResponse.arrayObject)
                     
-                    let sortedColors = colors?.sort{ $0.colorName < $1.colorName }
+                    let sortedColors = colors?.sort{ $0.name < $1.name }
                     
                     if let completion = completionHandler
                     {
@@ -1197,57 +1097,11 @@ class LRSessionManager: NSObject
                 {
                     if let jsonResponse = response
                     {
-                        let searchResponse = Mapper<SearchResponse>().map(jsonResponse.dictionaryObject)
-                        
-                        var results = Array<AnyObject>()
-                        
-                        // Add all brands
-                        if let brands = searchResponse?.brands
-                        {
-                            for brand in brands
-                            {
-                                results.append(brand)
-                            }
-                        }
-                        
-                        // Add 2 categories
-                        if let categories = searchResponse?.categories
-                        {
-                            var index = 0
-                            
-                            for category in categories
-                            {
-                                if index > 1
-                                {
-                                    break
-                                }
-                                
-                                // If not "Mens" Category, append the current category
-                                if category.parentId != nil
-                                {
-                                    results.append(category)
-                                    
-                                    index += 1
-                                }
-                            }
-                        }
-                        
-                        // Add all products
-                        
-                        if let productDicts = searchResponse?.products
-                        {
-                            for (_, productResponse) in productDicts
-                            {
-                                if let product: SearchProductResponse = productResponse
-                                {
-                                    results.append(product)
-                                }
-                            }
-                        }
+                        let searchResults = Mapper<Product>().mapArray(jsonResponse.arrayObject)
                         
                         if let completion = completionHandler
                         {
-                            completion(success: success, error: error, response: results)
+                            completion(success: success, error: error, response: searchResults)
                         }
                     }
                 }
@@ -1256,105 +1110,6 @@ class LRSessionManager: NSObject
                     if let completion = completionHandler
                     {
                         completion(success: success, error: error, response: nil)
-                    }
-                }
-            })
-        }
-        else
-        {
-            if let completion = completionHandler
-            {
-                completion(success: false, error: "INVALID_PARAMETERS".localized, response: nil)
-            }
-        }
-    }
-
-    // MARK: Sale Alerts
-    func loadSaleAlerts(completionHandler: LRCompletionBlock?)
-    {
-        let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("watch"))
-        
-        request.HTTPMethod = "GET"
-                
-        sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
-            
-            if success
-            {
-                if let jsonResponse = response
-                {                    
-                    let saleAlertResponse = Mapper<SaleAlertResponse>().map(jsonResponse.dictionaryObject)
-                    
-                    if let completion = completionHandler
-                    {
-                        completion(success: true, error: error, response: saleAlertResponse)
-                    }
-                }
-            }
-            else
-            {
-                if let completion = completionHandler
-                {
-                    completion(success: false, error: error, response: nil)
-                }
-            }
-        })
-    }
-    
-    func createSaleAlert(productId: NSNumber?, completionHandler: LRCompletionBlock?)
-    {
-        if let productId = productId
-        {
-            sendRequest(self.jsonRequest(APIUrlAtEndpoint("watch/products/\(productId.stringValue)"), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
-                
-                if success
-                {
-                    if let jsonResponse = response
-                    {
-                        if let completion = completionHandler
-                        {
-                            completion(success: true, error: error, response: jsonResponse.dictionaryObject)
-                        }
-                    }
-                }
-                else
-                {
-                    if let completion = completionHandler
-                    {
-                        completion(success: false, error: error, response: nil)
-                    }
-                }
-            })
-        }
-        else
-        {
-            if let completion = completionHandler
-            {
-                completion(success: false, error: "INVALID_PARAMETERS".localized, response: nil)
-            }
-        }
-    }
-    
-    func deleteSaleAlert(productId: NSNumber?, completionHandler: LRCompletionBlock?)
-    {
-        if let productId = productId
-        {
-            sendRequest(self.jsonRequest(APIUrlAtEndpoint("watch/products/\(productId.stringValue)"), HTTPMethod:  "DELETE", json: []), authorization: true, completion: { (success, error, response) -> Void in
-                
-                if success
-                {
-                    if let jsonResponse = response
-                    {
-                        if let completion = completionHandler
-                        {
-                            completion(success: true, error: error, response: jsonResponse.dictionaryObject)
-                        }
-                    }
-                }
-                else
-                {
-                    if let completion = completionHandler
-                    {
-                        completion(success: false, error: error, response: nil)
                     }
                 }
             })

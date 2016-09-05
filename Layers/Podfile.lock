@@ -13,7 +13,6 @@ PODS:
   - Bolts/AppLinks (1.7.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.7.0)
-  - Cosmos (1.2.2)
   - Crashlytics (3.7.1):
     - Fabric (~> 1.6.3)
   - DACircularProgress (2.3.1)
@@ -49,7 +48,6 @@ DEPENDENCIES:
   - AWSCognitoIdentityProvider (~> 2.4)
   - AWSCore (~> 2.4)
   - AWSSNS (~> 2.4)
-  - Cosmos (~> 1.2)
   - Crashlytics (~> 3.7)
   - DateTools (~> 1.7)
   - DeepLinkKit (~> 1.2)
@@ -76,7 +74,6 @@ SPEC CHECKSUMS:
   AWSCore: 7e0da755786280a76ed4ab4ed8c1d38ced09b460
   AWSSNS: b1e52a1d9b72e777810c8bb1188218f2a0ae9974
   Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
-  Cosmos: 87c49100c69d2cb2eebfa4eb8d1e801fe29ff774
   Crashlytics: 3cdd4c9655be68032a0cf0379e0fb5ef6af22cad
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60

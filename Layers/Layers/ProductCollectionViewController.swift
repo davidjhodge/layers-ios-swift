@@ -25,7 +25,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
     
     @IBOutlet weak var emptyStateButton: UIButton!
 
-    var products: Array<SimpleProductResponse>?
+    var products: Array<Product>?
     
     var currentPage: Int?
     
@@ -124,75 +124,102 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
             toggleErrorState(true, error: false)
         }
         
-        LRSessionManager.sharedManager.loadDiscoverProducts({ (success, error, response) -> Void in
-            
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+        LRSessionManager.sharedManager.loadProduct(NSNumber(int: 512141429), completionHandler: { (success, error, response) -> Void in
             
             if success
             {
-                if let newProducts: Array<SimpleProductResponse> = response as? Array<SimpleProductResponse>
+                if let product = response as? Product
                 {
-                    if newProducts.count > 0
-                    {
-                        // Update products and reload collection
-                        self.products = newProducts
+                    self.products = [product]
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
-                        // If refresh control is active. Reload data after refresh indicator disappears
-                        if let refresh = self.refreshControl
-                        {
-                            if refresh.refreshing
-                            {
-                                // Log Refresh
-                                FBSDKAppEvents.logEvent("Discover Refresh Events")
-                                
-                                CATransaction.begin()
-                                CATransaction.setCompletionBlock({ () -> Void in
-                                    
-                                    self.hardReloadCollectionView()
-                                })
-                                
-                                refresh.endRefreshing()
-                                CATransaction.commit()
-                            }
-                            else
-                            {
-                                // By default, refresh collection view immediately
-                                self.hardReloadCollectionView()
-                            }
-                        }
-                        else
-                        {
-                            // By default, refresh collection view immediately
-                            self.hardReloadCollectionView()
-                        }
-                    }
-                }
-                
-                if self.products == nil || self.products?.count == 0
-                {
-                    self.toggleErrorState(false, error: false)
+                        self.collectionView.reloadData()
+                    })
                 }
             }
             else
             {
                 log.error(error)
-                
-                self.toggleErrorState(false, error: true)
             }
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
-                self.spinner.stopAnimating()
+                self.refreshControl?.endRefreshing()
                 
-                if let refresh = self.refreshControl
-                {
-                    if refresh.refreshing
-                    {
-                        refresh.endRefreshing()
-                    }
-                }
+                self.spinner.stopAnimating()
             })
         })
+        
+//        LRSessionManager.sharedManager.loadDiscoverProducts({ (success, error, response) -> Void in
+//            
+//            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+//            
+//            if success
+//            {
+//                if let newProducts: Array<Product> = response as? Array<Product>
+//                {
+//                    if newProducts.count > 0
+//                    {
+//                        // Update products and reload collection
+//                        self.products = newProducts
+//                        
+//                        // If refresh control is active. Reload data after refresh indicator disappears
+//                        if let refresh = self.refreshControl
+//                        {
+//                            if refresh.refreshing
+//                            {
+//                                // Log Refresh
+//                                FBSDKAppEvents.logEvent("Discover Refresh Events")
+//                                
+//                                CATransaction.begin()
+//                                CATransaction.setCompletionBlock({ () -> Void in
+//                                    
+//                                    self.hardReloadCollectionView()
+//                                })
+//                                
+//                                refresh.endRefreshing()
+//                                CATransaction.commit()
+//                            }
+//                            else
+//                            {
+//                                // By default, refresh collection view immediately
+//                                self.hardReloadCollectionView()
+//                            }
+//                        }
+//                        else
+//                        {
+//                            // By default, refresh collection view immediately
+//                            self.hardReloadCollectionView()
+//                        }
+//                    }
+//                }
+//                
+//                if self.products == nil || self.products?.count == 0
+//                {
+//                    self.toggleErrorState(false, error: false)
+//                }
+//            }
+//            else
+//            {
+//                log.error(error)
+//                
+//                self.toggleErrorState(false, error: true)
+//            }
+//            
+//            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                
+//                self.spinner.stopAnimating()
+//                
+//                if let refresh = self.refreshControl
+//                {
+//                    if refresh.refreshing
+//                    {
+//                        refresh.endRefreshing()
+//                    }
+//                }
+//            })
+//        })
     }
     
     func loadMoreProducts()
@@ -205,7 +232,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
             
             if success
             {
-                if let newProducts: Array<SimpleProductResponse> = response as? Array<SimpleProductResponse>
+                if let newProducts: Array<Product> = response as? Array<Product>
                 {
                     // If this is a response for page 2 or greater
                     self.products?.appendContentsOf(newProducts)
@@ -348,7 +375,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
         
         if let items = products
         {
-            let product: SimpleProductResponse = items[indexPath.row]
+            let product: Product = items[indexPath.row]
             
             let cell: ProductCell = collectionView.dequeueReusableCellWithReuseIdentifier(kProductCellIdentfier, forIndexPath: indexPath) as! ProductCell
             
@@ -381,57 +408,47 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 //Set Image View with first image
                 if let firstImage = variant.images?[safe: 0]
                 {
-                    if let primaryUrl = firstImage.primaryUrl
-                    {
-                        let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize116)
-                        
-                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
-
-                            if error != nil
-                            {
-                                if let placeholderImage = UIImage(named: "image-placeholder")
-                                {
-                                    cell.productImageView.contentMode = .Center
-                                    
-                                    cell.productImageView.image = placeholderImage
-                                }
-                            }
-                            else
-                            {
-                                cell.productImageView.contentMode = .ScaleAspectFit
-                            }
-                        })
-                    }
+//                    if let primaryUrl = firstImage.primaryUrl
+//                    {
+//                        let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize116)
+//                        
+//                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
+//
+//                            if error != nil
+//                            {
+//                                if let placeholderImage = UIImage(named: "image-placeholder")
+//                                {
+//                                    cell.productImageView.contentMode = .Center
+//                                    
+//                                    cell.productImageView.image = placeholderImage
+//                                }
+//                            }
+//                            else
+//                            {
+//                                cell.productImageView.contentMode = .ScaleAspectFit
+//                            }
+//                        })
+//                    }
                 }
                 
-                //Set Price for first size
-                if let firstSize = variant.sizes?[safe:  0]
+                //Set Price
+                var currentPrice: NSNumber?
+                var retailPrice: NSNumber?
+                
+                if let currPrice = product.altPrice?.salePrice
                 {
-                    if let priceInfo = firstSize.price
-                    {
-                        var currentPrice: NSNumber?
-                        var retailPrice: NSNumber?
-                        
-                        if let altCouponPrice = firstSize.altPrice?.priceAfterCoupon
-                        {
-                            currentPrice = altCouponPrice
-                        }
-                        else if let currPrice = priceInfo.price
-                        {
-                            currentPrice = currPrice
-                        }
-                        
-                        if let retail = priceInfo.retailPrice
-                        {
-                            retailPrice = retail
-                        }
-                        
-                        cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(retailPrice, salePrice: currentPrice)
-                    }
+                    currentPrice = currPrice
                 }
+                
+                if let retail = product.price?.price
+                {
+                    retailPrice = retail
+                }
+                
+                cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(retailPrice, salePrice: currentPrice)
             }
             
-            if let brandName = product.brand?.brandName
+            if let brandName = product.brand?.name
             {
                 cell.brandLabel.text = brandName.uppercaseString
             }
@@ -522,7 +539,7 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 {
                     if let productCollection = products
                     {
-                        if let product = productCollection[indexPath.row] as SimpleProductResponse?
+                        if let product = productCollection[indexPath.row] as Product?
                         {
                             if let destinationVC = segue.destinationViewController as? ProductViewController
                             {

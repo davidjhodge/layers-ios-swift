@@ -58,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
 //        else
 //        {
-            AppStateTransitioner.transitionToLoginStoryboard(false)
+            AppStateTransitioner.transitionToMainStoryboard(false)
 //        }
 
         window?.makeKeyAndVisible()
@@ -77,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                                                             NSFontAttributeName: Font.PrimaryFontRegular(size: 16.0),
                                                                                                             NSKernAttributeName:1.5]
         UIBarButtonItem.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).setTitleTextAttributes([NSForegroundColorAttributeName: Color.whiteColor(),
-            NSFontAttributeName: Font.PrimaryFontRegular(size: 16.0)], forState: .Normal)
+            NSFontAttributeName: Font.PrimaryFontLight(size: 16.0)], forState: .Normal)
         
         UITableViewCell.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.PrimaryAppColor
     }

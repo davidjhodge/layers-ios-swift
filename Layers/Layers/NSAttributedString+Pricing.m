@@ -39,12 +39,12 @@ CGFloat const kSaleStringSizeLarge = 17.0;
     // If sale price is the same as the retail price, just show the retail price
     if ([retailPrice floatValue] == [salePrice floatValue])
     {
-        return [[NSAttributedString alloc] initWithString:retailRawString attributes:@{NSFontAttributeName: [Font OxygenRegularWithSize:kRetailStringSizeMedium],
+        return [[NSAttributedString alloc] initWithString:retailRawString attributes:@{NSFontAttributeName: [Font PrimaryFontRegularWithSize:kRetailStringSizeMedium],
             NSForegroundColorAttributeName: [UIColor blackColor]}];
     }
     
     NSAttributedString *retailString = [[NSAttributedString alloc] initWithString:retailRawString attributes:@{
-                                                                                                                                            NSFontAttributeName: [Font OxygenBoldWithSize:kRetailStringSizeStrikethroughSmall],
+                                                                                                                                            NSFontAttributeName: [Font PrimaryFontRegularWithSize:kRetailStringSizeStrikethroughSmall],
                                                                                                            NSForegroundColorAttributeName:[Color DarkTextColor],
                                                                                                            NSStrikethroughStyleAttributeName:
                                                                                                                [NSNumber numberWithInteger:NSUnderlineStyleSingle]}
@@ -67,10 +67,10 @@ CGFloat const kSaleStringSizeLarge = 17.0;
         }
         
         NSAttributedString *saleString = [[NSAttributedString alloc] initWithString:saleRawString attributes:@{
-                                                                                                               NSFontAttributeName: [Font OxygenBoldWithSize:kSaleStringSizeMedium],
+                                                                                                               NSFontAttributeName: [Font PrimaryFontRegularWithSize:kSaleStringSizeMedium],
                                                                                                                NSForegroundColorAttributeName:[Color RedColor]}];
         
-        NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" " attributes:@{NSFontAttributeName: [Font OxygenBoldWithSize:15.0]}];
+        NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" " attributes:@{NSFontAttributeName: [Font PrimaryFontRegularWithSize:15.0]}];
         [finalString appendAttributedString:space];
         [finalString appendAttributedString:saleString];
     }
@@ -100,7 +100,7 @@ CGFloat const kSaleStringSizeLarge = 17.0;
     }
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:retailString attributes:@{
-                                                                                                                NSFontAttributeName: [Font OxygenBoldWithSize:size],
+                                                                                                                NSFontAttributeName: [Font PrimaryFontRegularWithSize:size],
                                                                                                                 NSForegroundColorAttributeName:[Color DarkTextColor]
                                                                                                                 }];
     
@@ -134,7 +134,7 @@ CGFloat const kSaleStringSizeLarge = 17.0;
     }
     
     return [[NSAttributedString alloc] initWithString:saleString attributes:@{
-                                                                                 NSFontAttributeName: [Font OxygenBoldWithSize:kSaleStringSizeMedium],
+                                                                                 NSFontAttributeName: [Font PrimaryFontRegularWithSize:kSaleStringSizeMedium],
                                                                                  NSForegroundColorAttributeName:[Color RedColor]}];
 }
 

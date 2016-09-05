@@ -1,5 +1,5 @@
 //
-//  Price.swift
+//  AltPrice.swift
 //  Layers
 //
 //  Created by David Hodge on 9/4/16.
@@ -9,11 +9,13 @@
 import UIKit
 import ObjectMapper
 
-class Price: Mappable
+class AltPrice: Mappable
 {
     var currency: String?
     
-    var price: NSNumber?
+    var salePrice: NSNumber?
+    
+    var percentOff: NSNumber?
     
     required init?(_ map: Map) {
         
@@ -21,6 +23,7 @@ class Price: Mappable
     
     func mapping(map: Map) {
         currency           <-  map["currency"]
-        price              <-  map["price"]
+        salePrice          <-  map["sale_price"]
+        percentOff         <-  map["percent_change"]
     }
 }
