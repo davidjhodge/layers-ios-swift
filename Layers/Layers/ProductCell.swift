@@ -16,4 +16,10 @@ class ProductCell: UICollectionViewCell
     @IBOutlet weak var brandLabel: UILabel!
     
     @IBOutlet weak var priceLabel: UILabel!
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        layer.cornerRadius = 4.0
+    }
 }

@@ -13,7 +13,7 @@ class Images: Mappable
 {
     var primaryImageUrls: Array<Image>?
     
-    var alternateImageUrls: Array<Image>?
+    var alternateImages: Array<Array<Image>>?
     
     required init?(_ map: Map) {
         
@@ -21,6 +21,6 @@ class Images: Mappable
     
     func mapping(map: Map) {
         primaryImageUrls           <-  map["primary_urls"]
-        alternateImageUrls         <-  map["alternate_urls"]
+        alternateImages         <-  map["alternate_images"]
     }
 }

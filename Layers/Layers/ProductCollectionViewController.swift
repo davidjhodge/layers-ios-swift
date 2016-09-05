@@ -149,6 +149,8 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 
                 self.spinner.stopAnimating()
             })
+            
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
         })
         
 //        LRSessionManager.sharedManager.loadDiscoverProducts({ (success, error, response) -> Void in
@@ -403,50 +405,47 @@ class ProductCollectionViewController: UIViewController, UICollectionViewDataSou
                 }
             }
             
-            if let variant = variant
+            //Set Image View to primary product image
+
+            if let primaryImageResolutions = product.images?.primaryImageUrls
             {
-                //Set Image View with first image
-                if let firstImage = variant.images?[safe: 0]
+                if let imageIndex = primaryImageResolutions.indexOf({ $0.sizeName == "IPhone" })
                 {
-//                    if let primaryUrl = firstImage.primaryUrl
-//                    {
-//                        let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize116)
-//                        
-//                        cell.productImageView.sd_setImageWithURL(resizedPrimaryUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, imageUrl) -> Void in
-//
-//                            if error != nil
-//                            {
-//                                if let placeholderImage = UIImage(named: "image-placeholder")
-//                                {
-//                                    cell.productImageView.contentMode = .Center
-//                                    
-//                                    cell.productImageView.image = placeholderImage
-//                                }
-//                            }
-//                            else
-//                            {
-//                                cell.productImageView.contentMode = .ScaleAspectFit
-//                            }
-//                        })
-//                    }
+                    if let primaryImage: Image = primaryImageResolutions[safe: imageIndex]
+                    {
+                        if let imageUrl = primaryImage.url
+                        {
+                            cell.productImageView.sd_setImageWithURL(imageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                                
+                                if image != nil && cacheType != .Memory
+                                {
+                                    cell.productImageView.alpha = 0.0
+                                    
+                                    UIView.animateWithDuration(0.3, animations: {
+                                        cell.productImageView.alpha = 1.0
+                                    })
+                                }
+                            })
+                        }
+                    }
                 }
-                
-                //Set Price
-                var currentPrice: NSNumber?
-                var retailPrice: NSNumber?
-                
-                if let currPrice = product.altPrice?.salePrice
-                {
-                    currentPrice = currPrice
-                }
-                
-                if let retail = product.price?.price
-                {
-                    retailPrice = retail
-                }
-                
-                cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(retailPrice, salePrice: currentPrice)
             }
+            
+            //Set Price
+            var currentPrice: NSNumber?
+            var retailPrice: NSNumber?
+            
+            if let currPrice = product.altPrice?.salePrice
+            {
+                currentPrice = currPrice
+            }
+            
+            if let retail = product.price?.price
+            {
+                retailPrice = retail
+            }
+            
+            cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(retailPrice, salePrice: currentPrice)
             
             if let brandName = product.brand?.name
             {

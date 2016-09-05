@@ -24,6 +24,6 @@ class Variant: Mappable
     func mapping(map: Map) {
         color          <-  map["color"]
         sizes          <-  map["sizes"]
-        images         <-  map["images"]
+        images         <-  map["image"]
     }
 }

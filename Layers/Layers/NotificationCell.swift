@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import FRHyperLabel
 
 class NotificationCell: UICollectionViewCell {
     
     @IBOutlet weak var leftImageView: UIImageView!
     
-    @IBOutlet weak var contentLabel: UILabel!
+    @IBOutlet weak var contentLabel: FRHyperLabel!
     
     @IBOutlet weak var rightImageView: UIImageView!
     
@@ -20,8 +21,10 @@ class NotificationCell: UICollectionViewCell {
         super.layoutSubviews()
         
         leftImageView.layer.cornerRadius = leftImageView.bounds.size.width * 0.5
+        leftImageView.clipsToBounds = true
         
         rightImageView.layer.cornerRadius = rightImageView.bounds.size.width * 0.5
+        rightImageView.clipsToBounds = true
 
         layer.cornerRadius = 4.0
     }

@@ -64,6 +64,12 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
         
         // If view changes and must layout again, reset image view layout
         layoutImageViews(false)
+        
+        // Round corners
+        ctaButton.layer.cornerRadius = 4.0
+        ctaButton.clipsToBounds = true
+        
+        layer.cornerRadius = 4.0
     }
     
     func setImageElements(elements: Array<NSURL>)

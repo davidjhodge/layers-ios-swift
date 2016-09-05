@@ -54,7 +54,24 @@ class Product: Mappable
         retailer                 <-  map["retailer"]
         productDescription       <-  map["description"]
         inStock                  <-  map["in_stock"]
+    }
+    
+    func primaryImageUrl(size: ImageSizeKey) -> NSURL?
+    {
+        if let primaryImageResolutions = images?.primaryImageUrls
+        {
+            if let imageIndex = primaryImageResolutions.indexOf({ $0.sizeName == size.rawValue })
+            {
+                if let primaryImage: Image = primaryImageResolutions[safe: imageIndex]
+                {
+                    if let imageUrl = primaryImage.url
+                    {
+                        return imageUrl
+                    }
+                }
+            }
+        }
         
-
+        return nil
     }
 }

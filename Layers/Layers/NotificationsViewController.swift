@@ -9,6 +9,7 @@
 import UIKit
 import SDWebImage
 import DateTools
+import FRHyperLabel
 
 //Temp
 import ObjectMapper
@@ -119,6 +120,24 @@ class NotificationsViewController: UIViewController, UICollectionViewDataSource,
                         ]))
                     
                     cell.contentLabel.attributedText = attributedString
+                    
+                    // Link
+                    cell.contentLabel.linkAttributeDefault = [
+                                                              NSFontAttributeName: Font.PrimaryFontRegular(size: 14.0),
+                                                              NSForegroundColorAttributeName: Color.PrimaryAppColor]
+                    
+                    cell.contentLabel.linkAttributeHighlight = [NSFontAttributeName: Font.PrimaryFontRegular(size: 14.0),
+                                                                NSForegroundColorAttributeName: Color.HighlightedPrimaryAppColor]
+                    
+                    cell.contentLabel.setLinkForSubstring(userName, withLinkHandler: { (hyperLabel: FRHyperLabel!, substring: String!) -> Void in
+                        
+                        let storyboard = UIStoryboard(name: "Account", bundle: NSBundle.mainBundle())
+                        
+                        if let profileVc = storyboard.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController
+                        {
+                            self.navigationController?.pushViewController(profileVc, animated: true)
+                        }
+                    })
                 }
                 
                 // Right Image

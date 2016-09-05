@@ -17,5 +17,11 @@ class SimpleProductHeaderCell: UITableViewCell
     
     @IBOutlet weak var productNameLabel: UILabel!
     
-    @IBOutlet weak var ctaButton: UIButton!
+    @IBOutlet weak var ctaLabel: UILabel!
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        layer.cornerRadius = 4.0
+    }
 }

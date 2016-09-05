@@ -20,7 +20,7 @@ private enum TableSection: Int
 
 private enum VariantType: Int
 {
-    case Style = 0, Size, _Count
+    case Style = 0, Size, MoreDetails, _Count
 }
 
 private enum Picker: Int
@@ -302,19 +302,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     // MARK: Analytics
-    func photoTap()
-    {
-        if let product = product
-        {
-            if let productId = product.productId,
-            let productName = product.brandedName,
-                let category = product.categories?[safe: 0]?.name
-            {
-                FBSDKAppEvents.logEvent("Product Page Photo Taps", parameters: ["Product ID":productId, "Product Name":productName, "Category Name":category])
-            }
-        }
-    }
-    
     func brandTap()
     {
         
@@ -349,6 +336,18 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: Paginated Image View Delegate
     func showPhotoFullscreen(imageView: UIImageView, photos: Array<NSURL>, selectedIndex: Int)
     {
+        // Analytics
+        if let product = product
+        {
+            if let productId = product.productId,
+                let productName = product.brandedName,
+                let category = product.categories?[safe: 0]?.name
+            {
+                FBSDKAppEvents.logEvent("Product Page Photo Taps", parameters: ["Product ID":productId, "Product Name":productName, "Category Name":category])
+            }
+        }
+        
+        // Show Photo
         let photoBrowser = IDMPhotoBrowser(photoURLs: photos, animatedFromView: imageView)
         
         photoBrowser.scaleImage = imageView.image
@@ -395,7 +394,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 return 1
                 
             case .Variant:
-                return 2
+                return 3
                 
             default:
                 return 0
@@ -422,34 +421,44 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     cell.delegate = self
                     
-                    // Set image URLs
+                    // Set images
 
-//                    var productImages: Array<NSURL> = Array<NSURL>()
-//
-//                    if let imageDict = selectedVariant?.images
-//                    {
-//                        if let primaryUrl = imageDict.primaryUrl
-//                        {
-//                            let resizedPrimaryUrl = NSURL.imageAtUrl(primaryUrl, imageSize: ImageSize.kImageSize232)
-//                            
-//                            productImages.append(resizedPrimaryUrl)
-//                            
-//                            if let alternateUrls = imageDict.alternateUrls
-//                            {
-//                                for alternateUrl in alternateUrls
-//                                {
-//                                    let resizedAlternateUrl = NSURL.imageAtUrl(alternateUrl, imageSize: ImageSize.kImageSize232)
-//                                    
-//                                    productImages.append(resizedAlternateUrl)
-//                                }
-//                            }
-//                        }
-//                    }
-//                    
-//                    cell.setImageElements(productImages)
+                    var productImages: Array<NSURL> = Array<NSURL>()
+
+                    // Append primary image
+                    if let primaryImageResolutions = product.images?.primaryImageUrls
+                    {
+                        if let imageIndex = primaryImageResolutions.indexOf({ $0.sizeName == "IPhone" })
+                        {
+                            if let primaryImage: Image = primaryImageResolutions[safe: imageIndex]
+                            {
+                                if let imageUrl = primaryImage.url
+                                {
+                                    productImages.append(imageUrl)
+                                }
+                            }
+                        }
+                    }
                     
-                    // For Analytics
-                    cell.scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(photoTap)))
+                    // Append alternate images
+                    if let alternateImages = product.images?.alternateImages
+                    {
+                        for imageResolutions in alternateImages
+                        {
+                            if let imageIndex = imageResolutions.indexOf({ $0.sizeName == "IPhone" })
+                            {
+                                if let altImage: Image = imageResolutions[safe: imageIndex]
+                                {
+                                    if let imageUrl = altImage.url
+                                    {
+                                        productImages.append(imageUrl)
+                                    }
+                                }
+                            }
+                        }
+                    }
+            
+                    cell.setImageElements(productImages)
                     
                     if let brandName = product.brand?.name
                     {
@@ -493,19 +502,14 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         }
                     }
                     
-                    cell.ctaButton.setTitle("View Online".uppercaseString, forState: [.Normal, .Highlighted])
-                    cell.ctaButton.setTitleColor(Color.whiteColor(), forState: [.Normal, .Highlighted])
-                    
+                    cell.ctaButton.setAttributedTitle(NSAttributedString(string: "View Online".uppercaseString, attributes: FontAttributes.filledButtonAttributes), forState: [.Normal, .Highlighted])
+                                        
                     cell.ctaButton.addTarget(self, action: #selector(buy), forControlEvents: .TouchUpInside)
 
                     cell.ctaButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
                     cell.ctaButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
     
                     cell.ctaButton.adjustsImageWhenHighlighted = false
-                    
-                    cell.shareButton.setImage(UIImage(named: "share"), forState: .Normal)
-                    cell.shareButton.setImage(UIImage(named: "share-filled"), forState: .Highlighted)
-                    cell.shareButton.addTarget(self, action: #selector(share), forControlEvents: .TouchUpInside)
                     
                     cell.selectionStyle = .None
                     
@@ -545,6 +549,17 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             }
                             
                             cell.selectionStyle = .None
+                            
+                            return cell
+                            
+                            
+                        case .MoreDetails:
+                            
+                            let cell: MoreDetailsCell = tableView.dequeueReusableCellWithIdentifier("MoreDetailsCell") as! MoreDetailsCell
+                            
+                            cell.moreDetailsLabel.attributedText = NSAttributedString(string: "View More Details".uppercaseString, attributes: [NSForegroundColorAttributeName:Color.GrayColor,
+                                NSFontAttributeName:Font.PrimaryFontSemiBold(size: 14.0),
+                                NSKernAttributeName:1.5])
                             
                             return cell
                             
@@ -635,6 +650,21 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             }
                         }
                     }
+                    else if variant == .MoreDetails
+                    {
+                        // Present More Details View Controller
+                        let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+                        
+                        if let moreDetailsVc = storyboard.instantiateViewControllerWithIdentifier("MoreDetailsViewController") as? MoreDetailsViewController
+                        {
+                            if let product = product
+                            {
+                                moreDetailsVc.product = product
+                            }
+                            
+                            navigationController?.pushViewController(moreDetailsVc, animated: true)
+                        }
+                    }
                 }
                 
             default:
@@ -651,7 +681,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             switch tableSection {
             case .ProductHeader:
-//                return 451.0
+//                return 398.0
                 return UITableViewAutomaticDimension
                 
             case .Variant:
