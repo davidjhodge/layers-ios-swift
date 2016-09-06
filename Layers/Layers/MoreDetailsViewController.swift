@@ -52,32 +52,24 @@ class MoreDetailsViewController: UIViewController, UITableViewDataSource, UITabl
                 {
                     if let product = product
                     {
-                        if let primaryImageResolutions = product.images?.primaryImageUrls
+                        if let primaryImageUrl = product.primaryImageUrl(ImageSizeKey.Normal)
                         {
-                            if let imageIndex = primaryImageResolutions.indexOf({ $0.sizeName == "IPhoneSmall" })
-                            {
-                                if let primaryImage: Image = primaryImageResolutions[safe: imageIndex]
+                            cell.productImageView.sd_setImageWithURL(primaryImageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                                
+                                if image != nil && cacheType != .Memory
                                 {
-                                    if let imageUrl = primaryImage.url
-                                    {
-                                        cell.productImageView.sd_setImageWithURL(imageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
-                                            
-                                            if image != nil && cacheType != .Memory
-                                            {
-                                                cell.productImageView.alpha = 0.0
-                                                
-                                                UIView.animateWithDuration(0.3, animations: {
-                                                    cell.productImageView.alpha = 1.0
-                                                })
-                                            }
-                                        })
-                                    }
+                                    cell.productImageView.alpha = 0.0
+                                    
+                                    UIView.animateWithDuration(0.3, animations: {
+                                        cell.productImageView.alpha = 1.0
+                                    })
                                 }
-                            }
+                            })
                         }
+                    
 
                         cell.productImageView.image = nil
-                        
+                    
                         if let brand = product.brand?.name
                         {
                             cell.brandLabel.text = brand

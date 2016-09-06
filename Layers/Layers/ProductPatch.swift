@@ -19,7 +19,7 @@ extension Product
             {
                 // Check if images and sizes both exist
                 if firstVariant.sizes?.count > 0
-                && firstVariant.images?.count > 0
+                && firstVariant.image?.count > 0
                 {
                     // Check if price information exists
                     if price?.price != nil

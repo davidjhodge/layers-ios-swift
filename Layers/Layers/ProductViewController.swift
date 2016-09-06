@@ -28,13 +28,9 @@ private enum Picker: Int
     case Style = 0, Size
 }
 
-class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, DPLTargetViewController, PaginatedImageViewDelegate
+class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, DPLTargetViewController, PaginatedImageViewDelegate
 {
     @IBOutlet weak var tableView: UITableView!
-        
-    @IBOutlet var pickers: [UIPickerView]!
-    
-    @IBOutlet var pickerAccessoryView: PickerAccessoryView!
     
     var productIdentifier: NSNumber?
     
@@ -82,8 +78,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             navigationController?.setNavigationBarHidden(false, animated: true)
         }
-        
-        setupPickers()
         
         reloadProduct()
     }
@@ -141,6 +135,25 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             }
                         }
                         
+                        if let currentVariants = product.variants
+                        {
+                            VariantColors.analyzeVariantsAndApplyDominantColors(currentVariants, completionBlock: { (variants) -> Void in
+                              
+                                if let newVariants = variants
+                                {
+                                    product.variants = newVariants
+                                    
+                                    if let newDominantColor = product.variants?[safe: 0]?.dominantColor
+                                    {
+                                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                            
+                                            self.view.backgroundColor = newDominantColor
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                        
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
                             self.refreshUI()
@@ -178,42 +191,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         tableView.reloadData()
-    }
-    
-    func setupPickers()
-    {
-        for (index, picker) in pickers.enumerate()
-        {
-            picker.backgroundColor = Color.BackgroundGrayColor
-            
-            if index == Picker.Style.rawValue
-            {
-                picker.tag = Picker.Style.rawValue
-                
-                styleTextField.inputView = picker
-                styleTextField.inputAccessoryView = pickerAccessoryView
-                
-                view.addSubview(styleTextField)
-                styleTextField.hidden = true
-            }
-            else if index == Picker.Size.rawValue
-            {
-                picker.tag = Picker.Size.rawValue
-                
-                sizeTextField.inputView = picker
-                sizeTextField.inputAccessoryView = pickerAccessoryView
-                
-                view.addSubview(sizeTextField)
-                sizeTextField.hidden = true
-            }
-            
-            picker.dataSource = self
-            picker.delegate = self
-        }
-        
-        pickerAccessoryView.doneButton.addTarget(self, action: #selector(pickerDidFinish), forControlEvents: .TouchUpInside)
-        
-        pickerAccessoryView.cancelButton.addTarget(self, action: #selector(pickerDidCancel), forControlEvents: .TouchUpInside)
     }
     
     // MARK: Spinners
@@ -290,38 +267,10 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         })
     }
     
-    func showPicker(textField: UITextField?)
-    {
-        // If an existing picker is already in view, remove it
-        
-        if let textField = textField
-        {
-            if textField.isFirstResponder()
-            {
-                textField.resignFirstResponder()
-            }
-
-            textField.becomeFirstResponder()
-        }
-    }
-    
     // MARK: Analytics
     func brandTap()
     {
         
-    }
-    
-    // MARK: Picker Actions
-    func pickerDidFinish()
-    {
-        tableView.reloadData()
-        
-        view.endEditing(true)
-    }
-    
-    func pickerDidCancel()
-    {
-        view.endEditing(true)
     }
     
     // MARK: Deep Linking
@@ -628,8 +577,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 {
                     if variant == .Style
                     {
-                        showPicker(styleTextField)
-                        
                         if let product = product
                         {
                             if let productId = product.productId,
@@ -642,8 +589,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                     else if variant == .Size
                     {
-                        showPicker(sizeTextField)
-                        
                         if let product = product
                         {
                             if let productId = product.productId,
@@ -783,172 +728,6 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
                 
                 }, completion: nil)
-        }
-    }
-    
-    // MARK: Picker View
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        
-        if pickerView.tag == Picker.Style.rawValue
-        {
-            if let product = self.product
-            {
-                if let variants = product.variants
-                {
-                    return variants.count
-                }
-            }
-        }
-        else if pickerView.tag == Picker.Size.rawValue
-        {
-            if let currentVariant = selectedVariant
-            {
-                if let sizes = currentVariant.sizes
-                {
-                    return sizes.count
-                }
-            }
-        }
-        
-        return 0
-    }
-    
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
-        
-        if view == nil
-        {
-            // Remove selection indicators
-            pickerView.subviews[1].hidden = true
-            pickerView.subviews[2].hidden = true
-            
-            if let pickerRow: PickerRow = NSBundle.mainBundle().loadNibNamed("PickerRow", owner: self, options: nil)[0] as? PickerRow
-            {
-                if pickerView.tag == Picker.Style.rawValue
-                {
-                    if let product = self.product
-                    {
-                        if let variant = product.variants?[row]
-                        {
-                            if let variantName = variant.color
-                            {
-                                pickerRow.textLabel.text = variantName.capitalizedString
-                            }
-                            
-                            // Set color
-                            
-//                            if let color = variant.color
-//                            {
-//                                if let red = color.red?.floatValue, blue = color.blue?.floatValue, green = color.green?.floatValue
-//                                {
-//                                    pickerRow.colorSwatchView.backgroundColor = UIColor(colorLiteralRed: red/255.0, green: green/255.0, blue: blue/255.0, alpha: 1.0)
-//                                }
-//                            }
-                        }
-                    }
-                }
-                else if pickerView.tag == Picker.Size.rawValue
-                {
-                    if let currentVariant = selectedVariant
-                    {
-                        if let size = currentVariant.sizes?[row]
-                        {
-                            if let sizeName = size.sizeName
-                            {
-                                pickerRow.textLabel.text = sizeName.capitalizedString
-                            }
-                            
-                            pickerRow.colorSwatchView.hidden = true
-                        }
-                    }
-                }
-                
-                pickerRow.bounds = CGRectMake(pickerRow.bounds.origin.x, pickerRow.bounds.origin.y, UIScreen .mainScreen().bounds.width, pickerRow.bounds.size.height)
-                
-                return pickerRow
-            }
-            
-            return UIView()
-        }
-        else
-        {
-            if let reuseView = view
-            {
-                return reuseView
-            }
-        }
-
-        return UIView()
-    }
-    
-    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-        
-        return view.bounds.size.width
-    }
-    
-    func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        
-        return 48.0
-    }
-    
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        
-        if pickerView.tag == Picker.Style.rawValue
-        {
-            if let product = self.product
-            {
-                if let variant = product.variants?[row]
-                {
-                    if let variantName = variant.color
-                    {
-                        return variantName.capitalizedString
-                    }
-                }
-            }
-        }
-        else if pickerView.tag == Picker.Size.rawValue
-        {
-            if let currentVariant = selectedVariant
-            {
-                if let size = currentVariant.sizes?[row]
-                {
-                    if let sizeName = size.sizeName
-                    {
-                        return sizeName
-                    }
-                }
-            }
-        }
-    
-        return ""
-    }
-    
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
-        if pickerView.tag == Picker.Style.rawValue
-        {
-            //Should be index of product.styles
-            if let product = self.product
-            {
-                if let variant = product.variants?[safe: row]
-                {
-                    selectedVariant = variant
-                }
-            }
-        }
-        else if pickerView.tag == Picker.Size.rawValue
-        {
-            //Should be index of product.sizes
-            if let currentVariant = selectedVariant
-            {
-                if let size = currentVariant.sizes?[safe: row]
-                {
-                    selectedSize = size
-                }
-            }
         }
     }
     

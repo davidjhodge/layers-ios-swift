@@ -11,7 +11,7 @@ import ObjectMapper
 
 enum ImageSizeKey: String
 {
-    case Small = "IPhoneSmall", Normal = "IPhone"
+    case Smallest = "Small", Small = "IPhoneSmall", Normal = "IPhone"
 }
 
 class Image: Mappable {

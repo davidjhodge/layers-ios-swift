@@ -48,6 +48,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchBar.backgroundImage = UIImage()
         searchBar.backgroundColor = Color.clearColor()
         
+    
+        
         searchBar.delegate = self
         
         collectionView.backgroundColor = Color.BackgroundGrayColor

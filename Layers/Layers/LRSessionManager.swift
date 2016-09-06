@@ -894,7 +894,7 @@ class LRSessionManager: NSObject
     {
         if page >= 0
         {
-            var requestString = "products?page=\(page)&per_page=\(productCollectionPageSize)"
+            var requestString = "search?q=%20&page=\(page)&per_page=\(productCollectionPageSize)"
             
             if FilterManager.defaultManager.getCurrentFilter().hasActiveFilters()
             {
@@ -903,27 +903,28 @@ class LRSessionManager: NSObject
                 requestString = requestString.stringByAppendingString("&\(paramsString)")
             }
             
-            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint(requestString))
-                        
-            request.HTTPMethod = "GET"
-            
-            sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint(requestString), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
                     if let jsonResponse = response
                     {
-                        var products = Mapper<Product>().mapArray(jsonResponse.arrayObject)
-                        
-                        // Incomplete Product Patch
-                        if products?.count > 0
+                        if let results = jsonResponse.dictionaryObject?["results"] as? Dictionary<String, AnyObject>
                         {
-                            products = products?.filter({ $0.isValid() })
+                            if let products = Mapper<Product>().mapArray(results["products"])
+                            {
+                                if let completion = completionHandler
+                                {
+                                    completion(success: success, error: error, response: products)
+                                    
+                                    return
+                                }
+                            }
                         }
                         
                         if let completion = completionHandler
                         {
-                            completion(success: success, error: error, response: products)
+                            completion(success: false, error: "Error parsing JSON.", response: nil)
                         }
                     }
                 }

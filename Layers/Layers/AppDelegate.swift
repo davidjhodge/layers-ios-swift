@@ -80,6 +80,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSFontAttributeName: Font.PrimaryFontLight(size: 16.0)], forState: .Normal)
         
         UITableViewCell.appearanceWhenContainedInInstancesOfClasses([LRWindow.self]).tintColor = Color.PrimaryAppColor
+        
+        UITextField.appearanceWhenContainedInInstancesOfClasses([UISearchBar.self]).defaultTextAttributes = [NSFontAttributeName: Font.PrimaryFontLight(size: 12.0), NSForegroundColorAttributeName: Color.DarkTextColor, NSKernAttributeName: 0.7]
     }
     
     func registerRoutes()

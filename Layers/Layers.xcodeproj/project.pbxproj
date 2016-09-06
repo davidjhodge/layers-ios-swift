@@ -31,6 +31,7 @@
 		70329DE91D7E75E600C1D9D0 /* SimpleProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70329DE81D7E75E600C1D9D0 /* SimpleProduct.swift */; };
 		70329DEB1D7EFE5F00C1D9D0 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70329DEA1D7EFE5F00C1D9D0 /* SearchCell.swift */; };
 		70329DED1D7F3B4C00C1D9D0 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70329DEC1D7F3B4C00C1D9D0 /* CategoryCell.swift */; };
+		70329DF11D7F744600C1D9D0 /* VariantColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70329DF01D7F744500C1D9D0 /* VariantColors.swift */; };
 		7033C7401D5E707E0035A13D /* ProductWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033C73F1D5E707E0035A13D /* ProductWebViewController.swift */; };
 		7033C7421D5E7C780035A13D /* ProductWebNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033C7411D5E7C780035A13D /* ProductWebNavigationController.swift */; };
 		703D463A1D15C21700AB25C0 /* OpenSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703D46391D15C21700AB25C0 /* OpenSourceViewController.swift */; };
@@ -149,6 +150,7 @@
 		70329DE81D7E75E600C1D9D0 /* SimpleProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleProduct.swift; sourceTree = "<group>"; };
 		70329DEA1D7EFE5F00C1D9D0 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		70329DEC1D7F3B4C00C1D9D0 /* CategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
+		70329DF01D7F744500C1D9D0 /* VariantColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VariantColors.swift; sourceTree = "<group>"; };
 		7033C73F1D5E707E0035A13D /* ProductWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWebViewController.swift; sourceTree = "<group>"; };
 		7033C7411D5E7C780035A13D /* ProductWebNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWebNavigationController.swift; sourceTree = "<group>"; };
 		703D46391D15C21700AB25C0 /* OpenSourceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSourceViewController.swift; sourceTree = "<group>"; };
@@ -469,6 +471,7 @@
 				701B59CF1D4F925300354C68 /* FakeProgressView.swift */,
 				70EEEDB91D57D65D0028F0DF /* ProductPatch.swift */,
 				70C386D71D5BB9770045C86E /* EmptyStateView.swift */,
+				70329DF01D7F744500C1D9D0 /* VariantColors.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -892,6 +895,7 @@
 				70987BFC1CB97A9900D86FBA /* LRWindow.swift in Sources */,
 				70B311AA1D7CCD0000303D39 /* Retailer.swift in Sources */,
 				70987C3B1CBAB4BF00D86FBA /* SimpleWebViewController.swift in Sources */,
+				70329DF11D7F744600C1D9D0 /* VariantColors.swift in Sources */,
 				70329DE91D7E75E600C1D9D0 /* SimpleProduct.swift in Sources */,
 				706FF8941CBD6B83007B26AD /* StyleCell.swift in Sources */,
 				70987BEA1CB95F1900D86FBA /* ProductCollectionViewController.swift in Sources */,

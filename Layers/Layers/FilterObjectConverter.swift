@@ -15,18 +15,18 @@ class FilterObjectConverter
     {
             var filter: FilterObject = FilterObject()
             
-//            if let category = filterResponse as? Category
-//            {
-//                if let categoryName = category.name
-//                {
-//                    filter.name = categoryName
-//                }
-//                
-//                if let key = category.categoryId
-//                {
-//                    filter.key = key
-//                }
-//            }
+            if let category = filterResponse as? Category
+            {
+                if let categoryName = category.name
+                {
+                    filter.name = categoryName
+                }
+                
+                if let key = category.categoryId
+                {
+                    filter.key = key
+                }
+            }
             if let brand = filterResponse as? Brand
             {
                 if let name = brand.name

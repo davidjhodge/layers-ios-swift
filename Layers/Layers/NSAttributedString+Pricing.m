@@ -10,11 +10,11 @@
 #import "Layers-Swift.h"
 
 CGFloat const kRetailStringSizeStrikethroughSmall = 12.0;
-CGFloat const kRetailStringSizeMedium = 15.0;
-CGFloat const kRetailStringSizeLarge = 17.0;
+CGFloat const kRetailStringSizeMedium = 14.0;
+CGFloat const kRetailStringSizeLarge = 16.0;
 
-CGFloat const kSaleStringSizeMedium = 15.0;
-CGFloat const kSaleStringSizeLarge = 17.0;
+CGFloat const kSaleStringSizeMedium = 14.0;
+CGFloat const kSaleStringSizeLarge = 16.0;
 
 @implementation NSAttributedString (Pricing)
 

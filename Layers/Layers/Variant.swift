@@ -15,7 +15,9 @@ class Variant: Mappable
     
     var sizes: Array<Size>?
     
-    var images: Array<Image>?
+    var image: Array<Image>?
+    
+    var dominantColor: UIColor?
     
     required init?(_ map: Map) {
         
@@ -24,6 +26,6 @@ class Variant: Mappable
     func mapping(map: Map) {
         color          <-  map["color"]
         sizes          <-  map["sizes"]
-        images         <-  map["image"]
+        image         <-  map["image"]
     }
 }

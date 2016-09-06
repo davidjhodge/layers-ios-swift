@@ -27,6 +27,6 @@ class Category: Mappable
         categoryId             <-  map["id"]
         name                   <-  map["name"]
         shortName              <-  map["short_name"]
-        localizedCategoryId    <-  map["localized_id"]
+        localizedCategoryId    <-  map["localizedIdd"]
     }
 }

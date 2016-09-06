@@ -20,7 +20,7 @@ class Images: Mappable
     }
     
     func mapping(map: Map) {
-        primaryImageUrls           <-  map["primary_urls"]
+        primaryImageUrls        <-  map["primary_urls"]
         alternateImages         <-  map["alternate_images"]
     }
 }
