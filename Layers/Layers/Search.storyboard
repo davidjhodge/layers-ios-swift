@@ -6,6 +6,7 @@
     <customFonts key="customFonts">
         <mutableArray key="Montserrat-Light.otf">
             <string>Montserrat-Light</string>
+            <string>Montserrat-Light</string>
         </mutableArray>
         <mutableArray key="Oxygen-Bold.ttf">
             <string>Oxygen-Bold</string>
@@ -29,6 +30,57 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="5hh-Ym-gW9">
+                                <rect key="frame" x="0.0" y="44" width="600" height="556"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="dmV-Xs-xvL">
+                                    <size key="itemSize" width="100" height="168"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="8" minY="8" maxX="8" maxY="8"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CategoryCell" id="ZMz-Te-yvN" customClass="CategoryCell" customModule="Layers" customModuleProvider="target">
+                                        <rect key="frame" x="8" y="8" width="100" height="168"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="168"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rf5-qH-CyK">
+                                                    <rect key="frame" x="16" y="131" width="68" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="F9D-Ha-6Cb"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="16"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kx6-gF-i8O">
+                                                    <rect key="frame" x="24" y="16" width="52" height="99"/>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="kx6-gF-i8O" firstAttribute="top" secondItem="ZMz-Te-yvN" secondAttribute="top" constant="16" id="0Wo-yF-41H"/>
+                                            <constraint firstItem="Rf5-qH-CyK" firstAttribute="top" secondItem="kx6-gF-i8O" secondAttribute="bottom" constant="16" id="Kad-6H-Gwi"/>
+                                            <constraint firstItem="kx6-gF-i8O" firstAttribute="leading" secondItem="ZMz-Te-yvN" secondAttribute="leading" constant="24" id="NtX-Sf-3Z0"/>
+                                            <constraint firstAttribute="trailing" secondItem="Rf5-qH-CyK" secondAttribute="trailing" constant="16" id="Uic-H6-0UN"/>
+                                            <constraint firstItem="Rf5-qH-CyK" firstAttribute="leading" secondItem="ZMz-Te-yvN" secondAttribute="leading" constant="16" id="YIi-t8-hyy"/>
+                                            <constraint firstAttribute="bottom" secondItem="Rf5-qH-CyK" secondAttribute="bottom" constant="16" id="dLo-X3-gBW"/>
+                                            <constraint firstAttribute="trailing" secondItem="kx6-gF-i8O" secondAttribute="trailing" constant="24" id="uW4-9X-mLX"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="categoryImageView" destination="kx6-gF-i8O" id="2iq-8Q-YFr"/>
+                                            <outlet property="categoryLabel" destination="Rf5-qH-CyK" id="Lfd-rX-1dS"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="1gX-Ib-B4I" id="jSW-fB-T1h"/>
+                                    <outlet property="delegate" destination="1gX-Ib-B4I" id="UVo-E6-7K1"/>
+                                </connections>
+                            </collectionView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="abR-fo-ruL">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -115,9 +167,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Bb6-LI-FPs" firstAttribute="top" secondItem="5hh-Ym-gW9" secondAttribute="bottom" id="2Cg-fM-Odk"/>
                             <constraint firstItem="Bb6-LI-FPs" firstAttribute="top" secondItem="abR-fo-ruL" secondAttribute="bottom" id="6JP-iw-cS4"/>
                             <constraint firstItem="Ltp-wb-zet" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" id="B4W-bV-Kxx"/>
                             <constraint firstAttribute="trailing" secondItem="Ltp-wb-zet" secondAttribute="trailing" id="FcF-CQ-Y8F"/>
+                            <constraint firstItem="5hh-Ym-gW9" firstAttribute="top" secondItem="BNj-qo-r3S" secondAttribute="bottom" constant="24" id="QVo-Ys-K0q"/>
+                            <constraint firstItem="5hh-Ym-gW9" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" id="Qyz-Yu-TfU"/>
+                            <constraint firstAttribute="trailing" secondItem="5hh-Ym-gW9" secondAttribute="trailing" id="TtQ-88-Amm"/>
                             <constraint firstItem="abR-fo-ruL" firstAttribute="leading" secondItem="q4E-5p-nPV" secondAttribute="leading" id="VbI-yh-q3D"/>
                             <constraint firstItem="1Zy-3S-7sS" firstAttribute="top" secondItem="q4E-5p-nPV" secondAttribute="top" id="XFs-HF-GW7"/>
                             <constraint firstAttribute="trailing" secondItem="abR-fo-ruL" secondAttribute="trailing" id="g5u-4c-oYF"/>
@@ -130,6 +186,7 @@
                     <navigationItem key="navigationItem" id="FZX-Y4-Zc5"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="collectionView" destination="5hh-Ym-gW9" id="mkR-Ia-7A9"/>
                         <outlet property="navBarImageView" destination="1Zy-3S-7sS" id="Nkc-Wu-7il"/>
                         <outlet property="searchBar" destination="Ltp-wb-zet" id="Fuq-Ce-FLy"/>
                         <outlet property="tableView" destination="abR-fo-ruL" id="1zv-Vv-RKM"/>

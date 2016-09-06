@@ -34,6 +34,7 @@ PODS:
   - NHAlignmentFlowLayout (0.1.0)
   - ObjectMapper (1.4.0)
   - pop (1.0.9)
+  - RFQuiltLayout (1.1.1)
   - SDWebImage (3.8.1):
     - SDWebImage/Core (= 3.8.1)
   - SDWebImage/Core (3.8.1)
@@ -62,6 +63,7 @@ DEPENDENCIES:
   - MBProgressHUD (~> 1.0)
   - NHAlignmentFlowLayout (~> 0.1)
   - ObjectMapper (~> 1.4)
+  - RFQuiltLayout (~> 1.1)
   - SDWebImage (~> 3.8)
   - SwiftRangeSlider (~> 0.3)
   - SwiftyBeaver (~> 0.6)
@@ -91,6 +93,7 @@ SPEC CHECKSUMS:
   NHAlignmentFlowLayout: 7f7e9bd79774a7c733e7ac232f2a131a0ce095b9
   ObjectMapper: a07ad0462c5adf014adc0f89ef04c29b626e855e
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
+  RFQuiltLayout: aa28fc2d4a262fbca7caa43d9d8ef4b4726c8cd4
   SDWebImage: 35f9627a3e44b4f292a8a8ce6a531fa488239b91
   SwiftRangeSlider: a199ea521ba1ef57fa8bae26ffbdeb33c4c8f6eb
   SwiftyBeaver: 1f7e6378e75bae631bb219fa0a351ce6f34a40da

@@ -14,6 +14,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
 {
     @IBOutlet weak var tableView: UITableView!
 
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     @IBOutlet weak var tableViewBottomConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var searchBar: UISearchBar!
@@ -47,6 +49,16 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchBar.backgroundColor = Color.clearColor()
         
         searchBar.delegate = self
+        
+        collectionView.backgroundColor = Color.BackgroundGrayColor
+        collectionView.alwaysBounceVertical = true
+        
+        let customLayout = UICollectionViewFlowLayout()
+        customLayout.scrollDirection = .Vertical
+        customLayout.minimumLineSpacing = 8.0
+        customLayout.minimumInteritemSpacing = 8.0
+        customLayout.sectionInset = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
+        collectionView.collectionViewLayout = customLayout
         
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = Color.BackgroundGrayColor
@@ -90,8 +102,14 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     {
         if searchBar.text?.characters.count > 0
         {
+            self.tableView.hidden = false
+            self.collectionView.hidden = true
+            
             return false
         }
+        
+        self.tableView.hidden = true
+        self.collectionView.hidden = false
         
         return true
     }
@@ -456,12 +474,14 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return 11
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ProductCell", forIndexPath: indexPath) as! ProductCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CategoryCell", forIndexPath: indexPath)
+        
+        cell.backgroundColor = Color.whiteColor()
         
         return cell
     }
@@ -482,6 +502,61 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                 }
             }
         }
+    }
+    
+    // MARK: RFQuiltLayout
+
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        
+        if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
+        {
+            // Define Heights
+            let smallCellHeight: CGFloat = 176.0
+            
+            let mediumCellHeight: CGFloat = 228.0
+            
+            let largeCellHeight: CGFloat = 228.0
+            
+            // Define Widths
+            
+            let smallCellWidth = ((view.bounds.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right - flowLayout.minimumInteritemSpacing) * 0.5)
+            
+            let mediumCellWidth: CGFloat = smallCellWidth
+            
+            let largeCellWidth = view.bounds.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right
+            
+            let segmentSize = 6
+            
+            let remainder = indexPath.row % segmentSize
+            
+            if remainder == 2 || remainder == 5
+            {
+                // Large Cell
+                return CGSize(width: largeCellWidth, height: largeCellHeight)
+            }
+            else if remainder == 0 || remainder == 1
+            {
+                // Medium Cell
+                return CGSize(width: mediumCellWidth, height: mediumCellHeight)
+            }
+            else if remainder == 3 || remainder == 4
+            {
+                // Small Cell
+                return CGSize(width: smallCellWidth, height: smallCellHeight)
+            }
+        }
+        
+        return CGSize(width: 0, height: 0)
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+        
+        return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+        
+        return 8.0
     }
     
     // MARK: Navigation

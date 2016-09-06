@@ -40,7 +40,10 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
+        // Change status bar style to .LightContent
+        navigationController?.navigationBar.barStyle = .Black
+        
         // Update Filter with Selection
         var currentFilter = FilterManager.defaultManager.getCurrentFilter()
         
@@ -139,10 +142,6 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 }
             }
         }
-    }
-    
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
     }
     
     // MARK: Networking
