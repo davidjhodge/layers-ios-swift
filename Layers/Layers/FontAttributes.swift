@@ -33,4 +33,16 @@ public class FontAttributes: NSObject
         NSFontAttributeName: Font.PrimaryFontLight(size: 12.0),
         NSKernAttributeName: 0.7
     ]
+    
+    static let darkBodyTextAttributes = [
+        NSForegroundColorAttributeName: Color.DarkTextColor,
+        NSFontAttributeName: Font.PrimaryFontLight(size: 12.0),
+        NSKernAttributeName: 0.7
+    ]
+    
+    static let boldBodyTextAttributes = [
+        NSForegroundColorAttributeName: Color.GrayColor,
+        NSFontAttributeName: Font.PrimaryFontRegular(size: 12.0),
+        NSKernAttributeName: 0.7
+    ]
 }

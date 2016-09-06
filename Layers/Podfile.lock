@@ -40,6 +40,7 @@ PODS:
   - SwiftRangeSlider (0.3.2)
   - SwiftyBeaver (0.6.5)
   - SwiftyJSON (2.3.2)
+  - SwiftyTimer (1.4.1)
   - UITextView+Placeholder (1.2.0)
 
 DEPENDENCIES:
@@ -65,6 +66,7 @@ DEPENDENCIES:
   - SwiftRangeSlider (~> 0.3)
   - SwiftyBeaver (~> 0.6)
   - SwiftyJSON (~> 2.3)
+  - SwiftyTimer (~> 1.4)
   - UITextView+Placeholder (~> 1.2)
 
 SPEC CHECKSUMS:
@@ -93,6 +95,7 @@ SPEC CHECKSUMS:
   SwiftRangeSlider: a199ea521ba1ef57fa8bae26ffbdeb33c4c8f6eb
   SwiftyBeaver: 1f7e6378e75bae631bb219fa0a351ce6f34a40da
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+  SwiftyTimer: 4d25b60ebdbdc5c34782663ab6a5974424f9095e
   UITextView+Placeholder: 77680995fcdd07c3f52ec92fe1150874a2ac89ff
 
 COCOAPODS: 0.39.0

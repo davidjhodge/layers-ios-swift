@@ -17,7 +17,7 @@ public struct FilterObject
         self.key = nil
     }
     
-    init(name: String?, key: Int?)
+    init(name: String?, key: String?)
     {
         if (name != nil) { self.name = name }
         
@@ -26,7 +26,7 @@ public struct FilterObject
     
     var name: String?
     
-    var key: NSNumber?
+    var key: String?
 }
 
 struct Filter
@@ -144,7 +144,7 @@ class FilterManager
                     // First brand
                     if brandParams.characters.count == 0
                     {
-                        brandParams = brandParams.stringByAppendingString("brand=\(brandKey),")
+                        brandParams = brandParams.stringByAppendingString("brand_id=\(brandKey),")
                     }
                     // Any additional brands
                     else
@@ -176,7 +176,7 @@ class FilterManager
                     // First brand
                     if retailerParams.characters.count == 0
                     {
-                        retailerParams = retailerParams.stringByAppendingString("retailer=\(retailerKey),")
+                        retailerParams = retailerParams.stringByAppendingString("retailer_id=\(retailerKey),")
                     }
                         // Any additional brands
                     else
@@ -219,17 +219,17 @@ class FilterManager
             
             for color in colors
             {
-                if let colorName = color.name
+                if let colorKey = color.colorId
                 {
                     // First brand
                     if colorParams.characters.count == 0
                     {
-                        colorParams = colorParams.stringByAppendingString("color=\(colorName),")
+                        colorParams = colorParams.stringByAppendingString("color_id=\(colorKey),")
                     }
                         // Any additional brands
                     else
                     {
-                        colorParams = colorParams.stringByAppendingString("\(colorName),")
+                        colorParams = colorParams.stringByAppendingString("\(colorKey),")
                     }
                 }
             }

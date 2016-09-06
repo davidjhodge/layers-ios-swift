@@ -28,6 +28,7 @@ pod 'IDMPhotoBrowser', '~> 1.8'
 pod 'KLCPopup', '~> 1.0'
 pod 'FRHyperLabel', '~> 1.0'
 pod 'DateTools', '~> 1.7'
+pod 'SwiftyTimer', '~> 1.4'
 
 end
 

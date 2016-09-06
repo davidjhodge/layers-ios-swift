@@ -11,7 +11,7 @@ import ObjectMapper
 
 class Retailer: Mappable
 {
-    var retailerId: NSNumber?
+    var retailerId: String?
     
     var name: String?
     

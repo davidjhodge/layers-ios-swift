@@ -11,7 +11,7 @@ import ObjectMapper
 
 class Brand: Mappable
 {
-    var brandId: NSNumber?
+    var brandId: String?
     
     var name: String?
     

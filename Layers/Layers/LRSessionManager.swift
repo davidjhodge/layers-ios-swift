@@ -991,14 +991,24 @@ class LRSessionManager: NSObject
             {
                 if let jsonResponse = response
                 {
-                    let brands = Mapper<Brand>().mapArray(jsonResponse.arrayObject)
-                    
-                    let sortedBrands = brands?.sort{ $0.name < $1.name }
-                    
-                    if let completion = completionHandler
+                    if let brandArray = jsonResponse.dictionaryObject?["brands"]
                     {
-                        completion(success: true, error: error, response: sortedBrands)
+                        let brands = Mapper<Brand>().mapArray(brandArray)
+                        
+//                        let sortedBrands = brands?.sort{ $0.name < $1.name }
+                        
+                        if let completion = completionHandler
+                        {
+                            completion(success: true, error: error, response: brands)
+                            
+                            return
+                        }
                     }
+                }
+                
+                if let completion = completionHandler
+                {
+                    completion(success: false, error: "Error parsing brands.", response: nil)
                 }
             }
             else
@@ -1097,12 +1107,46 @@ class LRSessionManager: NSObject
                 {
                     if let jsonResponse = response
                     {
-                        let searchResults = Mapper<Product>().mapArray(jsonResponse.arrayObject)
-                        
-                        if let completion = completionHandler
+                        if let results = jsonResponse.dictionaryObject?["results"] as? Dictionary<String, AnyObject>
                         {
-                            completion(success: success, error: error, response: searchResults)
+                            let searchResults = Mapper<SearchResults>().map(results)
+                            
+                            var compiledResults = NSMutableArray()
+                            
+                            if let brandResults = searchResults?.brands
+                            {
+                                if let firstBrand = brandResults[safe: 0]
+                                {
+                                    compiledResults.addObject(firstBrand)
+                                }
+                            }
+                            
+                            if let categoryResults = searchResults?.categories
+                            {
+                                if let firstCategory = categoryResults[safe: 0]
+                                {
+                                    compiledResults.addObject(firstCategory)
+                                }
+                            }
+                            
+                            if let productResults = searchResults?.products
+                            {
+                                compiledResults.addObjectsFromArray(productResults)
+                            }
+                            
+                            if let completion = completionHandler
+                            {
+                                completion(success: success, error: error, response: compiledResults)
+                                
+                                return
+                            }
                         }
+                    }
+                    
+                    // No results or Error
+                    if let completion = completionHandler
+                    {
+                        completion(success: true, error: "No results.", response: nil)
                     }
                 }
                 else

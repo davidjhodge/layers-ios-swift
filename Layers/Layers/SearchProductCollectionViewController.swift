@@ -141,6 +141,10 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         }
     }
     
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
+    
     // MARK: Networking
     func reloadProducts()
     {

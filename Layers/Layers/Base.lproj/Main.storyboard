@@ -993,7 +993,7 @@ To keep browsing, try Search.</string>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SimpleProductHeaderCell" rowHeight="128" id="MYn-K6-jsz" customClass="SimpleProductHeaderCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="584" height="128"/>
+                                        <rect key="frame" x="0.0" y="49.5" width="584" height="128"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MYn-K6-jsz" id="BtZ-LM-fhS">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="127.5"/>
@@ -1006,8 +1006,8 @@ To keep browsing, try Search.</string>
                                                         <constraint firstAttribute="width" constant="80" id="lSU-EI-55n"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z04-Z4-Not">
-                                                    <rect key="frame" x="118" y="24" width="458" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z04-Z4-Not">
+                                                    <rect key="frame" x="118" y="24" width="442" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" priority="750" constant="21" id="gGZ-o5-kZv"/>
                                                     </constraints>
@@ -1015,8 +1015,8 @@ To keep browsing, try Search.</string>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FIo-pl-jod">
-                                                    <rect key="frame" x="120" y="49" width="456" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FIo-pl-jod">
+                                                    <rect key="frame" x="120" y="49" width="440" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" priority="750" constant="21" id="fAq-Cv-90z"/>
                                                     </constraints>
@@ -1024,8 +1024,8 @@ To keep browsing, try Search.</string>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="VIEW ONLINE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="67s-eu-HaK">
-                                                    <rect key="frame" x="120" y="86" width="456" height="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VIEW ONLINE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="67s-eu-HaK">
+                                                    <rect key="frame" x="120" y="86" width="440" height="17"/>
                                                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1055,14 +1055,14 @@ To keep browsing, try Search.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FreeformTextCell" rowHeight="112" id="DAE-8k-BqN" customClass="FreeformTextCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="178" width="584" height="112"/>
+                                        <rect key="frame" x="0.0" y="177.5" width="584" height="112"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DAE-8k-BqN" id="r3k-ha-wYX">
                                             <rect key="frame" x="0.0" y="0.0" width="584" height="111.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Body text" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xDJ-4t-12e">
-                                                    <rect key="frame" x="24" y="45" width="552" height="43"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Body text" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xDJ-4t-12e">
+                                                    <rect key="frame" x="24" y="45" width="536" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" priority="750" constant="43" id="CXp-HX-1Br"/>
                                                     </constraints>
@@ -1070,8 +1070,8 @@ To keep browsing, try Search.</string>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="HEADER" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KDm-Nb-dGg">
-                                                    <rect key="frame" x="24" y="16" width="552" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HEADER" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KDm-Nb-dGg">
+                                                    <rect key="frame" x="24" y="16" width="536" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="gOM-FW-eiP"/>
                                                     </constraints>

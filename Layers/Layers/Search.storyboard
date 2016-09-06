@@ -4,6 +4,9 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <customFonts key="customFonts">
+        <mutableArray key="Montserrat-Light.otf">
+            <string>Montserrat-Light</string>
+        </mutableArray>
         <mutableArray key="Oxygen-Bold.ttf">
             <string>Oxygen-Bold</string>
             <string>Oxygen-Bold</string>
@@ -53,6 +56,43 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="24" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchCell" id="WLd-fa-3FF" customClass="SearchCell" customModule="Layers" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="93.5" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WLd-fa-3FF" id="pS0-fh-woJ">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VIB-F8-Z0O">
+                                                    <rect key="frame" x="56" y="11" width="528" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="7Y2-Gk-IXL"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="12"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wbi-VI-3BC">
+                                                    <rect key="frame" x="24" y="12" width="16" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20" id="E7R-re-w1j"/>
+                                                        <constraint firstAttribute="width" constant="16" id="dep-LS-62V"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="VIB-F8-Z0O" firstAttribute="centerY" secondItem="pS0-fh-woJ" secondAttribute="centerY" id="225-gh-QFa"/>
+                                                <constraint firstItem="VIB-F8-Z0O" firstAttribute="leading" secondItem="wbi-VI-3BC" secondAttribute="trailing" constant="16" id="ccb-ss-o2x"/>
+                                                <constraint firstItem="wbi-VI-3BC" firstAttribute="centerY" secondItem="pS0-fh-woJ" secondAttribute="centerY" id="stn-qM-hrq"/>
+                                                <constraint firstItem="wbi-VI-3BC" firstAttribute="leading" secondItem="pS0-fh-woJ" secondAttribute="leading" constant="24" id="twT-d4-GR3"/>
+                                                <constraint firstAttribute="trailing" secondItem="VIB-F8-Z0O" secondAttribute="trailing" constant="16" id="y9F-EH-8wp"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="resultImageView" destination="wbi-VI-3BC" id="mYo-re-nMm"/>
+                                            <outlet property="titleLabel" destination="VIB-F8-Z0O" id="nEV-Ar-4vZ"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>

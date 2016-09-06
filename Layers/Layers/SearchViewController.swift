@@ -8,6 +8,7 @@
 
 import Foundation
 import FBSDKCoreKit
+import SwiftyTimer
 
 class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
@@ -26,6 +27,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     
     var keyboardNotificationObserver: AnyObject?
+    
+    var searchTimer: NSTimer?
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -110,33 +113,40 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         {
             self.tableView.reloadData()
         }
-            // Don't load results when the query string is 2 characters or less. This is not accurate enough.
-        else if searchText.characters.count < 3
-        {
-            self.searchResults = nil
-            
-            self.tableView.reloadData()
-        }
         else
         {
-            LRSessionManager.sharedManager.search(searchText, completionHandler: { (success, error, response) -> Void in
+            // Use timer to handle search queries sequentially as the user is typing. If the search query has changed and the previous query has not yet returned, the previous query is invalidated
+            if let searchTimer = searchTimer
+            {
+                if searchTimer.valid
+                {
+                    searchTimer.invalidate()
+                }
+            }
+            
+            searchTimer = nil
+            
+            searchTimer = NSTimer.after(0.3, { () -> Void in
                 
-                if success
-                {
-                    if let results = response as? Array<AnyObject>
+                LRSessionManager.sharedManager.search(searchText, completionHandler: { (success, error, response) -> Void in
+                    
+                    if success
                     {
-                        self.searchResults = results
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        if let results = response as? Array<AnyObject>
+                        {
+                            self.searchResults = results
                             
-                            self.tableView.reloadData()
-                        })
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                
+                                self.tableView.reloadData()
+                            })
+                        }
                     }
-                }
-                else
-                {
-                    log.error("Search Error.")
-                }
+                    else
+                    {
+                        log.error("Search Error.")
+                    }
+                })
             })
         }
         
@@ -218,44 +228,85 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         if searchResults?.count > 0 && !shouldShowCategories()
         {
-            let cell = tableView.dequeueReusableCellWithIdentifier("UITableViewCell")!
-            
-            cell.accessoryType = .DisclosureIndicator
-            
-            cell.textLabel?.textAlignment = .Left
-            
-            cell.textLabel?.textColor = Color.DarkTextColor
-            
-            cell.textLabel?.font = Font.OxygenRegular(size: 14.0)
-
-            cell.selectionStyle = .Default
-            
-            if let searchResults = searchResults
+            if let cell: SearchCell = tableView.dequeueReusableCellWithIdentifier("SearchCell") as? SearchCell
             {
-                if let brand = searchResults[safe: indexPath.row] as? Brand
+                cell.resultImageView.image = nil
+                cell.titleLabel.text = nil
+                
+                cell.accessoryType = .DisclosureIndicator
+                
+                cell.titleLabel?.textColor = Color.DarkTextColor
+                
+                cell.selectionStyle = .Default
+                
+                var resultText: String?
+                
+                if let searchResults = searchResults
                 {
-                    if let brandName = brand.name
+                    if let brand = searchResults[safe: indexPath.row] as? Brand
                     {
-                        cell.textLabel?.text = brandName
+                        if let brandName = brand.name
+                        {
+                            resultText = brandName
+                        }
+                    }
+                    else if let category = searchResults[safe: indexPath.row] as? Category
+                    {
+                        if let categoryName = category.name
+                        {
+                            resultText = categoryName
+                        }
+                    }
+                    else if let product = searchResults[safe: indexPath.row] as? SimpleProduct
+                    {
+                        if let productName = product.brandedName
+                        {
+                            resultText = productName
+                        }
+                        
+                        if let imageUrl = product.image?.url
+                        {
+                            cell.resultImageView.sd_setImageWithURL(imageUrl)
+                        }
                     }
                 }
-                else if let category = searchResults[safe: indexPath.row] as? Category
+                
+                if let resultText = resultText
                 {
-                    if let categoryName = category.name
+                    let attributedString = NSMutableAttributedString(string: resultText, attributes: FontAttributes.darkBodyTextAttributes)
+                    
+                    // Bolden query match
+                    if let searchQuery = searchBar.text
                     {
-                        cell.textLabel?.text = categoryName
+                        let words = searchQuery.characters.split{ $0 == " " }.map(String.init)
+                        
+                        for word in words
+                        {
+                            do {
+                                let regex = try NSRegularExpression(pattern: "\(word)", options: .CaseInsensitive)
+                                
+                                let range = NSMakeRange(0, resultText.characters.count)
+                                
+                                regex.enumerateMatchesInString(resultText, options: .ReportCompletion, range: range, usingBlock: { (result, flags, stop) -> Void in
+                                    
+                                    if let substringRange = result?.rangeAtIndex(0)
+                                    {
+                                        attributedString.addAttribute(NSFontAttributeName, value: Font.PrimaryFontSemiBold(size: 12.0), range: substringRange)
+                                    }
+                                })
+                                
+                            } catch
+                            {
+                                // Substring not found
+                            }
+                        }
                     }
+                    
+                    cell.titleLabel?.attributedText = attributedString
                 }
-                else if let product = searchResults[safe: indexPath.row] as? Product
-                {
-                    if let productName = product.brandedName
-                    {
-                        cell.textLabel?.text = "\(productName)"
-                    }
-                }
+                
+                return cell
             }
-            
-            return cell
         }
         else
         {
@@ -297,6 +348,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
 
             return cell
         }
+        
+        return UITableViewCell(style: .Default, reuseIdentifier: "UITableViewCell")
     }
     
     // MARK: Table View Delegate
@@ -334,10 +387,10 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         }
         else if let results = searchResults
         {
-            if results[indexPath.row] is Product
+            if results[indexPath.row] is SimpleProduct
             {
                 if let searchResults = searchResults,
-                    let product = searchResults[indexPath.row] as? Product
+                    let product = searchResults[indexPath.row] as? SimpleProduct
                 {
                     if let productId = product.productId
                     {

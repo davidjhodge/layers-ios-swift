@@ -52,7 +52,7 @@ class PriceFilterViewController: UIViewController
         slider.thumbTintColor = Color.whiteColor()
         
         slider.minimumValue = 0
-        slider.maximumValue = 20
+        slider.maximumValue = 28
         
         slider.lowerValue = slider.minimumValue
         slider.upperValue = slider.maximumValue

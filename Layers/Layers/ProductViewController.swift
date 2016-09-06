@@ -88,6 +88,10 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         reloadProduct()
     }
     
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
+    
     func reloadProduct()
     {
         if let productId = productIdentifier
