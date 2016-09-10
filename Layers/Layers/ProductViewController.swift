@@ -61,6 +61,9 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             FBSDKAppEvents.logEvent("Product Views", parameters: ["Product ID":productId.stringValue])
         }
+        
+        // Change status bar style to .LightContent
+        navigationController?.navigationBar.barStyle = .Black
 
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false

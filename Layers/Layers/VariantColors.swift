@@ -8,6 +8,7 @@
 
 import UIKit
 import SDWebImage
+import DominantColor
 
 typealias LRVariantColorsCompletionBlock = ((variants: Array<Variant>?) -> Void)
 
@@ -35,12 +36,20 @@ class VariantColors: NSObject
                                         
                                         if error == nil && image != nil
                                         {
-                                            let context = CIContext(options: nil)
+                                            let pixelCount = Int((image.size.width * image.size.height) * image.scale)
                                             
-                                            if let dominantColor = self.domiantColor(image, context: context)
+                                            if let cgImage = image.CGImage
                                             {
-                                                variant.dominantColor = dominantColor
+                                                if let dominantColor = dominantColorsInImage(cgImage, maxSampledPixels: pixelCount)[safe: 0]
+                                                {
+                                                    variant.dominantColor = UIColor(CGColor: dominantColor)
+                                                }
                                             }
+
+//                                            if let dominantColor = self.domiantColor(image, context: context)
+//                                            {
+//                                                variant.dominantColor = dominantColor
+//                                            }
                                         }
                                     })
                                 })

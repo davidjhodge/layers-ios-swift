@@ -22,10 +22,22 @@ public class FontAttributes: NSObject
         NSKernAttributeName: 1.3
     ]
     
+    static let smallCtaAttributes = [
+        NSForegroundColorAttributeName: Color.PrimaryAppColor,
+        NSFontAttributeName: Font.PrimaryFontRegular(size: 12.0),
+        NSKernAttributeName: 0.7
+    ]
+    
     static let headerTextAttributes = [
         NSForegroundColorAttributeName: Color.DarkTextColor,
         NSFontAttributeName: Font.PrimaryFontRegular(size: 14.0),
         NSKernAttributeName: 1.3
+    ]
+    
+    static let defaultTextAttributes = [
+        NSForegroundColorAttributeName: Color.DarkTextColor,
+        NSFontAttributeName: Font.PrimaryFontLight(size: 14.0),
+        NSKernAttributeName: 1.0
     ]
     
     static let bodyTextAttributes = [

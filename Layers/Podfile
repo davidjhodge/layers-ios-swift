@@ -29,6 +29,7 @@ pod 'KLCPopup', '~> 1.0'
 pod 'FRHyperLabel', '~> 1.0'
 pod 'DateTools', '~> 1.7'
 pod 'SwiftyTimer', '~> 1.4'
+pod 'DominantColor', :git => 'https://github.com/indragiek/DominantColor.git'
 
 end
 

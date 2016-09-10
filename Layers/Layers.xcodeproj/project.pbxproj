@@ -41,6 +41,11 @@
 		703D46431D16261900AB25C0 /* DeviceComparison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703D46421D16261900AB25C0 /* DeviceComparison.swift */; };
 		70488C521CE63C3E0085BAE9 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70488C511CE63C3E0085BAE9 /* ColorCell.swift */; };
 		70488C541CE63C640085BAE9 /* ColorFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70488C531CE63C640085BAE9 /* ColorFilterViewController.swift */; };
+		704FD3A31D83579C00CC8F9A /* AccountHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704FD3A21D83579C00CC8F9A /* AccountHomeViewController.swift */; };
+		704FD3A51D8485FF00CC8F9A /* BasicCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704FD3A41D8485FF00CC8F9A /* BasicCollectionCell.swift */; };
+		704FD3A71D84885600CC8F9A /* AccountHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704FD3A61D84885600CC8F9A /* AccountHeaderCell.swift */; };
+		704FD3AA1D8493F400CC8F9A /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704FD3A91D8493F400CC8F9A /* HeaderView.swift */; };
+		704FD3AC1D84940900CC8F9A /* HeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 704FD3AB1D84940900CC8F9A /* HeaderView.xib */; };
 		7053903A1CD7ED9100DA8E15 /* SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705390391CD7ED9100DA8E15 /* SafeIndex.swift */; };
 		70676BA31D61798E00219E9C /* Layers.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 70676BA21D61798E00219E9C /* Layers.entitlements */; };
 		706FF88A1CBC54F8007B26AD /* EmailLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */; };
@@ -160,6 +165,11 @@
 		703D46421D16261900AB25C0 /* DeviceComparison.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceComparison.swift; sourceTree = "<group>"; };
 		70488C511CE63C3E0085BAE9 /* ColorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		70488C531CE63C640085BAE9 /* ColorFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorFilterViewController.swift; sourceTree = "<group>"; };
+		704FD3A21D83579C00CC8F9A /* AccountHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountHomeViewController.swift; sourceTree = "<group>"; };
+		704FD3A41D8485FF00CC8F9A /* BasicCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicCollectionCell.swift; sourceTree = "<group>"; };
+		704FD3A61D84885600CC8F9A /* AccountHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountHeaderCell.swift; sourceTree = "<group>"; };
+		704FD3A91D8493F400CC8F9A /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		704FD3AB1D84940900CC8F9A /* HeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeaderView.xib; sourceTree = "<group>"; };
 		705390391CD7ED9100DA8E15 /* SafeIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeIndex.swift; sourceTree = "<group>"; };
 		70676BA21D61798E00219E9C /* Layers.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Layers.entitlements; sourceTree = "<group>"; };
 		706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailLoginViewController.swift; sourceTree = "<group>"; };
@@ -342,6 +352,26 @@
 			name = Cells;
 			sourceTree = "<group>";
 		};
+		704FD3A81D84886C00CC8F9A /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				704FD3A61D84885600CC8F9A /* AccountHeaderCell.swift */,
+				704FD3A41D8485FF00CC8F9A /* BasicCollectionCell.swift */,
+				70B311BE1D7D28BB00303D39 /* ProfileHeaderCell.swift */,
+				70B311C01D7D28C700303D39 /* UserProductCell.swift */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		704FD3AD1D8494B800CC8F9A /* HeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				704FD3A91D8493F400CC8F9A /* HeaderView.swift */,
+				704FD3AB1D84940900CC8F9A /* HeaderView.xib */,
+			);
+			name = HeaderView;
+			sourceTree = "<group>";
+		};
 		706FF88F1CBD6A02007B26AD /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -472,6 +502,7 @@
 				70EEEDB91D57D65D0028F0DF /* ProductPatch.swift */,
 				70C386D71D5BB9770045C86E /* EmptyStateView.swift */,
 				70329DF01D7F744500C1D9D0 /* VariantColors.swift */,
+				704FD3AD1D8494B800CC8F9A /* HeaderView */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -525,9 +556,9 @@
 		70987C2B1CB9A4C200D86FBA /* Account */ = {
 			isa = PBXGroup;
 			children = (
+				704FD3A21D83579C00CC8F9A /* AccountHomeViewController.swift */,
 				70B311BC1D7D27E600303D39 /* UserProfileViewController.swift */,
-				70B311BE1D7D28BB00303D39 /* ProfileHeaderCell.swift */,
-				70B311C01D7D28C700303D39 /* UserProductCell.swift */,
+				704FD3A81D84886C00CC8F9A /* Cells */,
 				70B311BB1D7D27C200303D39 /* Settings */,
 			);
 			name = Account;
@@ -773,6 +804,7 @@
 				70987C071CB980B300D86FBA /* Oxygen-Regular.ttf in Resources */,
 				70987C371CB9D15100D86FBA /* Login.storyboard in Resources */,
 				70776FD11CC8A90C002E6F25 /* Localizable.strings in Resources */,
+				704FD3AC1D84940900CC8F9A /* HeaderView.xib in Resources */,
 				70987C051CB980B300D86FBA /* Oxygen-Bold.ttf in Resources */,
 				703143AC1D7B84EE0032D54F /* Montserrat-SemiBold.otf in Resources */,
 				703143B21D7B8BA80032D54F /* Notifications.storyboard in Resources */,
@@ -891,6 +923,7 @@
 				706FF8961CBD6B95007B26AD /* PriceGraphCell.swift in Sources */,
 				70B311B21D7CD17B00303D39 /* Size.swift in Sources */,
 				702FC3011CC3FE6D0012969C /* ContactUsViewController.swift in Sources */,
+				704FD3A51D8485FF00CC8F9A /* BasicCollectionCell.swift in Sources */,
 				703D463C1D15C75300AB25C0 /* OpenSourceCell.swift in Sources */,
 				70987BFC1CB97A9900D86FBA /* LRWindow.swift in Sources */,
 				70B311AA1D7CCD0000303D39 /* Retailer.swift in Sources */,
@@ -937,6 +970,7 @@
 				70987C331CB9CA1300D86FBA /* ProductHeaderCell.swift in Sources */,
 				7033C7421D5E7C780035A13D /* ProductWebNavigationController.swift in Sources */,
 				70B311C11D7D28C700303D39 /* UserProductCell.swift in Sources */,
+				704FD3AA1D8493F400CC8F9A /* HeaderView.swift in Sources */,
 				70776FC61CC5F881002E6F25 /* FilterViewController.swift in Sources */,
 				707F48841D013D9D00E82A4C /* CallToActionCell.swift in Sources */,
 				70C386D81D5BB9770045C86E /* EmptyStateView.swift in Sources */,
@@ -944,11 +978,13 @@
 				70987C3D1CBBF07B00D86FBA /* GetStartedViewController.swift in Sources */,
 				70AF1A2D1CE3C57500C0518C /* TextFilterViewController.swift in Sources */,
 				707F48DD1D07A84900E82A4C /* SearchProductCollectionViewController.swift in Sources */,
+				704FD3A31D83579C00CC8F9A /* AccountHomeViewController.swift in Sources */,
 				70BE79BF1CFCFFD200AABE8A /* ErrorMessage.swift in Sources */,
 				70B311B01D7CCE5100303D39 /* Variant.swift in Sources */,
 				70D901B41D151DAC0078298B /* GlobalAlert.swift in Sources */,
 				70987BEE1CB9658200D86FBA /* User.swift in Sources */,
 				703143B61D7B8F410032D54F /* NotificationResponse.swift in Sources */,
+				704FD3A71D84885600CC8F9A /* AccountHeaderCell.swift in Sources */,
 				70488C541CE63C640085BAE9 /* ColorFilterViewController.swift in Sources */,
 				70B311BF1D7D28BB00303D39 /* ProfileHeaderCell.swift in Sources */,
 				703D463A1D15C21700AB25C0 /* OpenSourceViewController.swift in Sources */,

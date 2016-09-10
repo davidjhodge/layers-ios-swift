@@ -48,7 +48,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchBar.backgroundImage = UIImage()
         searchBar.backgroundColor = Color.clearColor()
         
-    
+        searchBar.autocapitalizationType = .None
         
         searchBar.delegate = self
         
