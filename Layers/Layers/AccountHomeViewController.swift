@@ -13,9 +13,9 @@ private enum Section: Int
     case ProfileHeader = 0, Activity, Other, _Count
 }
 
-private enum ActivityRow: Int
+enum UserActivity: Int
 {
-    case Purchases = 0, History, Saved, MyComments, _Count
+    case Purchases = 0, RecentlyViewed, Saved, MyComments, _Count
 }
 
 private enum OtherRow: Int
@@ -23,7 +23,7 @@ private enum OtherRow: Int
     case Settings = 0, Help, _Count
 }
 
-class AccountHomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class AccountHomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProductListDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -71,7 +71,7 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
                 
             case .Activity:
                 
-                return ActivityRow._Count.rawValue
+                return UserActivity._Count.rawValue
                 
             case .Other:
                 
@@ -101,7 +101,7 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
                             cell.profileImageView.sd_setImageWithURL(userImageUrl, completed:nil)
                         }
                         
-                        cell.fullNameLabel.attributedText = NSAttributedString(string: "David Hodge", attributes: FontAttributes.headerTextAttributes)
+                        cell.fullNameLabel.attributedText = NSAttributedString(string: "David Hodge", attributes: FontAttributes.largeHeaderTextAttributes)
                         
                         cell.ctaLabel.attributedText = NSAttributedString(string: "View Profile", attributes: FontAttributes.smallCtaAttributes)
                         
@@ -113,7 +113,7 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
                 
             case .Activity:
                 
-                if let row = ActivityRow(rawValue: indexPath.row)
+                if let row = UserActivity(rawValue: indexPath.row)
                 {
                     if let cell = collectionView.dequeueReusableCellWithReuseIdentifier("BasicCollectionCell", forIndexPath: indexPath) as? BasicCollectionCell
                     {
@@ -123,9 +123,9 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
                         {
                             cell.titleLabel.attributedText = NSAttributedString(string: "Purchases", attributes: textAttributes)
                         }
-                        else if row == .History
+                        else if row == .RecentlyViewed
                         {
-                            cell.titleLabel.attributedText = NSAttributedString(string: "History", attributes: textAttributes)
+                            cell.titleLabel.attributedText = NSAttributedString(string: "Recently Viewed", attributes: textAttributes)
 
                         }
                         else if row == .Saved
@@ -196,6 +196,10 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
                     {
                         headerView.sectionTitleLabel.attributedText = NSAttributedString(string: "Other".uppercaseString, attributes: textAttributes)
                     }
+                    else
+                    {
+                        headerView.sectionTitleLabel.attributedText = NSAttributedString(string: "", attributes: nil)
+                    }
                 }
                 
                 return headerView
@@ -206,6 +210,81 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     // MARK: Collection View Delegate
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath)
+    {
+        if let section = Section(rawValue: indexPath.section)
+        {
+            switch section {
+            case .ProfileHeader:
+                
+                if indexPath.row == 0
+                {
+                    let storyboard = UIStoryboard(name: "Account", bundle: NSBundle.mainBundle())
+                    
+                    if let profileVc = storyboard.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController
+                    {
+                        navigationController?.pushViewController(profileVc, animated: true)
+                    }
+                }
+                
+            case .Activity:
+                
+                let storyboard = UIStoryboard(name: "Account", bundle: NSBundle.mainBundle())
+                
+                if let productListVc = storyboard.instantiateViewControllerWithIdentifier("ProductListViewController") as? ProductListViewController
+                {
+                    productListVc.delegate = self
+                    
+                    if let row = UserActivity(rawValue: indexPath.row)
+                    {
+                        if row == .Purchases
+                        {
+                            productListVc.title = "Purchases"
+                            
+                            productListVc.activityType = .Purchases
+                        }
+                        else if row == .RecentlyViewed
+                        {
+                            productListVc.title = "Recently Viewed"
+                            
+                            productListVc.activityType = .RecentlyViewed
+                        }
+                        else if row == .Saved
+                        {
+                            productListVc.title = "Saved Items"
+
+                            productListVc.activityType = .Saved
+                        }
+                        else if row == .MyComments
+                        {
+                            productListVc.title = "My Comments"
+
+                            productListVc.activityType = .MyComments
+                        }
+                    }
+                    
+                    navigationController?.pushViewController(productListVc, animated: true)
+                }
+                
+            case .Other:
+                
+                if let row = OtherRow(rawValue: indexPath.row)
+                {
+                    if row == .Settings
+                    {
+                        
+                    }
+                    else if row == .Help
+                    {
+                    }
+                }
+                
+            default:
+                break
+            }
+        }
+    }
+    
     func collectionView(collectionView: UICollectionView, didHighlightItemAtIndexPath indexPath: NSIndexPath) {
         
         if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath)
@@ -233,13 +312,12 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
                 
                 if let headerCell = cell as? AccountHeaderCell
                 {
-                    headerCell.profileImageView.alpha = 0.5
+                    headerCell.profileImageView.alpha = 1.0
                 }
                 
                 }, completion: nil)
         }
     }
-    
     
     // MARK: Collection View Flow Layout
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
@@ -301,6 +379,51 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
         }
         
         return CGSize(width: ignoredWidth, height: CGFloat(0.01))
+    }
+    
+    // MARK: Product List Delegate
+    func reloadData(row: UserActivity ,completion: LRCompletionBlock?) {
+        
+        if row == .Purchases
+        {
+            LRSessionManager.sharedManager.loadProduct(NSNumber(int: 512141429), completionHandler: { (success, error, response) -> Void in
+                
+                if let completion = completion
+                {
+                    completion(success: success, error: error, response: response)
+                }
+            })
+        }
+        else if row == .RecentlyViewed
+        {
+            LRSessionManager.sharedManager.loadProduct(NSNumber(int: 533783711), completionHandler: { (success, error, response) -> Void in
+                
+                if let completion = completion
+                {
+                    completion(success: success, error: error, response: response)
+                }
+            })
+        }
+        else if row == .Saved
+        {
+            LRSessionManager.sharedManager.loadProduct(NSNumber(int: 487066353), completionHandler: { (success, error, response) -> Void in
+                
+                if let completion = completion
+                {
+                    completion(success: success, error: error, response: response)
+                }
+            })
+        }
+        else if row == .MyComments
+        {
+            LRSessionManager.sharedManager.loadProduct(NSNumber(int: 505709302), completionHandler: { (success, error, response) -> Void in
+                
+                if let completion = completion
+                {
+                    completion(success: success, error: error, response: response)
+                }
+            })
+        }
     }
 
     /*

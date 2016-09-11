@@ -46,6 +46,8 @@
 		704FD3A71D84885600CC8F9A /* AccountHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704FD3A61D84885600CC8F9A /* AccountHeaderCell.swift */; };
 		704FD3AA1D8493F400CC8F9A /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704FD3A91D8493F400CC8F9A /* HeaderView.swift */; };
 		704FD3AC1D84940900CC8F9A /* HeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 704FD3AB1D84940900CC8F9A /* HeaderView.xib */; };
+		704FD3AF1D84B52500CC8F9A /* ProductListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704FD3AE1D84B52500CC8F9A /* ProductListViewController.swift */; };
+		704FD3B11D84BC2100CC8F9A /* ProductListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704FD3B01D84BC2100CC8F9A /* ProductListCell.swift */; };
 		7053903A1CD7ED9100DA8E15 /* SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705390391CD7ED9100DA8E15 /* SafeIndex.swift */; };
 		70676BA31D61798E00219E9C /* Layers.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 70676BA21D61798E00219E9C /* Layers.entitlements */; };
 		706FF88A1CBC54F8007B26AD /* EmailLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */; };
@@ -170,6 +172,8 @@
 		704FD3A61D84885600CC8F9A /* AccountHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountHeaderCell.swift; sourceTree = "<group>"; };
 		704FD3A91D8493F400CC8F9A /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		704FD3AB1D84940900CC8F9A /* HeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeaderView.xib; sourceTree = "<group>"; };
+		704FD3AE1D84B52500CC8F9A /* ProductListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductListViewController.swift; sourceTree = "<group>"; };
+		704FD3B01D84BC2100CC8F9A /* ProductListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductListCell.swift; sourceTree = "<group>"; };
 		705390391CD7ED9100DA8E15 /* SafeIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeIndex.swift; sourceTree = "<group>"; };
 		70676BA21D61798E00219E9C /* Layers.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Layers.entitlements; sourceTree = "<group>"; };
 		706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailLoginViewController.swift; sourceTree = "<group>"; };
@@ -558,6 +562,8 @@
 			children = (
 				704FD3A21D83579C00CC8F9A /* AccountHomeViewController.swift */,
 				70B311BC1D7D27E600303D39 /* UserProfileViewController.swift */,
+				704FD3AE1D84B52500CC8F9A /* ProductListViewController.swift */,
+				704FD3B01D84BC2100CC8F9A /* ProductListCell.swift */,
 				704FD3A81D84886C00CC8F9A /* Cells */,
 				70B311BB1D7D27C200303D39 /* Settings */,
 			);
@@ -899,6 +905,7 @@
 			files = (
 				7022F2F51CFCAD100097DDF9 /* AWSManager.swift in Sources */,
 				70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */,
+				704FD3AF1D84B52500CC8F9A /* ProductListViewController.swift in Sources */,
 				703143B01D7B8B1E0032D54F /* NotificationsViewController.swift in Sources */,
 				706FF89A1CBD6E7A007B26AD /* AlternateReviewCell.swift in Sources */,
 				703D463F1D15CA7E00AB25C0 /* OpenSource.swift in Sources */,
@@ -995,6 +1002,7 @@
 				70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */,
 				70B311AE1D7CCDA700303D39 /* AltPrice.swift in Sources */,
 				70D901A51D10FA220078298B /* Constants.swift in Sources */,
+				704FD3B11D84BC2100CC8F9A /* ProductListCell.swift in Sources */,
 				70B311A61D7CC94A00303D39 /* Product.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

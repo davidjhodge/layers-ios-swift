@@ -34,6 +34,12 @@ public class FontAttributes: NSObject
         NSKernAttributeName: 1.3
     ]
     
+    static let largeHeaderTextAttributes = [
+        NSForegroundColorAttributeName: Color.DarkTextColor,
+        NSFontAttributeName: Font.PrimaryFontRegular(size: 16.0),
+        NSKernAttributeName: 1.3
+    ]
+    
     static let defaultTextAttributes = [
         NSForegroundColorAttributeName: Color.DarkTextColor,
         NSFontAttributeName: Font.PrimaryFontLight(size: 14.0),
