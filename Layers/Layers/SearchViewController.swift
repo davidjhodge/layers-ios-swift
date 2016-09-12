@@ -36,8 +36,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         super.init(coder: aDecoder)
         
         tabBarItem.title = "Search"
-        tabBarItem.image = UIImage(named: "search")
-        tabBarItem.selectedImage = UIImage(named: "search-filled")
+        tabBarItem.image = UIImage(named: "search-glass")
+        tabBarItem.selectedImage = UIImage(named: "search-glass-filled")
     }
     
     override func viewDidLoad() {

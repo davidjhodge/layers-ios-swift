@@ -27,6 +27,7 @@ class ProductListViewController: UIViewController, UICollectionViewDataSource, U
         
         collectionView.backgroundColor = Color.BackgroundGrayColor
         collectionView.alwaysBounceVertical = true
+        collectionView.showsVerticalScrollIndicator = false
         
         // Set estimated item size of each collection view cell. This causes the collection view to query each cell for its size, so autolayout takes over
 //        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout

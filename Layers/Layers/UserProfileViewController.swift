@@ -28,6 +28,8 @@ class UserProfileViewController: UIViewController, UICollectionViewDataSource, U
         
         collectionView.alwaysBounceVertical = true
         
+        collectionView.showsVerticalScrollIndicator = false
+
         reloadData()
     }
     

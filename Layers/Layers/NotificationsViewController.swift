@@ -26,8 +26,8 @@ class NotificationsViewController: UIViewController, UICollectionViewDataSource,
         title = "notifications".uppercaseString
         
         tabBarItem.title = "Notifications"
-        tabBarItem.image = UIImage(named: "bell")
-        tabBarItem.image = UIImage(named: "bell-filled")
+        tabBarItem.image = UIImage(named: "notifications-bell")
+        tabBarItem.selectedImage = UIImage(named: "notifications-bell-filled")
     }
     
     override func viewDidLoad() {

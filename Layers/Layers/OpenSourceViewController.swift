@@ -18,7 +18,7 @@ class OpenSourceViewController: UIViewController, UITableViewDataSource, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Open Source Libraries".uppercaseString
+        title = "Open Source Libraries"
         
         tableView.tableFooterView = UIView()
         
@@ -43,12 +43,12 @@ class OpenSourceViewController: UIViewController, UITableViewDataSource, UITable
         {
             if let name = library.name
             {
-                cell.titleLabel.text = name
+                cell.titleLabel.attributedText = NSAttributedString(string: name, attributes: FontAttributes.headerTextAttributes)
             }
             
             if let license = library.licenseDescription
             {
-                cell.descriptionTextView.text = license
+                cell.descriptionTextView.attributedText = NSAttributedString(string: license, attributes: FontAttributes.darkBodyTextAttributes)
                 
                 cell.descriptionTextView.bounds.size.height = cell.descriptionTextView.contentSize.height
             }

@@ -43,7 +43,7 @@ public class FontAttributes: NSObject
     static let defaultTextAttributes = [
         NSForegroundColorAttributeName: Color.DarkTextColor,
         NSFontAttributeName: Font.PrimaryFontLight(size: 14.0),
-        NSKernAttributeName: 1.0
+        NSKernAttributeName: 0.8
     ]
     
     static let bodyTextAttributes = [

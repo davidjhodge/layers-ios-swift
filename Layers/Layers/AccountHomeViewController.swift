@@ -20,7 +20,7 @@ enum UserActivity: Int
 
 private enum OtherRow: Int
 {
-    case Settings = 0, Help, _Count
+    case Settings = 0, ContactUs, _Count
 }
 
 class AccountHomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProductListDelegate {
@@ -34,7 +34,7 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
         
         tabBarItem.title = "Me"
         tabBarItem.image = UIImage(named: "person")
-        tabBarItem.image = UIImage(named: "person-filled")
+        tabBarItem.selectedImage = UIImage(named: "person-filled")
     }
     
     override func viewDidLoad() {
@@ -45,13 +45,9 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
         
         collectionView.backgroundColor = Color.BackgroundGrayColor
         collectionView.alwaysBounceVertical = true
+        collectionView.showsVerticalScrollIndicator = false
         
         collectionView.registerNib(UINib(nibName: "HeaderView", bundle: NSBundle.mainBundle()), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderView")
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: Collection View Data Source
@@ -155,9 +151,9 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
                         {
                             cell.titleLabel.attributedText = NSAttributedString(string: "Settings", attributes: textAttributes)
                         }
-                        else if row == .Help
+                        else if row == .ContactUs
                         {
-                            cell.titleLabel.attributedText = NSAttributedString(string: "Help", attributes: textAttributes)
+                            cell.titleLabel.attributedText = NSAttributedString(string: "Contact Us", attributes: textAttributes)
                         }
                         
                         cell.backgroundColor = Color.whiteColor()
@@ -214,13 +210,13 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
     {
         if let section = Section(rawValue: indexPath.section)
         {
+            let storyboard = UIStoryboard(name: "Account", bundle: NSBundle.mainBundle())
+
             switch section {
             case .ProfileHeader:
                 
                 if indexPath.row == 0
                 {
-                    let storyboard = UIStoryboard(name: "Account", bundle: NSBundle.mainBundle())
-                    
                     if let profileVc = storyboard.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController
                     {
                         navigationController?.pushViewController(profileVc, animated: true)
@@ -228,8 +224,6 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
                 }
                 
             case .Activity:
-                
-                let storyboard = UIStoryboard(name: "Account", bundle: NSBundle.mainBundle())
                 
                 if let productListVc = storyboard.instantiateViewControllerWithIdentifier("ProductListViewController") as? ProductListViewController
                 {
@@ -272,10 +266,17 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
                 {
                     if row == .Settings
                     {
-                        
+                        if let settingsVc = storyboard.instantiateViewControllerWithIdentifier("SettingsViewController") as? SettingsViewController
+                        {
+                            navigationController?.pushViewController(settingsVc, animated: true)
+                        }
                     }
-                    else if row == .Help
+                    else if row == .ContactUs
                     {
+                        if let contactVc = storyboard.instantiateViewControllerWithIdentifier("ContactUsViewController") as? ContactUsViewController
+                        {
+                            navigationController?.pushViewController(contactVc, animated: true)
+                        }
                     }
                 }
                 

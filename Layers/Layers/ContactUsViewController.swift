@@ -29,11 +29,11 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Send".uppercaseString, style: .Done, target: self, action: #selector(send))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Send", style: .Done, target: self, action: #selector(send))
         
         tableView.backgroundColor = Color.BackgroundGrayColor
         
-//        tableView.separatorColor = Color(red: 237.0, green: 237.0, blue: 237.0, alpha: 1.0)
+        tableView.separatorColor = Color(red: 237.0, green: 237.0, blue: 237.0, alpha: 1.0)
     }
     
     func send()
