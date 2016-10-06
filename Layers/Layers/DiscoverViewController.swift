@@ -29,13 +29,13 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
     
     var refreshControl: UIRefreshControl?
     
-    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
             
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        let titleLabel = UILabel(frame: CGRectMake(0,0,28,80))
-        titleLabel.attributedText = NSAttributedString(string: "Layers".uppercaseString, attributes: [NSForegroundColorAttributeName: Color.whiteColor(),
+        let titleLabel = UILabel(frame: CGRect(x: 0,y: 0,width: 28,height: 80))
+        titleLabel.attributedText = NSAttributedString(string: "Layers".uppercased(), attributes: [NSForegroundColorAttributeName: Color.white,
             NSFontAttributeName: Font.PrimaryFontRegular(size: 18.0),
             NSKernAttributeName: 2.5]
         )
@@ -50,7 +50,7 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
         super.viewDidLoad()
         
         // Change status bar style to .LightContent
-        navigationController?.navigationBar.barStyle = .Black
+        navigationController?.navigationBar.barStyle = .black
         
         collectionView.backgroundColor = Color.BackgroundGrayColor
         collectionView.alwaysBounceVertical = true
@@ -58,41 +58,41 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
         collectionView.showsHorizontalScrollIndicator = false
         
         refreshControl = UIRefreshControl()
-        refreshControl?.tintColor = Color.lightGrayColor()
-        refreshControl?.addTarget(self, action: #selector(refresh), forControlEvents: .ValueChanged)
+        refreshControl?.tintColor = Color.lightGray
+        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         refreshControl?.layer.zPosition = -1
         collectionView.addSubview(refreshControl!)
         
         // Flow Layout
         let customLayout = NHAlignmentFlowLayout()
-        customLayout.scrollDirection = .Vertical
-        customLayout.alignment = .TopLeftAligned
+        customLayout.scrollDirection = .vertical
+        customLayout.alignment = .topLeftAligned
         customLayout.minimumLineSpacing = 8.0
         customLayout.minimumInteritemSpacing = 8.0
         customLayout.sectionInset = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
         collectionView.collectionViewLayout = customLayout
         
-        emptyStateButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
-        emptyStateButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        emptyStateButton.setBackgroundColor(Color.NeonBlueColor, forState: UIControlState())
+        emptyStateButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .highlighted)
         
-        emptyStateButton.addTarget(self, action: #selector(showSearchTab), forControlEvents: .TouchUpInside)
+        emptyStateButton.addTarget(self, action: #selector(showSearchTab), for: .touchUpInside)
         
         spinner.hidesWhenStopped = true
-        spinner.hidden = true
-        spinner.color = Color.grayColor()
+        spinner.isHidden = true
+        spinner.color = Color.gray
         view.addSubview(spinner)
                 
         reloadProducts()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         if !LRSessionManager.sharedManager.hasSeenDiscoverPopup()
         {
-            if let popupView = NSBundle.mainBundle().loadNibNamed("DiscoverPopup", owner: self, options: nil)[0] as? DiscoverPopupView
+            if let popupView = Bundle.main.loadNibNamed("DiscoverPopup", owner: self, options: nil)?[0] as? DiscoverPopupView
             {
-                let discoverPopup = KLCPopup(contentView: popupView, showType: .BounceIn, dismissType: .BounceOut, maskType: .Dimmed, dismissOnBackgroundTouch: true, dismissOnContentTouch: true)
+                let discoverPopup = KLCPopup(contentView: popupView, showType: .bounceIn, dismissType: .bounceOut, maskType: .dimmed, dismissOnBackgroundTouch: true, dismissOnContentTouch: true)
                 
                 discoverPopup!.show()
                 
@@ -110,19 +110,19 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
     // MARK: Networking
     func reloadProducts()
     {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
         if self.products == nil || self.products?.count == 0
         {
             self.spinner.startAnimating()
         }
         
-        if emptyStateView.hidden == false
+        if emptyStateView.isHidden == false
         {
             toggleErrorState(true, error: false)
         }
         
-        LRSessionManager.sharedManager.loadProduct(NSNumber(int: 512141429), completionHandler: { (success, error, response) -> Void in
+        LRSessionManager.sharedManager.loadProduct(NSNumber(value: 512141429 as Int32), completionHandler: { (success, error, response) -> Void in
             
             if success
             {
@@ -130,7 +130,7 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
                 {
                     self.products = [product]
                     
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async(execute: { () -> Void in
                         
                         self.collectionView.reloadData()
                     })
@@ -141,14 +141,14 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
                 log.error(error)
             }
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 
                 self.refreshControl?.endRefreshing()
                 
                 self.spinner.stopAnimating()
             })
             
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
         })
         
 //        LRSessionManager.sharedManager.loadDiscoverProducts({ (success, error, response) -> Void in
@@ -224,21 +224,21 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
     
     func loadMoreProducts()
     {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
         LRSessionManager.sharedManager.loadDiscoverProducts({ (success, error, response) -> Void in
             
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             
             if success
             {
                 if let newProducts: Array<Product> = response as? Array<Product>
                 {
                     // If this is a response for page 2 or greater
-                    self.products?.appendContentsOf(newProducts)
+                    self.products?.append(contentsOf: newProducts)
                     
                     // Update UI
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async(execute: { () -> Void in
                         
                         let topOffset = self.collectionView.contentOffset.y
                         
@@ -248,7 +248,7 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
                         
                         self.collectionView.performBatchUpdates({ () -> Void in
                             
-                            var indexPaths = Array<NSIndexPath>()
+                            var indexPaths = Array<IndexPath>()
                             
                             // (Page - 1) represents the first index we want to insert into
                             if let products = self.products
@@ -258,16 +258,16 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
                                 // When less items than the productCollectionPageSize are returned, newProducts.count ensures we only try to insert the number of products we have. This avoids an indexOutOfBounds error
                                 for i in index...index+newProducts.count-1
                                 {
-                                    indexPaths.append(NSIndexPath(forRow: i, inSection: 0))
+                                    indexPaths.append(IndexPath(row: i, section: 0))
                                 }
                                 
-                                self.collectionView.insertItemsAtIndexPaths(indexPaths)
+                                self.collectionView.insertItems(at: indexPaths)
                                 
                             }
                             }, completion: { (finished) -> Void in
                                 
                                 // Set correct content offset
-                                self.collectionView.contentOffset = CGPointMake(0, topOffset)
+                                self.collectionView.contentOffset = CGPoint(x: 0, y: topOffset)
                                 CATransaction.commit()
                         })
                     })
@@ -275,68 +275,68 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
             }
             else
             {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     
-                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
+                    let alert = UIAlertController(title: error, message: nil, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                 })
             }
         })
     }
     
-    func toggleErrorState(hidden: Bool, error: Bool)
+    func toggleErrorState(_ hidden: Bool, error: Bool)
     {
         if hidden == true
         {
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 
-                self.collectionView.hidden = false
+                self.collectionView.isHidden = false
                 
-                self.emptyStateView.hidden = true
+                self.emptyStateView.isHidden = true
             })
         }
         else
         {
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 
                 if error
                 {
-                    self.emptyStateView.emptyStateButton.setTitle("Retry".uppercaseString, forState: .Normal)
-                    self.emptyStateView.emptyStateButton.setTitle("Retry".uppercaseString, forState: .Highlighted)
+                    self.emptyStateView.emptyStateButton.setTitle("Retry".uppercased(), for: UIControlState())
+                    self.emptyStateView.emptyStateButton.setTitle("Retry".uppercased(), for: .highlighted)
                     
                     // Replace old action with new action
-                    self.emptyStateView.emptyStateButton.removeTarget(self, action: #selector(self.showSearchTab), forControlEvents: .TouchUpInside)
-                    self.emptyStateView.emptyStateButton.addTarget(self, action: #selector(self.reloadProducts), forControlEvents: .TouchUpInside)
+                    self.emptyStateView.emptyStateButton.removeTarget(self, action: #selector(self.showSearchTab), for: .touchUpInside)
+                    self.emptyStateView.emptyStateButton.addTarget(self, action: #selector(self.reloadProducts), for: .touchUpInside)
                     self.emptyStateView.descriptionLabel.text = "\n\n" + "Whoops! There was an error loading new products."
                 }
                 else
                 {
                     // User has browsed all items in Discover
-                    self.emptyStateView.emptyStateButton.setTitle("Search Layers".uppercaseString, forState: .Normal)
-                    self.emptyStateView.emptyStateButton.setTitle("Search Layers".uppercaseString, forState: .Highlighted)
+                    self.emptyStateView.emptyStateButton.setTitle("Search Layers".uppercased(), for: UIControlState())
+                    self.emptyStateView.emptyStateButton.setTitle("Search Layers".uppercased(), for: .highlighted)
                     
                     // Replace old action with new action
-                    self.emptyStateView.emptyStateButton.removeTarget(self, action: #selector(self.reloadProducts), forControlEvents: .TouchUpInside)
-                    self.emptyStateView.emptyStateButton.addTarget(self, action: #selector(self.showSearchTab), forControlEvents: .TouchUpInside)
+                    self.emptyStateView.emptyStateButton.removeTarget(self, action: #selector(self.reloadProducts), for: .touchUpInside)
+                    self.emptyStateView.emptyStateButton.addTarget(self, action: #selector(self.showSearchTab), for: .touchUpInside)
                     
                     self.emptyStateView.descriptionLabel.text = "Wow! You've seen every item on Layers." + "\n\n" + "To keep browsing, try Search."
                 }
                 
-                self.collectionView.hidden = true
+                self.collectionView.isHidden = true
 
-                self.emptyStateView.hidden = false
+                self.emptyStateView.isHidden = false
             })
         }
     }
     
     func hardReloadCollectionView()
     {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        DispatchQueue.main.async(execute: { () -> Void in
             
             self.collectionView.reloadData()
             
-            self.collectionView.setContentOffset(CGPointZero, animated: false)
+            self.collectionView.setContentOffset(CGPoint.zero, animated: false)
         })
     }
     
@@ -356,26 +356,26 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
         }
     }
     
-    func like(indexPath: NSIndexPath)
+    func like(_ indexPath: IndexPath)
     {
 //        if let productId = products?[safe: indexPath.row]?.productId
 //        {
 //            // Like Product
 //        }
-        if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? ProductPostCell
+        if let cell = collectionView.cellForItem(at: indexPath) as? ProductPostCell
         {
-            if cell.likeButton.highlighted == false
+            if cell.likeButton.isHighlighted == false
             {
-                cell.likeButton.highlighted = true
+                cell.likeButton.isHighlighted = true
             }
             else
             {
-                cell.likeButton.highlighted = false
+                cell.likeButton.isHighlighted = false
             }
         }
     }
     
-    func viewProductOnline(sender: UIButton)
+    func viewProductOnline(_ sender: UIButton)
     {
         let index = sender.tag
         
@@ -387,25 +387,25 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
     
     // MARK: SFSafariViewController
     
-    func showWebBrowser(url: NSURL)
+    func showWebBrowser(_ url: URL)
     {
-        let webView = ProductWebViewController(URL: url)
+        let webView = ProductWebViewController(url: url)
         
         let navController = ProductWebNavigationController(rootViewController: webView)
         navController.setNavigationBarHidden(true, animated: false)
-        navController.modalPresentationStyle = .OverFullScreen
+        navController.modalPresentationStyle = .overFullScreen
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
 
     // MARK: Collection View Data Source
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if let items = products where items.count > 0
+        if let items = products , items.count > 0
         {
             return items.count
         }
@@ -413,27 +413,27 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
         return 0
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell: ProductPostCell = collectionView.dequeueReusableCellWithReuseIdentifier("ProductPostCell", forIndexPath: indexPath) as! ProductPostCell
+        let cell: ProductPostCell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductPostCell", for: indexPath) as! ProductPostCell
         
         if let items = products
         {
-            let product: Product = items[indexPath.row]
+            let product: Product = items[(indexPath as NSIndexPath).row]
             
             cell.productNameLabel.text = ""
             cell.priceLabel.text = ""
             
             // User Profile Image
-            if let imageUrl = NSURL(string: "https://organicthemes.com/demo/profile/files/2012/12/profile_img.png")
+            if let imageUrl = URL(string: "https://organicthemes.com/demo/profile/files/2012/12/profile_img.png")
             {
-                cell.profilePictureImageView.sd_setImageWithURL(imageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                cell.profilePictureImageView.sd_setImage(with: imageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
                     
-                    if image != nil && cacheType != .Memory
+                    if image != nil && cacheType != .memory
                     {
                         cell.profilePictureImageView.alpha = 0.0
                         
-                        UIView.animateWithDuration(0.3, animations: {
+                        UIView.animate(withDuration: 0.3, animations: {
                             cell.profilePictureImageView.alpha = 1.0
                         })
                     }
@@ -445,14 +445,14 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
             
             let attributedNameString = NSMutableAttributedString(string: fullName, attributes: FontAttributes.headerTextAttributes)
             
-            attributedNameString.appendAttributedString(NSAttributedString(string: " just bought this", attributes: FontAttributes.defaultTextAttributes))
+            attributedNameString.append(NSAttributedString(string: " just bought this", attributes: FontAttributes.defaultTextAttributes))
             
             cell.userFullNameLabel.attributedText = attributedNameString
             
             // Timestamp
-            let timestampDate = NSDate(timeIntervalSince1970: 1472951231)
+            let timestampDate = Date(timeIntervalSince1970: 1472951231)
                 
-            let timeStampString: String = timestampDate.shortTimeAgoSinceNow()
+            let timeStampString: String = (timestampDate as NSDate).shortTimeAgoSinceNow()
             
             cell.timestampLabel.attributedText = NSAttributedString(string: timeStampString, attributes: FontAttributes.boldBodyTextAttributes)
             
@@ -483,18 +483,18 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
             
             // Set Images
         
-            var productImages: Array<NSURL> = Array<NSURL>()
+            var productImages: Array<URL> = Array<URL>()
             
             // Append primary image
             if let primaryImageResolutions = product.images?.primaryImageUrls
             {
-                if let imageIndex = primaryImageResolutions.indexOf({ $0.sizeName == "IPhone" })
+                if let imageIndex = primaryImageResolutions.index(where: { $0.sizeName == "IPhone" })
                 {
                     if let primaryImage: Image = primaryImageResolutions[safe: imageIndex]
                     {
                         if let imageUrl = primaryImage.url
                         {
-                            productImages.append(imageUrl)
+                            productImages.append(imageUrl as URL)
                         }
                     }
                 }
@@ -505,13 +505,13 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
             {
                 for imageResolutions in alternateImages
                 {
-                    if let imageIndex = imageResolutions.indexOf({ $0.sizeName == "IPhone" })
+                    if let imageIndex = imageResolutions.index(where: { $0.sizeName == "IPhone" })
                     {
                         if let altImage: Image = imageResolutions[safe: imageIndex]
                         {
                             if let imageUrl = altImage.url
                             {
-                                productImages.append(imageUrl)
+                                productImages.append(imageUrl as URL)
                             }
                         }
                     }
@@ -534,14 +534,14 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
                 retailPrice = retail
             }
             
-            cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(retailPrice, salePrice: currentPrice)
+            cell.priceLabel.attributedText = NSAttributedString.priceString(withRetailPrice: retailPrice, salePrice: currentPrice)
             
             if let brand = product.brand?.name,
                 let unbrandedName = product.unbrandedName
             {
                 let attributedString = NSMutableAttributedString(string: brand, attributes: FontAttributes.headerTextAttributes)
                 
-                attributedString.appendAttributedString(NSAttributedString(string: " \(unbrandedName)", attributes: FontAttributes.defaultTextAttributes))
+                attributedString.append(NSAttributedString(string: " \(unbrandedName)", attributes: FontAttributes.defaultTextAttributes))
                 
                 cell.productNameLabel.attributedText = attributedString
             }
@@ -552,16 +552,16 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
             // Engagement
             
             // View Button
-            cell.viewButton.setAttributedTitle(NSAttributedString(string: "View".uppercaseString, attributes: FontAttributes.buttonAttributes), forState: .Normal)
+            cell.viewButton.setAttributedTitle(NSAttributedString(string: "View".uppercased(), attributes: FontAttributes.buttonAttributes), for: UIControlState())
             
             cell.viewButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6)
             
-            cell.viewButton.setImage(UIImage(named: "outbound-filled"), forState: .Normal)
+            cell.viewButton.setImage(UIImage(named: "outbound-filled"), for: UIControlState())
 
             // Specifies which cell index the button was tapped at
-            cell.viewButton.tag = indexPath.row
+            cell.viewButton.tag = (indexPath as NSIndexPath).row
             
-            cell.viewButton.addTarget(self, action: #selector(viewProductOnline(_:)), forControlEvents: .TouchUpInside)
+            cell.viewButton.addTarget(self, action: #selector(viewProductOnline(_:)), for: .touchUpInside)
             
             // Like Button
             let likeCount = 462
@@ -572,35 +572,35 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
             let highlightedTextAttributes = [NSForegroundColorAttributeName: Color.PrimaryAppColor,
                                              NSFontAttributeName: Font.PrimaryFontRegular(size: 14.0)]
             
-            cell.likeButton.setAttributedTitle(NSAttributedString(string: "\(likeCount)", attributes: normalTextAttributes), forState: .Normal)
-            cell.likeButton.setAttributedTitle(NSAttributedString(string: "\(likeCount)", attributes: highlightedTextAttributes), forState: .Highlighted)
+            cell.likeButton.setAttributedTitle(NSAttributedString(string: "\(likeCount)", attributes: normalTextAttributes), for: UIControlState())
+            cell.likeButton.setAttributedTitle(NSAttributedString(string: "\(likeCount)", attributes: highlightedTextAttributes), for: .highlighted)
 
             cell.likeButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             cell.likeButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -8, bottom: 0, right: 8)
             
-            cell.likeButton.setImage(UIImage(named: "heart"), forState: .Normal)
-            cell.likeButton.setImage(UIImage(named: "heart-filled"), forState: .Highlighted)
+            cell.likeButton.setImage(UIImage(named: "heart"), for: UIControlState())
+            cell.likeButton.setImage(UIImage(named: "heart-filled"), for: .highlighted)
             
             cell.likeButton.sizeToFit()
             
             // Comment Button
-            cell.commentButton.setImage(UIImage(named: "chat-bubble"), forState: .Normal)
-            cell.commentButton.setImage(UIImage(named: "chat-bubble-filled"), forState: .Highlighted)
+            cell.commentButton.setImage(UIImage(named: "chat-bubble"), for: UIControlState())
+            cell.commentButton.setImage(UIImage(named: "chat-bubble-filled"), for: .highlighted)
         
             // Share Button
-            cell.shareButton.setImage(UIImage(named: "share"), forState: .Normal)
-            cell.shareButton.setImage(UIImage(named: "share-filled"), forState: .Highlighted)
+            cell.shareButton.setImage(UIImage(named: "share"), for: UIControlState())
+            cell.shareButton.setImage(UIImage(named: "share-filled"), for: .highlighted)
         }
         
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         
         if let products = products
         {
             // Insert next page of items as we near the end of the current list
-            if indexPath.row == products.count - 4
+            if (indexPath as NSIndexPath).row == products.count - 4
             {
                 // If last page returned a full list of products, it's highly likely the next page is not empty. This is not perfect, but will reduce unnecessary API calls
                 loadMoreProducts()
@@ -608,36 +608,36 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
         }
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         // Size for Product Cell
         let flowLayout: UICollectionViewFlowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         
         let width: CGFloat = (collectionView.bounds.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right)
         
-        return CGSizeMake(width, 480.0)
+        return CGSize(width: width, height: 480.0)
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsetsMake(8, 8, 8, 8)
     }
     
     // MARK: Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ShowProductViewController"
         {
-            if segue.destinationViewController is ProductViewController
+            if segue.destination is ProductViewController
             {
 //                navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: self, action: nil)
 
                 //Selected Product Index
-                if let indexPath = sender as? NSIndexPath
+                if let indexPath = sender as? IndexPath
                 {
                     if let productCollection = products
                     {
-                        if let product = productCollection[indexPath.row] as Product?
+                        if let product = productCollection[(indexPath as NSIndexPath).row] as Product?
                         {
-                            if let destinationVC = segue.destinationViewController as? ProductViewController
+                            if let destinationVC = segue.destination as? ProductViewController
                             {
                                 destinationVC.productIdentifier = product.productId
                             }

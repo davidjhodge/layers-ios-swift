@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ProductListDelegate {
-    func reloadData(activityType: UserActivity, completion: LRCompletionBlock?)
+    func reloadData(_ activityType: UserActivity, completion: LRCompletionBlock?)
 }
 
 class ProductListViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -45,7 +45,7 @@ class ProductListViewController: UIViewController, UICollectionViewDataSource, U
                     {
                         self.products = [product, product, product]
                         
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        DispatchQueue.main.async(execute: { () -> Void in
                             
                             self.collectionView.reloadData()
                         })
@@ -58,11 +58,11 @@ class ProductListViewController: UIViewController, UICollectionViewDataSource, U
     // MARK: Networking
 
     // MARK: Collection View Data Source
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if let products = products
         {
@@ -72,24 +72,24 @@ class ProductListViewController: UIViewController, UICollectionViewDataSource, U
         return 0
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ProductListCell", forIndexPath: indexPath) as! ProductListCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductListCell", for: indexPath) as! ProductListCell
         
-        cell.backgroundColor = Color.whiteColor()
+        cell.backgroundColor = Color.white
 //        cell.nameLabel.preferredMaxLayoutWidth = 112.0
         
-        if let product = products?[safe: indexPath.row]
+        if let product = products?[safe: (indexPath as NSIndexPath).row]
         {
             if let primaryImageUrl = product.primaryImageUrl(ImageSizeKey.Small)
             {
-                cell.productImageView.sd_setImageWithURL(primaryImageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                cell.productImageView.sd_setImage(with: primaryImageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
                     
-                    if image != nil && cacheType != .Memory
+                    if image != nil && cacheType != .memory
                     {
                         cell.productImageView.alpha = 0.0
                         
-                        UIView.animateWithDuration(0.3, animations: {
+                        UIView.animate(withDuration: 0.3, animations: {
                             cell.productImageView.alpha = 1.0
                         })
                     }
@@ -101,7 +101,7 @@ class ProductListViewController: UIViewController, UICollectionViewDataSource, U
             {
                 let attributedString = NSMutableAttributedString(string: brand, attributes: FontAttributes.headerTextAttributes)
                 
-                attributedString.appendAttributedString(NSAttributedString(string: " \(unbrandedName)", attributes: FontAttributes.defaultTextAttributes))
+                attributedString.append(NSAttributedString(string: " \(unbrandedName)", attributes: FontAttributes.defaultTextAttributes))
                 
                 cell.nameLabel.attributedText = attributedString
             }
@@ -110,11 +110,11 @@ class ProductListViewController: UIViewController, UICollectionViewDataSource, U
             {
                 if let salePrice = product.altPrice?.salePrice
                 {
-                    cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(retailPrice, salePrice: salePrice)
+                    cell.priceLabel.attributedText = NSAttributedString.priceString(withRetailPrice: retailPrice, salePrice: salePrice)
                 }
                 else
                 {
-                    cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(retailPrice, size: 16.0, strikethrough: false)
+                    cell.priceLabel.attributedText = NSAttributedString.priceString(withRetailPrice: retailPrice, size: 16.0, strikethrough: false)
                 }
             }
             
@@ -124,13 +124,13 @@ class ProductListViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     // MARK: Collection View Delegate
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
-        if let productId = products?[safe: indexPath.row]?.productId
+        if let productId = products?[safe: (indexPath as NSIndexPath).row]?.productId
         {
-            let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+            let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
             
-            if let productVc = storyboard.instantiateViewControllerWithIdentifier("ProductViewController") as? ProductViewController
+            if let productVc = storyboard.instantiateViewController(withIdentifier: "ProductViewController") as? ProductViewController
             {
                 productVc.productIdentifier = productId
                 
@@ -139,11 +139,11 @@ class ProductListViewController: UIViewController, UICollectionViewDataSource, U
         }
     }
     
-    func collectionView(collectionView: UICollectionView, didHighlightItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
         
-        if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath)
+        if let cell: UICollectionViewCell = collectionView.cellForItem(at: indexPath)
         {
-            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+            UIView.animate(withDuration: 0.1, delay: 0, options: .allowUserInteraction, animations: { () -> Void in
                 
                 cell.backgroundColor = Color.HighlightedGrayColor
                 
@@ -156,13 +156,13 @@ class ProductListViewController: UIViewController, UICollectionViewDataSource, U
         }
     }
     
-    func collectionView(collectionView: UICollectionView, didUnhighlightItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
         
-        if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath)
+        if let cell: UICollectionViewCell = collectionView.cellForItem(at: indexPath)
         {
-            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+            UIView.animate(withDuration: 0.1, delay: 0, options: .allowUserInteraction, animations: { () -> Void in
                 
-                cell.backgroundColor = Color.whiteColor()
+                cell.backgroundColor = Color.white
                 
                 if let productCell = cell as? ProductListCell
                 {
@@ -174,7 +174,7 @@ class ProductListViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     // MARK: Collection View Delegate Flow Layout
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
         {

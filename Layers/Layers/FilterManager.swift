@@ -42,9 +42,9 @@ struct Filter
     var colors: (selections: Array<ColorObject>?, all: Array<ColorObject>?)
 }
 
-typealias FilterOriginalCompletionBlock = ((success: Bool, response:Array<AnyObject>?) -> Void)
-typealias FilterCompletionBlock = ((success: Bool, response:Array<FilterObject>?) -> Void)
-typealias ColorCompletionBlock = ((success: Bool, response:Array<ColorObject>?) -> Void)
+typealias FilterOriginalCompletionBlock = ((_ success: Bool, _ response:Array<AnyObject>?) -> Void)
+typealias FilterCompletionBlock = ((_ success: Bool, _ response:Array<FilterObject>?) -> Void)
+typealias ColorCompletionBlock = ((_ success: Bool, _ response:Array<ColorObject>?) -> Void)
 
 // Compare by keys
 func ==(lhs:FilterObject, rhs:FilterObject) -> Bool { // Implement Equatable
@@ -71,7 +71,7 @@ class FilterManager
     // Static variable to handle all filtering manipulations
     static let defaultManager = FilterManager()
     
-    private var filter: Filter!
+    fileprivate var filter: Filter!
     
     init()
     {
@@ -83,7 +83,7 @@ class FilterManager
         return filter
     }
     
-    func setNewFilter(newFilter: Filter)
+    func setNewFilter(_ newFilter: Filter)
     {
         filter = newFilter
     }
@@ -112,24 +112,24 @@ class FilterManager
                     // First category
                     if categoryParams.characters.count == 0
                     {
-                        categoryParams = categoryParams.stringByAppendingString("category_id=\(categoryKey),")
+                        categoryParams = categoryParams + "category_id=\(categoryKey),"
                     }
                     // Any additional categories
                     else
                     {
-                        categoryParams = categoryParams.stringByAppendingString("\(categoryKey),")
+                        categoryParams = categoryParams + "\(categoryKey),"
                     }
                 }
             }
             
-            if categoryParams.containsString(",")
+            if categoryParams.contains(",")
             {
                 categoryParams = String(categoryParams.characters.dropLast())
                 
-                categoryParams = categoryParams.stringByAppendingString("&")
+                categoryParams = categoryParams + "&"
             }
             
-            paramsString = paramsString.stringByAppendingString(categoryParams)
+            paramsString = paramsString + categoryParams
         }
         
         // Brands
@@ -144,24 +144,24 @@ class FilterManager
                     // First brand
                     if brandParams.characters.count == 0
                     {
-                        brandParams = brandParams.stringByAppendingString("brand_id=\(brandKey),")
+                        brandParams = brandParams + "brand_id=\(brandKey),"
                     }
                     // Any additional brands
                     else
                     {
-                        brandParams = brandParams.stringByAppendingString("\(brandKey),")
+                        brandParams = brandParams + "\(brandKey),"
                     }
                 }
             }
             
-            if brandParams.containsString(",")
+            if brandParams.contains(",")
             {
                 brandParams = String(brandParams.characters.dropLast())
                 
-                brandParams = brandParams.stringByAppendingString("&")
+                brandParams = brandParams + "&"
             }
             
-            paramsString = paramsString.stringByAppendingString(brandParams)
+            paramsString = paramsString + brandParams
         }
         
         // Retailers
@@ -176,24 +176,24 @@ class FilterManager
                     // First brand
                     if retailerParams.characters.count == 0
                     {
-                        retailerParams = retailerParams.stringByAppendingString("retailer_id=\(retailerKey),")
+                        retailerParams = retailerParams + "retailer_id=\(retailerKey),"
                     }
                         // Any additional brands
                     else
                     {
-                        retailerParams = retailerParams.stringByAppendingString("\(retailerKey),")
+                        retailerParams = retailerParams + "\(retailerKey),"
                     }
                 }
             }
             
-            if retailerParams.containsString(",")
+            if retailerParams.contains(",")
             {
                 retailerParams = String(retailerParams.characters.dropLast())
                 
-                retailerParams = retailerParams.stringByAppendingString("&")
+                retailerParams = retailerParams + "&"
             }
             
-            paramsString = paramsString.stringByAppendingString(retailerParams)
+            paramsString = paramsString + retailerParams
         }
         
         // Price
@@ -201,7 +201,7 @@ class FilterManager
         {
             let priceParam = "price_min=\(priceMin)&"
             
-            paramsString = paramsString.stringByAppendingString(priceParam)
+            paramsString = paramsString + priceParam
 
         }
         
@@ -209,7 +209,7 @@ class FilterManager
         {
             let priceParam = "price_max=\(priceMax)&"
             
-            paramsString = paramsString.stringByAppendingString(priceParam)
+            paramsString = paramsString + priceParam
         }
         
         // Color
@@ -224,27 +224,27 @@ class FilterManager
                     // First brand
                     if colorParams.characters.count == 0
                     {
-                        colorParams = colorParams.stringByAppendingString("color_id=\(colorKey),")
+                        colorParams = colorParams + "color_id=\(colorKey),"
                     }
                         // Any additional brands
                     else
                     {
-                        colorParams = colorParams.stringByAppendingString("\(colorKey),")
+                        colorParams = colorParams + "\(colorKey),"
                     }
                 }
             }
             
-            if colorParams.containsString(",")
+            if colorParams.contains(",")
             {
                 colorParams = String(colorParams.characters.dropLast())
                 
-                colorParams = colorParams.stringByAppendingString("&")
+                colorParams = colorParams + "&"
             }
             
-            paramsString = paramsString.stringByAppendingString(colorParams)
+            paramsString = paramsString + colorParams
         }
         
-        if paramsString.containsString("&")
+        if paramsString.contains("&")
         {
             paramsString = String(paramsString.characters.dropLast())
         }
@@ -254,13 +254,13 @@ class FilterManager
     
     // MARK: Fetch Categories
     // Helper to access the original categories. This architecture should be modified in the future.
-    func fetchOriginalCategories(completionHandler: FilterOriginalCompletionBlock?)
+    func fetchOriginalCategories(_ completionHandler: FilterOriginalCompletionBlock?)
     {
         if let originalCategories = filter.categories.originals
         {
             if let completion = completionHandler
             {
-                completion(success: true, response: originalCategories)
+                completion(true, originalCategories)
             }
         }
         else
@@ -273,7 +273,7 @@ class FilterManager
                     {
                         if let completion = completionHandler
                         {
-                            completion(success: success, response: originalCategories)
+                            completion(success, originalCategories)
                         }
                     }
                 }
@@ -281,13 +281,13 @@ class FilterManager
         }
     }
     
-    func fetchCategories(completionHandler: FilterCompletionBlock?)
+    func fetchCategories(_ completionHandler: FilterCompletionBlock?)
     {
         if let categories = filter.categories.all
         {
             if let completion = completionHandler
             {
-                completion(success: true, response: categories)
+                completion(true, categories)
             }
         }
         else
@@ -308,7 +308,7 @@ class FilterManager
                                 // Story a FilterObject copy
                                 self.filter.categories.all = filters
                                 
-                                completion(success: true, response: filters)
+                                completion(true, filters)
                             }
                         }
                     }
@@ -317,7 +317,7 @@ class FilterManager
                 {
                     if let completion = completionHandler
                     {
-                        completion(success: false, response: nil)
+                        completion(false, nil)
                     }
                 }
 
@@ -328,13 +328,13 @@ class FilterManager
     
     // MARK: Fetch Brands
     
-    func fetchBrands(completionHandler: FilterCompletionBlock?)
+    func fetchBrands(_ completionHandler: FilterCompletionBlock?)
     {
         if let brands = filter.brands.all
         {
             if let completion = completionHandler
             {
-                completion(success: true, response: brands)
+                completion(true, brands)
             }
         }
         else
@@ -356,7 +356,7 @@ class FilterManager
                                 // Store a FilterObject copy
                                 self.filter.brands.all = filters
                                 
-                                completion(success: true, response: filters)
+                                completion(true, filters)
                             }
                         }
                     }
@@ -365,7 +365,7 @@ class FilterManager
                 {
                     if let completion = completionHandler
                     {
-                        completion(success: false, response: nil)
+                        completion(false, nil)
                     }
                 }
             })
@@ -374,13 +374,13 @@ class FilterManager
     
     // MARK: Fetch Retailers
     
-    func fetchRetailers(completionHandler: FilterCompletionBlock?)
+    func fetchRetailers(_ completionHandler: FilterCompletionBlock?)
     {
         if let retailers = filter.retailers.all
         {
             if let completion = completionHandler
             {
-                completion(success: true, response: retailers)
+                completion(true, retailers)
             }
         }
         else
@@ -397,7 +397,7 @@ class FilterManager
                             {
                                 self.filter.retailers.all = filters
                                 
-                                completion(success: true, response: filters)
+                                completion(true, filters)
                             }
                         }
                     }
@@ -406,7 +406,7 @@ class FilterManager
                 {
                     if let completion = completionHandler
                     {
-                        completion(success: false, response: nil)
+                        completion(false, nil)
                     }
                 }
             })
@@ -414,13 +414,13 @@ class FilterManager
     }
     
     // MARK: Fetch Colors
-    func fetchColors(completionHandler: ColorCompletionBlock?)
+    func fetchColors(_ completionHandler: ColorCompletionBlock?)
     {
         if let colors = filter.colors.all
         {
             if let completion = completionHandler
             {
-                completion(success: true, response: colors)
+                completion(true, colors)
             }
         }
         else
@@ -433,7 +433,7 @@ class FilterManager
                     {
                         if let colorArray = response as? Array<ColorObject>
                         {
-                            completion(success: true, response: colorArray)
+                            completion(true, colorArray)
                         }
                     }
                 }
@@ -441,7 +441,7 @@ class FilterManager
                 {
                     if let completion = completionHandler
                     {
-                        completion(success: false, response: nil)
+                        completion(false, nil)
                     }
                 }
             })

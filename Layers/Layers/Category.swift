@@ -19,7 +19,7 @@ class Category: Mappable
     
     var localizedCategoryId: String?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

@@ -10,7 +10,7 @@ import UIKit
 
 private enum Section: Int
 {
-    case ProfileHeader = 0, UserProducts, _Count
+    case profileHeader = 0, userProducts, _Count
 }
 
 class UserProfileViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
@@ -35,7 +35,7 @@ class UserProfileViewController: UIViewController, UICollectionViewDataSource, U
     
     func reloadData()
     {
-        LRSessionManager.sharedManager.loadProduct(NSNumber(int: 512141429), completionHandler: { (success, error, response) -> Void in
+        LRSessionManager.sharedManager.loadProduct(NSNumber(value: 512141429 as Int32), completionHandler: { (success, error, response) -> Void in
             
             if success
             {
@@ -43,7 +43,7 @@ class UserProfileViewController: UIViewController, UICollectionViewDataSource, U
                 {
                     self.userProducts = [product, product, product]
                     
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async(execute: { () -> Void in
                         
                         self.collectionView.reloadData()
                     })
@@ -57,20 +57,20 @@ class UserProfileViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     // MARK: Collection View Data Source
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         
         return Section._Count.rawValue
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if let section = Section(rawValue: section)
         {
-            if section == .ProfileHeader
+            if section == .profileHeader
             {
                 return 1
             }
-            else if section == .UserProducts
+            else if section == .userProducts
             {
                 if let userProducts = userProducts
                 {
@@ -82,13 +82,13 @@ class UserProfileViewController: UIViewController, UICollectionViewDataSource, U
         return 0
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if let section = Section(rawValue: indexPath.section)
+        if let section = Section(rawValue: (indexPath as NSIndexPath).section)
         {
-            if section == .ProfileHeader
+            if section == .profileHeader
             {
-                if let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ProfileHeaderCell", forIndexPath: indexPath) as? ProfileHeaderCell
+                if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProfileHeaderCell", for: indexPath) as? ProfileHeaderCell
                 {
                     cell.profileImageView.image = nil
                     cell.followersCountLabel.text = nil
@@ -97,9 +97,9 @@ class UserProfileViewController: UIViewController, UICollectionViewDataSource, U
                     cell.fullNameLabel.text = nil
                     
                     // Dummy Data
-                    if let userImageUrl = NSURL(string: "https://organicthemes.com/demo/profile/files/2012/12/profile_img.png")
+                    if let userImageUrl = URL(string: "https://organicthemes.com/demo/profile/files/2012/12/profile_img.png")
                     {
-                        cell.profileImageView.sd_setImageWithURL(userImageUrl, completed:nil)
+                        cell.profileImageView.sd_setImage(with: userImageUrl, completed:nil)
                     }
                     
                     cell.fullNameLabel.attributedText = NSAttributedString(string: "David Hodge", attributes: FontAttributes.headerTextAttributes)
@@ -115,7 +115,7 @@ class UserProfileViewController: UIViewController, UICollectionViewDataSource, U
                     let subheadingAttributes = [NSForegroundColorAttributeName: Color.GrayColor,
                                                 NSFontAttributeName: Font.PrimaryFontRegular(size: 10.0),
                                                 NSKernAttributeName: 0.7
-                                                ]
+                                                ] as [String : Any]
                     
                     cell.followersLabel.attributedText = NSAttributedString(string: "followers", attributes: subheadingAttributes)
                     
@@ -127,25 +127,25 @@ class UserProfileViewController: UIViewController, UICollectionViewDataSource, U
                     return cell
                 }
             }
-            else if section == .UserProducts
+            else if section == .userProducts
             {
-                if let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UserProductCell", forIndexPath: indexPath) as? UserProductCell
+                if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserProductCell", for: indexPath) as? UserProductCell
                 {
                     cell.productImageView.image = nil
                     cell.brandLabel.text = nil
                     cell.productNameLabel.text = nil
                     
-                    if let product = userProducts?[safe: indexPath.row]
+                    if let product = userProducts?[safe: (indexPath as NSIndexPath).row]
                     {
                         if let imageUrl = product.primaryImageUrl(ImageSizeKey.Normal)
                         {
-                            cell.productImageView.sd_setImageWithURL(imageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                            cell.productImageView.sd_setImage(with: imageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
                                 
-                                if image != nil && cacheType != .Memory
+                                if image != nil && cacheType != .memory
                                 {
                                     cell.productImageView.alpha = 0.0
                                     
-                                    UIView.animateWithDuration(0.3, animations: {
+                                    UIView.animate(withDuration: 0.3, animations: {
                                         cell.productImageView.alpha = 1.0
                                     })
                                 }
@@ -173,15 +173,15 @@ class UserProfileViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     // MARK: Collection View Delegate
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if indexPath.section == Section.UserProducts.rawValue
+        if (indexPath as NSIndexPath).section == Section.userProducts.rawValue
         {
-            if let productId = userProducts?[safe: indexPath.row]?.productId
+            if let productId = userProducts?[safe: (indexPath as NSIndexPath).row]?.productId
             {
-                let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+                let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
                 
-                if let productVc = storyboard.instantiateViewControllerWithIdentifier("ProductViewController") as? ProductViewController
+                if let productVc = storyboard.instantiateViewController(withIdentifier: "ProductViewController") as? ProductViewController
                 {
                     productVc.productIdentifier = productId
                     
@@ -192,16 +192,16 @@ class UserProfileViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     // MARK: Collection View Delegate Flow Layout
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        if let section = Section(rawValue: indexPath.section)
+        if let section = Section(rawValue: (indexPath as NSIndexPath).section)
         {
             // Heights should be dynamic
-            if section == .ProfileHeader
+            if section == .profileHeader
             {
                 return CGSize(width: collectionView.bounds.size.width, height: 203.0)
             }
-            else if section == .UserProducts
+            else if section == .userProducts
             {
                 return CGSize(width: collectionView.bounds.size.width * 0.5 - 12, height: 217.0)
             }
@@ -210,15 +210,15 @@ class UserProfileViewController: UIViewController, UICollectionViewDataSource, U
         return CGSize(width: 0, height: 0)
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
         if let section = Section(rawValue: section)
         {
-            if section == .ProfileHeader
+            if section == .profileHeader
             {
                 return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             }
-            else if section == .UserProducts
+            else if section == .userProducts
             {
                 return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
             }

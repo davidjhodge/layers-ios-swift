@@ -13,7 +13,7 @@ import MBProgressHUD
 
 private enum TableSection: Int
 {
-    case Email, Description, Count
+    case email, description, count
 }
 
 class ContactUsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
@@ -29,7 +29,7 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Send", style: .Done, target: self, action: #selector(send))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Send", style: .done, target: self, action: #selector(send))
         
         tableView.backgroundColor = Color.BackgroundGrayColor
         
@@ -38,8 +38,8 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
     
     func send()
     {
-        if let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: TableSection.Email.rawValue)) as? TextFieldCell,
-            let contentCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: TableSection.Description.rawValue)) as? TextViewCell
+        if let emailCell = tableView.cellForRow(at: IndexPath(row: 0, section: TableSection.email.rawValue)) as? TextFieldCell,
+            let contentCell = tableView.cellForRow(at: IndexPath(row: 0, section: TableSection.description.rawValue)) as? TextViewCell
         {
             if let email = emailCell.textField.text,
                 let content = contentCell.textView.text
@@ -52,27 +52,27 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
                         {
                             // Show success hud for 1.5 seconds. Hide it, end editing, and pop
                             
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                
-                                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                                hud.mode = .CustomView
+                            DispatchQueue.main.async {
+                                    
+                                let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                                hud.mode = .customView
                                 hud.customView = UIImageView(image: UIImage(named: "checkmark"))
                                 
-                                hud.label.text = "Message Sent".uppercaseString
+                                hud.label.text = "Message Sent".uppercased()
                                 hud.label.font = Font.OxygenBold(size: 17.0)
-                                hud.hideAnimated(true, afterDelay: 1.0)
+                                hud.hide(animated: true, afterDelay: 1.0)
                                 
-                                self.performSelector(#selector(self.done), withObject: nil, afterDelay: 1.0)
-                            })
+                                self.perform(#selector(self.done), with: nil, afterDelay: 1.0)
+                            }
                         }
                         else
                         {
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            DispatchQueue.main.async {
                                 
-                                let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                                self.presentViewController(alert, animated: true, completion: nil)
-                            })
+                                let alert = UIAlertController(title: error, message: nil, preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                                self.present(alert, animated: true, completion: nil)
+                            }
                         }
                     })
 
@@ -81,11 +81,11 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
                 else
                 {
                     // Invalid Email
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async(execute: { () -> Void in
                         
-                        let alert = UIAlertController(title: "ENTER_VALID_EMAIL".localized, message: nil, preferredStyle: .Alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                        self.presentViewController(alert, animated: true, completion: nil)
+                        let alert = UIAlertController(title: "ENTER_VALID_EMAIL".localized, message: nil, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
                     })
                     
                     return
@@ -94,49 +94,49 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
         }
         
         // Invalid parameters
-        let alert = UIAlertController(title: "INVALID_PARAMETERS".localized, message: nil, preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        let alert = UIAlertController(title: "INVALID_PARAMETERS".localized, message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func done()
     {
         self.view.endEditing(true)
         
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     // MARK: Table View Data Source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return TableSection.Count.rawValue
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return TableSection.count.rawValue
 
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell: TextFieldCell = tableView.dequeueReusableCellWithIdentifier("TextFieldCell") as! TextFieldCell
+        let cell: TextFieldCell = tableView.dequeueReusableCell(withIdentifier: "TextFieldCell") as! TextFieldCell
         
-        cell.selectionStyle = .None
+        cell.selectionStyle = .none
         
-        if let tableSection = TableSection(rawValue: indexPath.section)
+        if let tableSection = TableSection(rawValue: (indexPath as NSIndexPath).section)
         {
             switch tableSection {
                 
-            case .Email:
+            case .email:
                 
                 cell.textField.placeholder = "Email"
 
-            case.Description:
+            case.description:
                 
-                let textViewCell: TextViewCell = tableView.dequeueReusableCellWithIdentifier("TextViewCell") as! TextViewCell
+                let textViewCell: TextViewCell = tableView.dequeueReusableCell(withIdentifier: "TextViewCell") as! TextViewCell
                 
                 textViewCell.textView.placeholder = "Description"
                 
-                textViewCell.selectionStyle = .None
+                textViewCell.selectionStyle = .none
                 
                 return textViewCell
 
@@ -148,9 +148,9 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        if indexPath.section == TableSection.Description.rawValue
+        if (indexPath as NSIndexPath).section == TableSection.description.rawValue
         {
             return 128.0
         }
@@ -160,12 +160,12 @@ class ContactUsViewController: UIViewController, UITableViewDataSource, UITableV
         }
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         return 8
     }
     
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         return 0.01
     }

@@ -22,13 +22,13 @@ class Image: Mappable {
     
     var width: NSNumber?
     
-    var url: NSURL?
+    var url: URL?
     
     var sizeName: String?
     
     var height: NSNumber?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

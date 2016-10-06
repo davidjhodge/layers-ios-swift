@@ -13,7 +13,7 @@ class FakeProgressView: UIProgressView
 {
     var isComplete: Bool = false
     
-    var timer: NSTimer?
+    var timer: Timer?
     
     override func awakeFromNib()
     {
@@ -24,7 +24,7 @@ class FakeProgressView: UIProgressView
         tintColor = Color.LightGray
         
         // 0.01667 = 1/60 = 60fps
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.01667, target: self, selector: #selector(timerCycle), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.01667, target: self, selector: #selector(timerCycle), userInfo: nil, repeats: true)
     }
     
 //    override func layoutSubviews()
@@ -40,13 +40,13 @@ class FakeProgressView: UIProgressView
             if progress >= 1
             {
                 // Hide progress view
-                UIView.animateWithDuration(0.05, animations: { () -> Void in
+                UIView.animate(withDuration: 0.05, animations: { () -> Void in
                     
                     self.alpha = 0.0
                     
                     }, completion: { (finished) -> Void in
                  
-                        self.hidden = true
+                        self.isHidden = true
                 })
                 
                 if let timer = timer

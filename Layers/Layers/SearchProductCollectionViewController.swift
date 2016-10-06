@@ -14,7 +14,7 @@ import SDWebImage
 
 class SearchProductCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FilterDelegate
 {
-    private let kProductCellIdentfier = "ProductCell"
+    fileprivate let kProductCellIdentfier = "ProductCell"
     
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -36,13 +36,13 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     
     var hasMore: Bool = true
     
-    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Change status bar style to .LightContent
-        navigationController?.navigationBar.barStyle = .Black
+        navigationController?.navigationBar.barStyle = .black
         
         // Update Filter with Selection
         var currentFilter = FilterManager.defaultManager.getCurrentFilter()
@@ -57,7 +57,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 
                 if let categoryTitle = category.name
                 {
-                    title = categoryTitle.uppercaseString
+                    title = categoryTitle.uppercased()
                 }
                 
                 // Update Filter
@@ -72,7 +72,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 
                 if let brandName = brand.name
                 {
-                    title = brandName.uppercaseString
+                    title = brandName.uppercased()
                 }
                 
                 // Update Filter
@@ -85,12 +85,12 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         
         FilterManager.defaultManager.setNewFilter(currentFilter)
         
-        let filterButton = UIBarButtonItem(image: UIImage(named: "filter"), style: .Plain, target: self, action: #selector(filter))
+        let filterButton = UIBarButtonItem(image: UIImage(named: "filter"), style: .plain, target: self, action: #selector(filter))
         
-        editFilterButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
-        editFilterButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        editFilterButton.setBackgroundColor(Color.NeonBlueColor, forState: UIControlState())
+        editFilterButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .highlighted)
 
-        editFilterButton.addTarget(self, action: #selector(filter), forControlEvents: .TouchUpInside)
+        editFilterButton.addTarget(self, action: #selector(filter), for: .touchUpInside)
         
         navigationItem.rightBarButtonItem = filterButton
         
@@ -101,14 +101,14 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         
         // Flow Layout
         let customLayout = NHAlignmentFlowLayout()
-        customLayout.scrollDirection = .Vertical
-        customLayout.alignment = .TopLeftAligned
+        customLayout.scrollDirection = .vertical
+        customLayout.alignment = .topLeftAligned
         customLayout.minimumLineSpacing = 8.0
         customLayout.minimumInteritemSpacing = 8.0
         customLayout.sectionInset = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
         collectionView.collectionViewLayout = customLayout
         
-        spinner.color = Color.grayColor()
+        spinner.color = Color.gray
         spinner.hidesWhenStopped = true
         view.addSubview(spinner)
         
@@ -123,7 +123,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         spinner.center = collectionView.center
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         if let selection = selectedItem
@@ -136,7 +136,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                     {
                         if let categoryFilter: FilterObject = currentSelections.first
                         {
-                            title = categoryFilter.name?.uppercaseString
+                            title = categoryFilter.name?.uppercased()
                         }
                     }
                 }
@@ -148,12 +148,12 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     func reloadProducts()
     {
         // Get next page of results
-        if let page = currentPage where page > 0
+        if let page = currentPage , page > 0
         {
-            emptyStateView.hidden = true
-            collectionView.hidden = false
+            emptyStateView.isHidden = true
+            collectionView.isHidden = false
             
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
             
             if products == nil || products?.count == 0
             {
@@ -162,11 +162,11 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
             
             LRSessionManager.sharedManager.loadProductCollection(page, completionHandler: { (success, error, response) -> Void in
                 
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 
-                if self.spinner.isAnimating()
+                if self.spinner.isAnimating
                 {
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async(execute: { () -> Void in
                         
                         self.spinner.stopAnimating()
                     })
@@ -193,10 +193,10 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                                 if FilterManager.defaultManager.getCurrentFilter().hasActiveFilters()
                                 {
                                     // New filter yielded 0 products. Show Alert
-                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                    DispatchQueue.main.async(execute: { () -> Void in
                                         
-                                        self.emptyStateView.hidden = false
-                                        self.collectionView.hidden = true
+                                        self.emptyStateView.isHidden = false
+                                        self.collectionView.isHidden = true
 
                                         log.debug("NO_RESULTS_FOR_FILTER".localized)
 
@@ -209,10 +209,10 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                             if newProducts.count > 0
                             {
                                 // If this is a response for page 2 or greater
-                                self.products?.appendContentsOf(newProducts)
+                                self.products?.append(contentsOf: newProducts)
                                 
                                 // Update UI
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                DispatchQueue.main.async(execute: { () -> Void in
                                     
                                     let topOffset = self.collectionView.contentOffset.y
                                     
@@ -222,7 +222,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                                     
                                     self.collectionView.performBatchUpdates({ () -> Void in
                                         
-                                        var indexPaths = Array<NSIndexPath>()
+                                        var indexPaths = Array<IndexPath>()
                                         
                                         // The first index to insert into
                                         if let productCount = self.products?.count
@@ -231,16 +231,16 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                                                                                         
                                             for i in index...index + newProducts.count - 1
                                             {
-                                                indexPaths.append(NSIndexPath(forRow: i, inSection: 0))
+                                                indexPaths.append(IndexPath(row: i, section: 0))
                                             }
                                             
-                                            self.collectionView.insertItemsAtIndexPaths(indexPaths)
+                                            self.collectionView.insertItems(at: indexPaths)
                                             
                                         }
                                         }, completion: { (finished) -> Void in
                                             
                                             // Set correct content offset
-                                            self.collectionView.contentOffset = CGPointMake(0, topOffset)
+                                            self.collectionView.contentOffset = CGPoint(x: 0, y: topOffset)
                                             
                                             CATransaction.commit()
                                     })
@@ -249,7 +249,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                             else
                             {
                                 // Remove loading cell
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                DispatchQueue.main.async(execute: { () -> Void in
                                     
                                     let topOffset = self.collectionView.contentOffset.y
                                     
@@ -261,7 +261,7 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                                         }, completion: { (finished) -> Void in
                                             
                                             // Set correct content offset
-                                            self.collectionView.contentOffset = CGPointMake(0, topOffset)
+                                            self.collectionView.contentOffset = CGPoint(x: 0, y: topOffset)
                                             CATransaction.commit()
                                     })
                                 })
@@ -271,11 +271,11 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
                 }
                 else
                 {
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async(execute: { () -> Void in
                         
-                        let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                        self.presentViewController(alert, animated: true, completion: nil)
+                        let alert = UIAlertController(title: error, message: nil, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
                     })
                 }
                 
@@ -283,19 +283,19 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         }
         else
         {
-            let alert = UIAlertController(title: "Page not specified.", message: nil, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "Page not specified.", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
     func hardReloadCollectionView()
     {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        DispatchQueue.main.async(execute: { () -> Void in
             
             self.collectionView.reloadData()
             
-            self.collectionView.setContentOffset(CGPointZero, animated: false)
+            self.collectionView.setContentOffset(CGPoint.zero, animated: false)
         })
     }
     
@@ -304,15 +304,15 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     {
         FBSDKAppEvents.logEvent("Filter Buttons Taps")
         
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         
-        if let filterVc = mainStoryboard.instantiateViewControllerWithIdentifier("FilterViewController") as? FilterViewController
+        if let filterVc = mainStoryboard.instantiateViewController(withIdentifier: "FilterViewController") as? FilterViewController
         {
             filterVc.delegate = self
             
             let navController = UINavigationController(rootViewController: filterVc)
             
-            presentViewController(navController, animated: true, completion: nil)
+            present(navController, animated: true, completion: nil)
         }
     }
     
@@ -326,13 +326,13 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     }
     
     // MARK: Collection View Data Source
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if let items = products where items.count > 0
+        if let items = products , items.count > 0
         {
             return items.count
         }
@@ -340,13 +340,13 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         return 0
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if let items = products
         {
-            let product: Product = items[indexPath.row]
+            let product: Product = items[(indexPath as NSIndexPath).row]
             
-            let cell: ProductCell = collectionView.dequeueReusableCellWithReuseIdentifier(kProductCellIdentfier, forIndexPath: indexPath) as! ProductCell
+            let cell: ProductCell = collectionView.dequeueReusableCell(withReuseIdentifier: kProductCellIdentfier, for: indexPath) as! ProductCell
             
             cell.brandLabel.text = ""
             cell.priceLabel.text = ""
@@ -375,19 +375,19 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
             
             if let primaryImageResolutions = product.images?.primaryImageUrls
             {
-                if let imageIndex = primaryImageResolutions.indexOf({ $0.sizeName == "IPhone" })
+                if let imageIndex = primaryImageResolutions.index(where: { $0.sizeName == "IPhone" })
                 {
                     if let primaryImage: Image = primaryImageResolutions[safe: imageIndex]
                     {
                         if let imageUrl = primaryImage.url
                         {
-                            cell.productImageView.sd_setImageWithURL(imageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                            cell.productImageView.sd_setImage(with: imageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
                                 
-                                if image != nil && cacheType != .Memory
+                                if image != nil && cacheType != .memory
                                 {
                                     cell.productImageView.alpha = 0.0
                                     
-                                    UIView.animateWithDuration(0.3, animations: {
+                                    UIView.animate(withDuration: 0.3, animations: {
                                         cell.productImageView.alpha = 1.0
                                     })
                                 }
@@ -413,33 +413,33 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
             
             if currentPrice != nil
             {
-                cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(retailPrice, salePrice: currentPrice)
+                cell.priceLabel.attributedText = NSAttributedString.priceString(withRetailPrice: retailPrice, salePrice: currentPrice)
             }
             else
             {
                 if let retailPrice = retailPrice
                 {
-                    cell.priceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(retailPrice, size: 14.0, strikethrough: false)
+                    cell.priceLabel.attributedText = NSAttributedString.priceString(withRetailPrice: retailPrice, size: 14.0, strikethrough: false)
                 }
             }
             
             if let brandName = product.brand?.name
             {
-                cell.brandLabel.attributedText = NSAttributedString(string: brandName.uppercaseString, attributes: FontAttributes.headerTextAttributes)
+                cell.brandLabel.attributedText = NSAttributedString(string: brandName.uppercased(), attributes: FontAttributes.headerTextAttributes)
             }
             
             return cell
         }
         
-        return collectionView.dequeueReusableCellWithReuseIdentifier(kProductCellIdentfier, forIndexPath: indexPath)
+        return collectionView.dequeueReusableCell(withReuseIdentifier: kProductCellIdentfier, for: indexPath)
     }
     
-    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         
         if let products = products
         {
             // Insert next page of items as we near the end of the current list
-            if indexPath.row == products.count - 3
+            if (indexPath as NSIndexPath).row == products.count - 3
             {
                 // Auto-increments page, so no <page> parameter is required
                 reloadProducts()
@@ -448,15 +448,15 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
     }
     
     // MARK: Collection View Delegate
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         
-        if let productVc = mainStoryboard.instantiateViewControllerWithIdentifier("ProductViewController") as? ProductViewController
+        if let productVc = mainStoryboard.instantiateViewController(withIdentifier: "ProductViewController") as? ProductViewController
         {
             if let productCollection = products
             {
-                if let product = productCollection[indexPath.row] as Product?
+                if let product = productCollection[(indexPath as NSIndexPath).row] as Product?
                 {
                     if let productId = product.productId
                     {
@@ -469,12 +469,12 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         }
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        if indexPath.row == products?.count
+        if (indexPath as NSIndexPath).row == products?.count
         {
             // Size for Loading Cell
-            return CGSizeMake(collectionView.bounds.size.width - 16, 40.0)
+            return CGSize(width: collectionView.bounds.size.width - 16, height: 40.0)
         }
         else
         {
@@ -483,19 +483,19 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
             
             let width: CGFloat = (collectionView.bounds.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right - 8) * 0.5
             
-            return CGSizeMake(width, 226.0)
+            return CGSize(width: width, height: 226.0)
         }
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsetsMake(8, 8, 8, 8)
     }
     
-    func collectionView(collectionView: UICollectionView, didHighlightItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
         
-        if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath)
+        if let cell: UICollectionViewCell = collectionView.cellForItem(at: indexPath)
         {
-            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+            UIView.animate(withDuration: 0.1, delay: 0, options: .allowUserInteraction, animations: { () -> Void in
                 
                 cell.backgroundColor = Color.HighlightedGrayColor
                 
@@ -508,13 +508,13 @@ class SearchProductCollectionViewController: UIViewController, UICollectionViewD
         }
     }
     
-    func collectionView(collectionView: UICollectionView, didUnhighlightItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
         
-        if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath)
+        if let cell: UICollectionViewCell = collectionView.cellForItem(at: indexPath)
         {
-            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+            UIView.animate(withDuration: 0.1, delay: 0, options: .allowUserInteraction, animations: { () -> Void in
                 
-                cell.backgroundColor = Color.whiteColor()
+                cell.backgroundColor = Color.white
                 
                 if let productCell = cell as? ProductCell
                 {

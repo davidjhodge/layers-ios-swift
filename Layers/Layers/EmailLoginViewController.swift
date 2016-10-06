@@ -11,7 +11,7 @@ import UIKit
 
 private enum TextField: Int
 {
-    case Email, Password, Count
+    case email, password, count
 }
 
 class EmailLoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate
@@ -26,26 +26,26 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     
     var keyboardNotificationObserver: AnyObject?
     
-    var spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    var spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        title = "login".uppercaseString
+        title = "login".uppercased()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loginButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
+        loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
         
         disableCTA()
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercaseString, style: .Plain, target: self, action: #selector(cancel))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercased(), style: .plain, target: self, action: #selector(cancel))
         
-        spinner.color = Color.grayColor()
+        spinner.color = Color.gray
         spinner.hidesWhenStopped = true
-        spinner.hidden = true
+        spinner.isHidden = true
         view.addSubview(spinner)
         
         prepareToHandleKeyboard()
@@ -57,23 +57,23 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
         spinner.center = tableView.center
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         tableView.layoutIfNeeded()
         
-        if let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as? TextFieldCell
+        if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? TextFieldCell
         {
             cell.textField.becomeFirstResponder()
         }
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return false
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
     }
     
     // MARK: Actions
@@ -83,16 +83,16 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
         
         view.endEditing(true)
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     // All text fields in view trigger this method on each text change
     func textFieldChanged()
     {
-        let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TextField.Email.rawValue, inSection: 0)) as! TextFieldCell
+        let emailCell = tableView.cellForRow(at: IndexPath(row: TextField.email.rawValue, section: 0)) as! TextFieldCell
         let emailInput = emailCell.textField.text!
         
-        let passwordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TextField.Password.rawValue, inSection: 0)) as! TextFieldCell
+        let passwordCell = tableView.cellForRow(at: IndexPath(row: TextField.password.rawValue, section: 0)) as! TextFieldCell
         let passwordInput = passwordCell.textField.text!
         
         if isValidEmail(emailInput) && isValidPassword(passwordInput)
@@ -107,26 +107,26 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     
     func disableCTA()
     {
-        loginButton.userInteractionEnabled = false
+        loginButton.isUserInteractionEnabled = false
         
-        loginButton.setBackgroundColor(Color.lightGrayColor(), forState: .Normal)
+        loginButton.setBackgroundColor(Color.lightGray, forState: UIControlState())
     }
     
     func enableCTA()
     {
-        loginButton.userInteractionEnabled = true
+        loginButton.isUserInteractionEnabled = true
         
-        loginButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
-        loginButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        loginButton.setBackgroundColor(Color.NeonBlueColor, forState: UIControlState())
+        loginButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .highlighted)
     }
     
     func login()
     {
         view.endEditing(true)
         
-        let email = stringFromTextFieldCellAtIndex(TextField.Email.rawValue)
+        let email = stringFromTextFieldCellAtIndex(TextField.email.rawValue)
         
-        let password = stringFromTextFieldCellAtIndex(TextField.Password.rawValue)
+        let password = stringFromTextFieldCellAtIndex(TextField.password.rawValue)
         
         if isValidEmail(email)
         {
@@ -143,20 +143,20 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
                         // Login to user pool succeeded
                         self.delegate?.authenticationDidSucceed()
                         
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        DispatchQueue.main.async(execute: { () -> Void in
                             
                             self.view.endEditing(true)
                             
-                            self.dismissViewControllerAnimated(true, completion: nil)
+                            self.dismiss(animated: true, completion: nil)
                         })
                     }
                     else
                     {
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        DispatchQueue.main.async(execute: { () -> Void in
                             
-                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                            self.presentViewController(alert, animated: true, completion: nil)
+                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
                             
                             self.view.endEditing(false)
                             
@@ -164,7 +164,7 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
                         })
                     }
                     
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async(execute: { () -> Void in
                         self.spinner.stopAnimating()
                     })
                 })
@@ -172,32 +172,32 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
             else
             {
                 // Invalid Password
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     
-                    let alert = UIAlertController(title: "ENTER_VALID_PASSWORD".localized, message: nil, preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
+                    let alert = UIAlertController(title: "ENTER_VALID_PASSWORD".localized, message: nil, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                 })
             }
         }
         else
         {
             // Invalid Email
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 
-                let alert = UIAlertController(title: "ENTER_VALID_EMAIL".localized, message: nil, preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "ENTER_VALID_EMAIL".localized, message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             })
         }
     }
     
     // Helper method to access cell text fields
-    func stringFromTextFieldCellAtIndex(index: Int) -> String
+    func stringFromTextFieldCellAtIndex(_ index: Int) -> String
     {
-        let indexPath = NSIndexPath(forRow: index, inSection: 0)
+        let indexPath = IndexPath(row: index, section: 0)
         
-        if let textFieldCell = tableView.cellForRowAtIndexPath(indexPath) as? TextFieldCell
+        if let textFieldCell = tableView.cellForRow(at: indexPath) as? TextFieldCell
         {
             if let textString = textFieldCell.textField.text
             {
@@ -209,15 +209,15 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     // MARK: Text Field Delegate
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
-        if textField.tag == TextField.Email.rawValue
+        if textField.tag == TextField.email.rawValue
         {
-            let passwordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TextField.Password.rawValue, inSection: 0)) as! TextFieldCell
+            let passwordCell = tableView.cellForRow(at: IndexPath(row: TextField.password.rawValue, section: 0)) as! TextFieldCell
             
             passwordCell.textField.becomeFirstResponder()
         }
-        else if textField.tag == TextField.Password.rawValue
+        else if textField.tag == TextField.password.rawValue
         {
             view.endEditing(true)
         }
@@ -226,40 +226,40 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     // MARK: Table View Data Source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell: TextFieldCell = tableView.dequeueReusableCellWithIdentifier("TextFieldCell") as! TextFieldCell
+        let cell: TextFieldCell = tableView.dequeueReusableCell(withIdentifier: "TextFieldCell") as! TextFieldCell
         
         cell.textField.textColor = Color.DarkTextColor
-        cell.selectionStyle = .None
+        cell.selectionStyle = .none
         
         cell.textField.delegate = self
-        cell.textField.addTarget(self, action: #selector(textFieldChanged), forControlEvents: .EditingChanged)
+        cell.textField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
                 
         //Email
-        if indexPath.row == TextField.Email.rawValue
+        if (indexPath as NSIndexPath).row == TextField.email.rawValue
         {
             cell.textField.placeholder = "Email"
-            cell.textField.tag = TextField.Email.rawValue
+            cell.textField.tag = TextField.email.rawValue
             
-            cell.textField.returnKeyType = .Next
+            cell.textField.returnKeyType = .next
         }
         //Password
-        else if indexPath.row == TextField.Password.rawValue
+        else if (indexPath as NSIndexPath).row == TextField.password.rawValue
         {
             cell.textField.placeholder = "Password"
-            cell.textField.secureTextEntry = true
-            cell.textField.tag = TextField.Password.rawValue
+            cell.textField.isSecureTextEntry = true
+            cell.textField.tag = TextField.password.rawValue
             
-            cell.textField.returnKeyType = .Done
+            cell.textField.returnKeyType = .done
         }
         else
         {
@@ -270,12 +270,12 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     // MARK: Table View Delegate
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         return 48.0
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         if section == 0
         {
@@ -290,21 +290,21 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     // MARK: Handle Keyboard
     func prepareToHandleKeyboard()
     {
-        keyboardNotificationObserver = NSNotificationCenter.defaultCenter().addObserverForName(UIKeyboardWillChangeFrameNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (notification) -> Void in
+        keyboardNotificationObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil, queue: OperationQueue.main) { [weak self] (notification) -> Void in
             
-            let frame : CGRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+            let frame : CGRect = ((notification as NSNotification).userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
             
-            guard let keyboardFrameInViewCoordiantes = self?.view.convertRect(frame, fromView: nil), bounds = self?.view.bounds else { return; }
+            guard let keyboardFrameInViewCoordiantes = self?.view.convert(frame, from: nil), let bounds = self?.view.bounds else { return; }
             
-            let constantModification = CGRectGetHeight(bounds) - keyboardFrameInViewCoordiantes.origin.y
+            let constantModification = bounds.height - keyboardFrameInViewCoordiantes.origin.y
             
-            let duration:NSTimeInterval = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-            let animationCurveRawNSN = notification.userInfo?[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
-            let animationCurveRaw = animationCurveRawNSN?.unsignedLongValue ?? UIViewAnimationOptions.CurveEaseInOut.rawValue
+            let duration:TimeInterval = ((notification as NSNotification).userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+            let animationCurveRawNSN = (notification as NSNotification).userInfo?[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
+            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions().rawValue
             let animationCurve:UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
             
             
-            UIView.animateWithDuration(duration, delay: 0.0, options: animationCurve, animations: { [weak self] () -> Void in
+            UIView.animate(withDuration: duration, delay: 0.0, options: animationCurve, animations: { [weak self] () -> Void in
                 
                 self?.signInButtonBottomConstraint.constant = constantModification
                 
@@ -316,7 +316,7 @@ class EmailLoginViewController: UIViewController, UITableViewDataSource, UITable
     {
         if let observer = keyboardNotificationObserver
         {
-            NSNotificationCenter.defaultCenter().removeObserver(observer)
+            NotificationCenter.default.removeObserver(observer)
         }
     }
 }

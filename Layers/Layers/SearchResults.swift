@@ -17,7 +17,7 @@ class SearchResults: Mappable
     
     var brands: Array<Brand>?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

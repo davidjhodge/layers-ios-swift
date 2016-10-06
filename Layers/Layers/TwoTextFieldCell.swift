@@ -21,6 +21,6 @@ class TwoTextFieldCell: UITableViewCell
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        separatorViewWidthConstraint.constant = 1.0 / UIScreen.mainScreen().scale
+        separatorViewWidthConstraint.constant = 1.0 / UIScreen.main.scale
     }
 }

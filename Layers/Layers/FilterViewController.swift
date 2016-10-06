@@ -8,10 +8,39 @@
 
 import Foundation
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 enum FilterType: Int
 {
-    case Category = 0, Brand, Price, Color, Count
+    case category = 0, brand, price, color, count
 }
 
 protocol FilterDelegate {
@@ -33,48 +62,48 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        title = "Filter".uppercaseString
+        title = "Filter".uppercased()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Change status bar style to .LightContent
-        navigationController?.navigationBar.barStyle = .Black
+        navigationController?.navigationBar.barStyle = .black
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercaseString, style: .Plain, target: self, action: #selector(cancel))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercased(), style: .plain, target: self, action: #selector(cancel))
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercaseString, style: .Plain, target: self, action: #selector(reset))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercased(), style: .plain, target: self, action: #selector(reset))
         
         tableView.backgroundColor = Color.BackgroundGrayColor
         
-        applyButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
-        applyButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        applyButton.setBackgroundColor(Color.NeonBlueColor, forState: UIControlState())
+        applyButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .highlighted)
 
-        applyButton.addTarget(self, action: #selector(applyFilter), forControlEvents: .TouchUpInside)
+        applyButton.addTarget(self, action: #selector(applyFilter), for: .touchUpInside)
         
         if !newFilter.hasActiveFilters()
         {
-            applyButton.hidden = true
+            applyButton.isHidden = true
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if applyButton.hidden == false
+        if applyButton.isHidden == false
         {
             if !newFilter.hasActiveFilters()
             {
-                applyButton.hidden = true
+                applyButton.isHidden = true
             }
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if applyButton.hidden == true
+        if applyButton.isHidden == true
         {
             if newFilter.hasActiveFilters()
             {
@@ -83,9 +112,9 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 transition.type = kCATransitionPush
                 transition.subtype = kCATransitionFromLeft
                 transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
-                applyButton.layer.addAnimation(transition, forKey: nil)
+                applyButton.layer.add(transition, forKey: nil)
                 
-                applyButton.hidden = false
+                applyButton.isHidden = false
             }
         }
     }
@@ -93,7 +122,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: Actions
     func cancel()
     {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     func reset()
@@ -110,20 +139,20 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         
         delegate?.didUpdateFilter()
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     // MARK: FilterTypeDelegate
-    func textFilterChanged(filters: Array<FilterObject>?, filterType: FilterType?)
+    func textFilterChanged(_ filters: Array<FilterObject>?, filterType: FilterType?)
     {
         if let type = filterType
         {
             switch type {
-            case .Category:
+            case .category:
                 
                 newFilter.categories.selections = filters
                 
-            case .Brand:
+            case .brand:
                 
                 newFilter.brands.selections = filters
                 
@@ -136,11 +165,11 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    func priceFilterChanged(priceFilter: PriceFilter?) {
+    func priceFilterChanged(_ priceFilter: PriceFilter?) {
         
         if let priceFilter = priceFilter
         {
-            if priceFilter.minPrice?.integerValue >= 0 && priceFilter.maxPrice?.integerValue > 0
+            if priceFilter.minPrice?.intValue >= 0 && priceFilter.maxPrice?.intValue > 0
             {
                 newFilter.priceRange = priceFilter
                 
@@ -157,7 +186,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     }
 
     // MARK: Color Filter Delegate
-    func colorFilterChanged(colors: Array<ColorObject>?) {
+    func colorFilterChanged(_ colors: Array<ColorObject>?) {
         
         newFilter.colors.selections = colors
         
@@ -166,32 +195,32 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     // MARK: Table View Data Source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return FilterType.Count.rawValue
+        return FilterType.count.rawValue
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("SubtitleFilterCell") as! SubtitleFilterCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SubtitleFilterCell") as! SubtitleFilterCell
         
-        cell.accessoryType = .DisclosureIndicator
+        cell.accessoryType = .disclosureIndicator
         
         cell.filterTypeLabel.text = ""
         cell.filterSelectionLabel.text = ""
-        cell.selectedCircleView.hidden = true
+        cell.selectedCircleView.isHidden = true
 
-        if let filterType = FilterType(rawValue: indexPath.row)
+        if let filterType = FilterType(rawValue: (indexPath as NSIndexPath).row)
         {
             switch filterType {
                 
-            case .Category:
+            case .category:
 
-                cell.filterTypeLabel.text = "Category".uppercaseString
+                cell.filterTypeLabel.text = "Category".uppercased()
                 
                 if let categorySelections = newFilter.categories.selections
                 {
@@ -199,7 +228,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                     {
                         if let firstCategoryName = categorySelections.first?.name
                         {
-                            cell.filterSelectionLabel.text = firstCategoryName.capitalizedString
+                            cell.filterSelectionLabel.text = firstCategoryName.capitalized
                         }
                     }
                     else
@@ -215,16 +244,16 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 // If filter selected, show blue dot
                 if newFilter.categories.selections != nil
                 {
-                    cell.selectedCircleView.hidden = false
+                    cell.selectedCircleView.isHidden = false
                 }
                 else
                 {
-                    cell.selectedCircleView.hidden = true
+                    cell.selectedCircleView.isHidden = true
                 }
                 
-            case .Brand:
+            case .brand:
                 
-                cell.filterTypeLabel.text = "Brand".uppercaseString
+                cell.filterTypeLabel.text = "Brand".uppercased()
                 
                 if let brandSelections = newFilter.brands.selections
                 {
@@ -232,7 +261,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                     {
                         if let firstBrandName = brandSelections.first?.name
                         {
-                            cell.filterSelectionLabel.text = firstBrandName.capitalizedString
+                            cell.filterSelectionLabel.text = firstBrandName.capitalized
                         }
                     }
                     else
@@ -248,16 +277,16 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 // If filter selected, show blue dot
                 if newFilter.brands.selections != nil
                 {
-                    cell.selectedCircleView.hidden = false
+                    cell.selectedCircleView.isHidden = false
                 }
                 else
                 {
-                    cell.selectedCircleView.hidden = true
+                    cell.selectedCircleView.isHidden = true
                 }
                 
-            case .Price:
+            case .price:
                 
-                cell.filterTypeLabel.text = "Price".uppercaseString
+                cell.filterTypeLabel.text = "Price".uppercased()
 
                 if let minPrice = newFilter.priceRange?.minPrice?.stringValue,
                     let maxPrice = newFilter.priceRange?.maxPrice?.stringValue
@@ -272,16 +301,16 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 // If filter selected, show blue dot
                 if newFilter.priceRange != nil
                 {
-                    cell.selectedCircleView.hidden = false
+                    cell.selectedCircleView.isHidden = false
                 }
                 else
                 {
-                    cell.selectedCircleView.hidden = true
+                    cell.selectedCircleView.isHidden = true
                 }
             
-            case .Color:
+            case .color:
                 
-                cell.filterTypeLabel.text = "Color".uppercaseString
+                cell.filterTypeLabel.text = "Color".uppercased()
                 
                 if let colorSelections = newFilter.colors.selections
                 {
@@ -289,7 +318,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                     {
                         if let firstColorName = colorSelections.first?.name
                         {
-                            cell.filterSelectionLabel.text = firstColorName.capitalizedString
+                            cell.filterSelectionLabel.text = firstColorName.capitalized
                         }
                     }
                     else
@@ -305,11 +334,11 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 // If filter selected, show blue dot
                 if newFilter.colors.selections != nil
                 {
-                    cell.selectedCircleView.hidden = false
+                    cell.selectedCircleView.isHidden = false
                 }
                 else
                 {
-                    cell.selectedCircleView.hidden = true
+                    cell.selectedCircleView.isHidden = true
                 }
                 
             default:
@@ -321,27 +350,27 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     // MARK: Table View Delegate
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let filterType = FilterType(rawValue: indexPath.row)
+        if let filterType = FilterType(rawValue: (indexPath as NSIndexPath).row)
         {
             switch filterType {
  
-            case .Category:
+            case .category:
                 // Use the logic for .Brand
                 fallthrough
                 
-            case .Brand:
+            case .brand:
 
-                performSegueWithIdentifier("ShowTextFilterViewController", sender:filterType.rawValue)
+                performSegue(withIdentifier: "ShowTextFilterViewController", sender:filterType.rawValue)
                 
-            case .Price:
+            case .price:
                 
-                performSegueWithIdentifier("ShowPriceFilterViewController", sender:filterType.rawValue)
+                performSegue(withIdentifier: "ShowPriceFilterViewController", sender:filterType.rawValue)
                 
-            case .Color:
+            case .color:
 
-                performSegueWithIdentifier("ShowColorFilterViewController", sender:filterType.rawValue)
+                performSegue(withIdentifier: "ShowColorFilterViewController", sender:filterType.rawValue)
 
                 break
                 
@@ -350,30 +379,30 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             }
         }
         
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         return 64.0
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         return 24.0
     }
     
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         return 24.0
     }
     
     // MARK: Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "ShowTextFilterViewController"
         {
-            if let destinationVc = segue.destinationViewController as? TextFilterViewController
+            if let destinationVc = segue.destination as? TextFilterViewController
             {
                 if let senderRawValue = sender as? Int
                 {
@@ -383,7 +412,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                         destinationVc.filterTypeDelegate = self
 
                         switch type {
-                        case .Category:
+                        case .category:
                             
                             if let currentFilters = newFilter.categories.selections
                             {
@@ -397,7 +426,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                                 destinationVc.selectedItems = array
                             }
                             
-                        case .Brand:
+                        case .brand:
                             
                             if let currentFilters = newFilter.brands.selections
                             {
@@ -420,7 +449,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         }
         else if segue.identifier == "ShowPriceFilterViewController"
         {
-            if let destinationVc = segue.destinationViewController as? PriceFilterViewController
+            if let destinationVc = segue.destination as? PriceFilterViewController
             {
                 destinationVc.delegate = self
                 
@@ -432,7 +461,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         }
         else if segue.identifier == "ShowColorFilterViewController"
         {
-            if let destinationVc = segue.destinationViewController as? ColorFilterViewController
+            if let destinationVc = segue.destination as? ColorFilterViewController
             {
                 destinationVc.delegate = self
                 

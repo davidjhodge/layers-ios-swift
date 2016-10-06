@@ -10,7 +10,7 @@ import UIKit
 
 private enum Section: Int
 {
-    case ProductHeader = 0, Description, _Count
+    case productHeader = 0, description, _Count
 }
 
 class MoreDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -22,45 +22,45 @@ class MoreDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "More Details".uppercaseString
+        title = "More Details".uppercased()
         
         tableView.tableFooterView = UIView()
         
         tableView.backgroundColor = Color.BackgroundGrayColor
         
-        tableView.separatorColor = Color.clearColor()
+        tableView.separatorColor = Color.clear
         
         view.backgroundColor = Color.BackgroundGrayColor
     }
 
     // MARK: Table View Data Source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if let section = Section(rawValue: indexPath.section)
+        if let section = Section(rawValue: (indexPath as NSIndexPath).section)
         {
-            if section == .ProductHeader
+            if section == .productHeader
             {
-                if let cell: SimpleProductHeaderCell = tableView.dequeueReusableCellWithIdentifier("SimpleProductHeaderCell") as? SimpleProductHeaderCell
+                if let cell: SimpleProductHeaderCell = tableView.dequeueReusableCell(withIdentifier: "SimpleProductHeaderCell") as? SimpleProductHeaderCell
                 {
                     if let product = product
                     {
                         if let primaryImageUrl = product.primaryImageUrl(ImageSizeKey.Normal)
                         {
-                            cell.productImageView.sd_setImageWithURL(primaryImageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
+                            cell.productImageView.sd_setImage(with: primaryImageUrl, completed: { (image, error, cacheType, imageUrl) -> Void in
                                 
-                                if image != nil && cacheType != .Memory
+                                if image != nil && cacheType != .memory
                                 {
                                     cell.productImageView.alpha = 0.0
                                     
-                                    UIView.animateWithDuration(0.3, animations: {
+                                    UIView.animate(withDuration: 0.3, animations: {
                                         cell.productImageView.alpha = 1.0
                                     })
                                 }
@@ -80,58 +80,58 @@ class MoreDetailsViewController: UIViewController, UITableViewDataSource, UITabl
                             cell.productNameLabel.text = productName
                         }
                         
-                        cell.ctaLabel.attributedText = NSAttributedString(string: "View Online".uppercaseString, attributes: FontAttributes.buttonAttributes)
+                        cell.ctaLabel.attributedText = NSAttributedString(string: "View Online".uppercased(), attributes: FontAttributes.buttonAttributes)
                     }
                     
                     return cell
                 }
             }
-            else if section == .Description
+            else if section == .description
             {
-                if let cell: FreeformTextCell = tableView.dequeueReusableCellWithIdentifier("FreeformTextCell") as? FreeformTextCell
+                if let cell: FreeformTextCell = tableView.dequeueReusableCell(withIdentifier: "FreeformTextCell") as? FreeformTextCell
                 {
-                    cell.headerLabel.text = "Description".uppercaseString
+                    cell.headerLabel.text = "Description".uppercased()
                     
                     if let productDescription = product?.productDescription
                     {
                         cell.bodyTextLabel.attributedText = NSAttributedString(string: productDescription, attributes: FontAttributes.bodyTextAttributes)
                     }
                     
-                    cell.selectionStyle = .None
+                    cell.selectionStyle = .none
 
                     return cell
                 }
             }
         }
         
-        return UITableViewCell(style: .Default, reuseIdentifier: "UITableViewCell")
+        return UITableViewCell(style: .default, reuseIdentifier: "UITableViewCell")
     }
     
     
     // MARK: Table View Delegate
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.section == Section.ProductHeader.rawValue
+        if (indexPath as NSIndexPath).section == Section.productHeader.rawValue
         {
             if let product = product
             {
                 if let productUrl = product.outboundUrl
                 {
-                    showWebBrowser(productUrl)
+                    showWebBrowser(productUrl as URL)
                 }
             }
         }
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 8.0
     }
     
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
-        if section == Section.Description.rawValue
+        if section == Section.description.rawValue
         {
             return 8.0
         }
@@ -139,11 +139,11 @@ class MoreDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         return 0.01
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 128
     }
     
-    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int)
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int)
     {
         if let headerView: UITableViewHeaderFooterView = view as? UITableViewHeaderFooterView
         {
@@ -151,21 +151,21 @@ class MoreDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
     }
     
     // MARK: SFSafariViewController
     
-    func showWebBrowser(url: NSURL)
+    func showWebBrowser(_ url: URL)
     {
-        let webView = ProductWebViewController(URL: url)
+        let webView = ProductWebViewController(url: url)
         
         let navController = ProductWebNavigationController(rootViewController: webView)
         navController.setNavigationBarHidden(true, animated: false)
-        navController.modalPresentationStyle = .OverFullScreen
+        navController.modalPresentationStyle = .overFullScreen
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
     
     /*

@@ -11,21 +11,21 @@ import UIKit
 
 extension UIButton
 {
-    func setBackgroundColor(backgroundColor: UIColor, forState state: UIControlState)
+    func setBackgroundColor(_ backgroundColor: UIColor, forState state: UIControlState)
     {
-        setBackgroundImage(UIButton.imageFromColor(backgroundColor), forState: state)
+        setBackgroundImage(UIButton.imageFromColor(backgroundColor), for: state)
     }
     
-    static func imageFromColor(color: UIColor) -> UIImage
+    static func imageFromColor(_ color: UIColor) -> UIImage
     {
-        let rect = CGRectMake(0,0,1,1)
+        let rect = CGRect(x: 0,y: 0,width: 1,height: 1)
         UIGraphicsBeginImageContext(rect.size)
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetFillColorWithColor(context, color.CGColor)
-        CGContextFillRect(context, rect)
+        context?.setFillColor(color.cgColor)
+        context?.fill(rect)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return image
+        return image!
     }
 }

@@ -9,7 +9,7 @@
 import Foundation
 import DeepLinkKit
 
-public class ProductRouteHandler: DPLRouteHandler
+open class ProductRouteHandler: DPLRouteHandler
 {
     var tabBarController: UITabBarController?
     
@@ -18,7 +18,7 @@ public class ProductRouteHandler: DPLRouteHandler
         var tabBarVc: UITabBarController?
         
         // If Tab Bar Controller is already rootVc, nothing needs to change
-        if let rootVc = UIApplication.sharedApplication().keyWindow?.rootViewController as? UITabBarController
+        if let rootVc = UIApplication.shared.keyWindow?.rootViewController as? UITabBarController
         {
             tabBarVc = rootVc
             
@@ -29,20 +29,20 @@ public class ProductRouteHandler: DPLRouteHandler
         {
             tabBarVc = AppStateTransitioner.mainTabBarController()
             
-            UIApplication.sharedApplication().keyWindow?.rootViewController = tabBarVc
+            UIApplication.shared.keyWindow?.rootViewController = tabBarVc
         }
         
         return tabBarVc
     }
     
     // The view controller to be displayed
-    public override func targetViewController() -> UIViewController! {
+    open override func targetViewController() -> UIViewController! {
 
         if tabBarController != nil
         {
-            let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+            let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
             
-            if let productVc = storyboard.instantiateViewControllerWithIdentifier("ProductViewController") as? ProductViewController
+            if let productVc = storyboard.instantiateViewController(withIdentifier: "ProductViewController") as? ProductViewController
             {
                 return productVc
             }
@@ -52,7 +52,7 @@ public class ProductRouteHandler: DPLRouteHandler
     }
     
     // The view controller that will present the target vc. Should be UINavigationController
-    public override func viewControllerForPresentingDeepLink(deepLink: DPLDeepLink!) -> UIViewController! {
+    open override func viewController(forPresenting deepLink: DPLDeepLink!) -> UIViewController! {
         
         if tabBarController == nil
         {
@@ -67,7 +67,7 @@ public class ProductRouteHandler: DPLRouteHandler
         return UINavigationController()
     }
     
-    public override func preferModalPresentation() -> Bool {
+    open override func preferModalPresentation() -> Bool {
         return false
     }
 }

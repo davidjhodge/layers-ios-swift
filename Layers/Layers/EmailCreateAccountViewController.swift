@@ -18,7 +18,7 @@ protocol AuthenticationDelegate {
 
 private enum CellType: Int
 {
-    case Email, Password, RetypePassword, Count
+    case email, password, retypePassword, count
 }
 
 class EmailCreateAccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate
@@ -33,26 +33,26 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     
     var keyboardNotificationObserver: AnyObject?
     
-    var spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    var spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        title = "create account".uppercaseString
+        title = "create account".uppercased()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        createAccountButton.addTarget(self, action: #selector(createAccount), forControlEvents: .TouchUpInside)
+        createAccountButton.addTarget(self, action: #selector(createAccount), for: .touchUpInside)
         
         // By default, CTA is disabled until valid input is entered
         disableCTA()
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercaseString, style: .Plain, target: self, action: #selector(cancel))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel".uppercased(), style: .plain, target: self, action: #selector(cancel))
         
         spinner.hidesWhenStopped = true
-        spinner.color = Color.grayColor()
+        spinner.color = Color.gray
         spinner.hidesWhenStopped = true
         view.addSubview(spinner)
         
@@ -65,23 +65,23 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
         spinner.center = tableView.center
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         tableView.layoutIfNeeded()
         
-        if let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as? TextFieldCell
+        if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? TextFieldCell
         {
             cell.textField.becomeFirstResponder()
         }
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return false
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
     }
     
     // MARK: Actions
@@ -91,19 +91,19 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
 
         view.endEditing(true)
 
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     // All text fields in view trigger this method on each text change
     func textFieldChanged()
     {
-        let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.Email.rawValue, inSection: 0)) as! TextFieldCell
+        let emailCell = tableView.cellForRow(at: IndexPath(row: CellType.email.rawValue, section: 0)) as! TextFieldCell
         let emailInput = emailCell.textField.text!
         
-        let passwordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.Password.rawValue, inSection: 0)) as! TextFieldCell
+        let passwordCell = tableView.cellForRow(at: IndexPath(row: CellType.password.rawValue, section: 0)) as! TextFieldCell
         let passwordInput = passwordCell.textField.text!
         
-        let retypePasswordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.RetypePassword.rawValue, inSection: 0)) as! TextFieldCell
+        let retypePasswordCell = tableView.cellForRow(at: IndexPath(row: CellType.retypePassword.rawValue, section: 0)) as! TextFieldCell
         let retypePasswordInput = retypePasswordCell.textField.text!
         
         if isValidEmail(emailInput) && isValidPassword(passwordInput) && isValidPassword(retypePasswordInput) && passwordInput == retypePasswordInput
@@ -118,25 +118,25 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     
     func disableCTA()
     {
-        createAccountButton.userInteractionEnabled = false
+        createAccountButton.isUserInteractionEnabled = false
         
-        createAccountButton.setBackgroundColor(Color.lightGrayColor(), forState: .Normal)
+        createAccountButton.setBackgroundColor(Color.lightGray, forState: UIControlState())
     }
     
     func enableCTA()
     {
-        createAccountButton.userInteractionEnabled = true
+        createAccountButton.isUserInteractionEnabled = true
         
-        createAccountButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
-        createAccountButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        createAccountButton.setBackgroundColor(Color.NeonBlueColor, forState: UIControlState())
+        createAccountButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .highlighted)
     }
     
     func createAccount()
     {
-        let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.Email.rawValue, inSection: 0)) as! TextFieldCell
+        let emailCell = tableView.cellForRow(at: IndexPath(row: CellType.email.rawValue, section: 0)) as! TextFieldCell
         let emailInput = emailCell.textField.text!
         
-        let passwordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.Password.rawValue, inSection: 0)) as! TextFieldCell
+        let passwordCell = tableView.cellForRow(at: IndexPath(row: CellType.password.rawValue, section: 0)) as! TextFieldCell
         let passwordInput = passwordCell.textField.text!
         
         if isValidEmail(emailInput)
@@ -146,7 +146,7 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
                 // Email and password are valid. Disable UI and make API Call
                 view.endEditing(true)
                 
-                tableView.userInteractionEnabled = false
+                tableView.isUserInteractionEnabled = false
                 
                 disableCTA()
                 
@@ -154,7 +154,7 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
 
                 LRSessionManager.sharedManager.registerWithEmail(emailInput, password: passwordInput, firstName: "", lastName: "", gender: "", age: 0, completionHandler: { (success, error, response) -> Void in
                     
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async(execute: { () -> Void in
                         
                         self.spinner.stopAnimating()
                     })
@@ -164,23 +164,23 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
                         // Signing up to user pool succeeded
                         self.delegate?.authenticationDidSucceed()
                         
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        DispatchQueue.main.async(execute: { () -> Void in
                             
                             self.view.endEditing(true)
 
-                            self.dismissViewControllerAnimated(true, completion: nil)
+                            self.dismiss(animated: true, completion: nil)
                         })
                     }
                     else
                     {
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        DispatchQueue.main.async(execute: { () -> Void in
                             
-                            self.tableView.userInteractionEnabled = true
-                            self.createAccountButton.userInteractionEnabled = true
+                            self.tableView.isUserInteractionEnabled = true
+                            self.createAccountButton.isUserInteractionEnabled = true
                             
-                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                            self.presentViewController(alert, animated: true, completion: nil)
+                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
                             
                             self.enableCTA()
                         })
@@ -190,43 +190,43 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
             else
             {
                 // Invalid Password
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     
-                    let alert = UIAlertController(title: "ENTER_VALID_PASSWORD".localized, message: nil, preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
+                    let alert = UIAlertController(title: "ENTER_VALID_PASSWORD".localized, message: nil, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                 })
             }
         }
         else
         {
             // Invalid Email
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
 
-                let alert = UIAlertController(title: "ENTER_VALID_EMAIL".localized, message: nil, preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "ENTER_VALID_EMAIL".localized, message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             })
         }
         
     }
     
     // MARK: Text Field Delegate
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
-        if textField.tag == CellType.Email.rawValue
+        if textField.tag == CellType.email.rawValue
         {
-            let passwordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.Password.rawValue, inSection: 0)) as! TextFieldCell
+            let passwordCell = tableView.cellForRow(at: IndexPath(row: CellType.password.rawValue, section: 0)) as! TextFieldCell
             
             passwordCell.textField.becomeFirstResponder()
         }
-        else if textField.tag == CellType.Password.rawValue
+        else if textField.tag == CellType.password.rawValue
         {
-            let retypePasswordCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: CellType.RetypePassword.rawValue, inSection: 0)) as! TextFieldCell
+            let retypePasswordCell = tableView.cellForRow(at: IndexPath(row: CellType.retypePassword.rawValue, section: 0)) as! TextFieldCell
             
             retypePasswordCell.textField.becomeFirstResponder()
         }
-        else if textField.tag == CellType.RetypePassword.rawValue
+        else if textField.tag == CellType.retypePassword.rawValue
         {
             view.endEditing(true)
         }
@@ -235,49 +235,49 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     }
     
     // MARK: Table View Data Source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return CellType.Count.rawValue
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return CellType.count.rawValue
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell: TextFieldCell = tableView.dequeueReusableCellWithIdentifier("TextFieldCell") as! TextFieldCell
+        let cell: TextFieldCell = tableView.dequeueReusableCell(withIdentifier: "TextFieldCell") as! TextFieldCell
         
         cell.textField.textColor = Color.DarkTextColor
-        cell.selectionStyle = .None
+        cell.selectionStyle = .none
     
         cell.textField.delegate = self
-        cell.textField.addTarget(self, action: #selector(textFieldChanged), forControlEvents: .EditingChanged)
+        cell.textField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         
         //Email
-        if indexPath.row == CellType.Email.rawValue
+        if (indexPath as NSIndexPath).row == CellType.email.rawValue
         {
             cell.textField.placeholder = "Email"
-            cell.textField.tag = CellType.Email.rawValue
+            cell.textField.tag = CellType.email.rawValue
             
-            cell.textField.returnKeyType = .Next
+            cell.textField.returnKeyType = .next
         }
         //Password
-        else if indexPath.row == CellType.Password.rawValue
+        else if (indexPath as NSIndexPath).row == CellType.password.rawValue
         {
             cell.textField.placeholder = "Password"
-            cell.textField.secureTextEntry = true
-            cell.textField.tag = CellType.Password.rawValue
+            cell.textField.isSecureTextEntry = true
+            cell.textField.tag = CellType.password.rawValue
 
-            cell.textField.returnKeyType = .Next
+            cell.textField.returnKeyType = .next
         }
         //Retype password
-        else if indexPath.row == CellType.RetypePassword.rawValue
+        else if (indexPath as NSIndexPath).row == CellType.retypePassword.rawValue
         {
             cell.textField.placeholder = "Retype your password"
-            cell.textField.secureTextEntry = true
-            cell.textField.tag = CellType.RetypePassword.rawValue
+            cell.textField.isSecureTextEntry = true
+            cell.textField.tag = CellType.retypePassword.rawValue
             
-            cell.textField.returnKeyType = .Done
+            cell.textField.returnKeyType = .done
         }
         else
         {
@@ -288,12 +288,12 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     }
     
     // MARK: Table View Delegate
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         return 48.0
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         if section == 0
         {
@@ -308,21 +308,21 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     // MARK: Handle Keyboard
     func prepareToHandleKeyboard()
     {
-        keyboardNotificationObserver = NSNotificationCenter.defaultCenter().addObserverForName(UIKeyboardWillChangeFrameNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (notification) -> Void in
+        keyboardNotificationObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil, queue: OperationQueue.main) { [weak self] (notification) -> Void in
             
-            let frame : CGRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+            let frame : CGRect = ((notification as NSNotification).userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
             
-            guard let keyboardFrameInViewCoordiantes = self?.view.convertRect(frame, fromView: nil), bounds = self?.view.bounds else { return; }
+            guard let keyboardFrameInViewCoordiantes = self?.view.convert(frame, from: nil), let bounds = self?.view.bounds else { return; }
             
-            let constantModification = CGRectGetHeight(bounds) - keyboardFrameInViewCoordiantes.origin.y
+            let constantModification = bounds.height - keyboardFrameInViewCoordiantes.origin.y
             
-            let duration:NSTimeInterval = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-            let animationCurveRawNSN = notification.userInfo?[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
-            let animationCurveRaw = animationCurveRawNSN?.unsignedLongValue ?? UIViewAnimationOptions.CurveEaseInOut.rawValue
+            let duration:TimeInterval = ((notification as NSNotification).userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+            let animationCurveRawNSN = (notification as NSNotification).userInfo?[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
+            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions().rawValue
             let animationCurve:UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
             
             
-            UIView.animateWithDuration(duration, delay: 0.0, options: animationCurve, animations: { [weak self] () -> Void in
+            UIView.animate(withDuration: duration, delay: 0.0, options: animationCurve, animations: { [weak self] () -> Void in
                 
                 self?.createAccountButtonBottomConstraint.constant = constantModification
                 
@@ -332,6 +332,6 @@ class EmailCreateAccountViewController: UIViewController, UITableViewDataSource,
     
     deinit
     {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 }

@@ -15,8 +15,10 @@
 
 #import <NHAlignmentFlowLayout/NHAlignmentFlowLayout.h>
 
-#import <AWSCore/AWSCore.h>
-#import <AWSCognitoIdentityProvider/AWSCognitoIdentityProvider.h>
+//@import AWSCore
+//@import AWSCognitoIdentityProvider
+//#import <AWSCore/AWSCore.h>
+//#import <AWSCognitoIdentityProvider/AWSCognitoIdentityProvider.h>
 
 #import <KLCPopup/KLCPopup.h>
 

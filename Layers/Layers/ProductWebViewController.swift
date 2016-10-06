@@ -17,29 +17,29 @@ class ProductWebViewController: SFSafariViewController, SFSafariViewControllerDe
         
         view.tintColor = Color.PrimaryAppColor
         
-        modalPresentationStyle = .OverFullScreen
+        modalPresentationStyle = .overFullScreen
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        UIApplication.sharedApplication().setStatusBarStyle(.Default, animated: true)
+        UIApplication.shared.setStatusBarStyle(.default, animated: true)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        UIApplication.sharedApplication().setStatusBarStyle(.LightContent, animated: false)
+        UIApplication.shared.setStatusBarStyle(.lightContent, animated: false)
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle
+    override var preferredStatusBarStyle : UIStatusBarStyle
     {
-        return .Default
+        return .default
     }
     
     // MARK: SFSafariViewControllerDelegate
-    func safariViewControllerDidFinish(controller: SFSafariViewController)
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController)
     {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }

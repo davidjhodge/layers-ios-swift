@@ -9,20 +9,20 @@
 import Foundation
 import UIKit
 
-public class Font: UIFont
+open class Font: UIFont
 {
     // MARK: Montserrat
-    public static func PrimaryFontLight(size size:(CGFloat)) -> UIFont
+    open static func PrimaryFontLight(size:(CGFloat)) -> UIFont
     {
         return UIFont(name: "Montserrat-Light", size: size)!
     }
     
-    public static func PrimaryFontRegular(size size:(CGFloat)) -> UIFont
+    open static func PrimaryFontRegular(size:(CGFloat)) -> UIFont
     {
         return UIFont(name: "Montserrat-Regular", size: size)!
     }
     
-    public static func PrimaryFontSemiBold(size size:(CGFloat)) -> UIFont
+    open static func PrimaryFontSemiBold(size:(CGFloat)) -> UIFont
     {
         return UIFont(name: "Montserrat-SemiBold", size: size)!
     }
@@ -44,17 +44,17 @@ public class Font: UIFont
 //    }
     
     // MARK: Oxygen
-    public static func OxygenLight(size size:(CGFloat)) -> UIFont
+    open static func OxygenLight(size:(CGFloat)) -> UIFont
     {
         return UIFont(name: "Oxygen-Light", size: size)!
     }
     
-    public static func OxygenRegular(size size:(CGFloat)) -> UIFont
+    open static func OxygenRegular(size:(CGFloat)) -> UIFont
     {
         return UIFont(name: "Oxygen-Regular", size: size)!
     }
     
-    public static func OxygenBold(size size:(CGFloat)) -> UIFont
+    open static func OxygenBold(size:(CGFloat)) -> UIFont
     {
         return UIFont(name: "Oxygen-Bold", size: size)!
     }

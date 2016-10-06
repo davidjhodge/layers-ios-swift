@@ -10,27 +10,21 @@ import Foundation
 
 enum ImageSize: NSNumber
 {
+    // These will need to change
     case kImageSize116 = 112, kImageSize200 = 200, kImageSize232 = 232, kImageSize348 = 348, kImageSize400 = 400, kImageSize600 = 600, kImageSize = 1242
 }
 
-extension NSURL
+extension URL
 {
-    static func imageAtUrl(imageUrl: NSURL, imageSize size: ImageSize?) -> NSURL
+    static func imageAtUrl(_ imageUrl: URL, imageSize size: ImageSize?) -> URL
     {
         if imageUrl.absoluteString.characters.count > 0
         {
             if let size = size
             {
-                // Replace "original" in the url with whatever size you want
-                if let initialRange: Range = imageUrl.absoluteString.rangeOfString("original")
-                {
-                    let updatedString = imageUrl.absoluteString.stringByReplacingCharactersInRange(initialRange.startIndex..<initialRange.endIndex, withString: NSString(format: "%.0f", CGFloat.retinaSize(size)) as String)
-                    
-                    if let updatedUrl = NSURL(string: updatedString)
-                    {
-                        return updatedUrl
-                    }
-                }
+                // Update update URL to select correct size.
+                
+                
             }
         }
 
@@ -40,9 +34,9 @@ extension NSURL
 
 extension CGFloat
 {
-    static func retinaSize(size: ImageSize) -> CGFloat
+    static func retinaSize(_ size: ImageSize) -> CGFloat
     {
-        let scale = UIScreen.mainScreen().scale
+        let scale = UIScreen.main.scale
         
         var imageSize = size
         

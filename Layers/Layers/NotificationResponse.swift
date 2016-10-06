@@ -11,15 +11,15 @@ import ObjectMapper
 
 class NotificationResponse: Mappable {
 
-    var userImageUrl: NSURL?
+    var userImageUrl: URL?
     
     var userName: String?
     
-    var timestamp: NSDate?
+    var timestamp: Date?
     
-    var productImageUrl: NSURL?
+    var productImageUrl: URL?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

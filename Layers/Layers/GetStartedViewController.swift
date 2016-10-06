@@ -9,6 +9,7 @@
 import Foundation
 import FBSDKLoginKit
 import ObjectMapper
+import DeviceKit
 
 class GetStartedViewController: UIViewController, AuthenticationDelegate
 {
@@ -27,30 +28,30 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        logoLabel.attributedText = NSAttributedString(string: "LAYERS".uppercaseString, attributes: [NSFontAttributeName:Font.PrimaryFontSemiBold(size: 30.0),
+        logoLabel.attributedText = NSAttributedString(string: "LAYERS".uppercased(), attributes: [NSFontAttributeName:Font.PrimaryFontSemiBold(size: 30.0),
             NSKernAttributeName:3])
         
-        view.sendSubviewToBack(heroImage)
+        view.sendSubview(toBack: heroImage)
         
-        facebookButton.setBackgroundColor(Color.whiteColor(), forState: .Normal)
-        facebookButton.setBackgroundColor(Color.HighlightedWhiteColor, forState: .Highlighted)
+        facebookButton.setBackgroundColor(Color.white, forState: UIControlState())
+        facebookButton.setBackgroundColor(Color.HighlightedWhiteColor, forState: .highlighted)
         
-        facebookButton.addTarget(self, action: #selector(connectWithFacebook), forControlEvents: .TouchUpInside)
+        facebookButton.addTarget(self, action: #selector(connectWithFacebook), for: .touchUpInside)
         
-        getStartedButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
-        getStartedButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        getStartedButton.setBackgroundColor(Color.NeonBlueColor, forState: UIControlState())
+        getStartedButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .highlighted)
         
-        getStartedButton.addTarget(self, action: #selector(startBrowsing), forControlEvents: .TouchUpInside)
+        getStartedButton.addTarget(self, action: #selector(startBrowsing), for: .touchUpInside)
 
-        alreadyHasAccountButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
+        alreadyHasAccountButton.addTarget(self, action: #selector(login), for: .touchUpInside)
         
-        if UIDevice.currentDevice().type == .iPhone4S
+        if Device() == .iPhone4s
         {
-            copyLabel.hidden = true
+            copyLabel.isHidden = true
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         enableButtons()
@@ -65,19 +66,19 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
 
         disableButttons()
         
-        UIApplication.sharedApplication().setStatusBarStyle(.Default, animated: true)
+        UIApplication.shared.setStatusBarStyle(.default, animated: true)
 
         let loginManager: FBSDKLoginManager = FBSDKLoginManager()
         
-        loginManager.logInWithReadPermissions(["public_profile", "user_friends", "email"], fromViewController: self, handler: {(result:FBSDKLoginManagerLoginResult!, error:NSError!) -> Void in
+        loginManager.logIn(withReadPermissions: ["public_profile", "user_friends", "email"], from: self, handler: {(result:FBSDKLoginManagerLoginResult?, error:Error?) -> Void in
             
             if error != nil
             {
-                log.debug(error.localizedDescription)
+                log.debug(error?.localizedDescription)
                 
                 self.enableButtons()
             }
-            else if result.isCancelled
+            else if (result?.isCancelled)!
             {
                 log.debug("User cancelled Facebook Login")
                 
@@ -91,15 +92,15 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
                 
                 self.handleFacebookLogin()
                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     
                     self.disableButttons()
                 })
             }
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
               
-                UIApplication.sharedApplication().setStatusBarStyle(.LightContent, animated: false)
+                UIApplication.shared.setStatusBarStyle(.lightContent, animated: false)
             })
         })
     }
@@ -113,7 +114,7 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
                 // User login succeeded. Note that this means an account already existed
                 self.authenticationDidSucceed()
                                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                   
                     AppStateTransitioner.transitionToMainStoryboard(true)
                 })
@@ -130,15 +131,15 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
                         FBSDKAppEvents.logEvent("Get Started Facebook Registrations")
 
                         // Show Confirmation Screen
-                        let loginStoryboard = UIStoryboard(name: "Login", bundle: NSBundle.mainBundle())
-                        if let confirmFacebookVc = loginStoryboard.instantiateViewControllerWithIdentifier("ConfirmFacebookInfoViewController") as? ConfirmFacebookInfoViewController
+                        let loginStoryboard = UIStoryboard(name: "Login", bundle: Bundle.main)
+                        if let confirmFacebookVc = loginStoryboard.instantiateViewController(withIdentifier: "ConfirmFacebookInfoViewController") as? ConfirmFacebookInfoViewController
                         {
                             if let facebookResponse = result as? FacebookUserResponse
                             {
                                 confirmFacebookVc.facebookResponse = facebookResponse
                             }
                             
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            DispatchQueue.main.async(execute: { () -> Void in
                                 
                                 self.navigationController?.pushViewController(confirmFacebookVc, animated: true)
                             })
@@ -150,11 +151,11 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
                     {
                         self.enableButtons()
 
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        DispatchQueue.main.async(execute: { () -> Void in
                             
-                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                            self.presentViewController(alert, animated: true, completion: nil)
+                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
                         })
                     }
                 })
@@ -178,16 +179,16 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
         disableButttons()
         
         // Show Email Login View Controller
-        let loginStoryboard = UIStoryboard(name: "Login", bundle: NSBundle.mainBundle())
+        let loginStoryboard = UIStoryboard(name: "Login", bundle: Bundle.main)
         
-        if let emailLoginVc = loginStoryboard.instantiateViewControllerWithIdentifier("EmailLoginViewController") as? EmailLoginViewController
+        if let emailLoginVc = loginStoryboard.instantiateViewController(withIdentifier: "EmailLoginViewController") as? EmailLoginViewController
         {
             emailLoginVc.delegate = self
             
             let nav = UINavigationController(rootViewController: emailLoginVc)
             
             // Show Login
-            presentViewController(nav, animated: true, completion: nil)
+            present(nav, animated: true, completion: nil)
             
             // Hide nav bar on Get Started Screen
             navigationController?.setNavigationBarHidden(false, animated: false)
@@ -200,7 +201,7 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
     {
         LRSessionManager.sharedManager.completeFirstLaunch()
         
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        DispatchQueue.main.async(execute: { () -> Void in
             
             AppStateTransitioner.transitionToMainStoryboard(true)
         })
@@ -222,15 +223,15 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
     // MARK: Handle UI Interactivity
     func disableButttons()
     {
-        facebookButton.userInteractionEnabled = false
-        getStartedButton.userInteractionEnabled = false
-        alreadyHasAccountButton.userInteractionEnabled = false
+        facebookButton.isUserInteractionEnabled = false
+        getStartedButton.isUserInteractionEnabled = false
+        alreadyHasAccountButton.isUserInteractionEnabled = false
     }
     
     func enableButtons()
     {
-        facebookButton.userInteractionEnabled = true
-        getStartedButton.userInteractionEnabled = true
-        alreadyHasAccountButton.userInteractionEnabled = true
+        facebookButton.isUserInteractionEnabled = true
+        getStartedButton.isUserInteractionEnabled = true
+        alreadyHasAccountButton.isUserInteractionEnabled = true
     }
 }

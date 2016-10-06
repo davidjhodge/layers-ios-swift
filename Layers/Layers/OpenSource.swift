@@ -30,7 +30,7 @@ class OpenSource
         var contentsDict: NSDictionary?
         
         // Reference library descriptions
-        if let path: String = NSBundle.mainBundle().pathForResource("OpenSourceList", ofType: "plist")
+        if let path: String = Bundle.main.path(forResource: "OpenSourceList", ofType: "plist")
         {
             if let dict = NSDictionary(contentsOfFile: path)
             {

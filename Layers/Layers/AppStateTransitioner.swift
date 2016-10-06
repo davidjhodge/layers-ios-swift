@@ -11,31 +11,31 @@ import UIKit
 
 class AppStateTransitioner
 {
-    private static func transition(destinationViewController: UIViewController, animated: Bool)
+    fileprivate static func transition(_ destinationViewController: UIViewController, animated: Bool)
     {
-        let window = UIApplication.sharedApplication().delegate!.window!
+        let window = UIApplication.shared.delegate!.window!
         
         if animated
         {
             let coverView = UIView(frame: window!.bounds)
-            coverView.backgroundColor = UIColor.whiteColor()
+            coverView.backgroundColor = UIColor.white
             coverView.alpha = 0.0
             
             window?.addSubview(coverView)
             
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
+            UIView.animate(withDuration: 0.5, animations: { () -> Void in
                 coverView.alpha = 1.0
-            }) { (finished) -> Void in
+            }, completion: { (finished) -> Void in
                 window?.rootViewController = destinationViewController
-                window?.bringSubviewToFront(coverView)
+                window?.bringSubview(toFront: coverView)
                 
                 
-                UIView.animateWithDuration(0.5, animations: { () -> Void in
+                UIView.animate(withDuration: 0.5, animations: { () -> Void in
                     coverView.alpha = 0.0
                     }, completion: { (finished) -> Void in
                         coverView.removeFromSuperview()
                 })
-            }
+            }) 
         }
         else
         {
@@ -43,26 +43,26 @@ class AppStateTransitioner
         }
     }
     
-    static func transitionToLoginStoryboard(animated: Bool)
+    static func transitionToLoginStoryboard(_ animated: Bool)
     {
-        let storyboard = UIStoryboard(name: "Login", bundle: NSBundle.mainBundle())
+        let storyboard = UIStoryboard(name: "Login", bundle: Bundle.main)
         
         let viewController: UIViewController = storyboard.instantiateInitialViewController()!
         
         transition(viewController, animated: animated)
     }
     
-    static func transitionToMainStoryboard(animated: Bool)
+    static func transitionToMainStoryboard(_ animated: Bool)
     {
         transition(mainTabBarController(), animated: animated)
     }
     
     static func mainTabBarController() -> UITabBarController
     {
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-        let searchStoryboard = UIStoryboard(name: "Search", bundle: NSBundle.mainBundle())
-        let notificationsStoryboard = UIStoryboard(name: "Notifications", bundle: NSBundle.mainBundle())
-        let accountStoryboard = UIStoryboard(name: "Account", bundle: NSBundle.mainBundle())
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        let searchStoryboard = UIStoryboard(name: "Search", bundle: Bundle.main)
+        let notificationsStoryboard = UIStoryboard(name: "Notifications", bundle: Bundle.main)
+        let accountStoryboard = UIStoryboard(name: "Account", bundle: Bundle.main)
         
         let mainVC: UIViewController = mainStoryboard.instantiateInitialViewController()!
         let searchVc: UIViewController = searchStoryboard.instantiateInitialViewController()!
@@ -71,8 +71,8 @@ class AppStateTransitioner
         
         let tabBarController: UITabBarController = UITabBarController()
         tabBarController.viewControllers = [mainVC, searchVc, notificationsVc, accountVC]
-        tabBarController.tabBar.translucent = false
-        tabBarController.delegate = UIApplication.sharedApplication().delegate as? UITabBarControllerDelegate
+        tabBarController.tabBar.isTranslucent = false
+        tabBarController.delegate = UIApplication.shared.delegate as? UITabBarControllerDelegate
         
         return tabBarController
     }

@@ -11,12 +11,12 @@ import UIKit
 
 private enum TableRow: NSInteger
 {
-    case Name = 0, GenderAge, Email, Count
+    case name = 0, genderAge, email, count
 }
 
 enum GenderOption: NSInteger
 {
-    case Male = 0, Female, OtherSpecific, NotKnown, NotSpecific, Count
+    case male = 0, female, otherSpecific, notKnown, notSpecific, count
 }
 
 class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate
@@ -49,12 +49,12 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         super.viewDidLoad()
         
         tableView.tableFooterView = UIView()
-        tableView.scrollEnabled = false
+        tableView.isScrollEnabled = false
         
-        submitButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
-        submitButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        submitButton.setBackgroundColor(Color.NeonBlueColor, forState: UIControlState())
+        submitButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .highlighted)
         
-        submitButton.addTarget(self, action: #selector(submit), forControlEvents: .TouchUpInside)
+        submitButton.addTarget(self, action: #selector(submit), for: .touchUpInside)
         
         headerLabel.font = Font.OxygenRegular(size: 18.0)
         
@@ -71,7 +71,7 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         
         pickerView.delegate = self
         
-        if let genderAgeCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.GenderAge.rawValue, inSection: 0)) as? TwoTextFieldCell
+        if let genderAgeCell = tableView.cellForRow(at: IndexPath(row: TableRow.genderAge.rawValue, section: 0)) as? TwoTextFieldCell
         {
             if let genderTextField = genderAgeCell.firstTextField
             {
@@ -84,13 +84,13 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
     
     func validateEmail() -> Bool
     {
-        let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Email.rawValue, inSection: 0)) as? TextFieldCell
+        let emailCell = tableView.cellForRow(at: IndexPath(row: TableRow.email.rawValue, section: 0)) as? TextFieldCell
         
         if let emailTextField = emailCell?.textField
         {
             if let email = emailTextField.text
             {
-                if email.rangeOfString("@") != nil && email.rangeOfString(".") != nil
+                if email.range(of: "@") != nil && email.range(of: ".") != nil
                 {
                     return true
                 }
@@ -105,16 +105,26 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
     {
         if validateEmail()
         {
-            if let nameCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Name.rawValue, inSection: 0)) as? TwoTextFieldCell,
+            if let nameCell = tableView.cellForRow(at: IndexPath(row: TableRow.name.rawValue, section: 0)) as? TwoTextFieldCell,
                 
-                let genderAgeCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.GenderAge.rawValue, inSection: 0)) as? TwoTextFieldCell,
+                let genderAgeCell = tableView.cellForRow(at: IndexPath(row: TableRow.genderAge.rawValue, section: 0)) as? TwoTextFieldCell,
                 
-                let emailCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.Email.rawValue, inSection: 0)) as? TextFieldCell
+                let emailCell = tableView.cellForRow(at: IndexPath(row: TableRow.email.rawValue, section: 0)) as? TextFieldCell
             {
                 let firstName = nameCell.firstTextField.text
                 let lastName = nameCell.secondTextField.text
                 let gender = genderAgeCell.firstTextField.text
-                let age = NSNumber.aws_numberFromString(genderAgeCell.secondTextField.text)
+                
+                var age: NSNumber = NSNumber(value: 0)
+                
+                if let ageText = genderAgeCell.secondTextField.text
+                {
+                    if let ageInteger = Int(ageText)
+                    {
+                        age = NSNumber(value: ageInteger)
+                    }
+                }
+
                 let email = emailCell.textField.text
                 
                 if let email = email
@@ -128,12 +138,12 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
                         else
                         {
                             //Failure
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            DispatchQueue.main.async {
                                 
-                                let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                                self.presentViewController(alert, animated: true, completion: nil)
-                            })
+                                let alert = UIAlertController(title: error, message: nil, preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                                self.present(alert, animated: true, completion: nil)
+                            }
                         }
                     })
                 }
@@ -141,9 +151,9 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         }
         else
         {
-            let alert = UIAlertController(title: "Whoops! Check to make sure you entered a valid email.", message: nil, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "Whoops! Check to make sure you entered a valid email.", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
@@ -151,7 +161,7 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
     {
         LRSessionManager.sharedManager.completeFirstLaunch()
         
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        DispatchQueue.main.async(execute: { () -> Void in
             
             self.view.endEditing(true)
         })
@@ -159,9 +169,9 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         if isModal
         {
             // Logged in on Account Page
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
 
-                self.dismissViewControllerAnimated(true, completion: nil)
+                self.dismiss(animated: true, completion: nil)
             })
         
             if let authDelegate = delegate
@@ -172,7 +182,7 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         else
         {
             // Logged in on Get Started Screen
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 
                 AppStateTransitioner.transitionToMainStoryboard(true)
             })
@@ -180,32 +190,32 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
     }
     
     // MARK: Table View Data Source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-         return TableRow.Count.rawValue
+         return TableRow.count.rawValue
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if let tableRow = TableRow(rawValue: indexPath.row)
+        if let tableRow = TableRow(rawValue: (indexPath as NSIndexPath).row)
         {
-            if tableRow == .Name
+            if tableRow == .name
             {
-                let cell = tableView.dequeueReusableCellWithIdentifier("TwoTextFieldCell") as! TwoTextFieldCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "TwoTextFieldCell") as! TwoTextFieldCell
                 
                 cell.separatorView.backgroundColor = tableView.separatorColor
 
-                cell.selectionStyle = .None
+                cell.selectionStyle = .none
                 
                 // First Name
                 cell.firstTextField.placeholder = "First Name"
         
-                cell.firstTextField.autocapitalizationType = .Words
-                cell.firstTextField.autocorrectionType = .No
+                cell.firstTextField.autocapitalizationType = .words
+                cell.firstTextField.autocorrectionType = .no
                 
                 if let firstName = facebookResponse?.firstName
                 {
@@ -215,8 +225,8 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
                 // Last Name
                 cell.secondTextField.placeholder = "Last Name"
                 
-                cell.secondTextField.autocapitalizationType = .Words
-                cell.secondTextField.autocorrectionType = .No
+                cell.secondTextField.autocapitalizationType = .words
+                cell.secondTextField.autocorrectionType = .no
 
                 if let lastName = facebookResponse?.lastName
                 {
@@ -225,13 +235,13 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
                 
                 return cell
             }
-            else if tableRow == .GenderAge
+            else if tableRow == .genderAge
             {
-                let cell = tableView.dequeueReusableCellWithIdentifier("TwoTextFieldCell") as! TwoTextFieldCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "TwoTextFieldCell") as! TwoTextFieldCell
                 
                 cell.separatorView.backgroundColor = tableView.separatorColor
                 
-                cell.selectionStyle = .None
+                cell.selectionStyle = .none
 
                 // Gender
                 cell.firstTextField.placeholder = "Gender"
@@ -241,16 +251,16 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
                 {
                     cell.firstTextField.inputView = picker
                     
-                    cell.firstTextField.tintColor = Color.clearColor()
+                    cell.firstTextField.tintColor = Color.clear
                     
                     cell.firstTextField.inputAccessoryView = nil
                 }
                 
-                cell.firstTextField.autocapitalizationType = .Words
+                cell.firstTextField.autocapitalizationType = .words
                 
                 if let gender = facebookResponse?.gender
                 {
-                    cell.firstTextField.text = gender.capitalizedString
+                    cell.firstTextField.text = gender.capitalized
                 }
                 else
                 {
@@ -260,29 +270,29 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
                 // Age
                 cell.secondTextField.placeholder = "Age"
                 
-                cell.secondTextField.keyboardType = .NumberPad
+                cell.secondTextField.keyboardType = .numberPad
                 
                 if let ageRange = facebookResponse?.ageRange
                 {
                     if let predictedAge = ageRange.predictedAge()
                     {
-                        cell.secondTextField.text = String(predictedAge)
+                        cell.secondTextField.text = predictedAge.stringValue
                     }
                 }
                 
                 return cell
             }
-            else if tableRow == .Email
+            else if tableRow == .email
             {
-                let cell = tableView.dequeueReusableCellWithIdentifier("TextFieldCell") as! TextFieldCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "TextFieldCell") as! TextFieldCell
                 
-                cell.selectionStyle = .None
+                cell.selectionStyle = .none
                 
                 // Email
                 cell.textField.placeholder = "Email"
                 
-                cell.textField.autocapitalizationType = .None
-                cell.textField.autocorrectionType = .No
+                cell.textField.autocapitalizationType = .none
+                cell.textField.autocorrectionType = .no
                 
                 if let email = facebookResponse?.email
                 {
@@ -293,7 +303,7 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
             }
         }
         
-        return UITableViewCell(style: .Default, reuseIdentifier: "UITableViewCell")
+        return UITableViewCell(style: .default, reuseIdentifier: "UITableViewCell")
     }
     
     // MARK: Table View Delegate
@@ -301,46 +311,46 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
     
     // MARK: Picker View Data Source
     // MARK: Picker View
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
     {
-        return GenderOption.Count.rawValue
+        return GenderOption.count.rawValue
     }
     
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         
         if view == nil
         {
             // Remove selection indicators
-            pickerView.subviews[1].hidden = true
-            pickerView.subviews[2].hidden = true
+            pickerView.subviews[1].isHidden = true
+            pickerView.subviews[2].isHidden = true
             
-            if let pickerRow: PickerRow = NSBundle.mainBundle().loadNibNamed("PickerRow", owner: self, options: nil)[0] as? PickerRow
+            if let pickerRow: PickerRow = Bundle.main.loadNibNamed("PickerRow", owner: self, options: nil)?[0] as? PickerRow
             {
-                pickerRow.colorSwatchView.hidden = true
+                pickerRow.colorSwatchView.isHidden = true
        
-                pickerRow.bounds = CGRectMake(pickerRow.bounds.origin.x, pickerRow.bounds.origin.y, UIScreen .mainScreen().bounds.width, pickerRow.bounds.size.height)
+                pickerRow.bounds = CGRect(x: pickerRow.bounds.origin.x, y: pickerRow.bounds.origin.y, width: UIScreen.main.bounds.width, height: pickerRow.bounds.size.height)
                 
                 if let genderOption = GenderOption(rawValue: row)
                 {
                     switch genderOption
                     {
-                    case .Male:
+                    case .male:
                         pickerRow.textLabel.text = "Male"
                         
-                    case .Female:
+                    case .female:
                         pickerRow.textLabel.text = "Female"
                         
-                    case .OtherSpecific:
+                    case .otherSpecific:
                         pickerRow.textLabel.text = "Other Specific"
                         
-                    case .NotKnown:
+                    case .notKnown:
                         pickerRow.textLabel.text = "Not Known"
                         
-                    case .NotSpecific:
+                    case .notSpecific:
                         pickerRow.textLabel.text = "Not Specific"
                         
                     default:
@@ -364,35 +374,35 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         return UIView()
     }
     
-    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+    func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         
         return view.bounds.size.width
     }
     
-    func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         
         return 48.0
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
         if let gender = GenderOption(rawValue: row)
         {
             switch gender
             {
-            case .Male:
+            case .male:
                 return "Male"
                 
-            case .Female:
+            case .female:
                 return "Female"
                 
-            case .OtherSpecific:
+            case .otherSpecific:
                 return "Other Specific"
                 
-            case .NotKnown:
+            case .notKnown:
                 return "Not Known"
                 
-            case .NotSpecific:
+            case .notSpecific:
                 return "Not Specific"
                 
             default:
@@ -403,31 +413,31 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
         return ""
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         if let gender = GenderOption(rawValue: row)
         {
             selectedGender = gender
             
-            if let genderAgeCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: TableRow.GenderAge.rawValue, inSection: 0)) as? TwoTextFieldCell
+            if let genderAgeCell = tableView.cellForRow(at: IndexPath(row: TableRow.genderAge.rawValue, section: 0)) as? TwoTextFieldCell
             {
                 if let genderTextField = genderAgeCell.firstTextField
                 {
                     switch gender
                     {
-                    case .Male:
+                    case .male:
                         genderTextField.text = "Male"
                         
-                    case .Female:
+                    case .female:
                         genderTextField.text = "Female"
                         
-                    case .OtherSpecific:
+                    case .otherSpecific:
                         genderTextField.text = "Other Specific"
                         
-                    case .NotKnown:
+                    case .notKnown:
                         genderTextField.text = "Not Known"
                         
-                    case .NotSpecific:
+                    case .notSpecific:
                         genderTextField.text = "Not Specific"
                         
                     default:
@@ -441,21 +451,21 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
     // MARK: Handle Keyboard
     func prepareToHandleKeyboard()
     {
-        keyboardNotificationObserver = NSNotificationCenter.defaultCenter().addObserverForName(UIKeyboardWillChangeFrameNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (notification) -> Void in
+        keyboardNotificationObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil, queue: OperationQueue.main) { [weak self] (notification) -> Void in
             
-            let frame : CGRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+            let frame : CGRect = ((notification as NSNotification).userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
             
-            guard let keyboardFrameInViewCoordiantes = self?.view.convertRect(frame, fromView: nil), bounds = self?.view.bounds else { return; }
+            guard let keyboardFrameInViewCoordiantes = self?.view.convert(frame, from: nil), let bounds = self?.view.bounds else { return; }
             
-            let constantModification = CGRectGetHeight(bounds) - keyboardFrameInViewCoordiantes.origin.y
+            let constantModification = bounds.height - keyboardFrameInViewCoordiantes.origin.y
             
-            let duration:NSTimeInterval = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-            let animationCurveRawNSN = notification.userInfo?[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
-            let animationCurveRaw = animationCurveRawNSN?.unsignedLongValue ?? UIViewAnimationOptions.CurveEaseInOut.rawValue
+            let duration:TimeInterval = ((notification as NSNotification).userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+            let animationCurveRawNSN = (notification as NSNotification).userInfo?[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
+            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions().rawValue
             let animationCurve:UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
             
             
-            UIView.animateWithDuration(duration, delay: 0.0, options: animationCurve, animations: { [weak self] () -> Void in
+            UIView.animate(withDuration: duration, delay: 0.0, options: animationCurve, animations: { [weak self] () -> Void in
                 
                 self?.submitButtonBottomConstraint.constant = constantModification
                 

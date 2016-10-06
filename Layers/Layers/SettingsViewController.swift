@@ -11,17 +11,17 @@ import FBSDKCoreKit
 
 private enum Section: Int
 {
-    case Account = 0, Legal, SignOut, _Count
+    case account = 0, legal, signOut, _Count
 }
 
 private enum AccountRow: Int
 {
-    case PushNotifications = 0, EmailPreferences, _Count
+    case pushNotifications = 0, emailPreferences, _Count
 }
 
 private enum LegalRow: Int
 {
-    case Terms = 0, Privacy, OpenSource, _Count
+    case terms = 0, privacy, openSource, _Count
 }
 
 class SettingsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -37,8 +37,8 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         collectionView.alwaysBounceVertical = true
         collectionView.showsVerticalScrollIndicator = false
         
-        collectionView.registerNib(UINib(nibName: "HeaderView", bundle: NSBundle.mainBundle()), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderView")
-        collectionView.registerNib(UINib(nibName: "HeaderView", bundle: NSBundle.mainBundle()), forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "HeaderView")
+        collectionView.register(UINib(nibName: "HeaderView", bundle: Bundle.main), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderView")
+        collectionView.register(UINib(nibName: "HeaderView", bundle: Bundle.main), forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "HeaderView")
     }
     
     // MARK: Actions
@@ -50,25 +50,25 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     // MARK: Collection View Data Source
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         
         return Section._Count.rawValue
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if let section = Section(rawValue: section)
         {
             switch section {
-            case .Account:
+            case .account:
                 
                 return AccountRow._Count.rawValue
                 
-            case .Legal:
+            case .legal:
                 
                 return LegalRow._Count.rawValue
                 
-            case .SignOut:
+            case .signOut:
                 
                 return 1
                 
@@ -80,44 +80,44 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         return 0
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("BasicCollectionCell", forIndexPath: indexPath) as! BasicCollectionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BasicCollectionCell", for: indexPath) as! BasicCollectionCell
         
-        cell.backgroundColor = Color.whiteColor()
+        cell.backgroundColor = Color.white
         
-        if let section = Section(rawValue: indexPath.section)
+        if let section = Section(rawValue: (indexPath as NSIndexPath).section)
         {
             let textAttributes = FontAttributes.defaultTextAttributes
             
-            if section == .Account
+            if section == .account
             {
-                if let row = AccountRow(rawValue: indexPath.row)
+                if let row = AccountRow(rawValue: (indexPath as NSIndexPath).row)
                 {
-                    if row == .PushNotifications
+                    if row == .pushNotifications
                     {
                         cell.titleLabel.attributedText = NSAttributedString(string: "Push Notifications", attributes: textAttributes)
                     }
-                    else if row == .EmailPreferences
+                    else if row == .emailPreferences
                     {
                         cell.titleLabel.attributedText = NSAttributedString(string: "Email Preferences", attributes: textAttributes)
                     }
                 }
             }
-            else if section == .Legal
+            else if section == .legal
             {
-                if let row = LegalRow(rawValue: indexPath.row)
+                if let row = LegalRow(rawValue: (indexPath as NSIndexPath).row)
                 {
                     switch row {
-                    case .Terms:
+                    case .terms:
                         
                         cell.titleLabel.attributedText = NSAttributedString(string: "Terms", attributes: textAttributes)
                         
-                    case .Privacy:
+                    case .privacy:
                         
                         cell.titleLabel.attributedText = NSAttributedString(string: "Privacy", attributes: textAttributes)
                         
-                    case .OpenSource:
+                    case .openSource:
                         
                         cell.titleLabel.attributedText = NSAttributedString(string: "Open Source", attributes: textAttributes)
                         
@@ -126,9 +126,9 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
                     }
                 }
             }
-            else if section == .SignOut
+            else if section == .signOut
             {
-                if indexPath.row == 0
+                if (indexPath as NSIndexPath).row == 0
                 {
                     if LRSessionManager.sharedManager.isAuthenticated()
                     {
@@ -145,27 +145,27 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if kind == UICollectionElementKindSectionHeader
         {
-            if let headerView = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "HeaderView", forIndexPath: indexPath) as? HeaderView
+            if let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView
             {
-                headerView.backgroundColor = Color.clearColor()
+                headerView.backgroundColor = Color.clear
                 
                 let textAttributes = [NSFontAttributeName: Font.PrimaryFontRegular(size: 12.0),
                                       NSForegroundColorAttributeName: Color.GrayColor,
-                                      NSKernAttributeName:0.7]
+                                      NSKernAttributeName:0.7] as [String : Any]
                 
-                if let section = Section(rawValue: indexPath.section)
+                if let section = Section(rawValue: (indexPath as NSIndexPath).section)
                 {
-                    if section == .Account
+                    if section == .account
                     {
-                        headerView.sectionTitleLabel.attributedText = NSAttributedString(string: "My Account".uppercaseString, attributes: textAttributes)
+                        headerView.sectionTitleLabel.attributedText = NSAttributedString(string: "My Account".uppercased(), attributes: textAttributes)
                     }
-                    else if section == .Legal
+                    else if section == .legal
                     {
-                        headerView.sectionTitleLabel.attributedText = NSAttributedString(string: "Legal".uppercaseString, attributes: textAttributes)
+                        headerView.sectionTitleLabel.attributedText = NSAttributedString(string: "Legal".uppercased(), attributes: textAttributes)
                     }
                     else
                     {
@@ -178,17 +178,17 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         }
         else if kind == UICollectionElementKindSectionFooter
         {
-            if let footerView = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "HeaderView", forIndexPath: indexPath) as? HeaderView
+            if let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView
             {
-                footerView.backgroundColor = Color.clearColor()
+                footerView.backgroundColor = Color.clear
                 
                 let textAttributes = [NSFontAttributeName: Font.PrimaryFontRegular(size: 12.0),
                                       NSForegroundColorAttributeName: Color.LightGray,
-                                      NSKernAttributeName:0.7]
+                                      NSKernAttributeName:0.7] as [String : Any]
                 
-                if let section = Section(rawValue: indexPath.section)
+                if let section = Section(rawValue: (indexPath as NSIndexPath).section)
                 {
-                    if section == .SignOut
+                    if section == .signOut
                     {
                         let versionNumber = "2.0.0"
                         
@@ -204,43 +204,43 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     // MARK: Collection View Delegate
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
-        if let section = Section(rawValue: indexPath.section)
+        if let section = Section(rawValue: (indexPath as NSIndexPath).section)
         {
             switch section {
-            case .Account:
+            case .account:
                 
                 // Do stuff with Account
                 break
                 
-            case .Legal:
+            case .legal:
                 
-                if let legalRow: LegalRow = LegalRow(rawValue: indexPath.row)
+                if let legalRow: LegalRow = LegalRow(rawValue: (indexPath as NSIndexPath).row)
                 {
                     switch legalRow {
-                    case .Terms:
+                    case .terms:
                         https://trylayers.com/terms/
                             //Show Terms
-                            if let url = NSURL(string: "https://trylayers.com/terms/")
+                            if let url = URL(string: "https://trylayers.com/terms/")
                         {
                             showWebBrowser(url)
                         }
                         
-                    case .Privacy:
+                    case .privacy:
                         
                         // Show Privacy
-                        if let url = NSURL(string: "https://trylayers.com/privacy/")
+                        if let url = URL(string: "https://trylayers.com/privacy/")
                         {
                             showWebBrowser(url)
                         }
                         
-                    case .OpenSource:
+                    case .openSource:
                         
                         //Show Open Source
-                        let storyboard = UIStoryboard(name: "Account", bundle: NSBundle.mainBundle())
+                        let storyboard = UIStoryboard(name: "Account", bundle: Bundle.main)
                         
-                        if let openSourceVc = storyboard.instantiateViewControllerWithIdentifier("OpenSourceViewController") as? OpenSourceViewController
+                        if let openSourceVc = storyboard.instantiateViewController(withIdentifier: "OpenSourceViewController") as? OpenSourceViewController
                         {
                             navigationController?.pushViewController(openSourceVc, animated: true)
                         }
@@ -250,7 +250,7 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
                     }
                 }
                 
-            case .SignOut:
+            case .signOut:
                 
                 if LRSessionManager.sharedManager.isAuthenticated()
                 {
@@ -258,7 +258,7 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
                 }
                 else
                 {
-                    if indexPath.row == 0
+                    if (indexPath as NSIndexPath).row == 0
                     {
                         if !LRSessionManager.sharedManager.isAuthenticated()
                         {
@@ -268,18 +268,18 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
                         else
                         {
                             // Show alert to confirm logout
-                            let alertController = UIAlertController(title: "Are you sure you want to sign out?", message: nil, preferredStyle: .Alert)
+                            let alertController = UIAlertController(title: "Are you sure you want to sign out?", message: nil, preferredStyle: .alert)
                             
-                            alertController.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
+                            alertController.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
                             
-                            alertController.addAction(UIAlertAction(title: "Sign Out", style: .Destructive, handler: { (action) -> Void in
+                            alertController.addAction(UIAlertAction(title: "Sign Out", style: .destructive, handler: { (action) -> Void in
                                 
                                 self.logout()
                             }))
                             
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            DispatchQueue.main.async(execute: { () -> Void in
                                 
-                                self.presentViewController(alertController, animated: true, completion: nil)
+                                self.present(alertController, animated: true, completion: nil)
                             })
                         }
                     }
@@ -291,33 +291,33 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         }
     }
     
-    func showWebBrowser(url: NSURL)
+    func showWebBrowser(_ url: URL)
     {
-        let webView = ProductWebViewController(URL: url)
+        let webView = ProductWebViewController(url: url)
         
         let navController = ProductWebNavigationController(rootViewController: webView)
         navController.setNavigationBarHidden(true, animated: false)
-        navController.modalPresentationStyle = .OverFullScreen
+        navController.modalPresentationStyle = .overFullScreen
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         
         if let section = Section(rawValue: section)
         {
             // Width is ignored
             let ignoredWidth: CGFloat = 100
             
-            if section == .Account
+            if section == .account
             {
                 return CGSize(width: ignoredWidth, height: 48.0)
             }
-            else if section == .Legal
+            else if section == .legal
             {
                 return CGSize(width: ignoredWidth, height: 40.0)
             }
-            else if section == .SignOut
+            else if section == .signOut
             {
                 return CGSize(width: ignoredWidth, height: 24.0)
             }
@@ -326,13 +326,13 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         return CGSize(width: 0, height: 0)
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         
         let ignoredWidth: CGFloat = 100.0
         
         if let section = Section(rawValue: section)
         {
-            if section == .SignOut
+            if section == .signOut
             {
                 return CGSize(width: ignoredWidth, height: 24.0)
             }
@@ -341,11 +341,11 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         return CGSize(width: 0, height: 0)
     }
     
-    func collectionView(collectionView: UICollectionView, didHighlightItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
         
-        if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath)
+        if let cell: UICollectionViewCell = collectionView.cellForItem(at: indexPath)
         {
-            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+            UIView.animate(withDuration: 0.1, delay: 0, options: .allowUserInteraction, animations: { () -> Void in
                 
                 cell.backgroundColor = Color.HighlightedGrayColor
                 
@@ -353,20 +353,20 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         }
     }
     
-    func collectionView(collectionView: UICollectionView, didUnhighlightItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
         
-        if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath)
+        if let cell: UICollectionViewCell = collectionView.cellForItem(at: indexPath)
         {
-            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+            UIView.animate(withDuration: 0.1, delay: 0, options: .allowUserInteraction, animations: { () -> Void in
                 
-                cell.backgroundColor = Color.whiteColor()
+                cell.backgroundColor = Color.white
                 
                 }, completion: nil)
         }
     }
     
     // MARK: Collection View Delegate Flow Layout
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
     {
         if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
         {
@@ -374,19 +374,19 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
             let leftInset = flowLayout.sectionInset.left
             let rightInset = flowLayout.sectionInset.right
             
-            if let section = Section(rawValue: indexPath.section)
+            if let section = Section(rawValue: (indexPath as NSIndexPath).section)
             {
                 switch section {
-                case .Account:
+                case .account:
                     
                     return CGSize(width: viewWidth - leftInset - rightInset, height: 48.0)
                     
-                case .Legal:
+                case .legal:
                     
                     // Use code in .Other
                     return CGSize(width: viewWidth - leftInset - rightInset, height: 48.0)
                     
-                case .SignOut:
+                case .signOut:
                     
                     return CGSize(width: viewWidth - leftInset - rightInset, height: 48.0)
                     

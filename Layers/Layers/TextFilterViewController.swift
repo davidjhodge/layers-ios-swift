@@ -18,7 +18,7 @@ struct FilterItem
 
 protocol FilterTypeDelegate
 {
-    func textFilterChanged(filters: Array<FilterObject>?, filterType: FilterType?)
+    func textFilterChanged(_ filters: Array<FilterObject>?, filterType: FilterType?)
 }
 
 class TextFilterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
@@ -45,17 +45,17 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         // Set the Navigation Title
         setNavTitle()
         
-        selectButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
-        selectButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        selectButton.setBackgroundColor(Color.NeonBlueColor, forState: UIControlState())
+        selectButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .highlighted)
         
-        selectButton.addTarget(self, action: #selector(confirmSelection), forControlEvents: .TouchUpInside)
+        selectButton.addTarget(self, action: #selector(confirmSelection), for: .touchUpInside)
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercaseString, style: .Plain, target: self, action:#selector(reset))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercased(), style: .plain, target: self, action:#selector(reset))
         
         reloadData()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         if let selections = selectedItems
@@ -95,13 +95,13 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
                 if let type = filterType
                 {
                     switch type {
-                    case .Category:
+                    case .category:
                         
-                        delegate.textFilterChanged(filterArray, filterType: FilterType.Category)
+                        delegate.textFilterChanged(filterArray, filterType: FilterType.category)
                         
-                    case .Brand:
+                    case .brand:
                         
-                        delegate.textFilterChanged(filterArray, filterType: FilterType.Brand)
+                        delegate.textFilterChanged(filterArray, filterType: FilterType.brand)
                         
                     default:
                         break
@@ -118,13 +118,13 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         if let type = filterType
         {
             switch type {
-            case .Category:
+            case .category:
                 
-                title = "Category".uppercaseString
+                title = "Category".uppercased()
                 
-            case .Brand:
+            case .brand:
                 
-                title = "Brand".uppercaseString
+                title = "Brand".uppercased()
                 
             default:
                 title = ""
@@ -137,7 +137,7 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         if let type = filterType
         {
             switch type {
-            case .Category:
+            case .category:
                 
                 FilterManager.defaultManager.fetchOriginalCategories( { (success, results) -> Void in
                     
@@ -149,14 +149,14 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
                             
                             self.items = filterObjects
                             
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            DispatchQueue.main.async(execute: { () -> Void in
                                 self.tableView.reloadData()
                             })
                         }
                     }
                 })
                 
-            case .Brand:
+            case .brand:
                 
                 //Need to fetch brands
                 FilterManager.defaultManager.fetchBrands( { (success, results) -> Void in
@@ -167,7 +167,7 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
                         {
                             self.items = categories
                             
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            DispatchQueue.main.async(execute: { () -> Void in
                                 self.tableView.reloadData()
                             })
                         }
@@ -183,7 +183,7 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
     // MARK: UI Actions
     func confirmSelection()
     {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
     func reset()
@@ -194,7 +194,7 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     // MARK: Add/Remove
-    func addSelection(index: Int)
+    func addSelection(_ index: Int)
     {
         if let filterItems = items
         {            
@@ -212,7 +212,7 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         }
     }
 
-    func deleteSelection(index: Int)
+    func deleteSelection(_ index: Int)
     {
         if let filterItems = items
         {
@@ -231,25 +231,25 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         }
     }
     
-    func updateRowAtIndex(index: Int)
+    func updateRowAtIndex(_ index: Int)
     {
         tableView.beginUpdates()
         
-        tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
+        tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
         
         tableView.endUpdates()
     }
     
     // MARK: UITableView Data Source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if let type = filterType
         {
-            if type == FilterType.Price
+            if type == FilterType.price
             {
                 return 1
             }
@@ -265,18 +265,18 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
         return 0
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Category, Brand, Retailer
-        let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("CheckmarkCell")!
+        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "CheckmarkCell")!
         
         cell.textLabel?.font = Font.OxygenRegular(size: 14.0)
         
-        cell.selectionStyle = .None
+        cell.selectionStyle = .none
         
         if let filterItems = items
         {
-            if let item: FilterObject = filterItems[indexPath.row]
+            if let item: FilterObject = filterItems[(indexPath as NSIndexPath).row]
             {
                 if let itemText = item.name
                 {
@@ -285,18 +285,18 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
                 
                 if let selections = selectedItems
                 {
-                    if selections.contains({ $0.name == item.name })
+                    if selections.contains(where: { $0.name == item.name })
                     {
-                        cell.accessoryType = .Checkmark
+                        cell.accessoryType = .checkmark
                     }
                     else
                     {
-                        cell.accessoryType = .None
+                        cell.accessoryType = .none
                     }
                 }
                 else
                 {
-                    cell.accessoryType = .None
+                    cell.accessoryType = .none
                 }
             }
         }
@@ -305,43 +305,43 @@ class TextFilterViewController: UIViewController, UITableViewDataSource, UITable
 }
 
     // MARK: UITableView Delegate
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let filterItems = items
         {
-            if let selectedItem = filterItems[safe: indexPath.row]
+            if let selectedItem = filterItems[safe: (indexPath as NSIndexPath).row]
             {
                 if let desiredKey = selectedItem.key
                 {
                     if let selections = selectedItems
                     {
-                        if selections.contains( { $0.key == desiredKey } )
+                        if selections.contains( where: { $0.key == desiredKey } )
                         {
                             // Item is already selected. Clear the selection
-                            deleteSelection(indexPath.row)
+                            deleteSelection((indexPath as NSIndexPath).row)
                             
                             return
                         }
                     }
                     
                     // Select the item
-                    addSelection(indexPath.row)
+                    addSelection((indexPath as NSIndexPath).row)
                 }
             }
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
        return 48.0
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         return 24.0
     }
     
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         return 24.0
     }

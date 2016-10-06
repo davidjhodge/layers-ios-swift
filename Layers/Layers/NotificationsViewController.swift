@@ -23,7 +23,7 @@ class NotificationsViewController: UIViewController, UICollectionViewDataSource,
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        title = "notifications".uppercaseString
+        title = "notifications".uppercased()
         
         tabBarItem.title = "Notifications"
         tabBarItem.image = UIImage(named: "notifications-bell")
@@ -34,7 +34,7 @@ class NotificationsViewController: UIViewController, UICollectionViewDataSource,
         super.viewDidLoad()
         
         // Change status bar style to .LightContent
-        navigationController?.navigationBar.barStyle = .Black
+        navigationController?.navigationBar.barStyle = .black
         
         view.backgroundColor = Color.BackgroundGrayColor
         
@@ -42,12 +42,12 @@ class NotificationsViewController: UIViewController, UICollectionViewDataSource,
         collectionView.alwaysBounceVertical = true
         
         // TEMP
-        let notificationDict = ["user_image_url": NSURL(string: "https://organicthemes.com/demo/profile/files/2012/12/profile_img.png")!,
+        let notificationDict = ["user_image_url": URL(string: "https://organicthemes.com/demo/profile/files/2012/12/profile_img.png")!,
         "user_name": "David Hodge",
-        "timestamp": NSDate(timeIntervalSince1970: 1472951231),
-        "product_image_url": NSURL(string: "https://organicthemes.com/demo/profile/files/2012/12/profile_img.png")!]
+        "timestamp": Date(timeIntervalSince1970: 1472951231),
+        "product_image_url": URL(string: "https://organicthemes.com/demo/profile/files/2012/12/profile_img.png")!] as [String : Any]
         
-        if let notification = Mapper<NotificationResponse>().map(notificationDict)
+        if let notification = Mapper<NotificationResponse>().map(JSON: notificationDict)
         {
             notifications = [notification]
         }
@@ -59,11 +59,11 @@ class NotificationsViewController: UIViewController, UICollectionViewDataSource,
     }
     
     // MARK: Collection View Data Source
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if let notifications = notifications
         {
@@ -73,20 +73,20 @@ class NotificationsViewController: UIViewController, UICollectionViewDataSource,
         return 0
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if let cell: NotificationCell = collectionView.dequeueReusableCellWithReuseIdentifier("NotificationCell", forIndexPath: indexPath) as? NotificationCell
+        if let cell: NotificationCell = collectionView.dequeueReusableCell(withReuseIdentifier: "NotificationCell", for: indexPath) as? NotificationCell
         {
-            cell.backgroundColor = Color.whiteColor()
+            cell.backgroundColor = Color.white
             
-            if let notification = notifications?[safe: indexPath.row]
+            if let notification = notifications?[safe: (indexPath as NSIndexPath).row]
             {
                 // Left Image
                 if let userImageUrl = notification.userImageUrl
                 {
                     //                    let resizedImageUrl = NSURL.imageAtUrl(userImageUrl, imageSize: ImageSize.kImageSize116)
                     
-                    cell.leftImageView.sd_setImageWithURL(userImageUrl, placeholderImage: nil, options: SDWebImageOptions.HighPriority, completed: { (image, error, cacheType, imageUrl) -> Void in
+                    cell.leftImageView.sd_setImage(with: userImageUrl, placeholderImage: nil, options: SDWebImageOptions.highPriority, completed: { (image, error, cacheType, imageUrl) -> Void in
                         
                         if error != nil
                         {
@@ -100,21 +100,21 @@ class NotificationsViewController: UIViewController, UICollectionViewDataSource,
                 
                 // Content
                 if let userName: String = notification.userName,
-                let timestamp = notification.timestamp?.shortTimeAgoSinceNow()
+                let timestamp = (notification.timestamp as NSDate?)?.shortTimeAgoSinceNow()
                 {
                     let attributedString = NSMutableAttributedString()
                     
-                    attributedString.appendAttributedString(NSAttributedString(string: userName, attributes: [
+                    attributedString.append(NSAttributedString(string: userName, attributes: [
                         NSFontAttributeName: Font.PrimaryFontRegular(size: 14.0),
                         NSForegroundColorAttributeName: Color.PrimaryAppColor
                         ]))
                     
-                    attributedString.appendAttributedString(NSAttributedString(string: " just liked your purchase. ", attributes: [
+                    attributedString.append(NSAttributedString(string: " just liked your purchase. ", attributes: [
                         NSFontAttributeName: Font.PrimaryFontLight(size: 14.0),
                         NSForegroundColorAttributeName: Color.DarkTextColor
                         ]))
                     
-                    attributedString.appendAttributedString(NSAttributedString(string: timestamp, attributes: [
+                    attributedString.append(NSAttributedString(string: timestamp, attributes: [
                         NSFontAttributeName: Font.PrimaryFontLight(size: 14.0),
                         NSForegroundColorAttributeName: Color.GrayColor
                         ]))
@@ -129,11 +129,11 @@ class NotificationsViewController: UIViewController, UICollectionViewDataSource,
                     cell.contentLabel.linkAttributeHighlight = [NSFontAttributeName: Font.PrimaryFontRegular(size: 14.0),
                                                                 NSForegroundColorAttributeName: Color.HighlightedPrimaryAppColor]
                     
-                    cell.contentLabel.setLinkForSubstring(userName, withLinkHandler: { (hyperLabel: FRHyperLabel!, substring: String!) -> Void in
+                    cell.contentLabel.setLinkForSubstring(userName, withLinkHandler: { (hyperLabel: FRHyperLabel?, substring: String?) -> Void in
                         
-                        let storyboard = UIStoryboard(name: "Account", bundle: NSBundle.mainBundle())
+                        let storyboard = UIStoryboard(name: "Account", bundle: Bundle.main)
                         
-                        if let profileVc = storyboard.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController
+                        if let profileVc = storyboard.instantiateViewController(withIdentifier: "UserProfileViewController") as? UserProfileViewController
                         {
                             self.navigationController?.pushViewController(profileVc, animated: true)
                         }
@@ -145,7 +145,7 @@ class NotificationsViewController: UIViewController, UICollectionViewDataSource,
                 {
 //                    let resizedImageUrl = NSURL.imageAtUrl(productImageUrl, imageSize: ImageSize.kImageSize116)
                     
-                    cell.rightImageView.sd_setImageWithURL(productImageUrl, placeholderImage: nil, options: SDWebImageOptions.HighPriority, completed: { (image, error, cacheType, imageUrl) -> Void in
+                    cell.rightImageView.sd_setImage(with: productImageUrl, placeholderImage: nil, options: SDWebImageOptions.highPriority, completed: { (image, error, cacheType, imageUrl) -> Void in
                         
                         if error != nil
                         {
@@ -168,14 +168,14 @@ class NotificationsViewController: UIViewController, UICollectionViewDataSource,
     // MARK: Collection View Delegate
     
     // MARK: Collection View Delegate Flow Layout
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         // Size for Product Cell
         let flowLayout: UICollectionViewFlowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         
         let width: CGFloat = (collectionView.bounds.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right)
         
-        return CGSizeMake(width, 72.0)
+        return CGSize(width: width, height: 72.0)
     }
     
     /*

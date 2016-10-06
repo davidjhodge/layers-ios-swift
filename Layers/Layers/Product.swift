@@ -13,7 +13,7 @@ class Product: Mappable
 {
     var productId: NSNumber?
     
-    var outboundUrl: NSURL?
+    var outboundUrl: URL?
     
     var brandedName: String?
     
@@ -37,7 +37,7 @@ class Product: Mappable
     
     var inStock: Bool?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     
@@ -56,17 +56,17 @@ class Product: Mappable
         inStock                  <-  map["in_stock"]
     }
     
-    func primaryImageUrl(size: ImageSizeKey) -> NSURL?
+    func primaryImageUrl(_ size: ImageSizeKey) -> URL?
     {
         if let primaryImageResolutions = images?.primaryImageUrls
         {
-            if let imageIndex = primaryImageResolutions.indexOf({ $0.sizeName == size.rawValue })
+            if let imageIndex = primaryImageResolutions.index(where: { $0.sizeName == size.rawValue })
             {
                 if let primaryImage: Image = primaryImageResolutions[safe: imageIndex]
                 {
                     if let imageUrl = primaryImage.url
                     {
-                        return imageUrl
+                        return imageUrl as URL
                     }
                 }
             }

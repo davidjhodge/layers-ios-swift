@@ -15,17 +15,17 @@ import IDMPhotoBrowser
 
 private enum TableSection: Int
 {
-    case ProductHeader = 0, Variant, _Count
+    case productHeader = 0, variant, _Count
 }
 
 private enum VariantType: Int
 {
-    case Style = 0, Size, MoreDetails, _Count
+    case style = 0, size, moreDetails, _Count
 }
 
 private enum Picker: Int
 {
-    case Style = 0, Size
+    case style = 0, size
 }
 
 class ProductViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, DPLTargetViewController, PaginatedImageViewDelegate
@@ -46,7 +46,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     let styleTextField: UITextField = UITextField()
     let sizeTextField: UITextField = UITextField()
 
-    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .White)
+    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -63,12 +63,12 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         // Change status bar style to .LightContent
-        navigationController?.navigationBar.barStyle = .Black
+        navigationController?.navigationBar.barStyle = .black
 
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
         
-        tableView.separatorColor = Color.clearColor()
+        tableView.separatorColor = Color.clear
 
         tableView.backgroundColor = Color.BackgroundGrayColor
         
@@ -77,7 +77,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         spinner.hidesWhenStopped = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
         
-        if navigationController?.navigationBarHidden == true
+        if navigationController?.isNavigationBarHidden == true
         {
             navigationController?.setNavigationBarHidden(false, animated: true)
         }
@@ -85,8 +85,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         reloadProduct()
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
     }
     
     func reloadProduct()
@@ -97,7 +97,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             
             LRSessionManager.sharedManager.loadProduct(productId, completionHandler: { (success, error, response) -> Void in
                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     
                     self.stopNetworkActivitySpinners()
                     })
@@ -148,7 +148,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                                     
                                     if let newDominantColor = product.variants?[safe: 0]?.dominantColor
                                     {
-                                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                        DispatchQueue.main.async(execute: { () -> Void in
                                             
                                             self.view.backgroundColor = newDominantColor
                                         })
@@ -157,7 +157,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             })
                         }
                         
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        DispatchQueue.main.async(execute: { () -> Void in
                             
                             self.refreshUI()
                         })
@@ -165,20 +165,20 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
                 else
                 {
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async(execute: { () -> Void in
                         
-                        let alert = UIAlertController(title: error, message: nil, preferredStyle: .Alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                        self.presentViewController(alert, animated: true, completion: nil)
+                        let alert = UIAlertController(title: error, message: nil, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
                     })
                 }
             })
         }
         else
         {
-            let alert = UIAlertController(title: "NO_PRODUCT_ID".localized, message: nil, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "NO_PRODUCT_ID".localized, message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
@@ -200,17 +200,17 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     func startNetworkActivitySpinners()
     {
         spinner.startAnimating()
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
     }
     
     func stopNetworkActivitySpinners()
     {
         spinner.stopAnimating()
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
     
     // MARK: Actions
-    func buy(sender: AnyObject)
+    func buy(_ sender: AnyObject)
     {
         FBSDKAppEvents.logEvent("Product Page CTA Taps")
         
@@ -218,7 +218,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             if let url = currentProduct.outboundUrl
             {
-                showWebBrowser(url)
+                showWebBrowser(url as URL)
             }
             
             if let productName = currentProduct.brandedName,
@@ -229,7 +229,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func like(sender: AnyObject)
+    func like(_ sender: AnyObject)
     {
         // Like API Call
         if sender is UIButton
@@ -237,15 +237,15 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
             let button = sender as! UIButton
             
             //This should be controlled by the model, not UI
-            if button.selected == true
+            if button.isSelected == true
             {
                 // User unliked item
-                button.selected = false
+                button.isSelected = false
             }
             else
             {
                 // User liked item
-                button.selected = true
+                button.isSelected = true
             }
         }
     }
@@ -254,18 +254,18 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     {
         FBSDKAppEvents.logEvent("Product Page Share Taps")
 
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        DispatchQueue.main.async(execute: { () -> Void in
             
             if let url = self.product?.outboundUrl
             {
                 let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-                self.presentViewController(activityViewController, animated: true, completion: {})
+                self.present(activityViewController, animated: true, completion: {})
             }
             else
             {
-                let alert = UIAlertController(title: "NO_SHARE_URL".localized, message: nil, preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "NO_SHARE_URL".localized, message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
         })
     }
@@ -278,19 +278,19 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // MARK: Deep Linking
     
-    func configureWithDeepLink(deepLink: DPLDeepLink!) {
+    func configure(with deepLink: DPLDeepLink!) {
         
         if let key = deepLink.routeParameters["product_id"] as? String
         {
             if let productId = Int(key)
             {
-                productIdentifier = NSNumber(integer: productId)
+                productIdentifier = NSNumber(value: productId as Int)
             }
         }
     }
     
     // MARK: Paginated Image View Delegate
-    func showPhotoFullscreen(imageView: UIImageView, photos: Array<NSURL>, selectedIndex: Int)
+    func showPhotoFullscreen(_ imageView: UIImageView, photos: Array<URL>, selectedIndex: Int)
     {
         // Analytics
         if let product = product
@@ -304,34 +304,34 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         // Show Photo
-        let photoBrowser = IDMPhotoBrowser(photoURLs: photos, animatedFromView: imageView)
+        let photoBrowser = IDMPhotoBrowser(photoURLs: photos, animatedFrom: imageView)
         
-        photoBrowser.scaleImage = imageView.image
+        photoBrowser?.scaleImage = imageView.image
         
-        photoBrowser.view.tintColor = Color.whiteColor()
+        photoBrowser?.view.tintColor = Color.white
 
-        photoBrowser.displayArrowButton = false
+        photoBrowser?.displayArrowButton = false
         
-        photoBrowser.displayCounterLabel = false
+        photoBrowser?.displayCounterLabel = false
         
-        photoBrowser.forceHideStatusBar = true
+        photoBrowser?.forceHideStatusBar = true
         
-        photoBrowser.useWhiteBackgroundColor = false
+        photoBrowser?.useWhiteBackgroundColor = false
         
-        photoBrowser.usePopAnimation = true
+        photoBrowser?.usePopAnimation = true
         
-        photoBrowser.displayActionButton = false
+        photoBrowser?.displayActionButton = false
         
         // Show Done Button
-        photoBrowser.displayDoneButton = true
+        photoBrowser?.displayDoneButton = true
         
-        photoBrowser.setInitialPageIndex(UInt(selectedIndex))
+        photoBrowser?.setInitialPageIndex(UInt(selectedIndex))
         
-        presentViewController(photoBrowser, animated: true, completion: nil)
+        present(photoBrowser!, animated: true, completion: nil)
     }
     
     // MARK: UITableView Data Source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int
+    func numberOfSections(in tableView: UITableView) -> Int
     {
         if product != nil
         {
@@ -341,15 +341,15 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         return 0
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         if let tableSection: TableSection = TableSection(rawValue: section)
         {
             switch tableSection {
-            case .ProductHeader:
+            case .productHeader:
                 return 1
                 
-            case .Variant:
+            case .variant:
                 return 3
                 
             default:
@@ -360,16 +360,16 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         return 0
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         if let product = self.product
         {
-            if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
+            if let tableSection: TableSection = TableSection(rawValue: (indexPath as NSIndexPath).section)
             {
                 switch tableSection {
-                case .ProductHeader:
+                case .productHeader:
                     
-                    let cell: ProductHeaderCell = tableView.dequeueReusableCellWithIdentifier("ProductHeaderCell") as! ProductHeaderCell
+                    let cell: ProductHeaderCell = tableView.dequeueReusableCell(withIdentifier: "ProductHeaderCell") as! ProductHeaderCell
                     
                     cell.brandLabel.text = ""
                     
@@ -379,18 +379,18 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     // Set images
 
-                    var productImages: Array<NSURL> = Array<NSURL>()
+                    var productImages: Array<URL> = Array<URL>()
 
                     // Append primary image
                     if let primaryImageResolutions = product.images?.primaryImageUrls
                     {
-                        if let imageIndex = primaryImageResolutions.indexOf({ $0.sizeName == "IPhone" })
+                        if let imageIndex = primaryImageResolutions.index(where: { $0.sizeName == "IPhone" })
                         {
                             if let primaryImage: Image = primaryImageResolutions[safe: imageIndex]
                             {
                                 if let imageUrl = primaryImage.url
                                 {
-                                    productImages.append(imageUrl)
+                                    productImages.append(imageUrl as URL)
                                 }
                             }
                         }
@@ -401,13 +401,13 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     {
                         for imageResolutions in alternateImages
                         {
-                            if let imageIndex = imageResolutions.indexOf({ $0.sizeName == "IPhone" })
+                            if let imageIndex = imageResolutions.index(where: { $0.sizeName == "IPhone" })
                             {
                                 if let altImage: Image = imageResolutions[safe: imageIndex]
                                 {
                                     if let imageUrl = altImage.url
                                     {
-                                        productImages.append(imageUrl)
+                                        productImages.append(imageUrl as URL)
                                     }
                                 }
                             }
@@ -418,7 +418,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     if let brandName = product.brand?.name
                     {
-                        cell.brandLabel.text = brandName.uppercaseString
+                        cell.brandLabel.text = brandName.uppercased()
                     }
                     
                     if let productName = product.unbrandedName
@@ -443,59 +443,59 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                         {
                             if (currentPrice.floatValue != retailPrice.floatValue)
                             {
-                                cell.largePriceLabel.attributedText = NSAttributedString.priceStringWithSalePrice(currentPrice, size: 17.0)
+                                cell.largePriceLabel.attributedText = NSAttributedString.priceString(withSalePrice: currentPrice, size: 17.0)
                                 
-                                cell.smallPriceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(retailPrice, size: 12.0, strikethrough: true)
+                                cell.smallPriceLabel.attributedText = NSAttributedString.priceString(withRetailPrice: retailPrice, size: 12.0, strikethrough: true)
                             }
                             else
                             {
-                                cell.largePriceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(currentPrice, size: 17.0, strikethrough: false)
+                                cell.largePriceLabel.attributedText = NSAttributedString.priceString(withRetailPrice: currentPrice, size: 17.0, strikethrough: false)
                             }
                         }
                         else
                         {
-                            cell.largePriceLabel.attributedText = NSAttributedString.priceStringWithRetailPrice(currentPrice, size: 17.0, strikethrough: false)
+                            cell.largePriceLabel.attributedText = NSAttributedString.priceString(withRetailPrice: currentPrice, size: 17.0, strikethrough: false)
                         }
                     }
                     
-                    cell.ctaButton.setAttributedTitle(NSAttributedString(string: "View Online".uppercaseString, attributes: FontAttributes.filledButtonAttributes), forState: [.Normal, .Highlighted])
+                    cell.ctaButton.setAttributedTitle(NSAttributedString(string: "View Online".uppercased(), attributes: FontAttributes.filledButtonAttributes), for: .highlighted)
                                         
-                    cell.ctaButton.addTarget(self, action: #selector(buy), forControlEvents: .TouchUpInside)
+                    cell.ctaButton.addTarget(self, action: #selector(buy), for: .touchUpInside)
 
-                    cell.ctaButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
-                    cell.ctaButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+                    cell.ctaButton.setBackgroundColor(Color.NeonBlueColor, forState: UIControlState())
+                    cell.ctaButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .highlighted)
     
                     cell.ctaButton.adjustsImageWhenHighlighted = false
                     
-                    cell.selectionStyle = .None
+                    cell.selectionStyle = .none
                     
                     return cell
                     
-                case .Variant:
+                case .variant:
                     
-                    if let variant: VariantType = VariantType(rawValue: indexPath.row)
+                    if let variant: VariantType = VariantType(rawValue: (indexPath as NSIndexPath).row)
                     {
                         switch variant {
-                        case .Style:
+                        case .style:
                             
-                            let cell: StyleCell = tableView.dequeueReusableCellWithIdentifier("StyleCell") as! StyleCell
+                            let cell: StyleCell = tableView.dequeueReusableCell(withIdentifier: "StyleCell") as! StyleCell
                             
                             cell.styleLabel.text = ""
                             
                             if let variantName = selectedVariant?.color
                             {
-                                cell.styleLabel.text = variantName.capitalizedString
+                                cell.styleLabel.text = variantName.capitalized
                             }
                             
                             // Should set color swatches here
                             
-                            cell.selectionStyle = .None
+                            cell.selectionStyle = .none
                             
                             return cell
                             
-                        case .Size:
+                        case .size:
                             
-                            let cell: SizeCell = tableView.dequeueReusableCellWithIdentifier("SizeCell") as! SizeCell
+                            let cell: SizeCell = tableView.dequeueReusableCell(withIdentifier: "SizeCell") as! SizeCell
                             
                             cell.sizeLabel.text = ""
                             
@@ -504,16 +504,16 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                                 cell.sizeLabel.text = sizeName
                             }
                             
-                            cell.selectionStyle = .None
+                            cell.selectionStyle = .none
                             
                             return cell
                             
                             
-                        case .MoreDetails:
+                        case .moreDetails:
                             
-                            let cell: MoreDetailsCell = tableView.dequeueReusableCellWithIdentifier("MoreDetailsCell") as! MoreDetailsCell
+                            let cell: MoreDetailsCell = tableView.dequeueReusableCell(withIdentifier: "MoreDetailsCell") as! MoreDetailsCell
                             
-                            cell.moreDetailsLabel.attributedText = NSAttributedString(string: "View More Details".uppercaseString, attributes: [NSForegroundColorAttributeName:Color.GrayColor,
+                            cell.moreDetailsLabel.attributedText = NSAttributedString(string: "View More Details".uppercased(), attributes: [NSForegroundColorAttributeName:Color.GrayColor,
                                 NSFontAttributeName:Font.PrimaryFontSemiBold(size: 14.0),
                                 NSKernAttributeName:1.5])
                             
@@ -526,31 +526,31 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                     
                 default:
-                    return UITableViewCell(style: .Default, reuseIdentifier: "UITableViewCell")
+                    return UITableViewCell(style: .default, reuseIdentifier: "UITableViewCell")
                 }
             }
         }
         
-        return UITableViewCell(style: .Default, reuseIdentifier: "UITableViewCell")
+        return UITableViewCell(style: .default, reuseIdentifier: "UITableViewCell")
     }
     
-    func highlightCTAButton(sender: UIButton)
+    func highlightCTAButton(_ sender: UIButton)
     {
         sender.backgroundColor = Color.NeonBlueColor
-        sender.titleLabel?.textColor = Color.whiteColor()
+        sender.titleLabel?.textColor = Color.white
     }
     
-    func unhighlightCTAButton(sender: UIButton)
+    func unhighlightCTAButton(_ sender: UIButton)
     {
         sender.backgroundColor = Color.NeonBlueHighlightedColor
-        sender.titleLabel?.textColor = Color.whiteColor()
+        sender.titleLabel?.textColor = Color.white
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
+        if let tableSection: TableSection = TableSection(rawValue: (indexPath as NSIndexPath).section)
         {
-           if tableSection == TableSection.ProductHeader
+           if tableSection == TableSection.productHeader
            {
                 if cell is ProductHeaderCell
                 {
@@ -560,7 +560,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int)
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int)
     {
         if let headerView: UITableViewHeaderFooterView = view as? UITableViewHeaderFooterView
         {
@@ -569,16 +569,16 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     // MARK: UITableView Delegate
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
+        if let tableSection: TableSection = TableSection(rawValue: (indexPath as NSIndexPath).section)
         {
             switch tableSection {
-            case .Variant:
+            case .variant:
                 
-                if let variant = VariantType(rawValue: indexPath.row)
+                if let variant = VariantType(rawValue: (indexPath as NSIndexPath).row)
                 {
-                    if variant == .Style
+                    if variant == .style
                     {
                         if let product = product
                         {
@@ -590,7 +590,7 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             }
                         }
                     }
-                    else if variant == .Size
+                    else if variant == .size
                     {
                         if let product = product
                         {
@@ -602,12 +602,12 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
                             }
                         }
                     }
-                    else if variant == .MoreDetails
+                    else if variant == .moreDetails
                     {
                         // Present More Details View Controller
-                        let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+                        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
                         
-                        if let moreDetailsVc = storyboard.instantiateViewControllerWithIdentifier("MoreDetailsViewController") as? MoreDetailsViewController
+                        if let moreDetailsVc = storyboard.instantiateViewController(withIdentifier: "MoreDetailsViewController") as? MoreDetailsViewController
                         {
                             if let product = product
                             {
@@ -627,16 +627,16 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        if let tableSection: TableSection = TableSection(rawValue: indexPath.section)
+        if let tableSection: TableSection = TableSection(rawValue: (indexPath as NSIndexPath).section)
         {
             switch tableSection {
-            case .ProductHeader:
+            case .productHeader:
 //                return 398.0
                 return UITableViewAutomaticDimension
                 
-            case .Variant:
+            case .variant:
                 return 48.0
                 
             default:
@@ -647,8 +647,8 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         return 44.0
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == TableSection.ProductHeader.rawValue
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath as NSIndexPath).section == TableSection.productHeader.rawValue
         {
             return 451.0
         }
@@ -658,15 +658,15 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         if let tableSection: TableSection = TableSection(rawValue: section)
         {
             switch tableSection {
-            case .ProductHeader:
+            case .productHeader:
                 return 8.0
                 
-            case .Variant:
+            case .variant:
                 return 4.0
                 
             default:
@@ -678,15 +678,15 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
 
     }
     
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         if let tableSection: TableSection = TableSection(rawValue: section)
         {
             switch tableSection {
-            case .ProductHeader:
+            case .productHeader:
                 return 4.0
                 
-            case .Variant:
+            case .variant:
                 return 4.0
             
             default:
@@ -697,13 +697,13 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         return 8.0
     }
     
-    func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         
-        if indexPath.section == TableSection.Variant.rawValue
+        if (indexPath as NSIndexPath).section == TableSection.variant.rawValue
         {
-            if let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)
+            if let cell: UITableViewCell = tableView.cellForRow(at: indexPath)
             {
-                UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+                UIView.animate(withDuration: 0.1, delay: 0, options: .allowUserInteraction, animations: { () -> Void in
                     
                     cell.backgroundColor = Color.HighlightedGrayColor
                     
@@ -717,13 +717,13 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func tableView(tableView: UITableView, didUnhighlightRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
         
-        if let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)
+        if let cell: UITableViewCell = tableView.cellForRow(at: indexPath)
         {
-            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+            UIView.animate(withDuration: 0.1, delay: 0, options: .allowUserInteraction, animations: { () -> Void in
                 
-                cell.backgroundColor = Color.whiteColor()
+                cell.backgroundColor = Color.white
                 
                 if let styleCell = cell as? StyleCell
                 {
@@ -736,19 +736,19 @@ class ProductViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // MARK: SFSafariViewController
     
-    func showWebBrowser(url: NSURL)
+    func showWebBrowser(_ url: URL)
     {
-        let webView = ProductWebViewController(URL: url)
+        let webView = ProductWebViewController(url: url)
         
         let navController = ProductWebNavigationController(rootViewController: webView)
         navController.setNavigationBarHidden(true, animated: false)
-        navController.modalPresentationStyle = .OverFullScreen
+        navController.modalPresentationStyle = .overFullScreen
         
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
     
     deinit
     {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 }

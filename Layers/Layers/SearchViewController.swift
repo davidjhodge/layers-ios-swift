@@ -9,6 +9,26 @@
 import Foundation
 import FBSDKCoreKit
 import SwiftyTimer
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
@@ -26,11 +46,11 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     var categories: Array<Category>?
     
-    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     
     var keyboardNotificationObserver: AnyObject?
     
-    var searchTimer: NSTimer?
+    var searchTimer: Timer?
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -46,9 +66,9 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         navBarImageView.image = UIButton.imageFromColor(Color.PrimaryAppColor)
         
         searchBar.backgroundImage = UIImage()
-        searchBar.backgroundColor = Color.clearColor()
+        searchBar.backgroundColor = Color.clear
         
-        searchBar.autocapitalizationType = .None
+        searchBar.autocapitalizationType = .none
         
         searchBar.delegate = self
         
@@ -56,7 +76,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         collectionView.alwaysBounceVertical = true
         
         let customLayout = UICollectionViewFlowLayout()
-        customLayout.scrollDirection = .Vertical
+        customLayout.scrollDirection = .vertical
         customLayout.minimumLineSpacing = 8.0
         customLayout.minimumInteritemSpacing = 8.0
         customLayout.sectionInset = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
@@ -64,19 +84,19 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = Color.BackgroundGrayColor
-        tableView.separatorColor = Color.clearColor()
+        tableView.separatorColor = Color.clear
         
         tableView.scrollIndicatorInsets = UIEdgeInsetsMake(-20, 0, 0, 0)
         
-        spinner.color = Color.grayColor()
+        spinner.color = Color.gray
         spinner.hidesWhenStopped = true
-        spinner.hidden = true
+        spinner.isHidden = true
         view.addSubview(spinner)
         
         prepareToHandleKeyboard()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: false)
@@ -88,7 +108,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         spinner.center = tableView.center
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         navigationController?.setNavigationBarHidden(false, animated: false)
@@ -96,29 +116,29 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         view.endEditing(true)
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
     }
     
     func shouldShowCategories() -> Bool
     {
         if searchBar.text?.characters.count > 0
         {
-            self.tableView.hidden = false
-            self.collectionView.hidden = true
+            self.tableView.isHidden = false
+            self.collectionView.isHidden = true
             
             return false
         }
         
-        self.tableView.hidden = true
-        self.collectionView.hidden = false
+        self.tableView.isHidden = true
+        self.collectionView.isHidden = false
         
         return true
     }
     
     // MARK: Search Bar Delegate
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         
         searchBar.resignFirstResponder()
         
@@ -127,7 +147,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.reloadData()
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if shouldShowCategories()
         {
@@ -138,7 +158,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             // Use timer to handle search queries sequentially as the user is typing. If the search query has changed and the previous query has not yet returned, the previous query is invalidated
             if let searchTimer = searchTimer
             {
-                if searchTimer.valid
+                if searchTimer.isValid
                 {
                     searchTimer.invalidate()
                 }
@@ -146,7 +166,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             
             searchTimer = nil
             
-            searchTimer = NSTimer.after(0.3, { () -> Void in
+            searchTimer = Timer.after(0.3, { () -> Void in
                 
                 LRSessionManager.sharedManager.search(searchText, completionHandler: { (success, error, response) -> Void in
                     
@@ -156,10 +176,10 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                         {
                             self.searchResults = results
                             
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            DispatchQueue.main.async {
                                 
                                 self.tableView.reloadData()
-                            })
+                            }
                         }
                     }
                     else
@@ -172,27 +192,27 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         if searchText.characters.count == 0
         {
-            tableView.setContentOffset(CGPointZero, animated: true)
+            tableView.setContentOffset(CGPoint.zero, animated: true)
         }
         
         FBSDKAppEvents.logEvent("Search Queries", parameters: ["Query String":searchText])
     }
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         
         FBSDKAppEvents.logEvent("Search Bar Taps")
         
         searchBar.setShowsCancelButton(true, animated: true)
     }
     
-    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         
         searchBar.setShowsCancelButton(false, animated: true)
 
         searchBar.resignFirstResponder()
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         searchBar.resignFirstResponder()
         
@@ -200,15 +220,15 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     // MARK: Table View Data Source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         
         if shouldShowCategories()
         {
             tableView.contentInset = UIEdgeInsets(top: 48, left: tableView.contentInset.left, bottom: 48, right: tableView.contentInset.right)
             
-            tableView.backgroundColor = Color.whiteColor()
+            tableView.backgroundColor = Color.white
             
-            tableView.setContentOffset(CGPointMake(0, -48), animated: false)
+            tableView.setContentOffset(CGPoint(x: 0, y: -48), animated: false)
         }
         else
         {
@@ -216,14 +236,14 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             
             tableView.backgroundColor = Color.BackgroundGrayColor
             
-            tableView.setContentOffset(CGPointMake(0, 0), animated: false)
+            tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
         }
         
         
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         if !shouldShowCategories()
         {
@@ -244,40 +264,40 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         return 0
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if searchResults?.count > 0 && !shouldShowCategories()
         {
-            if let cell: SearchCell = tableView.dequeueReusableCellWithIdentifier("SearchCell") as? SearchCell
+            if let cell: SearchCell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as? SearchCell
             {
                 cell.resultImageView.image = nil
                 cell.titleLabel.text = nil
                 
-                cell.accessoryType = .DisclosureIndicator
+                cell.accessoryType = .disclosureIndicator
                 
                 cell.titleLabel?.textColor = Color.DarkTextColor
                 
-                cell.selectionStyle = .Default
+                cell.selectionStyle = .default
                 
                 var resultText: String?
                 
                 if let searchResults = searchResults
                 {
-                    if let brand = searchResults[safe: indexPath.row] as? Brand
+                    if let brand = searchResults[safe: (indexPath as NSIndexPath).row] as? Brand
                     {
                         if let brandName = brand.name
                         {
                             resultText = brandName
                         }
                     }
-                    else if let category = searchResults[safe: indexPath.row] as? Category
+                    else if let category = searchResults[safe: (indexPath as NSIndexPath).row] as? Category
                     {
                         if let categoryName = category.name
                         {
                             resultText = categoryName
                         }
                     }
-                    else if let product = searchResults[safe: indexPath.row] as? SimpleProduct
+                    else if let product = searchResults[safe: (indexPath as NSIndexPath).row] as? SimpleProduct
                     {
                         if let productName = product.brandedName
                         {
@@ -286,7 +306,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                         
                         if let imageUrl = product.image?.url
                         {
-                            cell.resultImageView.sd_setImageWithURL(imageUrl)
+                            cell.resultImageView.sd_setImage(with: imageUrl)
                         }
                     }
                 }
@@ -303,13 +323,13 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                         for word in words
                         {
                             do {
-                                let regex = try NSRegularExpression(pattern: "\(word)", options: .CaseInsensitive)
+                                let regex = try NSRegularExpression(pattern: "\(word)", options: .caseInsensitive)
                                 
                                 let range = NSMakeRange(0, resultText.characters.count)
                                 
-                                regex.enumerateMatchesInString(resultText, options: .ReportCompletion, range: range, usingBlock: { (result, flags, stop) -> Void in
+                                regex.enumerateMatches(in: resultText, options: .reportCompletion, range: range, using: { (result, flags, stop) -> Void in
                                     
-                                    if let substringRange = result?.rangeAtIndex(0)
+                                    if let substringRange = result?.rangeAt(0)
                                     {
                                         attributedString.addAttribute(NSFontAttributeName, value: Font.PrimaryFontSemiBold(size: 12.0), range: substringRange)
                                     }
@@ -331,20 +351,20 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         else
         {
             // Show Categories
-            let cell = tableView.dequeueReusableCellWithIdentifier("UITableViewCell")!
+            let cell = tableView.dequeueReusableCell(withIdentifier: "UITableViewCell")!
             
-            cell.accessoryType = .None
+            cell.accessoryType = .none
             
-            cell.selectionStyle = .None
+            cell.selectionStyle = .none
 
-            cell.textLabel?.textAlignment = .Center
+            cell.textLabel?.textAlignment = .center
             
-            if indexPath.row == 0
+            if (indexPath as NSIndexPath).row == 0
             {
                 // Heading Cell
                 cell.textLabel?.text = "FEATURED CATEGORIES"
                 
-                cell.textLabel?.textColor = Color.grayColor()
+                cell.textLabel?.textColor = Color.gray
                 
                 cell.textLabel?.font = Font.OxygenBold(size: 14.0)
             }
@@ -356,7 +376,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                 
                 if let categories = categories
                 {
-                    if let category = categories[safe: indexPath.row - 1]
+                    if let category = categories[safe: (indexPath as NSIndexPath).row - 1]
                     {
                         if let categoryTitle = category.name
                         {
@@ -369,34 +389,34 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             return cell
         }
         
-        return UITableViewCell(style: .Default, reuseIdentifier: "UITableViewCell")
+        return UITableViewCell(style: .default, reuseIdentifier: "UITableViewCell")
     }
     
     // MARK: Table View Delegate
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
         
         if shouldShowCategories()
         {
             if let categories = categories
             {
                 // Header Cell has no action
-                if indexPath.row != 0
+                if (indexPath as NSIndexPath).row != 0
                 {
-                    let category = categories[safe: indexPath.row - 1]
+                    let category = categories[safe: (indexPath as NSIndexPath).row - 1]
                     
-                    let searchStoryboard = UIStoryboard(name: "Search", bundle: NSBundle.mainBundle())
+                    let searchStoryboard = UIStoryboard(name: "Search", bundle: Bundle.main)
                     
-                    if let searchProductCollectionVc = searchStoryboard.instantiateViewControllerWithIdentifier("SearchProductCollectionViewController") as? SearchProductCollectionViewController
+                    if let searchProductCollectionVc = searchStoryboard.instantiateViewController(withIdentifier: "SearchProductCollectionViewController") as? SearchProductCollectionViewController
                     {
-                        searchProductCollectionVc.filterType = FilterType.Category
+                        searchProductCollectionVc.filterType = FilterType.category
                         
                         searchProductCollectionVc.selectedItem = category
                         
                         navigationController?.pushViewController(searchProductCollectionVc, animated: true)
                         
-                        if let categoryName = category?.name, categoryId = category?.categoryId
+                        if let categoryName = category?.name, let categoryId = category?.categoryId
                         {
                             FBSDKAppEvents.logEvent("Search Categories Selected", parameters: ["Category Name":categoryName, "Category ID":categoryId
                                 ])
@@ -407,16 +427,16 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         }
         else if let results = searchResults
         {
-            if results[indexPath.row] is SimpleProduct
+            if results[(indexPath as NSIndexPath).row] is SimpleProduct
             {
                 if let searchResults = searchResults,
-                    let product = searchResults[indexPath.row] as? SimpleProduct
+                    let product = searchResults[(indexPath as NSIndexPath).row] as? SimpleProduct
                 {
                     if let productId = product.productId
                     {
-                        let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+                        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
                         
-                        if let productVc = storyboard.instantiateViewControllerWithIdentifier("ProductViewController") as? ProductViewController
+                        if let productVc = storyboard.instantiateViewController(withIdentifier: "ProductViewController") as? ProductViewController
                         {
                             productVc.productIdentifier = productId
                             
@@ -430,22 +450,22 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                     }
                 }
             }
-            else if results[indexPath.row] is Brand
+            else if results[(indexPath as NSIndexPath).row] is Brand
             {
-                performSegueWithIdentifier("ShowSearchProductCollectionViewController", sender: ["indexPath": indexPath, "filterTypeValue": FilterType.Brand.rawValue])
+                performSegue(withIdentifier: "ShowSearchProductCollectionViewController", sender: ["indexPath": indexPath, "filterTypeValue": FilterType.brand.rawValue])
             }
-            else if results[indexPath.row] is Category
+            else if results[(indexPath as NSIndexPath).row] is Category
             {
-                performSegueWithIdentifier("ShowSearchProductCollectionViewController", sender: ["indexPath": indexPath, "filterTypeValue": FilterType.Category.rawValue])
+                performSegue(withIdentifier: "ShowSearchProductCollectionViewController", sender: ["indexPath": indexPath, "filterTypeValue": FilterType.category.rawValue])
             }
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         if shouldShowCategories()
         {
-            if indexPath.row == 0
+            if (indexPath as NSIndexPath).row == 0
             {
                 return 64.0
             }
@@ -460,45 +480,45 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         return 0.01
     }
     
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         return 0.01
     }
     
     // MARK: CollectionView Data Source
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 11
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CategoryCell", forIndexPath: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath)
         
-        cell.backgroundColor = Color.whiteColor()
+        cell.backgroundColor = Color.white
         
         return cell
     }
     
     // MARK: CollectionView Delegate
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if let searchResults = searchResults,
-            let product = searchResults[indexPath.row] as? Product
+            let product = searchResults[(indexPath as NSIndexPath).row] as? Product
         {
             if let productId = product.productId
             {
-                let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+                let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
                 
-                if let productVc = storyboard.instantiateViewControllerWithIdentifier("ProductViewController") as? ProductViewController
+                if let productVc = storyboard.instantiateViewController(withIdentifier: "ProductViewController") as? ProductViewController
                 {
                     productVc.productIdentifier = productId
                 }
@@ -508,7 +528,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     // MARK: RFQuiltLayout
 
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
         {
@@ -529,7 +549,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             
             let segmentSize = 6
             
-            let remainder = indexPath.row % segmentSize
+            let remainder = (indexPath as NSIndexPath).row % segmentSize
             
             if remainder == 2 || remainder == 5
             {
@@ -551,22 +571,22 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         return CGSize(width: 0, height: 0)
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
         return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         
         return 8.0
     }
     
     // MARK: Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "ShowSearchProductCollectionViewController"
         {
-            if let destinationVc = segue.destinationViewController as? SearchProductCollectionViewController,
+            if let destinationVc = segue.destination as? SearchProductCollectionViewController,
             let senderDict = sender as? Dictionary<String,AnyObject>,
                 let searchResults = searchResults
             {
@@ -576,7 +596,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                     {
                         if let filterType = FilterType(rawValue: filterTypeValue)
                         {
-                            if filterType == FilterType.Brand
+                            if filterType == FilterType.brand
                             {
                                 destinationVc.filterType = filterType
                                 
@@ -591,7 +611,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                                     }
                                 }
                             }
-                            else if filterType == FilterType.Category
+                            else if filterType == FilterType.category
                             {
                                 destinationVc.filterType = filterType
                                 
@@ -616,26 +636,26 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: Handle Keyboard
     func prepareToHandleKeyboard()
     {
-        keyboardNotificationObserver = NSNotificationCenter.defaultCenter().addObserverForName(UIKeyboardWillChangeFrameNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (notification) -> Void in
+        keyboardNotificationObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil, queue: OperationQueue.main) { [weak self] (notification) -> Void in
             
-            let frame : CGRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+            let frame : CGRect = ((notification as NSNotification).userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
             
-            guard let keyboardFrameInViewCoordiantes = self?.view.convertRect(frame, fromView: nil), bounds = self?.view.bounds else { return; }
+            guard let keyboardFrameInViewCoordiantes = self?.view.convert(frame, from: nil), let bounds = self?.view.bounds else { return; }
             
-            var constantModification = CGRectGetHeight(bounds) - keyboardFrameInViewCoordiantes.origin.y
+            var constantModification = bounds.height - keyboardFrameInViewCoordiantes.origin.y
             
             if constantModification < 0
             {
                 constantModification = 0
             }
             
-            let duration:NSTimeInterval = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-            let animationCurveRawNSN = notification.userInfo?[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
-            let animationCurveRaw = animationCurveRawNSN?.unsignedLongValue ?? UIViewAnimationOptions.CurveEaseInOut.rawValue
+            let duration:TimeInterval = ((notification as NSNotification).userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+            let animationCurveRawNSN = (notification as NSNotification).userInfo?[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
+            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions().rawValue
             let animationCurve:UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
             
             
-            UIView.animateWithDuration(duration, delay: 0.0, options: animationCurve, animations: { [weak self] () -> Void in
+            UIView.animate(withDuration: duration, delay: 0.0, options: animationCurve, animations: { [weak self] () -> Void in
                 
                 self?.tableViewBottomConstraint.constant = constantModification
                 
@@ -646,6 +666,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     deinit
     {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 }

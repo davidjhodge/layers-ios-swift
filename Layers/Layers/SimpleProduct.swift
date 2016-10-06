@@ -21,7 +21,7 @@ class SimpleProduct: Mappable
     
     var image: Image?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

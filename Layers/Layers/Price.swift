@@ -15,7 +15,7 @@ class Price: Mappable
     
     var price: NSNumber?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

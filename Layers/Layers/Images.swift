@@ -15,7 +15,7 @@ class Images: Mappable
     
     var alternateImages: Array<Array<Image>>?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

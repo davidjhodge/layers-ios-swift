@@ -17,7 +17,7 @@ class ColorObject: Mappable
     
     var rank: NSNumber?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

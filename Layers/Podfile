@@ -5,31 +5,34 @@
 
 target 'Layers' do
 
-pod 'ObjectMapper', '~> 1.4'
-pod 'KeychainAccess', '~> 2.3'
+pod 'ObjectMapper', '~> 2.0'
+pod 'KeychainAccess', '~> 3.0'
 pod 'SDWebImage', '~> 3.8'
-pod 'Alamofire', '~> 3.4'
-pod 'SwiftyJSON', '~> 2.3'
-pod 'SwiftyBeaver', '~> 0.6'
-pod 'FBSDKCoreKit', '~> 4.11'
-pod 'FBSDKLoginKit', '~> 4.11'
-pod 'UITextView+Placeholder', '~> 1.2'
-pod 'AWSCore', '~> 2.4'
-pod 'AWSCognito', '~> 2.4'
-pod 'AWSCognitoIdentityProvider', '~> 2.4'
-pod 'AWSSNS', '~> 2.4'
+pod 'Alamofire', '~> 4.0'
+pod 'SwiftyJSON', '~> 3.0'
+pod 'SwiftyBeaver', '~> 1.0'
+pod 'FBSDKCoreKit', '~> 4.15'
+pod 'FBSDKLoginKit', '~> 4.15'
+pod 'UITextView+Placeholder'
 pod 'MBProgressHUD', '~> 1.0'
 pod 'DeepLinkKit', '~> 1.2'
-pod 'SwiftRangeSlider', '~> 0.3'
+# pod 'SwiftRangeSlider', '~> 0.3'
 pod 'NHAlignmentFlowLayout', '~> 0.1'
 pod 'Fabric', '~> 1.6'
-pod 'Crashlytics', '~> 3.7'
+pod 'Crashlytics', '~> 3.8'
 pod 'IDMPhotoBrowser', '~> 1.8'
 pod 'KLCPopup', '~> 1.0'
 pod 'FRHyperLabel', '~> 1.0'
 pod 'DateTools', '~> 1.7'
-pod 'SwiftyTimer', '~> 1.4'
-pod 'DominantColor', :git => 'https://github.com/indragiek/DominantColor.git'
+pod 'SwiftyTimer', :git => 'https://github.com/radex/SwiftyTimer.git', :branch => 'swift3'
+pod 'DeviceKit', '~> 1.0'
 
 end
 
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+            config.build_settings['SWIFT_VERSION'] = '3.0'
+        end
+    end
+end

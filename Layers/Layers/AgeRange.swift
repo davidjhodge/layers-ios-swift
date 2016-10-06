@@ -15,7 +15,7 @@ class AgeRange: Mappable
     
     var maxAge: NSNumber?
     
-    required init?(_ map: Map) {
+     required init?(map: Map) {
         
     }
     
@@ -40,7 +40,7 @@ class AgeRange: Mappable
             if let min = minAge
             {
                 // Min and max
-                age = Int(round((max.doubleValue + min.doubleValue) * 0.5))
+                age = Int(round((max.doubleValue + min.doubleValue) * 0.5)) as NSNumber?
             }
             else
             {

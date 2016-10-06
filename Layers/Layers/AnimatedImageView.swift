@@ -21,7 +21,7 @@ class AnimatedImageView: UIImageView {
 
                 self.alpha = 0.0
                 
-                UIView.animateWithDuration(0.2, animations: { () -> Void in
+                UIView.animate(withDuration: 0.2, animations: { () -> Void in
                   
                     self.alpha = 1.0
                 })

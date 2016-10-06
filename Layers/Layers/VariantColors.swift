@@ -8,48 +8,43 @@
 
 import UIKit
 import SDWebImage
-import DominantColor
+import CoreImage
 
-typealias LRVariantColorsCompletionBlock = ((variants: Array<Variant>?) -> Void)
+typealias LRVariantColorsCompletionBlock = ((_ variants: Array<Variant>?) -> Void)
 
 class VariantColors: NSObject
 {
-    static func analyzeVariantsAndApplyDominantColors(variants: Array<Variant>, completionBlock: LRVariantColorsCompletionBlock?)
+    static func analyzeVariantsAndApplyDominantColors(_ variants: Array<Variant>, completionBlock: LRVariantColorsCompletionBlock?)
     {
-        let operationQueue = NSOperationQueue()
+        let operationQueue = OperationQueue()
         operationQueue.maxConcurrentOperationCount = 1
         
             for variant in variants
             {
                 if let imageResolutions = variant.image
                 {
-                    if let imageIndex = imageResolutions.indexOf({ $0.sizeName == ImageSizeKey.Smallest.rawValue })
+                    if let imageIndex = imageResolutions.index(where: { $0.sizeName == ImageSizeKey.Smallest.rawValue })
                     {
                         if let primaryImage: Image = imageResolutions[safe: imageIndex]
                         {
                             if let imageUrl = primaryImage.url
                             {
                                 // Download Image
-                                operationQueue.addOperationWithBlock({ () -> Void in
+                                operationQueue.addOperation({ () -> Void in
                                     
-                                    SDWebImageManager.sharedManager().downloadImageWithURL(imageUrl, options: SDWebImageOptions.CacheMemoryOnly, progress: nil, completed: { (image, error, cacheType, finished, imageUrl) -> Void in
+                                    SDWebImageManager.shared().downloadImage(with: imageUrl as URL!, options: SDWebImageOptions.cacheMemoryOnly, progress: nil, completed: { (image, error, cacheType, finished, imageUrl) -> Void in
                                         
                                         if error == nil && image != nil
                                         {
-                                            let pixelCount = Int((image.size.width * image.size.height) * image.scale)
-                                            
-                                            if let cgImage = image.CGImage
+                                            if let image = image
                                             {
-                                                if let dominantColor = dominantColorsInImage(cgImage, maxSampledPixels: pixelCount)[safe: 0]
+                                                let context = CIContext()
+                                                
+                                                if let dominantColor = self.domiantColor(image, context: context)
                                                 {
-                                                    variant.dominantColor = UIColor(CGColor: dominantColor)
+                                                    variant.dominantColor = dominantColor
                                                 }
                                             }
-
-//                                            if let dominantColor = self.domiantColor(image, context: context)
-//                                            {
-//                                                variant.dominantColor = dominantColor
-//                                            }
                                         }
                                     })
                                 })
@@ -60,16 +55,16 @@ class VariantColors: NSObject
                 }
             }
         
-        operationQueue.addOperationWithBlock({ () -> Void in
+        operationQueue.addOperation({ () -> Void in
             
             if let completion = completionBlock
             {
-                completion(variants: variants)
+                completion(variants)
             }
         })
     }
     
-    static func domiantColor(image: UIImage, context: CIContext) -> UIColor?
+    static func domiantColor(_ image: UIImage, context: CIContext) -> UIColor?
     {
         let convertImage = CIImage(image: image)
         
@@ -78,9 +73,9 @@ class VariantColors: NSObject
         
         if let processedImage = filter?.outputImage
         {
-            let finalImage = context.createCGImage(processedImage, fromRect: processedImage.extent)
+            let finalImage = context.createCGImage(processedImage, from: processedImage.extent)
             
-            let pixelData = CGDataProviderCopyData(CGImageGetDataProvider(finalImage))
+            let pixelData = finalImage?.dataProvider?.data
             let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
             
             let pixelInfo: Int = ((Int(1) * Int(0)) + Int(0)) * 4

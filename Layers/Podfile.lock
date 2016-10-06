@@ -1,113 +1,96 @@
 PODS:
-  - Alamofire (3.4.1)
-  - AWSCognito (2.4.0):
-    - AWSCore (= 2.4.0)
-  - AWSCognitoIdentityProvider (2.4.0):
-    - AWSCore (= 2.4.0)
-  - AWSCore (2.4.0)
-  - AWSSNS (2.4.0):
-    - AWSCore (= 2.4.0)
-  - Bolts (1.7.0):
-    - Bolts/AppLinks (= 1.7.0)
-    - Bolts/Tasks (= 1.7.0)
-  - Bolts/AppLinks (1.7.0):
+  - Alamofire (4.0.1)
+  - Bolts (1.8.4):
+    - Bolts/AppLinks (= 1.8.4)
+    - Bolts/Tasks (= 1.8.4)
+  - Bolts/AppLinks (1.8.4):
     - Bolts/Tasks
-  - Bolts/Tasks (1.7.0)
-  - Crashlytics (3.7.1):
+  - Bolts/Tasks (1.8.4)
+  - Crashlytics (3.8.2):
     - Fabric (~> 1.6.3)
   - DACircularProgress (2.3.1)
   - DateTools (1.7.0)
   - DeepLinkKit (1.2.1)
-  - DominantColor (0.1.0)
-  - Fabric (1.6.7)
-  - FBSDKCoreKit (4.11.0):
+  - DeviceKit (1.0.0)
+  - Fabric (1.6.9)
+  - FBSDKCoreKit (4.16.0):
     - Bolts (~> 1.7)
-  - FBSDKLoginKit (4.11.0):
+  - FBSDKLoginKit (4.16.0):
     - FBSDKCoreKit
-  - FRHyperLabel (1.0.2)
+  - FRHyperLabel (1.0.3)
   - IDMPhotoBrowser (1.8.4):
     - DACircularProgress
     - pop
     - SDWebImage
-  - KeychainAccess (2.3.5)
+  - KeychainAccess (3.0.0)
   - KLCPopup (1.0)
   - MBProgressHUD (1.0.0)
   - NHAlignmentFlowLayout (0.1.0)
-  - ObjectMapper (1.4.0)
+  - ObjectMapper (2.0.0)
   - pop (1.0.9)
-  - SDWebImage (3.8.1):
-    - SDWebImage/Core (= 3.8.1)
-  - SDWebImage/Core (3.8.1)
-  - SwiftRangeSlider (0.3.2)
-  - SwiftyBeaver (0.6.5)
-  - SwiftyJSON (2.3.2)
-  - SwiftyTimer (1.4.1)
+  - SDWebImage (3.8.2):
+    - SDWebImage/Core (= 3.8.2)
+  - SDWebImage/Core (3.8.2)
+  - SwiftyBeaver (1.0.3)
+  - SwiftyJSON (3.1.0)
+  - SwiftyTimer (2.0.0)
   - UITextView+Placeholder (1.2.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 3.4)
-  - AWSCognito (~> 2.4)
-  - AWSCognitoIdentityProvider (~> 2.4)
-  - AWSCore (~> 2.4)
-  - AWSSNS (~> 2.4)
-  - Crashlytics (~> 3.7)
+  - Alamofire (~> 4.0)
+  - Crashlytics (~> 3.8)
   - DateTools (~> 1.7)
   - DeepLinkKit (~> 1.2)
-  - DominantColor (from `https://github.com/indragiek/DominantColor.git`)
+  - DeviceKit (~> 1.0)
   - Fabric (~> 1.6)
-  - FBSDKCoreKit (~> 4.11)
-  - FBSDKLoginKit (~> 4.11)
+  - FBSDKCoreKit (~> 4.15)
+  - FBSDKLoginKit (~> 4.15)
   - FRHyperLabel (~> 1.0)
   - IDMPhotoBrowser (~> 1.8)
-  - KeychainAccess (~> 2.3)
+  - KeychainAccess (~> 3.0)
   - KLCPopup (~> 1.0)
   - MBProgressHUD (~> 1.0)
   - NHAlignmentFlowLayout (~> 0.1)
-  - ObjectMapper (~> 1.4)
+  - ObjectMapper (~> 2.0)
   - SDWebImage (~> 3.8)
-  - SwiftRangeSlider (~> 0.3)
-  - SwiftyBeaver (~> 0.6)
-  - SwiftyJSON (~> 2.3)
-  - SwiftyTimer (~> 1.4)
-  - UITextView+Placeholder (~> 1.2)
+  - SwiftyBeaver (~> 1.0)
+  - SwiftyJSON (~> 3.0)
+  - SwiftyTimer (from `https://github.com/radex/SwiftyTimer.git`, branch `swift3`)
+  - UITextView+Placeholder
 
 EXTERNAL SOURCES:
-  DominantColor:
-    :git: https://github.com/indragiek/DominantColor.git
+  SwiftyTimer:
+    :branch: swift3
+    :git: https://github.com/radex/SwiftyTimer.git
 
 CHECKOUT OPTIONS:
-  DominantColor:
-    :commit: 8f5c3c3792e5ae7779f9d8a81492e0399900dc7e
-    :git: https://github.com/indragiek/DominantColor.git
+  SwiftyTimer:
+    :commit: a51e1b0a10787a42e45b14553f3803f68c790291
+    :git: https://github.com/radex/SwiftyTimer.git
 
 SPEC CHECKSUMS:
-  Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
-  AWSCognito: 1d96bd3ccda48918b00862895561dcb2a6080acf
-  AWSCognitoIdentityProvider: 64410d394f6ea498c6741cd4dc7488f85b0f82c7
-  AWSCore: 7e0da755786280a76ed4ab4ed8c1d38ced09b460
-  AWSSNS: b1e52a1d9b72e777810c8bb1188218f2a0ae9974
-  Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
-  Crashlytics: 3cdd4c9655be68032a0cf0379e0fb5ef6af22cad
+  Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
+  Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
+  Crashlytics: 27acca95a01b042a8294291dd6dff27f8f6af6d7
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
   DeepLinkKit: 4c3a713b7ecc6c6e25ba56c87d0c728f6035a9ef
-  DominantColor: 721b6dbe5ca4fc7b5ace6a267b6eae441815943f
-  Fabric: caf7580c725e64db144f610ac65cd60956911dc7
-  FBSDKCoreKit: 686ac982723a14ec9ddb85e2f81235d7706c891b
-  FBSDKLoginKit: bade9fc78277764149ccc5bfaadbf13c83175c6a
-  FRHyperLabel: 967b8b7ffdd86b9f2d44f2981a5688c4d3faa9ac
+  DeviceKit: ddead7f3a7c9603ba3a63cb748566428c38dd11f
+  Fabric: bc5bec42cef4bcf1ee3ce0e218fc518e4b44dfbb
+  FBSDKCoreKit: 7a6baaed4a2b2a244ba253346713bdbc74df135b
+  FBSDKLoginKit: 9a514a55a7d05190f64d4ef09502737588b5b561
+  FRHyperLabel: 99d08d3667880b4c430071c9afbcb93aaaa34b37
   IDMPhotoBrowser: b574fe3229754e701f32df271afbc4ac7e4e1997
-  KeychainAccess: e283c1981a6c5655e1984cd411c6faf16fa165ae
+  KeychainAccess: 412bf2650d9aebfc8135a58103b90ec38caad7f8
   KLCPopup: 76c5a19227977f1e53d85236f9ef42257c168d98
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   NHAlignmentFlowLayout: 7f7e9bd79774a7c733e7ac232f2a131a0ce095b9
-  ObjectMapper: a07ad0462c5adf014adc0f89ef04c29b626e855e
+  ObjectMapper: aed2570edabbd3c9b26c939e1cabdb6558f933e0
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
-  SDWebImage: 35f9627a3e44b4f292a8a8ce6a531fa488239b91
-  SwiftRangeSlider: a199ea521ba1ef57fa8bae26ffbdeb33c4c8f6eb
-  SwiftyBeaver: 1f7e6378e75bae631bb219fa0a351ce6f34a40da
-  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
-  SwiftyTimer: 4d25b60ebdbdc5c34782663ab6a5974424f9095e
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+  SwiftyBeaver: e42a664ffbdb5ec68ce968ffd3c54f619c92e0d7
+  SwiftyJSON: 29b9f2a64f118c07e691667c2ba1efe536acfe0b
+  SwiftyTimer: 2efd74b060d69ad4f1496baf5bbedbe132125fcf
   UITextView+Placeholder: 77680995fcdd07c3f52ec92fe1150874a2ac89ff
 
 COCOAPODS: 0.39.0

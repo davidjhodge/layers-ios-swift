@@ -23,7 +23,7 @@ class User: AnyObject, Mappable
     
     var lastName: String?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

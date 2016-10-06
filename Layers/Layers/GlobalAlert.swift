@@ -16,15 +16,15 @@ extension UIAlertController
         present(true, completion: nil)
     }
     
-    func present(animated: Bool, completion: (() -> Void)?)
+    func present(_ animated: Bool, completion: (() -> Void)?)
     {
-        if let rootVc = UIApplication.sharedApplication().keyWindow?.rootViewController
+        if let rootVc = UIApplication.shared.keyWindow?.rootViewController
         {
             presentFromController(rootVc, animated: animated, completion: completion)
         }
     }
     
-    private func presentFromController(controller: UIViewController, animated: Bool, completion: (() -> Void)?)
+    fileprivate func presentFromController(_ controller: UIViewController, animated: Bool, completion: (() -> Void)?)
     {
         if let navVc = controller as? UINavigationController,
         let visibleVc = navVc.visibleViewController
@@ -38,7 +38,7 @@ extension UIAlertController
         }
         else
         {
-            controller.presentViewController(self, animated: animated, completion: completion)
+            controller.present(self, animated: animated, completion: completion)
         }
     }
 }

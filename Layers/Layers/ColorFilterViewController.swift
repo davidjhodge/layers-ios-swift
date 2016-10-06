@@ -11,7 +11,7 @@ import UIKit
 
 protocol ColorFilterDelegate
 {
-    func colorFilterChanged(colors: Array<ColorObject>?)
+    func colorFilterChanged(_ colors: Array<ColorObject>?)
 }
 
 class ColorFilterViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
@@ -31,27 +31,27 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Color".uppercaseString
+        title = "Color".uppercased()
         
         collectionView.alwaysBounceVertical = true
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         
-        collectionView.backgroundColor = UIColor.whiteColor()
+        collectionView.backgroundColor = UIColor.white
         
         setNavTitle()
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercaseString, style: .Plain, target: self, action:#selector(reset))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reset".uppercased(), style: .plain, target: self, action:#selector(reset))
 
-        selectButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
-        selectButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        selectButton.setBackgroundColor(Color.NeonBlueColor, forState: UIControlState())
+        selectButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .highlighted)
         
-        selectButton.addTarget(self, action: #selector(confirmSelection), forControlEvents: .TouchUpInside)
+        selectButton.addTarget(self, action: #selector(confirmSelection), for: .touchUpInside)
         
         reloadColors()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         if let colorSelections = selectedColors
@@ -73,9 +73,9 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
     
     func setNavTitle()
     {
-        if filterType == FilterType.Color
+        if filterType == FilterType.color
         {
-            title = "Color".uppercaseString
+            title = "Color".uppercased()
         }
     }
     
@@ -89,7 +89,7 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
                 {
                     self.colors = fetchedColors
                     
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async(execute: { () -> Void in
                         
                         self.collectionView.reloadData()
                     })
@@ -101,7 +101,7 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
     // MARK: UI Actions
     func confirmSelection()
     {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
     func reset()
@@ -112,7 +112,7 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     // MARK: Add/Remove
-    func addSelection(index: Int)
+    func addSelection(_ index: Int)
     {
         if let filterColors = colors
         {
@@ -130,7 +130,7 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
         }
     }
     
-    func deleteSelection(index: Int)
+    func deleteSelection(_ index: Int)
     {
         if let filterColors = colors
         {
@@ -149,13 +149,13 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
         }
     }
     
-    func updateRowAtIndex(index: Int)
+    func updateRowAtIndex(_ index: Int)
     {
         UIView.setAnimationsEnabled(false)
         
         collectionView.performBatchUpdates({ () -> Void in
             
-            self.collectionView.reloadItemsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)])
+            self.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
             
             }, completion: { (finished) -> Void in
                 
@@ -164,11 +164,11 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     // MARK: Collection View Data Source
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if let colors = colors
         {
@@ -178,9 +178,9 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
         return 0
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ColorCell", forIndexPath: indexPath) as! ColorCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorCell", for: indexPath) as! ColorCell
         
         if let colors = colors
         {
@@ -226,40 +226,40 @@ class ColorFilterViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     // MARK: Collection View Delegate
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         // Add/remove color
         if let filterColors = colors
         {
-            if let selectedColor = filterColors[safe: indexPath.row]
+            if let selectedColor = filterColors[safe: (indexPath as NSIndexPath).row]
             {
                 if let desiredKey = selectedColor.colorId
                 {
                     if let selections = selectedColors
                     {
-                        if selections.contains( { $0.colorId == desiredKey } )
+                        if selections.contains( where: { $0.colorId == desiredKey } )
                         {
                             // Item is already selected. Clear the selection
-                            deleteSelection(indexPath.row)
+                            deleteSelection((indexPath as NSIndexPath).row)
                             
                             return
                         }
                     }
                     
                     // Select the item
-                    addSelection(indexPath.row)
+                    addSelection((indexPath as NSIndexPath).row)
                 }
             }
         }
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         // Size for Product Cell
         let flowLayout: UICollectionViewFlowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         
         let width: CGFloat = (collectionView.bounds.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right - 8) * 0.25
         
-        return CGSizeMake(width, 104.0)
+        return CGSize(width: width, height: 104.0)
     }
 }

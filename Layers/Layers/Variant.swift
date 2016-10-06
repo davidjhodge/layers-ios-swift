@@ -19,7 +19,7 @@ class Variant: Mappable
     
     var dominantColor: UIColor?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

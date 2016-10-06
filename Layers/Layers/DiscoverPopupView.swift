@@ -25,17 +25,17 @@ class DiscoverPopupView: UIView
         
         headerLabel.textColor = Color.DarkTextColor
         
-        firstSubLabel.textColor = Color.darkGrayColor()
+        firstSubLabel.textColor = Color.darkGray
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.paragraphSpacing = 4
-        paragraphStyle.alignment = .Center
+        paragraphStyle.alignment = .center
         
-        secondSubLabel.attributedText = NSAttributedString(string: "On this screen, we only" + "\n" + "show you new items that you" + "\n" + "haven't viewed before.", attributes: [NSForegroundColorAttributeName: Color.darkGrayColor(),
+        secondSubLabel.attributedText = NSAttributedString(string: "On this screen, we only" + "\n" + "show you new items that you" + "\n" + "haven't viewed before.", attributes: [NSForegroundColorAttributeName: Color.darkGray,
             NSFontAttributeName: Font.OxygenRegular(size: 16.0),
             NSParagraphStyleAttributeName: paragraphStyle])
         
-        ctaButton.setBackgroundColor(Color.NeonBlueColor, forState: .Normal)
-        ctaButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .Highlighted)
+        ctaButton.setBackgroundColor(Color.NeonBlueColor, forState: .normal)
+        ctaButton.setBackgroundColor(Color.NeonBlueHighlightedColor, forState: .highlighted)
     }
 }

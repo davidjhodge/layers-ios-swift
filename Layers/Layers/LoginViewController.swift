@@ -28,11 +28,11 @@ class LoginViewController: UIViewController, AuthenticationDelegate {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        facebookButton.addTarget(self, action: #selector(connectWithFacebook), forControlEvents: .TouchUpInside)
+        facebookButton.addTarget(self, action: #selector(connectWithFacebook), for: .touchUpInside)
         
-        signUpButton.addTarget(self, action: #selector(signUp), forControlEvents: .TouchUpInside)
+        signUpButton.addTarget(self, action: #selector(signUp), for: .touchUpInside)
         
-        loginButton.addTarget(self, action: #selector(login), forControlEvents: .TouchUpInside)
+        loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
 
         configureAppearance()
     }
@@ -40,7 +40,7 @@ class LoginViewController: UIViewController, AuthenticationDelegate {
     func configureAppearance()
     {
         // Logo
-        layersLabel.attributedText = NSAttributedString(string: "layers".uppercaseString, attributes: [NSForegroundColorAttributeName: Color.PrimaryAppColor,
+        layersLabel.attributedText = NSAttributedString(string: "layers".uppercased(), attributes: [NSForegroundColorAttributeName: Color.PrimaryAppColor,
             NSFontAttributeName: Font.PrimaryFontRegular(size: 30.0),
             NSKernAttributeName: 4.5
             ])
@@ -53,36 +53,36 @@ class LoginViewController: UIViewController, AuthenticationDelegate {
             NSKernAttributeName: 0.9])
         
         // Connect with Facebook
-        facebookButton.setAttributedTitle(NSAttributedString(string: "Connect with Facebook".uppercaseString, attributes: FontAttributes.filledButtonAttributes), forState: .Normal)
+        facebookButton.setAttributedTitle(NSAttributedString(string: "Connect with Facebook".uppercased(), attributes: FontAttributes.filledButtonAttributes), for: UIControlState())
         
-        facebookButton.setBackgroundColor(Color.PrimaryAppColor, forState: .Normal)
-        facebookButton.setBackgroundColor(Color.HighlightedPrimaryAppColor, forState: .Highlighted)
+        facebookButton.setBackgroundColor(Color.PrimaryAppColor, forState: UIControlState())
+        facebookButton.setBackgroundColor(Color.HighlightedPrimaryAppColor, forState: .highlighted)
         facebookButton.layer.cornerRadius = 4.0
         facebookButton.clipsToBounds = true
         
         // Sign Up Button
-        signUpButton.setBackgroundColor(Color.whiteColor(), forState: .Normal)
-        signUpButton.setBackgroundColor(Color.PrimaryAppColor, forState: .Highlighted)
+        signUpButton.setBackgroundColor(Color.white, forState: UIControlState())
+        signUpButton.setBackgroundColor(Color.PrimaryAppColor, forState: .highlighted)
         
-        signUpButton.setAttributedTitle(NSAttributedString(string: "Sign Up".uppercaseString, attributes: FontAttributes.buttonAttributes), forState: .Normal)
-        signUpButton.setAttributedTitle(NSAttributedString(string: "Sign Up".uppercaseString, attributes: FontAttributes.filledButtonAttributes), forState: .Highlighted)
+        signUpButton.setAttributedTitle(NSAttributedString(string: "Sign Up".uppercased(), attributes: FontAttributes.buttonAttributes), for: UIControlState())
+        signUpButton.setAttributedTitle(NSAttributedString(string: "Sign Up".uppercased(), attributes: FontAttributes.filledButtonAttributes), for: .highlighted)
         
         signUpButton.layer.cornerRadius = 4.0
         signUpButton.clipsToBounds = true
         signUpButton.layer.borderWidth = 1.0
-        signUpButton.layer.borderColor = Color.PrimaryAppColor.CGColor
+        signUpButton.layer.borderColor = Color.PrimaryAppColor.cgColor
         
         // Login Button
-        loginButton.setBackgroundColor(Color.whiteColor(), forState: .Normal)
-        loginButton.setBackgroundColor(Color.PrimaryAppColor, forState: .Highlighted)
+        loginButton.setBackgroundColor(Color.white, forState: UIControlState())
+        loginButton.setBackgroundColor(Color.PrimaryAppColor, forState: .highlighted)
         
-        loginButton.setAttributedTitle(NSAttributedString(string: "Login".uppercaseString, attributes: FontAttributes.buttonAttributes), forState: .Normal)
-        loginButton.setAttributedTitle(NSAttributedString(string: "Login".uppercaseString, attributes: FontAttributes.filledButtonAttributes), forState: .Highlighted)
+        loginButton.setAttributedTitle(NSAttributedString(string: "Login".uppercased(), attributes: FontAttributes.buttonAttributes), for: UIControlState())
+        loginButton.setAttributedTitle(NSAttributedString(string: "Login".uppercased(), attributes: FontAttributes.filledButtonAttributes), for: .highlighted)
 
         loginButton.layer.cornerRadius = 4.0
         loginButton.clipsToBounds = true
         loginButton.layer.borderWidth = 1.0
-        loginButton.layer.borderColor = Color.PrimaryAppColor.CGColor
+        loginButton.layer.borderColor = Color.PrimaryAppColor.cgColor
         
         // Try it Label
         tryItLabel.attributedText = tryItLabelAttributedString()
@@ -95,7 +95,7 @@ class LoginViewController: UIViewController, AuthenticationDelegate {
                                            NSFontAttributeName: Font.PrimaryFontSemiBold(size: 14.0),
                                            NSKernAttributeName: 2.0]
         
-        tryItLabel.setLinkForSubstring("Try it first", withLinkHandler: { (hyperLabel: FRHyperLabel!, substring: String!) -> Void in
+        tryItLabel.setLinkForSubstring("Try it first", withLinkHandler: { (hyperLabel: FRHyperLabel?, substring: String?) -> Void in
          
             self.continueAsGuest()
         })
@@ -105,13 +105,13 @@ class LoginViewController: UIViewController, AuthenticationDelegate {
     {
         let string = NSMutableAttributedString()
         
-        string.appendAttributedString(NSAttributedString(string: "Not quite ready? ", attributes: [
+        string.append(NSAttributedString(string: "Not quite ready? ", attributes: [
             NSForegroundColorAttributeName: Color.GrayColor,
             NSFontAttributeName: Font.PrimaryFontLight(size: 14.0),
             NSKernAttributeName: 2.0
             ]))
         
-        string.appendAttributedString(NSAttributedString(string: "Try it first", attributes: [
+        string.append(NSAttributedString(string: "Try it first", attributes: [
             NSForegroundColorAttributeName: Color.PrimaryAppColor,
             NSFontAttributeName: Font.PrimaryFontSemiBold(size: 14.0),
             NSKernAttributeName: 2.0
@@ -120,7 +120,7 @@ class LoginViewController: UIViewController, AuthenticationDelegate {
         return NSAttributedString(attributedString: string)
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
     
@@ -138,15 +138,15 @@ class LoginViewController: UIViewController, AuthenticationDelegate {
         disableButttons()
         
         // Show Email Create Account View Controller
-        let loginStoryboard = UIStoryboard(name: "Login", bundle: NSBundle.mainBundle())
+        let loginStoryboard = UIStoryboard(name: "Login", bundle: Bundle.main)
         
-        if let emailSignUpVc = loginStoryboard.instantiateViewControllerWithIdentifier("EmailCreateAccountViewController") as? EmailCreateAccountViewController
+        if let emailSignUpVc = loginStoryboard.instantiateViewController(withIdentifier: "EmailCreateAccountViewController") as? EmailCreateAccountViewController
         {
             emailSignUpVc.delegate = self
             
             let nav = UINavigationController(rootViewController: emailSignUpVc)
             
-            presentViewController(nav, animated: true, completion: nil)
+            present(nav, animated: true, completion: nil)
         }
         
     }
@@ -158,16 +158,16 @@ class LoginViewController: UIViewController, AuthenticationDelegate {
         disableButttons()
         
         // Show Email Login View Controller
-        let loginStoryboard = UIStoryboard(name: "Login", bundle: NSBundle.mainBundle())
+        let loginStoryboard = UIStoryboard(name: "Login", bundle: Bundle.main)
         
-        if let emailLoginVc = loginStoryboard.instantiateViewControllerWithIdentifier("EmailLoginViewController") as? EmailLoginViewController
+        if let emailLoginVc = loginStoryboard.instantiateViewController(withIdentifier: "EmailLoginViewController") as? EmailLoginViewController
         {
             emailLoginVc.delegate = self
             
             let nav = UINavigationController(rootViewController: emailLoginVc)
             
             // Show Login
-            presentViewController(nav, animated: true, completion: nil)
+            present(nav, animated: true, completion: nil)
         }
     }
 
@@ -191,18 +191,18 @@ class LoginViewController: UIViewController, AuthenticationDelegate {
     
     func disableButttons()
     {
-        facebookButton.userInteractionEnabled = false
-        signUpButton.userInteractionEnabled = false
-        loginButton.userInteractionEnabled = false
-        tryItLabel.userInteractionEnabled = false
+        facebookButton.isUserInteractionEnabled = false
+        signUpButton.isUserInteractionEnabled = false
+        loginButton.isUserInteractionEnabled = false
+        tryItLabel.isUserInteractionEnabled = false
     }
     
     func enableButtons()
     {
-        facebookButton.userInteractionEnabled = true
-        signUpButton.userInteractionEnabled = true
-        loginButton.userInteractionEnabled = true
-        tryItLabel.userInteractionEnabled = true
+        facebookButton.isUserInteractionEnabled = true
+        signUpButton.isUserInteractionEnabled = true
+        loginButton.isUserInteractionEnabled = true
+        tryItLabel.isUserInteractionEnabled = true
     }
 
     /*

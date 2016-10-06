@@ -41,7 +41,7 @@ class FacebookUserResponse: NSObject, Mappable
     
     var ageRange: AgeRange?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

@@ -11,7 +11,7 @@ import Foundation
 class FilterObjectConverter
 {
     // Convert either a category, retailer, or brand to filter object
-    static func filterObject<T>(filterResponse: T?) -> FilterObject?
+    static func filterObject<T>(_ filterResponse: T?) -> FilterObject?
     {
             var filter: FilterObject = FilterObject()
             
@@ -55,7 +55,7 @@ class FilterObjectConverter
             return filter
     }
     
-    static func filterObjectArray<T>(responses: Array<T>?) -> Array<FilterObject>?
+    static func filterObjectArray<T>(_ responses: Array<T>?) -> Array<FilterObject>?
     {
         if let responses = responses
         {

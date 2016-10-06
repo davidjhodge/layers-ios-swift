@@ -17,7 +17,7 @@ class AltPrice: Mappable
     
     var percentOff: NSNumber?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

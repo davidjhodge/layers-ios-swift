@@ -10,17 +10,17 @@ import UIKit
 
 private enum Section: Int
 {
-    case ProfileHeader = 0, Activity, Other, _Count
+    case profileHeader = 0, activity, other, _Count
 }
 
 enum UserActivity: Int
 {
-    case Purchases = 0, RecentlyViewed, Saved, MyComments, _Count
+    case purchases = 0, recentlyViewed, saved, myComments, _Count
 }
 
 private enum OtherRow: Int
 {
-    case Settings = 0, ContactUs, _Count
+    case settings = 0, contactUs, _Count
 }
 
 class AccountHomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProductListDelegate {
@@ -41,35 +41,35 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
         super.viewDidLoad()
 
         // Change status bar style to .LightContent
-        navigationController?.navigationBar.barStyle = .Black
+        navigationController?.navigationBar.barStyle = .black
         
         collectionView.backgroundColor = Color.BackgroundGrayColor
         collectionView.alwaysBounceVertical = true
         collectionView.showsVerticalScrollIndicator = false
         
-        collectionView.registerNib(UINib(nibName: "HeaderView", bundle: NSBundle.mainBundle()), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderView")
+        collectionView.register(UINib(nibName: "HeaderView", bundle: Bundle.main), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderView")
     }
     
     // MARK: Collection View Data Source
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         
         return Section._Count.rawValue
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if let section = Section(rawValue: section)
         {
             switch section {
-            case .ProfileHeader:
+            case .profileHeader:
                 
                 return 1
                 
-            case .Activity:
+            case .activity:
                 
                 return UserActivity._Count.rawValue
                 
-            case .Other:
+            case .other:
                 
                 return OtherRow._Count.rawValue
                 
@@ -81,82 +81,82 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
         return 0
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if let section = Section(rawValue: indexPath.section)
+        if let section = Section(rawValue: (indexPath as NSIndexPath).section)
         {
             switch section {
-            case .ProfileHeader:
+            case .profileHeader:
                 
-                if indexPath.row == 0
+                if (indexPath as NSIndexPath).row == 0
                 {
-                    if let cell = collectionView.dequeueReusableCellWithReuseIdentifier("AccountHeaderCell", forIndexPath: indexPath) as? AccountHeaderCell
+                    if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AccountHeaderCell", for: indexPath) as? AccountHeaderCell
                     {
-                        if let userImageUrl = NSURL(string: "https://organicthemes.com/demo/profile/files/2012/12/profile_img.png")
+                        if let userImageUrl = URL(string: "https://organicthemes.com/demo/profile/files/2012/12/profile_img.png")
                         {
-                            cell.profileImageView.sd_setImageWithURL(userImageUrl, completed:nil)
+                            cell.profileImageView.sd_setImage(with: userImageUrl, completed:nil)
                         }
                         
                         cell.fullNameLabel.attributedText = NSAttributedString(string: "David Hodge", attributes: FontAttributes.largeHeaderTextAttributes)
                         
                         cell.ctaLabel.attributedText = NSAttributedString(string: "View Profile", attributes: FontAttributes.smallCtaAttributes)
                         
-                        cell.backgroundColor = Color.whiteColor()
+                        cell.backgroundColor = Color.white
                         
                         return cell
                     }
                 }
                 
-            case .Activity:
+            case .activity:
                 
-                if let row = UserActivity(rawValue: indexPath.row)
+                if let row = UserActivity(rawValue: (indexPath as NSIndexPath).row)
                 {
-                    if let cell = collectionView.dequeueReusableCellWithReuseIdentifier("BasicCollectionCell", forIndexPath: indexPath) as? BasicCollectionCell
+                    if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BasicCollectionCell", for: indexPath) as? BasicCollectionCell
                     {
                         let textAttributes = FontAttributes.defaultTextAttributes
                         
-                        if row == .Purchases
+                        if row == .purchases
                         {
                             cell.titleLabel.attributedText = NSAttributedString(string: "Purchases", attributes: textAttributes)
                         }
-                        else if row == .RecentlyViewed
+                        else if row == .recentlyViewed
                         {
                             cell.titleLabel.attributedText = NSAttributedString(string: "Recently Viewed", attributes: textAttributes)
 
                         }
-                        else if row == .Saved
+                        else if row == .saved
                         {
                             cell.titleLabel.attributedText = NSAttributedString(string: "Saved Items", attributes: textAttributes)
                         }
-                        else if row == .MyComments
+                        else if row == .myComments
                         {
                             cell.titleLabel.attributedText = NSAttributedString(string: "My Comments", attributes: textAttributes)
                         }
                         
-                        cell.backgroundColor = Color.whiteColor()
+                        cell.backgroundColor = Color.white
 
                         return cell
                     }
                 }
                 
-            case .Other:
+            case .other:
                 
-                if let row = OtherRow(rawValue: indexPath.row)
+                if let row = OtherRow(rawValue: (indexPath as NSIndexPath).row)
                 {
-                    if let cell = collectionView.dequeueReusableCellWithReuseIdentifier("BasicCollectionCell", forIndexPath: indexPath) as? BasicCollectionCell
+                    if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BasicCollectionCell", for: indexPath) as? BasicCollectionCell
                     {
                         let textAttributes = FontAttributes.defaultTextAttributes
                         
-                        if row == .Settings
+                        if row == .settings
                         {
                             cell.titleLabel.attributedText = NSAttributedString(string: "Settings", attributes: textAttributes)
                         }
-                        else if row == .ContactUs
+                        else if row == .contactUs
                         {
                             cell.titleLabel.attributedText = NSAttributedString(string: "Contact Us", attributes: textAttributes)
                         }
                         
-                        cell.backgroundColor = Color.whiteColor()
+                        cell.backgroundColor = Color.white
 
                         return cell
                     }
@@ -167,30 +167,30 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
             }
         }
     
-        return collectionView.dequeueReusableCellWithReuseIdentifier("BasicCollectionCell", forIndexPath: indexPath)
+        return collectionView.dequeueReusableCell(withReuseIdentifier: "BasicCollectionCell", for: indexPath)
     }
     
-    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if kind == UICollectionElementKindSectionHeader
         {
-            if let headerView = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "HeaderView", forIndexPath: indexPath) as? HeaderView
+            if let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView
             {
-                headerView.backgroundColor = Color.clearColor()
+                headerView.backgroundColor = Color.clear
                 
                 let textAttributes = [NSFontAttributeName: Font.PrimaryFontRegular(size: 12.0),
                                       NSForegroundColorAttributeName: Color.GrayColor,
-                                      NSKernAttributeName:0.7]
+                                      NSKernAttributeName:0.7] as [String : Any]
                 
-                if let section = Section(rawValue: indexPath.section)
+                if let section = Section(rawValue: (indexPath as NSIndexPath).section)
                 {
-                    if section == .Activity
+                    if section == .activity
                     {
-                        headerView.sectionTitleLabel.attributedText = NSAttributedString(string: "My Activity".uppercaseString, attributes: textAttributes)
+                        headerView.sectionTitleLabel.attributedText = NSAttributedString(string: "My Activity".uppercased(), attributes: textAttributes)
                     }
-                    else if section == .Other
+                    else if section == .other
                     {
-                        headerView.sectionTitleLabel.attributedText = NSAttributedString(string: "Other".uppercaseString, attributes: textAttributes)
+                        headerView.sectionTitleLabel.attributedText = NSAttributedString(string: "Other".uppercased(), attributes: textAttributes)
                     }
                     else
                     {
@@ -206,74 +206,74 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     // MARK: Collection View Delegate
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
-        if let section = Section(rawValue: indexPath.section)
+        if let section = Section(rawValue: (indexPath as NSIndexPath).section)
         {
-            let storyboard = UIStoryboard(name: "Account", bundle: NSBundle.mainBundle())
+            let storyboard = UIStoryboard(name: "Account", bundle: Bundle.main)
 
             switch section {
-            case .ProfileHeader:
+            case .profileHeader:
                 
-                if indexPath.row == 0
+                if (indexPath as NSIndexPath).row == 0
                 {
-                    if let profileVc = storyboard.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController
+                    if let profileVc = storyboard.instantiateViewController(withIdentifier: "UserProfileViewController") as? UserProfileViewController
                     {
                         navigationController?.pushViewController(profileVc, animated: true)
                     }
                 }
                 
-            case .Activity:
+            case .activity:
                 
-                if let productListVc = storyboard.instantiateViewControllerWithIdentifier("ProductListViewController") as? ProductListViewController
+                if let productListVc = storyboard.instantiateViewController(withIdentifier: "ProductListViewController") as? ProductListViewController
                 {
                     productListVc.delegate = self
                     
-                    if let row = UserActivity(rawValue: indexPath.row)
+                    if let row = UserActivity(rawValue: (indexPath as NSIndexPath).row)
                     {
-                        if row == .Purchases
+                        if row == .purchases
                         {
                             productListVc.title = "Purchases"
                             
-                            productListVc.activityType = .Purchases
+                            productListVc.activityType = .purchases
                         }
-                        else if row == .RecentlyViewed
+                        else if row == .recentlyViewed
                         {
                             productListVc.title = "Recently Viewed"
                             
-                            productListVc.activityType = .RecentlyViewed
+                            productListVc.activityType = .recentlyViewed
                         }
-                        else if row == .Saved
+                        else if row == .saved
                         {
                             productListVc.title = "Saved Items"
 
-                            productListVc.activityType = .Saved
+                            productListVc.activityType = .saved
                         }
-                        else if row == .MyComments
+                        else if row == .myComments
                         {
                             productListVc.title = "My Comments"
 
-                            productListVc.activityType = .MyComments
+                            productListVc.activityType = .myComments
                         }
                     }
                     
                     navigationController?.pushViewController(productListVc, animated: true)
                 }
                 
-            case .Other:
+            case .other:
                 
-                if let row = OtherRow(rawValue: indexPath.row)
+                if let row = OtherRow(rawValue: (indexPath as NSIndexPath).row)
                 {
-                    if row == .Settings
+                    if row == .settings
                     {
-                        if let settingsVc = storyboard.instantiateViewControllerWithIdentifier("SettingsViewController") as? SettingsViewController
+                        if let settingsVc = storyboard.instantiateViewController(withIdentifier: "SettingsViewController") as? SettingsViewController
                         {
                             navigationController?.pushViewController(settingsVc, animated: true)
                         }
                     }
-                    else if row == .ContactUs
+                    else if row == .contactUs
                     {
-                        if let contactVc = storyboard.instantiateViewControllerWithIdentifier("ContactUsViewController") as? ContactUsViewController
+                        if let contactVc = storyboard.instantiateViewController(withIdentifier: "ContactUsViewController") as? ContactUsViewController
                         {
                             navigationController?.pushViewController(contactVc, animated: true)
                         }
@@ -286,11 +286,11 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
         }
     }
     
-    func collectionView(collectionView: UICollectionView, didHighlightItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
         
-        if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath)
+        if let cell: UICollectionViewCell = collectionView.cellForItem(at: indexPath)
         {
-            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+            UIView.animate(withDuration: 0.1, delay: 0, options: .allowUserInteraction, animations: { () -> Void in
                 
                 cell.backgroundColor = Color.HighlightedGrayColor
                 
@@ -303,13 +303,13 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
         }
     }
     
-    func collectionView(collectionView: UICollectionView, didUnhighlightItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
         
-        if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath)
+        if let cell: UICollectionViewCell = collectionView.cellForItem(at: indexPath)
         {
-            UIView.animateWithDuration(0.1, delay: 0, options: .AllowUserInteraction, animations: { () -> Void in
+            UIView.animate(withDuration: 0.1, delay: 0, options: .allowUserInteraction, animations: { () -> Void in
                 
-                cell.backgroundColor = Color.whiteColor()
+                cell.backgroundColor = Color.white
                 
                 if let headerCell = cell as? AccountHeaderCell
                 {
@@ -321,7 +321,7 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     // MARK: Collection View Flow Layout
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
         {
@@ -329,19 +329,19 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
             let leftInset = flowLayout.sectionInset.left
             let rightInset = flowLayout.sectionInset.right
             
-            if let section = Section(rawValue: indexPath.section)
+            if let section = Section(rawValue: (indexPath as NSIndexPath).section)
             {
                 switch section {
-                case .ProfileHeader:
+                case .profileHeader:
                     
                     return CGSize(width: viewWidth - leftInset - rightInset, height: 96.0)
                     
-                case .Activity:
+                case .activity:
                     
                     // Use code in .Other
                     return CGSize(width: viewWidth - leftInset - rightInset, height: 48.0)
                     
-                case .Other:
+                case .other:
                     
                     return CGSize(width: viewWidth - leftInset - rightInset, height: 48.0)
                     
@@ -354,7 +354,7 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
         return CGSize(width: 0, height: 0)
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         
         // Width is ignored
         let ignoredWidth: CGFloat = 100
@@ -362,15 +362,15 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
         if let section = Section(rawValue: section)
         {
             switch section {
-            case .ProfileHeader:
+            case .profileHeader:
                 
                 return CGSize(width: ignoredWidth, height: CGFloat(0.01))
                 
-            case .Activity:
+            case .activity:
                 
                 return CGSize(width: ignoredWidth, height: CGFloat(32.0))
                 
-            case .Other:
+            case .other:
                 
                 return CGSize(width: ignoredWidth, height: CGFloat(32.0))
                 
@@ -383,45 +383,45 @@ class AccountHomeViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     // MARK: Product List Delegate
-    func reloadData(row: UserActivity ,completion: LRCompletionBlock?) {
+    func reloadData(_ row: UserActivity ,completion: LRCompletionBlock?) {
         
-        if row == .Purchases
+        if row == .purchases
         {
-            LRSessionManager.sharedManager.loadProduct(NSNumber(int: 512141429), completionHandler: { (success, error, response) -> Void in
+            LRSessionManager.sharedManager.loadProduct(NSNumber(value: 512141429 as Int32), completionHandler: { (success, error, response) -> Void in
                 
                 if let completion = completion
                 {
-                    completion(success: success, error: error, response: response)
+                    completion(success, error, response)
                 }
             })
         }
-        else if row == .RecentlyViewed
+        else if row == .recentlyViewed
         {
-            LRSessionManager.sharedManager.loadProduct(NSNumber(int: 533783711), completionHandler: { (success, error, response) -> Void in
+            LRSessionManager.sharedManager.loadProduct(NSNumber(value: 533783711 as Int32), completionHandler: { (success, error, response) -> Void in
                 
                 if let completion = completion
                 {
-                    completion(success: success, error: error, response: response)
+                    completion(success, error, response)
                 }
             })
         }
-        else if row == .Saved
+        else if row == .saved
         {
-            LRSessionManager.sharedManager.loadProduct(NSNumber(int: 487066353), completionHandler: { (success, error, response) -> Void in
+            LRSessionManager.sharedManager.loadProduct(NSNumber(value: 487066353 as Int32), completionHandler: { (success, error, response) -> Void in
                 
                 if let completion = completion
                 {
-                    completion(success: success, error: error, response: response)
+                    completion(success, error, response)
                 }
             })
         }
-        else if row == .MyComments
+        else if row == .myComments
         {
-            LRSessionManager.sharedManager.loadProduct(NSNumber(int: 505709302), completionHandler: { (success, error, response) -> Void in
+            LRSessionManager.sharedManager.loadProduct(NSNumber(value: 505709302 as Int32), completionHandler: { (success, error, response) -> Void in
                 
                 if let completion = completion
                 {
-                    completion(success: success, error: error, response: response)
+                    completion(success, error, response)
                 }
             })
         }

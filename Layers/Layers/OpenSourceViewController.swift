@@ -25,21 +25,21 @@ class OpenSourceViewController: UIViewController, UITableViewDataSource, UITable
         tableView.backgroundColor = Color.BackgroundGrayColor
     }
     // MARK: Table View Data Source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return openSourceLibraries.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("OpenSourceCell") as! OpenSourceCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "OpenSourceCell") as! OpenSourceCell
         
-        cell.selectionStyle = .None
+        cell.selectionStyle = .none
         
-        if let library = openSourceLibraries[safe: indexPath.row]
+        if let library = openSourceLibraries[safe: (indexPath as NSIndexPath).row]
         {
             if let name = library.name
             {
@@ -58,12 +58,12 @@ class OpenSourceViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     // MARK: Table View Delegate
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         return UITableViewAutomaticDimension
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         
         return 100.0
     }

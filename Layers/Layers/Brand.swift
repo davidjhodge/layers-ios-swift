@@ -15,7 +15,7 @@ class Brand: Mappable
     
     var name: String?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

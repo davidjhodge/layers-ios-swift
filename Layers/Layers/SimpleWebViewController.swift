@@ -13,41 +13,41 @@ class SimpleWebViewController: UIViewController, UIWebViewDelegate
 {
     @IBOutlet weak var webView: UIWebView!
     
-    let spinner: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .White)
+    let spinner: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .white)
     
-    var webURL: NSURL?
+    var webURL: URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = Color.whiteColor()
+        view.backgroundColor = Color.white
         
         spinner.hidesWhenStopped = true
-        spinner.hidden = true
+        spinner.isHidden = true
         navigationItem.rightBarButtonItem?.customView = spinner
         
         if let url = webURL
         {
-            let request: NSURLRequest = NSURLRequest(URL: url, cachePolicy: .ReloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 20.0)
+            let request: URLRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 20.0)
             webView.loadRequest(request)
         }
     }
     
-    func webViewDidStartLoad(webView: UIWebView) {
+    func webViewDidStartLoad(_ webView: UIWebView) {
         
-        spinner.hidden = false
+        spinner.isHidden = false
         spinner.startAnimating()
     }
     
-    func webViewDidFinishLoad(webView: UIWebView) {
+    func webViewDidFinishLoad(_ webView: UIWebView) {
         
         spinner.stopAnimating()
     }
     
-    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
+    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
         
-        let alert: UIAlertController = UIAlertController(title: error?.localizedDescription, message: nil, preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-        presentViewController(alert, animated: true, completion: nil)
+        let alert: UIAlertController = UIAlertController(title: error.localizedDescription, message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 }

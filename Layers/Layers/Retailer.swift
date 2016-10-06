@@ -15,7 +15,7 @@ class Retailer: Mappable
     
     var name: String?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

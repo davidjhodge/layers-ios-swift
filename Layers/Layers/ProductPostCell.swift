@@ -46,7 +46,7 @@ class ProductPostCell: UICollectionViewCell, UIScrollViewDelegate {
     
     var delegate: PaginatedImageViewDelegate?
     
-    var productImages: Array<NSURL>?
+    var productImages: Array<URL>?
     
     override var frame: CGRect
         {
@@ -75,14 +75,14 @@ class ProductPostCell: UICollectionViewCell, UIScrollViewDelegate {
         profilePictureImageView.clipsToBounds = true
     }
     
-    func setImageElements(elements: Array<NSURL>)
+    func setImageElements(_ elements: Array<URL>)
     {
         productImages = elements
         
         layoutImageViews(true)
     }
     
-    private func layoutImageViews(shouldRedraw:Bool)
+    fileprivate func layoutImageViews(_ shouldRedraw:Bool)
     {
         if photoScrollView == nil
         {
@@ -100,7 +100,7 @@ class ProductPostCell: UICollectionViewCell, UIScrollViewDelegate {
             }
             
             // Explicitly clear from memory
-            self.imageViews.removeAll(keepCapacity: false)
+            self.imageViews.removeAll(keepingCapacity: false)
             
             // New Image Views
             if let images = productImages
@@ -109,24 +109,24 @@ class ProductPostCell: UICollectionViewCell, UIScrollViewDelegate {
                 {
                     let imageView = AnimatedImageView()
                     imageView.clipsToBounds = true
-                    imageView.contentMode = UIViewContentMode.ScaleAspectFit
-                    imageView.userInteractionEnabled = true
+                    imageView.contentMode = UIViewContentMode.scaleAspectFit
+                    imageView.isUserInteractionEnabled = true
                     
                     // Set Image
-                    imageView.sd_setImageWithURL(imageUrl, placeholderImage: nil, options: SDWebImageOptions.HighPriority, completed: { (image, error, cacheType, url) -> Void in
+                    imageView.sd_setImage(with: imageUrl, placeholderImage: nil, options: SDWebImageOptions.highPriority, completed: { (image, error, cacheType, url) -> Void in
                         
                         if error != nil
                         {
                             if let placeholderImage = UIImage(named: "image-placeholder")
                             {
-                                imageView.contentMode = .Center
+                                imageView.contentMode = .center
                                 
                                 imageView.image = placeholderImage
                             }
                         }
                         else
                         {
-                            imageView.contentMode = .ScaleAspectFit
+                            imageView.contentMode = .scaleAspectFit
                         }
                     })
                     
@@ -138,24 +138,24 @@ class ProductPostCell: UICollectionViewCell, UIScrollViewDelegate {
         }
         
         // Layout image view
-        for (index, imageView) in imageViews.enumerate()
+        for (index, imageView) in imageViews.enumerated()
         {
             // Creates image view offset based on index in array
-            imageView.frame = CGRectMake(CGFloat(index) * photoScrollView.bounds.size.width, 0, photoScrollView.bounds.size.width, photoScrollView.bounds.size.height)
+            imageView.frame = CGRect(x: CGFloat(index) * photoScrollView.bounds.size.width, y: 0, width: photoScrollView.bounds.size.width, height: photoScrollView.bounds.size.height)
         }
         
         // Set content size based on number of images
-        photoScrollView.contentSize = CGSizeMake(photoScrollView.bounds.size.width * (CGFloat(imageViews.count)), photoScrollView.bounds.size.height - 1)
+        photoScrollView.contentSize = CGSize(width: photoScrollView.bounds.size.width * (CGFloat(imageViews.count)), height: photoScrollView.bounds.size.height - 1)
         
         updatePageControl()
     }
     
     // MARK : Scroll View Delegate
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updatePageControl()
     }
     
@@ -171,7 +171,7 @@ class ProductPostCell: UICollectionViewCell, UIScrollViewDelegate {
             pageControl.currentPage = Int(pageNumber)
             
             // If only 1 page, hide page control
-            pageControl.hidden = pageControl.numberOfPages == 1 ? true : false
+            pageControl.isHidden = pageControl.numberOfPages == 1 ? true : false
         }
     }
 }

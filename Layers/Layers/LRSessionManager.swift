@@ -23,8 +23,8 @@ let kTokenObject = "kTokenObject"
 
 let productCollectionPageSize = 12
 
-typealias LRCompletionBlock = ((success: Bool, error: String?, response:AnyObject?) -> Void)
-typealias LRJsonCompletionBlock = ((success: Bool, error: String?, response:JSON?) -> Void)
+typealias LRCompletionBlock = ((_ success: Bool, _ error: String?, _ response:Any?) -> Void)
+typealias LRJsonCompletionBlock = ((_ success: Bool, _ error: String?, _ response:JSON?) -> Void)
 
 private let kUserPoolLoginProvider = "kUserPoolLoginProvider"
 
@@ -37,13 +37,13 @@ class LRSessionManager: NSObject
     static let sharedManager: LRSessionManager = LRSessionManager()
     
     // Access the Keychain
-    private let keychain: Keychain = Keychain(service: NSBundle.mainBundle().bundleIdentifier!)
+    fileprivate let keychain: Keychain = Keychain(service: Bundle.main.bundleIdentifier!)
     
     // Intialized in the init method and is never deallocated. It is assumed to always exist
-    var networkManager: Manager!
+    var networkManager: SessionManager!
     
     // Background queue to handle API responses
-    private let backgroundQueue: dispatch_queue_t = dispatch_queue_create("Session Background", DISPATCH_QUEUE_CONCURRENT)
+    fileprivate let backgroundQueue: DispatchQueue = DispatchQueue(label: "Session Background", attributes: DispatchQueue.Attributes.concurrent)
     
     var deviceKey: String?
     
@@ -60,11 +60,11 @@ class LRSessionManager: NSObject
         log.debug("Initializing Session")
         
         //initialize alamofire network manager
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        configuration.HTTPMaximumConnectionsPerHost = 10
+        let configuration = URLSessionConfiguration.default
+        configuration.httpMaximumConnectionsPerHost = 10
         configuration.timeoutIntervalForRequest = 30
         
-        networkManager = Alamofire.Manager(configuration: configuration)
+        networkManager = SessionManager(configuration: configuration)
         
         resumeSession()
     }
@@ -72,30 +72,30 @@ class LRSessionManager: NSObject
     // MARK: First Launch
     func completeFirstLaunch()
     {
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: kUserDidCompleteFirstLaunch)
-        NSUserDefaults.standardUserDefaults().synchronize()
+        UserDefaults.standard.set(true, forKey: kUserDidCompleteFirstLaunch)
+        UserDefaults.standard.synchronize()
     }
     
     func hasCompletedFirstLaunch() -> Bool
     {
-        return NSUserDefaults.standardUserDefaults().boolForKey(kUserDidCompleteFirstLaunch)
+        return UserDefaults.standard.bool(forKey: kUserDidCompleteFirstLaunch)
     }
     
     // MARK: Discover Popup
     func completeDiscoverPopupExperience()
     {
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: kDiscoverPopupShown)
-        NSUserDefaults.standardUserDefaults().synchronize()
+        UserDefaults.standard.set(true, forKey: kDiscoverPopupShown)
+        UserDefaults.standard.synchronize()
     }
     
     func hasSeenDiscoverPopup() -> Bool
     {
-        return NSUserDefaults.standardUserDefaults().boolForKey(kDiscoverPopupShown)
+        return UserDefaults.standard.bool(forKey: kDiscoverPopupShown)
     }
     
     //MARK: Managing Account Credentials
 
-    private func resumeSession()
+    fileprivate func resumeSession()
     {
         restoreCredentials()
     }
@@ -126,18 +126,18 @@ class LRSessionManager: NSObject
         }
     }
     
-    private func restoreCredentials()
+    fileprivate func restoreCredentials()
     {
         log.debug("Restoring Session.")
         
         // Check if tokens and device id exist
-        if let storedTokens = keychain[kTokenObject] where keychain[kDeviceId] != nil
+        if let storedTokens = keychain[kTokenObject] , keychain[kDeviceId] != nil
         {
-            if let storedTokenData = storedTokens.dataUsingEncoding(NSUTF8StringEncoding)
+            if let storedTokenData = storedTokens.data(using: String.Encoding.utf8)
             {
                 if let storedTokenDict = JSON(data: storedTokenData).dictionaryObject
                 {
-                    if let storedToken = Mapper<DeviceTokenResponse>().map(storedTokenDict),
+                    if let storedToken = Mapper<DeviceTokenResponse>().map(JSON: storedTokenDict),
                         let deviceKey = keychain[kDeviceId]
                     {
                         if storedToken.accessToken != nil
@@ -161,7 +161,7 @@ class LRSessionManager: NSObject
         clearCredentials()
     }
     
-    private func saveCredentials()
+    fileprivate func saveCredentials()
     {
         if let tokenObject = tokenObject,
             let deviceKey = deviceKey
@@ -182,7 +182,7 @@ class LRSessionManager: NSObject
         }
     }
 
-    private func clearCredentials()
+    fileprivate func clearCredentials()
     {
         tokenObject = nil
         deviceKey = nil
@@ -202,7 +202,7 @@ class LRSessionManager: NSObject
         })
     }
     
-    func logout(completionHandler: LRCompletionBlock?)
+    func logout(_ completionHandler: LRCompletionBlock?)
     {
         logoutRemotely({ (success, error, response) -> Void in
          
@@ -212,7 +212,7 @@ class LRSessionManager: NSObject
                     
                     if let completion = completionHandler
                     {
-                        completion(success: success, error: error, response: response)
+                        completion(success, error, response)
                     }
                 })
             }
@@ -220,13 +220,13 @@ class LRSessionManager: NSObject
             {
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: "Unable to complete logout.", response: nil)
+                    completion(false, "Unable to complete logout.", nil)
                 }
             }
         })
     }
     
-    func abortSessionAndRegisterNewDevice(completionHandler: LRCompletionBlock?)
+    func abortSessionAndRegisterNewDevice(_ completionHandler: LRCompletionBlock?)
     {
         self.clearCredentials()
         
@@ -240,7 +240,7 @@ class LRSessionManager: NSObject
                     
                     if let completion = completionHandler
                     {
-                        completion(success: true, error: nil, response: response)
+                        completion(true, nil, response)
                     }
                 }
             }
@@ -250,7 +250,7 @@ class LRSessionManager: NSObject
                 
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: error, response: nil)
+                    completion(false, error, nil)
                 }
             }
         })
@@ -262,12 +262,12 @@ class LRSessionManager: NSObject
         self.clearCredentials()
         
         // Return to login screen
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        DispatchQueue.main.async(execute: { () -> Void in
             
             AppStateTransitioner.transitionToLoginStoryboard(true)
         })
         
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
     
     // Determines if the device has registered. Note that this is not the same as creating a fully-authorized account using a login provider. This merely represents notifying the backend that this device exists is allowed to access the API.
@@ -290,16 +290,16 @@ class LRSessionManager: NSObject
     
     // MARK: Authorization
 
-    func registerDevice(completionHandler: LRCompletionBlock?)
+    func registerDevice(_ completionHandler: LRCompletionBlock?)
     {
-        let model = UIDevice.currentDevice().model
+        let model = UIDevice.current.model
         
-        let systemVersion = UIDevice.currentDevice().systemVersion
+        let systemVersion = UIDevice.current.systemVersion
         
-        let timeZone = NSTimeZone.localTimeZone().secondsFromGMT
+        let timeZone = NSTimeZone.local.secondsFromGMT()
      
         // Create unique device id and store it in keychain
-        let uuidString = NSUUID().UUIDString
+        let uuidString = UUID().uuidString
         
         deviceKey = uuidString
         
@@ -308,15 +308,15 @@ class LRSessionManager: NSObject
         let jsonBody = ["device_id":    uuidString,
                         "device_name":  model,
                         "os_version":   systemVersion,
-                        "timezone":     timeZone]
+                        "timezone":     timeZone] as [String : Any]
         
-        sendRequest(self.jsonRequest(APIUrlAtEndpoint("device"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
+        sendRequest(self.jsonRequest(APIUrlAtEndpoint("device"), httpMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
          
             if success
             {
-                if let jsonResponse = response
+                if let jsonDict = response?.dictionaryObject
                 {
-                    if let tokenResponse = Mapper<DeviceTokenResponse>().map(jsonResponse.dictionaryObject)
+                    if let tokenResponse = Mapper<DeviceTokenResponse>().map(JSON: jsonDict)
                     {
                         self.tokenObject = tokenResponse
                         
@@ -324,7 +324,7 @@ class LRSessionManager: NSObject
                         
                         if let completion = completionHandler
                         {
-                            completion(success: true, error: nil, response: tokenResponse)
+                            completion(true, nil, tokenResponse)
                             
                             return
                         }
@@ -334,7 +334,7 @@ class LRSessionManager: NSObject
                 // Invalid Response
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: "Invalid token response.", response: nil)
+                    completion(false, "Invalid token response.", nil)
                 }
             }
             else
@@ -348,28 +348,28 @@ class LRSessionManager: NSObject
                 
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: error, response: nil)
+                    completion(false, error, nil)
                 }
             }
         })
     }
     
-    func registerWithEmail(email: String, password: String, firstName: String, lastName: String, gender: String, age: NSNumber, completionHandler: LRCompletionBlock?)
+    func registerWithEmail(_ email: String, password: String, firstName: String, lastName: String, gender: String, age: NSNumber, completionHandler: LRCompletionBlock?)
     {
         let jsonBody = ["email": email,
                         "password": password,
                         "first_name": firstName,
                         "last_name": lastName,
                         "gender": gender,
-                        "age": age]
+                        "age": age] as [String : Any]
         
-        sendRequest(self.jsonRequest(APIUrlAtEndpoint("user"), HTTPMethod: "PUT", json: jsonBody), authorization: true, completion: { (success, error, response) -> Void in
+        sendRequest(self.jsonRequest(APIUrlAtEndpoint("user"), httpMethod: "PUT", json: jsonBody), authorization: true, completion: { (success, error, response) -> Void in
          
             if success
             {
-                if let jsonResponse = response
+                if let jsonDict = response?.dictionaryObject
                 {
-                    if let tokenResponse = Mapper<DeviceTokenResponse>().map(jsonResponse.dictionaryObject)
+                    if let tokenResponse = Mapper<DeviceTokenResponse>().map(JSON: jsonDict)
                     {
                         self.tokenObject = tokenResponse
                         
@@ -377,7 +377,7 @@ class LRSessionManager: NSObject
                         
                         if let completion = completionHandler
                         {
-                            completion(success: true, error: nil, response: tokenResponse)
+                            completion(true, nil, tokenResponse)
                             
                             return
                         }
@@ -387,44 +387,44 @@ class LRSessionManager: NSObject
                 // Invalid Response
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: "Invalid token response.", response: nil)
+                    completion(false, "Invalid token response.", nil)
                 }
             }
             else
             {
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: error, response: nil)
+                    completion(false, error, nil)
                 }
             }
         })
     }
     
-    func registerWithFacebook(email: String, firstName: String?, lastName: String?, gender: String?, age: NSNumber?, completionHandler: LRCompletionBlock?)
+    func registerWithFacebook(_ email: String, firstName: String?, lastName: String?, gender: String?, age: NSNumber?, completionHandler: LRCompletionBlock?)
     {
-        if let facebookToken = FBSDKAccessToken.currentAccessToken().tokenString
+        if let facebookToken = FBSDKAccessToken.current().tokenString
         {
             var jsonBody: Dictionary<String,AnyObject> = [
-                "facebook_token":   facebookToken,
-                "email":            email]
+                "facebook_token":   facebookToken as AnyObject,
+                "email":            email as AnyObject]
             
-            if firstName != nil { jsonBody["first_name"] = firstName }
+            if firstName != nil { jsonBody["first_name"] = firstName as AnyObject? }
             
-            if lastName != nil { jsonBody["last_name"] = lastName }
+            if lastName != nil { jsonBody["last_name"] = lastName as AnyObject? }
             
-            if gender != nil { jsonBody["gender"] = gender }
+            if gender != nil { jsonBody["gender"] = gender as AnyObject? }
             
             if age != nil { jsonBody["age"] = age }
             
             let httpBody = jsonBody
             
-            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user"), HTTPMethod: "PUT", json: httpBody), authorization: true, completion: { (success, error, response) -> Void in
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user"), httpMethod: "PUT", json: httpBody), authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
-                    if let jsonResponse = response
+                    if let jsonDict = response?.dictionaryObject
                     {
-                        if let tokenResponse = Mapper<DeviceTokenResponse>().map(jsonResponse.dictionaryObject)
+                        if let tokenResponse = Mapper<DeviceTokenResponse>().map(JSON: jsonDict)
                         {
                             self.tokenObject = tokenResponse
                             
@@ -432,7 +432,7 @@ class LRSessionManager: NSObject
                             
                             if let completion = completionHandler
                             {
-                                completion(success: true, error: nil, response: tokenResponse)
+                                completion(true, nil, tokenResponse)
                                 
                                 return
                             }
@@ -442,14 +442,14 @@ class LRSessionManager: NSObject
                     // Invalid Response
                     if let completion = completionHandler
                     {
-                        completion(success: false, error: "Invalid token response.", response: nil)
+                        completion(false, "Invalid token response.", nil)
                     }
                 }
                 else
                 {
                     if let completion = completionHandler
                     {
-                        completion(success: false, error: error, response: nil)
+                        completion(false, error, nil)
                     }
                 }
             })
@@ -458,12 +458,12 @@ class LRSessionManager: NSObject
         {
             if let completion = completionHandler
             {
-                completion(success: false, error: "Invalid Facebook Token.", response: nil)
+                completion(false, "Invalid Facebook Token.", nil)
             }
         }
     }
     
-    func loginWithEmail(email: String, password: String, completionHandler: LRCompletionBlock?)
+    func loginWithEmail(_ email: String, password: String, completionHandler: LRCompletionBlock?)
     {
         if let deviceId = deviceKey
         {
@@ -471,13 +471,13 @@ class LRSessionManager: NSObject
                             "password": password,
                             "device_id": deviceId]
             
-            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user/session"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user/session"), httpMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
-                    if let jsonResponse = response
+                    if let jsonDict = response?.dictionaryObject
                     {
-                        if let tokenResponse = Mapper<DeviceTokenResponse>().map(jsonResponse.dictionaryObject)
+                        if let tokenResponse = Mapper<DeviceTokenResponse>().map(JSON: jsonDict)
                         {
                             log.debug("User logged in with email.")
                             
@@ -487,7 +487,7 @@ class LRSessionManager: NSObject
                             
                             if let completion = completionHandler
                             {
-                                completion(success: true, error: nil, response: tokenResponse)
+                                completion(true, nil, tokenResponse)
                                 
                                 return
                             }
@@ -497,35 +497,35 @@ class LRSessionManager: NSObject
                     // Invalid Response
                     if let completion = completionHandler
                     {
-                        completion(success: false, error: "Invalid token response.", response: nil)
+                        completion(false, "Invalid token response.", nil)
                     }
                 }
                 else
                 {
                     if let completion = completionHandler
                     {
-                        completion(success: false, error: error, response: nil)
+                        completion(false, error, nil)
                     }
                 }
             })
         }
     }
 
-    func loginWithFacebook(completionHandler: LRCompletionBlock?)
+    func loginWithFacebook(_ completionHandler: LRCompletionBlock?)
     {
-        if let facebookToken = FBSDKAccessToken.currentAccessToken().tokenString,
+        if let facebookToken = FBSDKAccessToken.current().tokenString,
             let deviceId = deviceKey
         {
             let jsonBody = ["facebook_token": facebookToken,
                             "device_id": deviceId]
 
-            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user/session"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user/session"), httpMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
-                    if let jsonResponse = response
+                    if let jsonDict = response?.dictionaryObject
                     {
-                        if let tokenResponse = Mapper<DeviceTokenResponse>().map(jsonResponse.dictionaryObject)
+                        if let tokenResponse = Mapper<DeviceTokenResponse>().map(JSON: jsonDict)
                         {
                             log.debug("User logged in with Facebook.")
                             
@@ -535,7 +535,7 @@ class LRSessionManager: NSObject
                             
                             if let completion = completionHandler
                             {
-                                completion(success: true, error: nil, response: tokenResponse)
+                                completion(true, nil, tokenResponse)
                                 
                                 return
                             }
@@ -545,14 +545,14 @@ class LRSessionManager: NSObject
                     // Invalid Response
                     if let completion = completionHandler
                     {
-                        completion(success: false, error: "Invalid token response.", response: nil)
+                        completion(false, "Invalid token response.", nil)
                     }
                 }
                 else
                 {
                     if let completion = completionHandler
                     {
-                        completion(success: false, error: error, response: nil)
+                        completion(false, error, nil)
                     }
                 }
             })
@@ -561,24 +561,24 @@ class LRSessionManager: NSObject
         {
             if let completion = completionHandler
             {
-                completion(success: false, error: "Invalid Facebook Token.", response: nil)
+                completion(false, "Invalid Facebook Token.", nil)
             }
         }
     }
     
-    func refreshToken(completionHandler: LRJsonCompletionBlock?)
+    func refreshToken(_ completionHandler: LRJsonCompletionBlock?)
     {
         if let currentRefreshToken = tokenObject?.refreshToken
         {
             let jsonBody = ["refresh_token": currentRefreshToken]
             
-            sendRequest(self.jsonRequest(APIUrlAtEndpoint("device/refresh"), HTTPMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("device/refresh"), httpMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
              
                 if success
                 {
-                    if let jsonResponse = response
+                    if let jsonDict = response?.dictionaryObject
                     {
-                        if let tokenResponse = Mapper<DeviceTokenResponse>().map(jsonResponse.dictionaryObject)
+                        if let tokenResponse = Mapper<DeviceTokenResponse>().map(JSON: jsonDict)
                         {
                             self.tokenObject = tokenResponse
                             
@@ -590,7 +590,7 @@ class LRSessionManager: NSObject
                     
                     if let completion = completionHandler
                     {
-                        completion(success: true, error: nil, response: response)
+                        completion(true, nil, response)
                     }
                 }
                 else
@@ -600,10 +600,10 @@ class LRSessionManager: NSObject
                     // If refresh token is invalid, clear credential cache and return to login screen
                     self.clearCredentials()
                     
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async {
                         
                         AppStateTransitioner.transitionToLoginStoryboard(true)
-                    })
+                    }
                 }
             })
         }
@@ -612,7 +612,7 @@ class LRSessionManager: NSObject
             // If refresh token is invalid, clear credential cache and return to login screen
             self.abortSessionAndRegisterNewDevice({ (success, error, response) -> Void in
                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     
                     AppStateTransitioner.transitionToLoginStoryboard(true)
                 })
@@ -620,14 +620,14 @@ class LRSessionManager: NSObject
             
             if let completion = completionHandler
             {
-                completion(success: false, error: "User cannot retreive a new refresh token because the current refresh token does not exist.", response: nil)
+                completion(false, "User cannot retreive a new refresh token because the current refresh token does not exist.", nil)
             }
         }
     }
     
-    func logoutRemotely(completionHandler: LRJsonCompletionBlock?)
+    func logoutRemotely(_ completionHandler: LRJsonCompletionBlock?)
     {
-        sendRequest(self.jsonRequest(APIUrlAtEndpoint("device/logout"), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
+        sendRequest(self.jsonRequest(APIUrlAtEndpoint("device/logout"), httpMethod: "POST", json: [:]), authorization: true, completion: { (success, error, response) -> Void in
          
             if success
             {
@@ -635,129 +635,74 @@ class LRSessionManager: NSObject
                 
                 if let completion = completionHandler
                 {
-                    completion(success: true, error: nil, response: response)
+                    completion(true, nil, response)
                 }
             }
             else
             {
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: nil, response: nil)
+                    completion(false, nil, nil)
                 }
             }
         })
     }
         
-    func fetchFacebookUserInfo(completion: LRCompletionBlock?)
+    func fetchFacebookUserInfo(_ completion: LRCompletionBlock?)
     {
         // The currentAccessToken() should be retrieved from Facebook in the View Controller that the login dialogue is shown from.
-        if (FBSDKAccessToken.currentAccessToken() != nil)
+        if (FBSDKAccessToken.current() != nil)
         {
             // Get user information with Facebook Graph API
-            let request = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, age_range, link, gender, locale, picture, timezone, updated_time, verified, friends, email"], HTTPMethod: "GET")
-            
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
-                request.startWithCompletionHandler({(connection:FBSDKGraphRequestConnection!, result: AnyObject!, error: NSError!) -> Void in
+            if var request = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, age_range, link, gender, locale, picture, timezone, updated_time, verified, friends, email"], httpMethod: "GET")
+            {
+                DispatchQueue.main.async(execute: { () -> Void in
                     
-                    if error == nil
-                    {
-                        if let response = Mapper<FacebookUserResponse>().map(JSON(result).dictionaryObject)
+                    request.start(completionHandler: {(connection:FBSDKGraphRequestConnection?, result: Any?, error: Error?) in
+                        
+                        if error == nil
                         {
-                            if let gender = response.gender
+                            if let jsonDict = JSON(result).dictionaryObject
                             {
-                                // If gender exists but is not male or female
-                                if gender.characters.count > 0 && gender.lowercaseString != "male" && gender.lowercaseString != "female"
+                                if let response = Mapper<FacebookUserResponse>().map(JSON: jsonDict)
                                 {
-                                    response.gender = "other specific"
+                                    if let gender = response.gender
+                                    {
+                                        // If gender exists but is not male or female
+                                        if gender.characters.count > 0 && gender.lowercased() != "male" && gender.lowercased() != "female"
+                                        {
+                                            response.gender = "other specific"
+                                        }
+                                    }
+                                    
+                                    if let completionBlock = completion
+                                    {
+                                        completionBlock(true, nil, response)
+                                    }
                                 }
                             }
-                            
-                            if let completionBlock = completion
+                            else
                             {
-                                completionBlock(success: true, error: nil, response: response)
+                                if let completionBlock = completion
+                                {
+                                    completionBlock(true, "fetchFacebookUserInfo: Invalid JSON response.", nil)
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        if let completionBlock = completion
+                        else
                         {
-                            completionBlock(success: true, error: error.localizedDescription, response: nil)
+                            if let completionBlock = completion
+                            {
+                                completionBlock(true, error?.localizedDescription, nil)
+                            }
                         }
-                    }
+                    })
                 })
-            })
+            }
         }
     }
     
     // MARK: Push Notifications
-    func registerForPushNotifications(deviceToken: NSData?, completionHandler: LRCompletionBlock?)
-    {        
-        AWSManager.defaultManager.registerWithSNS(deviceToken, completionHandler: { (success, error, response) -> Void in
-            
-            if success
-            {
-                if let endpointARN = response as? String
-                {
-                    self.registerDeviceEndpoint(endpointARN, completionHandler: { (success, error, response) -> Void in
-                     
-                        if let completion = completionHandler
-                        {
-                            completion(success: success, error: error, response: response)
-                        }
-                    })
-                }
-                else
-                {
-                    if let completion = completionHandler
-                    {
-                        completion(success: false, error: "Invalid Endpoint ARN returned from SNS.", response: nil)
-                    }
-                }
-            }
-            else
-            {
-                if let completion = completionHandler
-                {
-                    completion(success: success, error: error, response: response)
-                }
-            }
-        })
-    }
-    
-    private func registerDeviceEndpoint(deviceEndpointARN: String, completionHandler: LRCompletionBlock?)
-    {
-        let jsonBody = ["sns_endpoint": deviceEndpointARN]
-        
-        sendRequest(self.jsonRequest(APIUrlAtEndpoint("device"), HTTPMethod: "PUT", json: jsonBody), authorization: true, completion: { (success, error, response) -> Void in
-         
-            if success
-            {
-                if let dictionaryResponse = response?.dictionaryObject
-                {
-                    if let completion = completionHandler
-                    {
-                        completion(success: success, error: error, response: dictionaryResponse)
-                    }
-                }
-                else
-                {
-                    if let completion = completionHandler
-                    {
-                        completion(success: false, error: "SNS Registration returned invalid response.", response: nil)
-                    }
-                }
-            }
-            else
-            {
-                if let completion = completionHandler
-                {
-                    completion(success: false, error: nil, response: nil)
-                }
-            }
-        })
-    }
     
     func registerForRemoteNotificationsIfNeeded()
     {
@@ -767,30 +712,30 @@ class LRSessionManager: NSObject
             let readAction: UIMutableUserNotificationAction = UIMutableUserNotificationAction()
             readAction.identifier = "READ_IDENTIFIER"
             readAction.title = "Read"
-            readAction.activationMode = .Foreground
-            readAction.destructive = false
-            readAction.authenticationRequired = true
+            readAction.activationMode = .foreground
+            readAction.isDestructive = false
+            readAction.isAuthenticationRequired = true
             
             let messageCategory = UIMutableUserNotificationCategory()
             messageCategory.identifier = "MESSAGE_CATEGORY"
-            messageCategory.setActions([readAction], forContext: .Default)
-            messageCategory.setActions([readAction], forContext: .Minimal)
+            messageCategory.setActions([readAction], for: .default)
+            messageCategory.setActions([readAction], for: .minimal)
             
             let categories: Set<UIUserNotificationCategory> = NSSet(object: messageCategory) as! Set<UIUserNotificationCategory>
             
-            let settings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [.Badge, .Sound, .Alert], categories: categories)
+            let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: categories)
             
-            UIApplication.sharedApplication().registerForRemoteNotifications()
-            UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+            UIApplication.shared.registerForRemoteNotifications()
+            UIApplication.shared.registerUserNotificationSettings(settings)
         }
     }
 
     func userHasEnabledNotifications() -> Bool
     {
-        if let grantedSettings: UIUserNotificationSettings = UIApplication.sharedApplication().currentUserNotificationSettings()
+        if let grantedSettings: UIUserNotificationSettings = UIApplication.shared.currentUserNotificationSettings
         {
             // Check if no permission have been granted
-            if grantedSettings.types == [.Badge, .Sound, .Alert]
+            if grantedSettings.types == [.badge, .sound, .alert]
             {
                 return true
             }
@@ -800,11 +745,11 @@ class LRSessionManager: NSObject
     }
     
     // MARK: Fetching Server Data
-    func loadDiscoverProducts(completionHandler: LRCompletionBlock?)
+    func loadDiscoverProducts(_ completionHandler: LRCompletionBlock?)
     {
-        let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/531614790"))
+        var request = URLRequest(url: APIUrlAtEndpoint("products/531614790"))
         
-        request.HTTPMethod = "GET"
+        request.httpMethod = "GET"
         
         sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
@@ -812,17 +757,20 @@ class LRSessionManager: NSObject
             {
                 if let jsonResponse = response
                 {
-                    var products = Mapper<Product>().mapArray(jsonResponse.arrayObject)
-                    
-                    // Incomplete Product Patch
-                    if products != nil
+                    if let array = jsonResponse.arrayObject as? [[String:Any]]
                     {
-                        products = products?.filter({ $0.isValid() })
-                    }
-                    
-                    if let completion = completionHandler
-                    {
-                        completion(success: success, error: error, response: products)
+                        var products = Mapper<Product>().mapArray(JSONArray: array)
+                        
+                        // Incomplete Product Patch
+                        if products != nil
+                        {
+                            products = products?.filter({ $0.isValid() })
+                        }
+                        
+                        if let completion = completionHandler
+                        {
+                            completion(success, error, products)
+                        }
                     }
                 }
             }
@@ -830,38 +778,38 @@ class LRSessionManager: NSObject
             {
                 if let completion = completionHandler
                 {
-                    completion(success: success, error: error, response: nil)
+                    completion(success, error, nil)
                 }
             }
         })
     }
     
-    func loadProduct(productId: NSNumber?, completionHandler: LRCompletionBlock?)
+    func loadProduct(_ productId: NSNumber?, completionHandler: LRCompletionBlock?)
     {
         if let productId = productId
         {
-            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint("products/\(productId.stringValue)"))
+            var request = URLRequest(url: APIUrlAtEndpoint("products/\(productId.stringValue)"))
             
-            request.HTTPMethod = "GET"
+            request.httpMethod = "GET"
             
             sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
-                    if let jsonResponse = response
+                    if let jsonResponse = response?.arrayObject?[safe: 0] as? [String:Any]
                     {
-                        if let product = Mapper<Product>().map(jsonResponse.arrayObject?[safe: 0])
+                        if let product = Mapper<Product>().map(JSON: jsonResponse)
                         {
                             if let completion = completionHandler
                             {
-                                completion(success: success, error: error, response: product)
+                                completion(success, error, product)
                             }
                         }
                         else
                         {
                             if let completion = completionHandler
                             {
-                                completion(success: success, error: "loadProduct JSON Parsing Error.", response: nil)
+                                completion(success, "loadProduct JSON Parsing Error.", nil)
                             }
                         }
                     }
@@ -870,7 +818,7 @@ class LRSessionManager: NSObject
                 {
                     if let completion = completionHandler
                     {
-                        completion(success: success, error: error, response: nil)
+                        completion(success, error, nil)
                     }
                 }
             })
@@ -879,9 +827,9 @@ class LRSessionManager: NSObject
         {
             if let completion = completionHandler
             {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     
-                    completion(success: false, error: "NO_PRODUCT_ID".localized, response: nil)
+                    completion(false, "NO_PRODUCT_ID".localized, nil)
                 })
             }
             
@@ -890,7 +838,7 @@ class LRSessionManager: NSObject
     }
     
     
-    func loadProductCollection(page: Int, completionHandler: LRCompletionBlock?)
+    func loadProductCollection(_ page: Int, completionHandler: LRCompletionBlock?)
     {
         if page >= 0
         {
@@ -900,31 +848,34 @@ class LRSessionManager: NSObject
             {
                 let paramsString = FilterManager.defaultManager.filterParamsAsString()
                 
-                requestString = requestString.stringByAppendingString("&\(paramsString)")
+                requestString = requestString + "&\(paramsString)"
             }
             
-            sendRequest(self.jsonRequest(APIUrlAtEndpoint(requestString), HTTPMethod: "POST", json: []), authorization: true, completion: { (success, error, response) -> Void in
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint(requestString), httpMethod: "POST", json: [:]), authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {
                     if let jsonResponse = response
                     {
-                        if let results = jsonResponse.dictionaryObject?["results"] as? Dictionary<String, AnyObject>
+                        if let results = jsonResponse.dictionaryObject?["results"] as? Dictionary<String,Any>
                         {
-                            if let products = Mapper<Product>().mapArray(results["products"])
+                            if let array = results["products"] as? [[String:Any]]
                             {
-                                if let completion = completionHandler
+                                if let products = Mapper<Product>().mapArray(JSONArray: array)
                                 {
-                                    completion(success: success, error: error, response: products)
-                                    
-                                    return
+                                    if let completion = completionHandler
+                                    {
+                                        completion(success, error, products)
+                                        
+                                        return
+                                    }
                                 }
                             }
                         }
                         
                         if let completion = completionHandler
                         {
-                            completion(success: false, error: "Error parsing JSON.", response: nil)
+                            completion(false, "Error parsing JSON.", nil)
                         }
                     }
                 }
@@ -932,7 +883,7 @@ class LRSessionManager: NSObject
                 {
                     if let completion = completionHandler
                     {
-                        completion(success: success, error: error, response: nil)
+                        completion(success, error, nil)
                     }
                 }
             })
@@ -941,32 +892,40 @@ class LRSessionManager: NSObject
         {
             if let completion = completionHandler
             {
-                completion(success: false, error: "INVALID_PARAMETERS".localized, response: nil)
+                completion(false, "INVALID_PARAMETERS".localized, nil)
             }
         }
     }
     
     // MARK: Filtering
     
-    func loadCategories(completionHandler: LRCompletionBlock?)
+    func loadCategories(_ completionHandler: LRCompletionBlock?)
     {
-        let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("categories"))
+        var request = URLRequest(url: APIUrlAtEndpoint("categories"))
         
-        request.HTTPMethod = "GET"
+        request.httpMethod = "GET"
         
         sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
-                if let jsonResponse = response
+                if let jsonArray = response?.arrayObject as? [[String:Any]]
                 {
-                    let categories = Mapper<Category>().mapArray(jsonResponse.arrayObject)
+                    let categories = Mapper<Category>().mapArray(JSONArray: jsonArray)
                     
-                    let sortedCategories = categories?.sort{ $0.name < $1.name }
+                    let sortedCategories = categories?.sorted {
+                        
+                        if let name1 = $0.name, let name2 = $1.name
+                        {
+                            return name1 < name2
+                        }
+                        
+                        return false
+                    }
                     
                     if let completion = completionHandler
                     {
-                        completion(success: true, error: error, response: sortedCategories)
+                        completion(true, error, sortedCategories)
                     }
                 }
             }
@@ -974,17 +933,17 @@ class LRSessionManager: NSObject
             {
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: error, response: nil)
+                    completion(false, error, nil)
                 }
             }
         })
     }
     
-    func loadBrands(completionHandler: LRCompletionBlock?)
+    func loadBrands(_ completionHandler: LRCompletionBlock?)
     {
-        let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("brands"))
+        var request = URLRequest(url: APIUrlAtEndpoint("brands"))
         
-        request.HTTPMethod = "GET"
+        request.httpMethod = "GET"
         
         sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
@@ -992,15 +951,15 @@ class LRSessionManager: NSObject
             {
                 if let jsonResponse = response
                 {
-                    if let brandArray = jsonResponse.dictionaryObject?["brands"]
+                    if let brandArray = jsonResponse.dictionaryObject?["brands"] as? [[String:Any]]
                     {
-                        let brands = Mapper<Brand>().mapArray(brandArray)
+                        let brands = Mapper<Brand>().mapArray(JSONArray: brandArray)
                         
 //                        let sortedBrands = brands?.sort{ $0.name < $1.name }
                         
                         if let completion = completionHandler
                         {
-                            completion(success: true, error: error, response: brands)
+                            completion(true, error, brands)
                             
                             return
                         }
@@ -1009,38 +968,46 @@ class LRSessionManager: NSObject
                 
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: "Error parsing brands.", response: nil)
+                    completion(false, "Error parsing brands.", nil)
                 }
             }
             else
             {
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: error, response: nil)
+                    completion(false, error, nil)
                 }
             }
         })
     }
     
-    func loadRetailers(completionHandler: LRCompletionBlock?)
+    func loadRetailers(_ completionHandler: LRCompletionBlock?)
     {
-        let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("retailers"))
+        var request = URLRequest(url: APIUrlAtEndpoint("retailers"))
         
-        request.HTTPMethod = "GET"
+        request.httpMethod = "GET"
         
         sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
-                if let jsonResponse = response
+                if let jsonArray = response?.arrayObject as? Array<[String:Any]>
                 {
-                    let retailers = Mapper<Retailer>().mapArray(jsonResponse.arrayObject)
+                    let retailers = Mapper<Retailer>().mapArray(JSONArray: jsonArray)
                     
-                    let sortedRetailers = retailers?.sort{ $0.name < $1.name }
+                    let sortedRetailers = retailers?.sorted {
+                        
+                        if let name1 = $0.name, let name2 = $1.name
+                        {
+                            return name1 < name2
+                        }
+                        
+                        return false
+                    }
                     
                     if let completion = completionHandler
                     {
-                            completion(success: true, error: error, response: sortedRetailers)
+                            completion(true, error, sortedRetailers)
                     }
                 }
             }
@@ -1048,31 +1015,39 @@ class LRSessionManager: NSObject
             {
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: error, response: nil)
+                    completion(false, error, nil)
                 }
             }
         })
     }
     
-    func loadColors(completionHandler: LRCompletionBlock?)
+    func loadColors(_ completionHandler: LRCompletionBlock?)
     {
-        let request = NSMutableURLRequest(URL: APIUrlAtEndpoint("colors"))
+        var request = URLRequest(url: APIUrlAtEndpoint("colors"))
         
-        request.HTTPMethod = "GET"
+        request.httpMethod = "GET"
         
         sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
             
             if success
             {
-                if let jsonResponse = response
+                if let jsonArray = response?.arrayObject as? [[String:Any]]
                 {
-                    let colors = Mapper<ColorObject>().mapArray(jsonResponse.arrayObject)
+                    let colors = Mapper<ColorObject>().mapArray(JSONArray: jsonArray)
                     
-                    let sortedColors = colors?.sort{ $0.name < $1.name }
+                    let sortedColors = colors?.sorted {
+                        
+                        if let name1 = $0.name, let name2 = $1.name
+                        {
+                            return name1 < name2
+                        }
+                        
+                        return false
+                    }
                     
                     if let completion = completionHandler
                     {
-                        completion(success: true, error: error, response: sortedColors)
+                        completion(true, error, sortedColors)
                     }
                 }
             }
@@ -1080,27 +1055,27 @@ class LRSessionManager: NSObject
             {
                 if let completion = completionHandler
                 {
-                    completion(success: false, error: error, response: nil)
+                    completion(false, error, nil)
                 }
             }
         })
     }
     
     // MARK: Search
-    func search(query: String, completionHandler: LRCompletionBlock?)
+    func search(_ query: String, completionHandler: LRCompletionBlock?)
     {
         if query.characters.count > 0
         {
             let pageSize = 5
             
             // Encode string to url format
-            let queryString = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+            let queryString = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
             
             let requestString = "search?&q=\(queryString)&per_page=\(pageSize)"
             
-            let request: NSMutableURLRequest = NSMutableURLRequest(URL: APIUrlAtEndpoint(requestString))
+            var request = URLRequest(url: APIUrlAtEndpoint(requestString))
             
-            request.HTTPMethod = "GET"
+            request.httpMethod = "GET"
             
             sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
                 
@@ -1110,7 +1085,7 @@ class LRSessionManager: NSObject
                     {
                         if let results = jsonResponse.dictionaryObject?["results"] as? Dictionary<String, AnyObject>
                         {
-                            let searchResults = Mapper<SearchResults>().map(results)
+                            let searchResults = Mapper<SearchResults>().map(JSON: results)
                             
                             var compiledResults = NSMutableArray()
                             
@@ -1118,7 +1093,7 @@ class LRSessionManager: NSObject
                             {
                                 if let firstBrand = brandResults[safe: 0]
                                 {
-                                    compiledResults.addObject(firstBrand)
+                                    compiledResults.add(firstBrand)
                                 }
                             }
                             
@@ -1126,18 +1101,18 @@ class LRSessionManager: NSObject
                             {
                                 if let firstCategory = categoryResults[safe: 0]
                                 {
-                                    compiledResults.addObject(firstCategory)
+                                    compiledResults.add(firstCategory)
                                 }
                             }
                             
                             if let productResults = searchResults?.products
                             {
-                                compiledResults.addObjectsFromArray(productResults)
+                                compiledResults.addObjects(from: productResults)
                             }
                             
                             if let completion = completionHandler
                             {
-                                completion(success: success, error: error, response: compiledResults)
+                                completion(success, error, compiledResults)
                                 
                                 return
                             }
@@ -1147,14 +1122,14 @@ class LRSessionManager: NSObject
                     // No results or Error
                     if let completion = completionHandler
                     {
-                        completion(success: true, error: "No results.", response: nil)
+                        completion(true, "No results.", nil)
                     }
                 }
                 else
                 {
                     if let completion = completionHandler
                     {
-                        completion(success: success, error: error, response: nil)
+                        completion(success, error, nil)
                     }
                 }
             })
@@ -1163,54 +1138,54 @@ class LRSessionManager: NSObject
         {
             if let completion = completionHandler
             {
-                completion(success: false, error: "INVALID_PARAMETERS".localized, response: nil)
+                completion(false, "INVALID_PARAMETERS".localized, nil)
             }
         }
     }
     
     // MARK: Contact
-    func submitContactForm(email: String, content: String, completionHandler: LRJsonCompletionBlock?)
+    func submitContactForm(_ email: String, content: String, completionHandler: LRJsonCompletionBlock?)
     {
         let jsonBody = ["email": email,
                         "content": content,
                         "subject": "iOS Contact Form"
-        ]
+        ] as [String:Any]
         
-        sendRequest(self.jsonRequest(APIUrlAtEndpoint("contact"), HTTPMethod: "POST", json: jsonBody), authorization: true, completion: { (success, error, response) -> Void in
+        sendRequest(self.jsonRequest(APIUrlAtEndpoint("contact"), httpMethod: "POST", json: jsonBody), authorization: true, completion: { (success, error, response) -> Void in
             
             if let completion = completionHandler
             {
-                completion(success: success, error: error, response: response)
+                completion(success, error, response)
             }
         })
     }
         
     // MARK: API Helpers
-    func APIUrlAtEndpoint(endpointPath: String?) -> NSURL
+    func APIUrlAtEndpoint(_ endpointPath: String?) -> URL
     {
         if let path = endpointPath
         {
-            return NSURL(string: kLRAPIBase.stringByAppendingString(path))!
+            return URL(string: kLRAPIBase + path)!
         }
         
-        return NSURL()
+        return URL(string: "")! // Make sure this does not fail
     }
     
     /**
     Create a JSON Request with HTTP Method and Body
     */
-    private func jsonRequest(url: NSURL, HTTPMethod: String, json: AnyObject) -> NSMutableURLRequest
+    fileprivate func jsonRequest(_ url: URL, httpMethod: String, json: [String:Any]) -> URLRequest
     {
         let jsonObject = JSON(json)
         
-        let request = NSMutableURLRequest(URL: url)
+        var request = URLRequest(url: url)
         
-        request.HTTPMethod = HTTPMethod
+        request.httpMethod = httpMethod
         
-        let options = NSJSONWritingOptions(rawValue: 0)
+        let options = JSONSerialization.WritingOptions(rawValue: 0)
         
         do {
-            try request.HTTPBody = jsonObject.rawData(options: options)
+            try request.httpBody = jsonObject.rawData(options: options)
         } catch {
             log.verbose("Failed to assign HTTP Body to request.")
         }
@@ -1223,9 +1198,9 @@ class LRSessionManager: NSObject
  
     This function calls the completion block on the method it was called on. You are responsible for calling completion blocks on the main thread.
     */
-    private func sendRequest(request: NSURLRequest, authorization: Bool, completion: LRJsonCompletionBlock?)
+    fileprivate func sendRequest(_ request: URLRequest?, authorization: Bool, completion: LRJsonCompletionBlock?)
     {
-        if let networkRequest = request.mutableCopy() as? NSMutableURLRequest
+        if var networkRequest = request
         {
             if authorization
             {
@@ -1235,11 +1210,11 @@ class LRSessionManager: NSObject
                 }
             }
             
-            performNetworkRequest(request, networkRequest: networkRequest, completionHandler: { (success, error, response) -> Void in
+            performNetworkRequest(networkRequest, completionHandler: { (success, error, response) -> Void in
                 
                 if let completion = completion
                 {
-                    completion(success: success, error: error, response: response)
+                    completion(success, error, response)
                 }
             })
         }
@@ -1247,29 +1222,29 @@ class LRSessionManager: NSObject
         {
             if let completionHandler = completion
             {
-                completionHandler(success: false, error: "The URL request made by the client is malformed.", response: nil)
+                completionHandler(false, "The URL request made by the client is malformed.", nil)
             }
         }
     }
     
-    func performNetworkRequest(initialRequest: NSURLRequest, networkRequest: NSMutableURLRequest, completionHandler: LRJsonCompletionBlock?)
+    func performNetworkRequest(_ networkRequest: URLRequest, completionHandler: LRJsonCompletionBlock?)
     {
-        let newRequest = networkRequest
+        var newRequest = networkRequest
         
         newRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         newRequest.setValue("close", forHTTPHeaderField: "Connection")
         
-        let startTime = NSDate().timeIntervalSince1970
+        let startTime = Date().timeIntervalSince1970
         
         networkManager.request(newRequest)
             .validate(contentType: ["application/json"])
-            .responseString(encoding: NSUTF8StringEncoding) { (response: Response<String, NSError>) -> Void in
+            .responseString(encoding: String.Encoding.utf8) { (response: DataResponse<String>) -> Void in
                 
                 //Process responses in a queue
-                dispatch_async(self.backgroundQueue, { () -> Void in
-                    
-                    let requestUrlString = initialRequest.URL?.absoluteString
+                self.backgroundQueue.async
+                {
+                    let requestUrlString = newRequest.url?.absoluteString
                     let requestTimestamp = NSDate().timeIntervalSince1970 - startTime
                     
                     let milliseconds = Int(round(requestTimestamp * 1000))
@@ -1279,10 +1254,10 @@ class LRSessionManager: NSObject
                     
                     log.verbose("Request: \(requestUrlString!) returned status of \(statusCode!) in: \(milliseconds) ms")
                     
-                    if let data = response.result.value?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+                    if let data = response.result.value?.data(using: String.Encoding.utf8, allowLossyConversion: true)
                     {
                         var jsonError: NSError?
-                        let jsonObject = JSON(data: data, options: .AllowFragments, error: &jsonError)
+                        let jsonObject = JSON(data: data, options: .allowFragments, error: &jsonError)
                         
                         // Check if json error exists. If so, valid data cannot be extracted, so the error must be returned.
                         if let jsonParsingError = jsonError
@@ -1291,7 +1266,7 @@ class LRSessionManager: NSObject
                             {
                                 log.error("Networking Error: ", jsonParsingError.localizedDescription)
                                 
-                                completion(success: false, error: jsonParsingError.localizedDescription, response: nil)
+                                completion(false, jsonParsingError.localizedDescription, nil)
                             }
                             
                             // A JSON error occured so the method returns after passing the error back through the completion block
@@ -1313,11 +1288,11 @@ class LRSessionManager: NSObject
                                         if success
                                         {
                                             // After refreshing token, perform this request again
-                                            self.sendRequest(initialRequest, authorization: true, completion: { (success, error, response) -> Void in
+                                            self.sendRequest(networkRequest, authorization: true, completion: { (success, error, response) -> Void in
                                              
                                                 if let completion = completionHandler
                                                 {
-                                                    completion(success: success, error: error, response: response)
+                                                    completion(success, error, response)
                                                 }
                                             })
                                         }
@@ -1325,7 +1300,7 @@ class LRSessionManager: NSObject
                                         {
                                             if let completion = completionHandler
                                             {
-                                                completion(success: false, error: error, response: nil)
+                                                completion(false, error, nil)
                                             }
                                         }
                                     })
@@ -1367,7 +1342,7 @@ class LRSessionManager: NSObject
                                         
                                         if let completion = completionHandler
                                         {
-                                            completion(success: false, error: errorString, response: nil)
+                                            completion(false, errorString, nil)
                                             
                                             log.error(errors)
                                             
@@ -1380,7 +1355,7 @@ class LRSessionManager: NSObject
                                 {
                                     let errorMessage = "Unknown Server Error."
                                     
-                                    completion(success: false, error: errorMessage, response: nil)
+                                    completion(false, errorMessage, nil)
                                     
                                     log.error(errorMessage)
                                     
@@ -1392,7 +1367,7 @@ class LRSessionManager: NSObject
                         // The request succeeded and returned valid data
                         if let completion = completionHandler
                         {
-                            completion(success: true, error: nil, response: jsonObject)
+                            completion(true, nil, jsonObject)
                         }
                     }
                     else
@@ -1403,16 +1378,16 @@ class LRSessionManager: NSObject
                             {
                                 log.error("Networking Error: \(errorMessage)")
                                 
-                                completion(success: false, error: "Whoops! \(errorMessage)", response: nil)
+                                completion(false, "Whoops! \(errorMessage)", nil)
                             }
                             else
                             {
                                 log.error("NETWORK_ERROR_UNKNOWN".localized)
-                                completion(success: false, error: "NETWORK_ERROR_UNKNOWN".localized, response: nil)
+                                completion(false, "NETWORK_ERROR_UNKNOWN".localized, nil)
                             }
                         }
                     }
-                })
+                }
         }
     }
 }

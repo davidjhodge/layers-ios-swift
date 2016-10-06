@@ -10,17 +10,17 @@ import Foundation
 
 class ProductWebNavigationController: UINavigationController, UIGestureRecognizerDelegate
 {
-    override func setNavigationBarHidden(hidden: Bool, animated: Bool) {
+    override func setNavigationBarHidden(_ hidden: Bool, animated: Bool) {
         super.setNavigationBarHidden(hidden, animated: animated)
         
         if let popGesture = interactivePopGestureRecognizer
         {
-            popGesture.enabled = false
+            popGesture.isEnabled = false
             popGesture.delegate = self
         }
     }
     
-    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         
         if let popGesture = interactivePopGestureRecognizer
         {

@@ -41,7 +41,7 @@ class ProfileHeaderCell: UICollectionViewCell
         followButton.layer.cornerRadius = 4.0
         followButton.clipsToBounds = true
     
-        followButton.layer.borderColor = Color.PrimaryAppColor.CGColor
+        followButton.layer.borderColor = Color.PrimaryAppColor.cgColor
         followButton.layer.borderWidth = 2.0
     }
 }

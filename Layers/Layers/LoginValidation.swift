@@ -8,12 +8,12 @@
 
 import Foundation
 
-func isValidEmail(email: String) -> Bool
+func isValidEmail(_ email: String) -> Bool
 {
-    return (email.containsString("@") && email.containsString("."))
+    return (email.contains("@") && email.contains("."))
 }
 
-func isValidPassword(password: String) -> Bool
+func isValidPassword(_ password: String) -> Bool
 {
     return password.characters.count > 6
 }

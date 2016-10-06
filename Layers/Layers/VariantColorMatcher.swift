@@ -7,16 +7,36 @@
 //
 
 import Foundation
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 extension Variant
 {
-    static func variantMatchingFilterColorsInVariants(variants: Array<Variant>?) -> Variant?
+    static func variantMatchingFilterColorsInVariants(_ variants: Array<Variant>?) -> Variant?
     {
         if let variants = variants
         {
             for currVariant in variants
             {
-                if let selectedColors = FilterManager.defaultManager.getCurrentFilter().colors.selections where FilterManager.defaultManager.getCurrentFilter().colors.selections?.count > 0
+                if let selectedColors = FilterManager.defaultManager.getCurrentFilter().colors.selections , FilterManager.defaultManager.getCurrentFilter().colors.selections?.count > 0
                 {
                     //Color filtering is active
                     

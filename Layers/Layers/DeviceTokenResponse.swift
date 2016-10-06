@@ -15,11 +15,11 @@ class DeviceTokenResponse: Mappable
     
     var refreshToken: String?
     
-    var expirationDate: NSDate?
+    var expirationDate: Date?
     
     var isAnonymous: Bool?
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

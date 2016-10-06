@@ -12,7 +12,7 @@ import SDWebImage
 
 protocol PaginatedImageViewDelegate
 {
-    func showPhotoFullscreen(imageView: UIImageView, photos: Array<NSURL>, selectedIndex: Int)
+    func showPhotoFullscreen(_ imageView: UIImageView, photos: Array<URL>, selectedIndex: Int)
 }
 
 class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
@@ -34,7 +34,7 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
     
     var delegate: PaginatedImageViewDelegate?
     
-    var productImages: Array<NSURL>?
+    var productImages: Array<URL>?
 
     override var frame: CGRect
     {
@@ -72,14 +72,14 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
         layer.cornerRadius = 4.0
     }
     
-    func setImageElements(elements: Array<NSURL>)
+    func setImageElements(_ elements: Array<URL>)
     {
         productImages = elements
         
         layoutImageViews(true)
     }
     
-    private func layoutImageViews(shouldRedraw:Bool)
+    fileprivate func layoutImageViews(_ shouldRedraw:Bool)
     {
         if scrollView == nil
         {
@@ -97,7 +97,7 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
             }
             
             // Explicitly clear from memory
-            self.imageViews.removeAll(keepCapacity: false)
+            self.imageViews.removeAll(keepingCapacity: false)
             
             // New Image Views
             if let images = productImages
@@ -106,26 +106,26 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
                 {
                     let imageView = AnimatedImageView()
                     imageView.clipsToBounds = true
-                    imageView.contentMode = UIViewContentMode.ScaleAspectFit
-                    imageView.userInteractionEnabled = true
+                    imageView.contentMode = UIViewContentMode.scaleAspectFit
+                    imageView.isUserInteractionEnabled = true
                     
                     imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapPhoto(_:))))
                     
                     // Set Image
-                    imageView.sd_setImageWithURL(imageUrl, placeholderImage: nil, options: SDWebImageOptions.ProgressiveDownload, completed: { (image, error, cacheType, url) -> Void in
+                    imageView.sd_setImage(with: imageUrl, completed: { (image, error, cacheType, url) -> Void in
                         
                         if error != nil
                         {
                             if let placeholderImage = UIImage(named: "image-placeholder")
                             {
-                                imageView.contentMode = .Center
+                                imageView.contentMode = .center
                                 
                                 imageView.image = placeholderImage
                             }
                         }
                         else
                         {
-                            imageView.contentMode = .ScaleAspectFit
+                            imageView.contentMode = .scaleAspectFit
                         }
                     })
                     
@@ -137,24 +137,24 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
         }
         
         // Layout image view
-        for (index, imageView) in imageViews.enumerate()
+        for (index, imageView) in imageViews.enumerated()
         {
             // Creates image view offset based on index in array
-            imageView.frame = CGRectMake(CGFloat(index) * scrollView.bounds.size.width, 0, scrollView.bounds.size.width, scrollView.bounds.size.height)
+            imageView.frame = CGRect(x: CGFloat(index) * scrollView.bounds.size.width, y: 0, width: scrollView.bounds.size.width, height: scrollView.bounds.size.height)
         }
         
         // Set content size based on number of images
-        scrollView.contentSize = CGSizeMake(scrollView.bounds.size.width * (CGFloat(imageViews.count)), scrollView.bounds.size.height - 1)
+        scrollView.contentSize = CGSize(width: scrollView.bounds.size.width * (CGFloat(imageViews.count)), height: scrollView.bounds.size.height - 1)
 
         updatePageControl()
     }
     
     // MARK : Scroll View Delegate
-    override func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    override func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updatePageControl()
     }
     
@@ -170,23 +170,23 @@ class ProductHeaderCell: UITableViewCell, UIScrollViewDelegate
             pageControl.currentPage = Int(pageNumber)
             
             // If only 1 page, hide page control
-            pageControl.hidden = pageControl.numberOfPages == 1 ? true : false
+            pageControl.isHidden = pageControl.numberOfPages == 1 ? true : false
         }
     }
     
     // MARK: Expand Photo
-    func tapPhoto(recognizer: UITapGestureRecognizer)
+    func tapPhoto(_ recognizer: UITapGestureRecognizer)
     {
-        if recognizer.state == .Ended
+        if recognizer.state == .ended
         {
-            for (index, imageView) in imageViews.enumerate()
+            for (index, imageView) in imageViews.enumerated()
             {
                 // Detect which photo we're at based on the scroll view offset
-                if CGRectContainsPoint(imageView.bounds, recognizer.locationInView(imageView))
+                if (imageView.bounds).contains(recognizer.location(in: imageView))
                 {
                     if let productImages = productImages
                     {
-                        var images = Array<NSURL>()
+                        var images = Array<URL>()
                         
                         for image in productImages
                         {
