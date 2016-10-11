@@ -12,8 +12,9 @@ import FBSDKCoreKit
 import NHAlignmentFlowLayout
 import SDWebImage
 import KLCPopup
+import IDMPhotoBrowser
 
-class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
+class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PaginatedImageViewDelegate
 {
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -30,7 +31,7 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
     var refreshControl: UIRefreshControl?
     
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-            
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -385,6 +386,50 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
         }
     }
     
+    // MARK: Paginated Image View Delegate
+    func showPhotoFullscreen(_ imageView: UIImageView, photos: Array<URL>, selectedIndex: Int)
+    {
+        // Analytics
+//        if let index = selectedCollectionIndex
+//        {
+//            if let product = products[safe: index]
+//            {
+//                if let productId = product.productId,
+//                    let productName = product.brandedName,
+//                    let category = product.categories?[safe: 0]?.name
+//                {
+//                    FBSDKAppEvents.logEvent("Product Page Photo Taps", parameters: ["Product ID":productId, "Product Name":productName, "Category Name":category])
+//                }
+//            }
+//        }
+        
+        // Show Photo
+        let photoBrowser = IDMPhotoBrowser(photoURLs: photos, animatedFrom: imageView)
+        
+        photoBrowser?.scaleImage = imageView.image
+        
+        photoBrowser?.view.tintColor = Color.white
+        
+        photoBrowser?.displayArrowButton = false
+        
+        photoBrowser?.displayCounterLabel = false
+        
+//        photoBrowser?.forceHideStatusBar = true
+        
+        photoBrowser?.useWhiteBackgroundColor = false
+        
+        photoBrowser?.usePopAnimation = true
+        
+        photoBrowser?.displayActionButton = false
+        
+        // Show Done Button
+        photoBrowser?.displayDoneButton = true
+        
+        photoBrowser?.setInitialPageIndex(UInt(selectedIndex))
+        
+        present(photoBrowser!, animated: true, completion: nil)
+    }
+    
     // MARK: SFSafariViewController
     
     func showWebBrowser(_ url: URL)
@@ -424,6 +469,8 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
             cell.productNameLabel.text = ""
             cell.priceLabel.text = ""
             
+            cell.delegate = self
+            
             // User Profile Image
             if let imageUrl = URL(string: "https://organicthemes.com/demo/profile/files/2012/12/profile_img.png")
             {
@@ -452,7 +499,7 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
             // Timestamp
             let timestampDate = Date(timeIntervalSince1970: 1472951231)
                 
-            let timeStampString: String = (timestampDate as NSDate).shortTimeAgoSinceNow()
+            let timeStampString: String = (timestampDate as NSDate).shortTimeAgoSinceNow().lowercased()
             
             cell.timestampLabel.attributedText = NSAttributedString(string: timeStampString, attributes: FontAttributes.boldBodyTextAttributes)
             

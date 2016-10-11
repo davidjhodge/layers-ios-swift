@@ -9,11 +9,6 @@
 import UIKit
 import SDWebImage
 
-//protocol ProductPostCellDelegate {
-//    
-//    func viewProduct
-//}
-
 class ProductPostCell: UICollectionViewCell, UIScrollViewDelegate {
     
     @IBOutlet weak var profilePictureImageView: UIImageView!
@@ -112,6 +107,8 @@ class ProductPostCell: UICollectionViewCell, UIScrollViewDelegate {
                     imageView.contentMode = UIViewContentMode.scaleAspectFit
                     imageView.isUserInteractionEnabled = true
                     
+                    imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapPhoto(_:))))
+
                     // Set Image
                     imageView.sd_setImage(with: imageUrl, placeholderImage: nil, options: SDWebImageOptions.highPriority, completed: { (image, error, cacheType, url) -> Void in
                         
@@ -172,6 +169,36 @@ class ProductPostCell: UICollectionViewCell, UIScrollViewDelegate {
             
             // If only 1 page, hide page control
             pageControl.isHidden = pageControl.numberOfPages == 1 ? true : false
+        }
+    }
+    
+    // MARK: Expand Photo
+    func tapPhoto(_ recognizer: UITapGestureRecognizer)
+    {
+        if recognizer.state == .ended
+        {
+            for (index, imageView) in imageViews.enumerated()
+            {
+                // Detect which photo we're at based on the scroll view offset
+                if (imageView.bounds).contains(recognizer.location(in: imageView))
+                {
+                    if let productImages = productImages
+                    {
+                        var images = Array<URL>()
+                        
+                        for image in productImages
+                        {
+                            images.append(image)
+                        }
+                        
+                        // Old and New arrays match
+                        if images.count == productImages.count
+                        {
+                            delegate?.showPhotoFullscreen(imageView, photos: images, selectedIndex: index)
+                        }
+                    }
+                }
+            }
         }
     }
 }

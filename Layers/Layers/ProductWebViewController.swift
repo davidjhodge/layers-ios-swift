@@ -17,6 +17,17 @@ class ProductWebViewController: SFSafariViewController, SFSafariViewControllerDe
         
         view.tintColor = Color.PrimaryAppColor
         
+//        if #available(iOS 10.0, *)
+//        {
+//            preferredBarTintColor = Color.PrimaryAppColor
+//            
+//            preferredControlTintColor = Color.white
+//        }
+//        else
+//        {
+//            // Fallback on earlier versions
+//        }
+        
         modalPresentationStyle = .overFullScreen
     }
     
