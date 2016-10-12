@@ -61,7 +61,7 @@ extension Filter
         {
             return true
         }
-        
+
         return false
     }
 }

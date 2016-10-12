@@ -11,8 +11,8 @@ import SwiftyBeaver
 import FBSDKCoreKit
 import DeepLinkKit
 import ObjectMapper
-import Fabric
-import Crashlytics
+//import Fabric
+//import Crashlytics
 
 let log = SwiftyBeaver.self
 
@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         //Crashlytics
-        Fabric.with([Crashlytics.self])
+        //Fabric.with([Crashlytics.self])
         
         window = LRWindow(frame: UIScreen.main.bounds)
         window?.tintColor = Color.PrimaryAppColor

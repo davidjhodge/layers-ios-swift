@@ -15,10 +15,10 @@ PODS:
   - Fabric (1.6.9)
   - FBSDKCoreKit (4.16.0):
     - Bolts (~> 1.7)
-  - FBSDKLoginKit (4.16.0):
+  - FBSDKLoginKit (4.16.1):
     - FBSDKCoreKit
   - FRHyperLabel (1.0.3)
-  - IDMPhotoBrowser (1.8.4):
+  - IDMPhotoBrowser (1.9.1):
     - DACircularProgress
     - pop
     - SDWebImage
@@ -26,13 +26,13 @@ PODS:
   - KLCPopup (1.0)
   - MBProgressHUD (1.0.0)
   - NHAlignmentFlowLayout (0.1.0)
-  - ObjectMapper (2.0.0)
+  - ObjectMapper (2.1.0)
   - pop (1.0.9)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
   - SwiftyBeaver (1.0.3)
-  - SwiftyJSON (3.1.0)
+  - SwiftyJSON (3.1.1)
   - SwiftyTimer (2.0.0)
   - UITextView+Placeholder (1.2.0)
 
@@ -78,19 +78,21 @@ SPEC CHECKSUMS:
   DeviceKit: ddead7f3a7c9603ba3a63cb748566428c38dd11f
   Fabric: bc5bec42cef4bcf1ee3ce0e218fc518e4b44dfbb
   FBSDKCoreKit: 7a6baaed4a2b2a244ba253346713bdbc74df135b
-  FBSDKLoginKit: 9a514a55a7d05190f64d4ef09502737588b5b561
+  FBSDKLoginKit: 469a56cebe2e1ed62b1621d0b155970fd6aac2d8
   FRHyperLabel: 99d08d3667880b4c430071c9afbcb93aaaa34b37
-  IDMPhotoBrowser: b574fe3229754e701f32df271afbc4ac7e4e1997
+  IDMPhotoBrowser: 35e8ba559a88f2a8be4ae04d7fd424665344ba06
   KeychainAccess: 412bf2650d9aebfc8135a58103b90ec38caad7f8
   KLCPopup: 76c5a19227977f1e53d85236f9ef42257c168d98
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   NHAlignmentFlowLayout: 7f7e9bd79774a7c733e7ac232f2a131a0ce095b9
-  ObjectMapper: aed2570edabbd3c9b26c939e1cabdb6558f933e0
+  ObjectMapper: e5e0f8aef8590fc2ddcde7f27eddb255863ee6e9
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SwiftyBeaver: e42a664ffbdb5ec68ce968ffd3c54f619c92e0d7
-  SwiftyJSON: 29b9f2a64f118c07e691667c2ba1efe536acfe0b
+  SwiftyJSON: f0be2e604f83e8405a624e9f891898bf6ed4e019
   SwiftyTimer: 2efd74b060d69ad4f1496baf5bbedbe132125fcf
   UITextView+Placeholder: 77680995fcdd07c3f52ec92fe1150874a2ac89ff
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: d82cf5f6572f408359c58920a5c05287dfb12154
+
+COCOAPODS: 1.0.1

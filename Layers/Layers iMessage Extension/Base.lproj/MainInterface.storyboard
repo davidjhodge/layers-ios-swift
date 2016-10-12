@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A320" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ObA-dk-sSI">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Light.otf">
+            <string>Montserrat-Light</string>
+        </array>
+        <array key="Montserrat-Regular.otf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Messages View Controller-->
+        <scene sceneID="7MM-of-jgj">
+            <objects>
+                <viewController id="ObA-dk-sSI" customClass="MessagesViewController" customModule="Layers_iMessage_Extension" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qkL-Od-lgU"/>
+                        <viewControllerLayoutGuide type="bottom" id="n38-gi-rB5"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="zMn-AG-sqS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="528"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="aiu-b5-7ft">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="tVX-R8-pbp">
+                                    <size key="itemSize" width="150" height="159"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="8" minY="8" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="UserProductCell" id="80m-0V-gPZ" customClass="UserProductCell" customModule="Layers_iMessage_Extension" customModuleProvider="target">
+                                        <rect key="frame" x="77" y="8" width="175" height="217"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="175" height="217"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Brand" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CKO-Xu-tdC">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="RLv-qc-Ljc"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VYX-sH-QAI"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nof-Iu-z1p">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="ucz-9p-qqe"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="12"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </view>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="CKO-Xu-tdC" firstAttribute="top" secondItem="VYX-sH-QAI" secondAttribute="bottom" constant="16" id="3FS-qn-Dm4"/>
+                                            <constraint firstItem="Nof-Iu-z1p" firstAttribute="top" secondItem="CKO-Xu-tdC" secondAttribute="bottom" constant="6" id="AUl-MG-FNg"/>
+                                            <constraint firstItem="Nof-Iu-z1p" firstAttribute="leading" secondItem="80m-0V-gPZ" secondAttribute="leading" constant="16" id="R6n-1i-MJZ"/>
+                                            <constraint firstItem="VYX-sH-QAI" firstAttribute="top" secondItem="80m-0V-gPZ" secondAttribute="top" constant="16" id="Us7-2R-Wpf"/>
+                                            <constraint firstAttribute="trailing" secondItem="VYX-sH-QAI" secondAttribute="trailing" constant="24" id="YpR-qg-9bv"/>
+                                            <constraint firstItem="CKO-Xu-tdC" firstAttribute="leading" secondItem="80m-0V-gPZ" secondAttribute="leading" constant="16" id="aho-kk-V9i"/>
+                                            <constraint firstItem="VYX-sH-QAI" firstAttribute="leading" secondItem="80m-0V-gPZ" secondAttribute="leading" constant="24" id="nnd-my-HWZ"/>
+                                            <constraint firstAttribute="bottom" secondItem="Nof-Iu-z1p" secondAttribute="bottom" constant="16" id="q25-KM-CHp"/>
+                                            <constraint firstAttribute="trailing" secondItem="Nof-Iu-z1p" secondAttribute="trailing" constant="16" id="vCc-do-ZiN"/>
+                                            <constraint firstAttribute="trailing" secondItem="CKO-Xu-tdC" secondAttribute="trailing" constant="16" id="z86-Cb-ai7"/>
+                                        </constraints>
+                                        <size key="customSize" width="175" height="217"/>
+                                        <connections>
+                                            <outlet property="brandLabel" destination="CKO-Xu-tdC" id="6S5-Ll-tPb"/>
+                                            <outlet property="productImageView" destination="VYX-sH-QAI" id="si2-gW-tCS"/>
+                                            <outlet property="productNameLabel" destination="Nof-Iu-z1p" id="xaA-an-voX"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="aiu-b5-7ft" secondAttribute="trailing" id="Ond-qe-iuz"/>
+                            <constraint firstItem="n38-gi-rB5" firstAttribute="top" secondItem="aiu-b5-7ft" secondAttribute="bottom" id="bw6-hH-bMa"/>
+                            <constraint firstItem="aiu-b5-7ft" firstAttribute="top" secondItem="zMn-AG-sqS" secondAttribute="top" id="fsA-BO-Btk"/>
+                            <constraint firstItem="aiu-b5-7ft" firstAttribute="leading" secondItem="zMn-AG-sqS" secondAttribute="leading" id="g2b-9g-3BF"/>
+                        </constraints>
+                    </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="528"/>
+                    <connections>
+                        <outlet property="collectionView" destination="aiu-b5-7ft" id="QJP-6d-Sti"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="X47-rx-isc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="116.8" y="123.23838080959521"/>
+        </scene>
+    </scenes>
+</document>

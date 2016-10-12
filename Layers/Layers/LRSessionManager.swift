@@ -15,16 +15,10 @@ import KeychainAccess
 
 import FBSDKLoginKit
 
-//let kLRAPIBase = "https://api.trylayers.com/"
-let kLRAPIBase = "http://52.24.175.141:8000/"
-
 let kDeviceId = "kDeviceId"
 let kTokenObject = "kTokenObject"
 
 let productCollectionPageSize = 12
-
-typealias LRCompletionBlock = ((_ success: Bool, _ error: String?, _ response:Any?) -> Void)
-typealias LRJsonCompletionBlock = ((_ success: Bool, _ error: String?, _ response:JSON?) -> Void)
 
 private let kUserPoolLoginProvider = "kUserPoolLoginProvider"
 
@@ -1158,17 +1152,6 @@ class LRSessionManager: NSObject
                 completion(success, error, response)
             }
         })
-    }
-        
-    // MARK: API Helpers
-    func APIUrlAtEndpoint(_ endpointPath: String?) -> URL
-    {
-        if let path = endpointPath
-        {
-            return URL(string: kLRAPIBase + path)!
-        }
-        
-        return URL(string: "")! // Make sure this does not fail
     }
     
     /**
