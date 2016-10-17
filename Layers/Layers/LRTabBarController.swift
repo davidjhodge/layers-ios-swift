@@ -49,6 +49,11 @@ class LRTabBarController: UITabBarController, UITabBarControllerDelegate, ImageP
     
     func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
         
+        if let firstImage = images[safe: 0]
+        {
+            NewProduct.sharedProduct.userImage = firstImage
+        }
+        
         let uploadStoryboard = UIStoryboard(name: "Upload", bundle: Bundle.main)
         
         if let tagItemVc = uploadStoryboard.instantiateViewController(withIdentifier: "TagItemsViewController") as? TagItemsViewController

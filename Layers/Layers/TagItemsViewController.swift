@@ -70,10 +70,8 @@ class TagItemsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         if let findProductVc = storyboard.instantiateViewController(withIdentifier: "SharePostViewController") as? SharePostViewController
         {
-            if let selectedProductId = selectedProduct?.productId
+            if NewProduct.sharedProduct.productId != nil
             {
-                findProductVc.productId = selectedProductId
-                
                 navigationController?.pushViewController(findProductVc, animated: true)
             }
         }
@@ -159,9 +157,9 @@ class TagItemsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         if let sharePostVc = storyboard.instantiateViewController(withIdentifier: "SharePostViewController") as? SharePostViewController
         {
-            sharePostVc.customProductImage = image
-            
-            sharePostVc.customProductUrl = productUrl
+            NewProduct.sharedProduct.customProductImage = image
+
+            NewProduct.sharedProduct.customProductUrl = productUrl
             
             navigationController?.pushViewController(sharePostVc, animated: true)
         }
@@ -262,7 +260,10 @@ class TagItemsViewController: UIViewController, UITableViewDataSource, UITableVi
         // Did Select Row
         if let product = searchResults?[safe: indexPath.row - 1]
         {
-            selectedProduct = product
+            if let productId = product.productId
+            {
+                NewProduct.sharedProduct.productId = productId
+            }
             
             showFinalShareScreen()
         }
