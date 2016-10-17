@@ -313,33 +313,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                 
                 if let resultText = resultText
                 {
-                    let attributedString = NSMutableAttributedString(string: resultText, attributes: FontAttributes.darkBodyTextAttributes)
+                    var attributedString = NSMutableAttributedString(string: resultText, attributes: FontAttributes.darkBodyTextAttributes)
                     
                     // Bolden query match
                     if let searchQuery = searchBar.text
                     {
-                        let words = searchQuery.characters.split{ $0 == " " }.map(String.init)
-                        
-                        for word in words
-                        {
-                            do {
-                                let regex = try NSRegularExpression(pattern: "\(word)", options: .caseInsensitive)
-                                
-                                let range = NSMakeRange(0, resultText.characters.count)
-                                
-                                regex.enumerateMatches(in: resultText, options: .reportCompletion, range: range, using: { (result, flags, stop) -> Void in
-                                    
-                                    if let substringRange = result?.rangeAt(0)
-                                    {
-                                        attributedString.addAttribute(NSFontAttributeName, value: Font.PrimaryFontSemiBold(size: 12.0), range: substringRange)
-                                    }
-                                })
-                                
-                            } catch
-                            {
-                                // Substring not found
-                            }
-                        }
+                        attributedString.boldenMatchesFor(searchQuery)
                     }
                     
                     cell.titleLabel?.attributedText = attributedString

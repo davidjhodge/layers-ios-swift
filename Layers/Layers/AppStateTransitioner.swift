@@ -57,22 +57,24 @@ class AppStateTransitioner
         transition(mainTabBarController(), animated: animated)
     }
     
-    static func mainTabBarController() -> UITabBarController
+    static func mainTabBarController() -> LRTabBarController
     {
         let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         let searchStoryboard = UIStoryboard(name: "Search", bundle: Bundle.main)
+        let uploadStoryboard = UIStoryboard(name: "Upload", bundle: Bundle.main)
         let notificationsStoryboard = UIStoryboard(name: "Notifications", bundle: Bundle.main)
         let accountStoryboard = UIStoryboard(name: "Account", bundle: Bundle.main)
         
         let mainVC: UIViewController = mainStoryboard.instantiateInitialViewController()!
         let searchVc: UIViewController = searchStoryboard.instantiateInitialViewController()!
+        let uploadBaseVc: UIViewController = uploadStoryboard.instantiateInitialViewController()!
         let notificationsVc: UIViewController = notificationsStoryboard.instantiateInitialViewController()!
         let accountVC: UIViewController = accountStoryboard.instantiateInitialViewController()!
         
-        let tabBarController: UITabBarController = UITabBarController()
-        tabBarController.viewControllers = [mainVC, searchVc, notificationsVc, accountVC]
+        let tabBarController: LRTabBarController = LRTabBarController()
+        tabBarController.viewControllers = [mainVC, searchVc, uploadBaseVc, notificationsVc, accountVC]
         tabBarController.tabBar.isTranslucent = false
-        tabBarController.delegate = UIApplication.shared.delegate as? UITabBarControllerDelegate
+//        tabBarController.delegate = UIApplication.shared.delegate as? UITabBarControllerDelegate
         
         return tabBarController
     }

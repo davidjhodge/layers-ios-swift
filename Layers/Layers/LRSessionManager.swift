@@ -1143,6 +1143,60 @@ class LRSessionManager: NSObject
         }
     }
     
+    func searchProducts(_ query: String, completionHandler: LRCompletionBlock?)
+    {
+        if query.characters.count > 0
+        {
+            let pageSize = 5
+            
+            // Encode string to url format
+            let queryString = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+            
+            let requestString = "search?&q=\(queryString)&per_page=\(pageSize)"
+            
+            var request = URLRequest(url: APIUrlAtEndpoint(requestString))
+            
+            request.httpMethod = "GET"
+            
+            sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+                
+                if success
+                {
+                    if let jsonResponse = response
+                    {
+                        if let results = jsonResponse.dictionaryObject?["results"] as? Dictionary<String, AnyObject>
+                        {
+                            let searchResults = Mapper<SearchResults>().map(JSON: results)
+                            
+                            if let products: Array<SimpleProduct> = searchResults?.products
+                            {
+                                if let completion = completionHandler
+                                {
+                                    completion(success, error, products)
+                                    
+                                    return
+                                }
+                            }
+                        }
+                    }
+                    
+                    // No results or Error
+                    if let completion = completionHandler
+                    {
+                        completion(true, "No results.", nil)
+                    }
+                }
+                else
+                {
+                    if let completion = completionHandler
+                    {
+                        completion(success, error, nil)
+                    }
+                }
+            })
+        }
+    }
+    
     // MARK: Contact
     func submitContactForm(_ email: String, content: String, completionHandler: LRJsonCompletionBlock?)
     {

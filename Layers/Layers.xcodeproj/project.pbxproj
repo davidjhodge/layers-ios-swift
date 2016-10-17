@@ -7,11 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		35D2CA6AC9BC70A0D97C9B38 /* Pods_Layers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29055E7EACEA98F3107E42C /* Pods_Layers.framework */; };
+		3E1B7521547313E8D1615FAB /* Pods_Layers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE06315EB1D633BF7DE7262E /* Pods_Layers.framework */; };
 		70032F541D5F9CCC00BCA625 /* DiscoverPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70032F531D5F9CCC00BCA625 /* DiscoverPopup.xib */; };
 		70032F561D5F9F1200BCA625 /* DiscoverPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70032F551D5F9F1200BCA625 /* DiscoverPopupView.swift */; };
 		7003C1A81D446E9200FB531B /* LoginValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C1A71D446E9200FB531B /* LoginValidation.swift */; };
 		70059C951CD672990094B454 /* FacebookUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70059C941CD672990094B454 /* FacebookUserResponse.swift */; };
+		700D7C201DB43DF500F4CF88 /* HTMLImageParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700D7C1F1DB43DF500F4CF88 /* HTMLImageParser.swift */; };
+		700D7C231DB4468B00F4CF88 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700D7C221DB4468B00F4CF88 /* ImageCell.swift */; };
+		700D7C251DB448F000F4CF88 /* TextCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700D7C241DB448F000F4CF88 /* TextCollectionViewCell.swift */; };
 		701B59D01D4F925300354C68 /* FakeProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701B59CF1D4F925300354C68 /* FakeProgressView.swift */; };
 		7024AA381D259E4D00069B59 /* DeviceTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7024AA371D259E4D00069B59 /* DeviceTokenResponse.swift */; };
 		702FC2F11CC2D8470012969C /* UINavigationItem+BackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 702FC2F01CC2D8470012969C /* UINavigationItem+BackButton.m */; };
@@ -37,6 +40,7 @@
 		703D463C1D15C75300AB25C0 /* OpenSourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703D463B1D15C75300AB25C0 /* OpenSourceCell.swift */; };
 		703D463F1D15CA7E00AB25C0 /* OpenSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703D463E1D15CA7E00AB25C0 /* OpenSource.swift */; };
 		703D46411D15CCCA00AB25C0 /* OpenSourceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 703D46401D15CCCA00AB25C0 /* OpenSourceList.plist */; };
+		70431FEF1DB464F000C58B61 /* StringRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70431FEE1DB464F000C58B61 /* StringRange.swift */; };
 		70488C521CE63C3E0085BAE9 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70488C511CE63C3E0085BAE9 /* ColorCell.swift */; };
 		70488C541CE63C640085BAE9 /* ColorFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70488C531CE63C640085BAE9 /* ColorFilterViewController.swift */; };
 		704FD3A31D83579C00CC8F9A /* AccountHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704FD3A21D83579C00CC8F9A /* AccountHomeViewController.swift */; };
@@ -49,6 +53,17 @@
 		704FD3B61D85E21E00CC8F9A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704FD3B51D85E21E00CC8F9A /* SettingsViewController.swift */; };
 		704FD3B91D85FAC700CC8F9A /* ProductPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704FD3B81D85FAC700CC8F9A /* ProductPostCell.swift */; };
 		7053903A1CD7ED9100DA8E15 /* SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705390391CD7ED9100DA8E15 /* SafeIndex.swift */; };
+		7059C18C1DB28E6100FAEA52 /* Upload.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7059C18B1DB28E6100FAEA52 /* Upload.storyboard */; };
+		7059C18E1DB28EB000FAEA52 /* TagItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7059C18D1DB28EB000FAEA52 /* TagItemsViewController.swift */; };
+		7059C1911DB292F900FAEA52 /* TextUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7059C1901DB292F900FAEA52 /* TextUtility.swift */; };
+		7059C1931DB295C900FAEA52 /* LRTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7059C1921DB295C900FAEA52 /* LRTabBarController.swift */; };
+		7059C1951DB297D300FAEA52 /* UploadBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7059C1941DB297D300FAEA52 /* UploadBaseViewController.swift */; };
+		7059C1971DB2D8C800FAEA52 /* SearchGoogleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7059C1961DB2D8C800FAEA52 /* SearchGoogleCell.swift */; };
+		7059C1991DB3F19500FAEA52 /* FindProductWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7059C1981DB3F19500FAEA52 /* FindProductWebViewController.swift */; };
+		7059C19B1DB3F99B00FAEA52 /* SelectImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7059C19A1DB3F99B00FAEA52 /* SelectImageViewController.swift */; };
+		705C71861DB49699005FEE07 /* SharePostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C71851DB49699005FEE07 /* SharePostViewController.swift */; };
+		705C71881DB49F82005FEE07 /* AltSimpleProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C71871DB49F82005FEE07 /* AltSimpleProductCell.swift */; };
+		705C718A1DB4A181005FEE07 /* AddPostCaptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C71891DB4A181005FEE07 /* AddPostCaptionCell.swift */; };
 		70676BA31D61798E00219E9C /* Layers.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 70676BA21D61798E00219E9C /* Layers.entitlements */; };
 		706FF88A1CBC54F8007B26AD /* EmailLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */; };
 		706FF88C1CBC57D6007B26AD /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */; };
@@ -128,12 +143,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2617CC4AE1CA59B7C7DFB253 /* Pods-Layers.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Layers.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Layers/Pods-Layers.debug.xcconfig"; sourceTree = "<group>"; };
-		3FCE59FA6B494AAB3C36EE8C /* Pods-Layers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Layers.release.xcconfig"; path = "Pods/Target Support Files/Pods-Layers/Pods-Layers.release.xcconfig"; sourceTree = "<group>"; };
+		3BBF38C8457CCEEEEE5DCB5B /* Pods-Layers.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Layers.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Layers/Pods-Layers.debug.xcconfig"; sourceTree = "<group>"; };
 		70032F531D5F9CCC00BCA625 /* DiscoverPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiscoverPopup.xib; sourceTree = "<group>"; };
 		70032F551D5F9F1200BCA625 /* DiscoverPopupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverPopupView.swift; sourceTree = "<group>"; };
 		7003C1A71D446E9200FB531B /* LoginValidation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginValidation.swift; sourceTree = "<group>"; };
 		70059C941CD672990094B454 /* FacebookUserResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookUserResponse.swift; sourceTree = "<group>"; };
+		700D7C1F1DB43DF500F4CF88 /* HTMLImageParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTMLImageParser.swift; sourceTree = "<group>"; };
+		700D7C221DB4468B00F4CF88 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		700D7C241DB448F000F4CF88 /* TextCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextCollectionViewCell.swift; sourceTree = "<group>"; };
 		701B59CF1D4F925300354C68 /* FakeProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeProgressView.swift; sourceTree = "<group>"; };
 		7024AA371D259E4D00069B59 /* DeviceTokenResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceTokenResponse.swift; sourceTree = "<group>"; };
 		702FC2EF1CC2D8470012969C /* UINavigationItem+BackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+BackButton.h"; sourceTree = "<group>"; };
@@ -160,6 +177,7 @@
 		703D463B1D15C75300AB25C0 /* OpenSourceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSourceCell.swift; sourceTree = "<group>"; };
 		703D463E1D15CA7E00AB25C0 /* OpenSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSource.swift; sourceTree = "<group>"; };
 		703D46401D15CCCA00AB25C0 /* OpenSourceList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = OpenSourceList.plist; sourceTree = "<group>"; };
+		70431FEE1DB464F000C58B61 /* StringRange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringRange.swift; sourceTree = "<group>"; };
 		70488C511CE63C3E0085BAE9 /* ColorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		70488C531CE63C640085BAE9 /* ColorFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorFilterViewController.swift; sourceTree = "<group>"; };
 		704FD3A21D83579C00CC8F9A /* AccountHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountHomeViewController.swift; sourceTree = "<group>"; };
@@ -172,6 +190,17 @@
 		704FD3B51D85E21E00CC8F9A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		704FD3B81D85FAC700CC8F9A /* ProductPostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductPostCell.swift; sourceTree = "<group>"; };
 		705390391CD7ED9100DA8E15 /* SafeIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeIndex.swift; sourceTree = "<group>"; };
+		7059C18B1DB28E6100FAEA52 /* Upload.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Upload.storyboard; sourceTree = "<group>"; };
+		7059C18D1DB28EB000FAEA52 /* TagItemsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagItemsViewController.swift; sourceTree = "<group>"; };
+		7059C1901DB292F900FAEA52 /* TextUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextUtility.swift; sourceTree = "<group>"; };
+		7059C1921DB295C900FAEA52 /* LRTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LRTabBarController.swift; sourceTree = "<group>"; };
+		7059C1941DB297D300FAEA52 /* UploadBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadBaseViewController.swift; sourceTree = "<group>"; };
+		7059C1961DB2D8C800FAEA52 /* SearchGoogleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchGoogleCell.swift; sourceTree = "<group>"; };
+		7059C1981DB3F19500FAEA52 /* FindProductWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindProductWebViewController.swift; sourceTree = "<group>"; };
+		7059C19A1DB3F99B00FAEA52 /* SelectImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectImageViewController.swift; sourceTree = "<group>"; };
+		705C71851DB49699005FEE07 /* SharePostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharePostViewController.swift; sourceTree = "<group>"; };
+		705C71871DB49F82005FEE07 /* AltSimpleProductCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AltSimpleProductCell.swift; sourceTree = "<group>"; };
+		705C71891DB4A181005FEE07 /* AddPostCaptionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddPostCaptionCell.swift; sourceTree = "<group>"; };
 		70676BA21D61798E00219E9C /* Layers.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Layers.entitlements; sourceTree = "<group>"; };
 		706FF8891CBC54F8007B26AD /* EmailLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailLoginViewController.swift; sourceTree = "<group>"; };
 		706FF88B1CBC57D6007B26AD /* TextFieldCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldCell.swift; sourceTree = "<group>"; };
@@ -252,7 +281,8 @@
 		70DD85401CFFA0C900319716 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		70EEEDB91D57D65D0028F0DF /* ProductPatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductPatch.swift; sourceTree = "<group>"; };
 		70FF31CD1D0CDDB800F19C9E /* PriceFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceFilterViewController.swift; sourceTree = "<group>"; };
-		C29055E7EACEA98F3107E42C /* Pods_Layers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Layers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE06315EB1D633BF7DE7262E /* Pods_Layers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Layers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD3C91E3AD092937583F4819 /* Pods-Layers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Layers.release.xcconfig"; path = "Pods/Target Support Files/Pods-Layers/Pods-Layers.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -260,19 +290,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				35D2CA6AC9BC70A0D97C9B38 /* Pods_Layers.framework in Frameworks */,
+				3E1B7521547313E8D1615FAB /* Pods_Layers.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		18382FE24C97633ECC26B812 /* Frameworks */ = {
+		06EF63A6E23FF792ECE42E68 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				C29055E7EACEA98F3107E42C /* Pods_Layers.framework */,
+				3BBF38C8457CCEEEEE5DCB5B /* Pods-Layers.debug.xcconfig */,
+				CD3C91E3AD092937583F4819 /* Pods-Layers.release.xcconfig */,
 			);
-			name = Frameworks;
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		70032F521D5F9C9100BCA625 /* Popup */ = {
@@ -282,6 +313,18 @@
 				70032F551D5F9F1200BCA625 /* DiscoverPopupView.swift */,
 			);
 			name = Popup;
+			sourceTree = "<group>";
+		};
+		700D7C211DB4467100F4CF88 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				7059C1961DB2D8C800FAEA52 /* SearchGoogleCell.swift */,
+				700D7C221DB4468B00F4CF88 /* ImageCell.swift */,
+				700D7C241DB448F000F4CF88 /* TextCollectionViewCell.swift */,
+				705C71871DB49F82005FEE07 /* AltSimpleProductCell.swift */,
+				705C71891DB4A181005FEE07 /* AddPostCaptionCell.swift */,
+			);
+			name = Cells;
 			sourceTree = "<group>";
 		};
 		70204A621CBF5EB700868C00 /* Web */ = {
@@ -378,6 +421,19 @@
 			name = Post;
 			sourceTree = "<group>";
 		};
+		7059C18F1DB28EB700FAEA52 /* Upload */ = {
+			isa = PBXGroup;
+			children = (
+				7059C1941DB297D300FAEA52 /* UploadBaseViewController.swift */,
+				7059C18D1DB28EB000FAEA52 /* TagItemsViewController.swift */,
+				7059C1981DB3F19500FAEA52 /* FindProductWebViewController.swift */,
+				7059C19A1DB3F99B00FAEA52 /* SelectImageViewController.swift */,
+				705C71851DB49699005FEE07 /* SharePostViewController.swift */,
+				700D7C211DB4467100F4CF88 /* Cells */,
+			);
+			name = Upload;
+			sourceTree = "<group>";
+		};
 		706FF88F1CBD6A02007B26AD /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -423,6 +479,7 @@
 			isa = PBXGroup;
 			children = (
 				70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */,
+				7059C1921DB295C900FAEA52 /* LRTabBarController.swift */,
 			);
 			name = "App State Transitioner";
 			sourceTree = "<group>";
@@ -453,6 +510,7 @@
 				70987C361CB9D15100D86FBA /* Login.storyboard */,
 				70D84AA21CB9557300A70485 /* Main.storyboard */,
 				70DD853E1CFFA08F00319716 /* Search.storyboard */,
+				7059C18B1DB28E6100FAEA52 /* Upload.storyboard */,
 				703143B11D7B8BA80032D54F /* Notifications.storyboard */,
 				70987C271CB9A4A500D86FBA /* Account.storyboard */,
 				70987C3E1CBBF07F00D86FBA /* Login */,
@@ -461,6 +519,7 @@
 				70987BF21CB9705C00D86FBA /* Discover */,
 				70987C311CB9C9FC00D86FBA /* Product Detail */,
 				70DD85421CFFA38800319716 /* Search */,
+				7059C18F1DB28EB700FAEA52 /* Upload */,
 				703143AE1D7B8AEA0032D54F /* Notifications */,
 				70987C2B1CB9A4C200D86FBA /* Account */,
 			);
@@ -505,6 +564,9 @@
 				70EEEDB91D57D65D0028F0DF /* ProductPatch.swift */,
 				70C386D71D5BB9770045C86E /* EmptyStateView.swift */,
 				70329DF01D7F744500C1D9D0 /* VariantColors.swift */,
+				7059C1901DB292F900FAEA52 /* TextUtility.swift */,
+				700D7C1F1DB43DF500F4CF88 /* HTMLImageParser.swift */,
+				70431FEE1DB464F000C58B61 /* StringRange.swift */,
 				704FD3AD1D8494B800CC8F9A /* HeaderView */,
 			);
 			name = Utilities;
@@ -672,8 +734,8 @@
 				70676BA21D61798E00219E9C /* Layers.entitlements */,
 				70D84A9D1CB9557300A70485 /* Layers */,
 				70D84A9C1CB9557200A70485 /* Products */,
-				C4EC2D873913FC477A8BD06D /* Pods */,
-				18382FE24C97633ECC26B812 /* Frameworks */,
+				06EF63A6E23FF792ECE42E68 /* Pods */,
+				8191F1019CDA86AFDBE21C80 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -717,13 +779,12 @@
 			name = Search;
 			sourceTree = "<group>";
 		};
-		C4EC2D873913FC477A8BD06D /* Pods */ = {
+		8191F1019CDA86AFDBE21C80 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2617CC4AE1CA59B7C7DFB253 /* Pods-Layers.debug.xcconfig */,
-				3FCE59FA6B494AAB3C36EE8C /* Pods-Layers.release.xcconfig */,
+				BE06315EB1D633BF7DE7262E /* Pods_Layers.framework */,
 			);
-			name = Pods;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -733,14 +794,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 70D84AAD1CB9557300A70485 /* Build configuration list for PBXNativeTarget "Layers" */;
 			buildPhases = (
-				A34BDF9E3D8CA4A0F4052948 /* Check Pods Manifest.lock */,
+				E71F35EDDFF6E14050007373 /* [CP] Check Pods Manifest.lock */,
 				70D84A971CB9557200A70485 /* Sources */,
 				70D84A981CB9557200A70485 /* Frameworks */,
 				70D84A991CB9557200A70485 /* Resources */,
-				BC222FEF670F8C99C7C14B7C /* Embed Pods Frameworks */,
-				8FFF9DBF607F77DEE0D5153B /* Copy Pods Resources */,
 				70987C1E1CB99C7700D86FBA /* Increment Build Number Script */,
 				70C0CC391D17A1A700B738CF /* ShellScript */,
+				FF2003317A19C83180CD6AB4 /* [CP] Embed Pods Frameworks */,
+				D09CCA07375D63478128AB25 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -804,6 +865,7 @@
 				703143AB1D7B84EE0032D54F /* Montserrat-Regular.otf in Resources */,
 				70D84AA61CB9557300A70485 /* Assets.xcassets in Resources */,
 				70D84AA41CB9557300A70485 /* Main.storyboard in Resources */,
+				7059C18C1DB28E6100FAEA52 /* Upload.storyboard in Resources */,
 				703143AA1D7B84EE0032D54F /* Montserrat-Light.otf in Resources */,
 				70AF1A211CE1651A00C0518C /* PickerRow.xib in Resources */,
 				70987C281CB9A4A500D86FBA /* Account.storyboard in Resources */,
@@ -851,14 +913,14 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" fdaf05f61a1e9365c304bc071ccbb2396316bdc5 0cd9513c8f2eb6d5cf093aedcdbecf222b5c7d398cfe60cf69d6eaa4bdd11197";
 		};
-		8FFF9DBF607F77DEE0D5153B /* Copy Pods Resources */ = {
+		D09CCA07375D63478128AB25 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -866,14 +928,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Layers/Pods-Layers-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A34BDF9E3D8CA4A0F4052948 /* Check Pods Manifest.lock */ = {
+		E71F35EDDFF6E14050007373 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -881,14 +943,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		BC222FEF670F8C99C7C14B7C /* Embed Pods Frameworks */ = {
+		FF2003317A19C83180CD6AB4 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -906,6 +968,7 @@
 				70AF1A231CE1676200C0518C /* PickerRow.swift in Sources */,
 				704FD3AF1D84B52500CC8F9A /* ProductListViewController.swift in Sources */,
 				703143B01D7B8B1E0032D54F /* NotificationsViewController.swift in Sources */,
+				700D7C231DB4468B00F4CF88 /* ImageCell.swift in Sources */,
 				703D463F1D15CA7E00AB25C0 /* OpenSource.swift in Sources */,
 				70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */,
 				70DD85411CFFA0C900319716 /* SearchViewController.swift in Sources */,
@@ -915,19 +978,26 @@
 				70B311B61D7D053A00303D39 /* Category.swift in Sources */,
 				70987BF51CB970CA00D86FBA /* LRSessionManager.swift in Sources */,
 				70B311AC1D7CCD4D00303D39 /* Price.swift in Sources */,
+				705C71881DB49F82005FEE07 /* AltSimpleProductCell.swift in Sources */,
 				70987C301CB9B4E400D86FBA /* ProductViewController.swift in Sources */,
 				702FC2FC1CC344960012969C /* EmailCreateAccountViewController.swift in Sources */,
 				702FC3031CC408FC0012969C /* TextViewCell.swift in Sources */,
 				706FF88C1CBC57D6007B26AD /* TextFieldCell.swift in Sources */,
+				7059C1951DB297D300FAEA52 /* UploadBaseViewController.swift in Sources */,
+				70431FEF1DB464F000C58B61 /* StringRange.swift in Sources */,
 				70329DE71D7E75A400C1D9D0 /* SearchResults.swift in Sources */,
 				706FF88A1CBC54F8007B26AD /* EmailLoginViewController.swift in Sources */,
 				70987C171CB985DE00D86FBA /* Font.swift in Sources */,
 				70329DED1D7F3B4C00C1D9D0 /* CategoryCell.swift in Sources */,
 				70837E6B1CFA4AA500C83045 /* ProductRouteHandler.swift in Sources */,
+				7059C1971DB2D8C800FAEA52 /* SearchGoogleCell.swift in Sources */,
+				7059C1911DB292F900FAEA52 /* TextUtility.swift in Sources */,
 				706FF8961CBD6B95007B26AD /* PriceGraphCell.swift in Sources */,
 				70B311B21D7CD17B00303D39 /* Size.swift in Sources */,
 				702FC3011CC3FE6D0012969C /* ContactUsViewController.swift in Sources */,
 				704FD3A51D8485FF00CC8F9A /* BasicCollectionCell.swift in Sources */,
+				7059C1991DB3F19500FAEA52 /* FindProductWebViewController.swift in Sources */,
+				705C718A1DB4A181005FEE07 /* AddPostCaptionCell.swift in Sources */,
 				703D463C1D15C75300AB25C0 /* OpenSourceCell.swift in Sources */,
 				704FD3B61D85E21E00CC8F9A /* SettingsViewController.swift in Sources */,
 				70987BFC1CB97A9900D86FBA /* LRWindow.swift in Sources */,
@@ -947,6 +1017,7 @@
 				7033C7401D5E707E0035A13D /* ProductWebViewController.swift in Sources */,
 				703143B41D7B8EA70032D54F /* NotificationCell.swift in Sources */,
 				706FF8911CBD6B6C007B26AD /* SizeCell.swift in Sources */,
+				7059C18E1DB28EB000FAEA52 /* TagItemsViewController.swift in Sources */,
 				70CECA821CEE31E600FF7B8F /* FilterManager.swift in Sources */,
 				70329DEB1D7EFE5F00C1D9D0 /* SearchCell.swift in Sources */,
 				70CECA871CF7AD2400FF7B8F /* FilterObjectConverter.swift in Sources */,
@@ -959,6 +1030,7 @@
 				70AF1A1F1CE1479200C0518C /* NSURLImageSIze.swift in Sources */,
 				70488C521CE63C3E0085BAE9 /* ColorCell.swift in Sources */,
 				707F48D31D04BCCE00E82A4C /* HighlightedButton.swift in Sources */,
+				700D7C201DB43DF500F4CF88 /* HTMLImageParser.swift in Sources */,
 				7024AA381D259E4D00069B59 /* DeviceTokenResponse.swift in Sources */,
 				70B311BA1D7D154F00303D39 /* Images.swift in Sources */,
 				7003C1A81D446E9200FB531B /* LoginValidation.swift in Sources */,
@@ -975,6 +1047,7 @@
 				7033C7421D5E7C780035A13D /* ProductWebNavigationController.swift in Sources */,
 				704FD3B91D85FAC700CC8F9A /* ProductPostCell.swift in Sources */,
 				70B311C11D7D28C700303D39 /* UserProductCell.swift in Sources */,
+				700D7C251DB448F000F4CF88 /* TextCollectionViewCell.swift in Sources */,
 				704FD3AA1D8493F400CC8F9A /* HeaderView.swift in Sources */,
 				70776FC61CC5F881002E6F25 /* FilterViewController.swift in Sources */,
 				707F48841D013D9D00E82A4C /* CallToActionCell.swift in Sources */,
@@ -990,6 +1063,8 @@
 				70987BEE1CB9658200D86FBA /* User.swift in Sources */,
 				703143B61D7B8F410032D54F /* NotificationResponse.swift in Sources */,
 				704FD3A71D84885600CC8F9A /* AccountHeaderCell.swift in Sources */,
+				705C71861DB49699005FEE07 /* SharePostViewController.swift in Sources */,
+				7059C1931DB295C900FAEA52 /* LRTabBarController.swift in Sources */,
 				70488C541CE63C640085BAE9 /* ColorFilterViewController.swift in Sources */,
 				70B311BF1D7D28BB00303D39 /* ProfileHeaderCell.swift in Sources */,
 				703D463A1D15C21700AB25C0 /* OpenSourceViewController.swift in Sources */,
@@ -998,6 +1073,7 @@
 				70776FD31CC8A9FF002E6F25 /* Localization.swift in Sources */,
 				70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */,
 				70B311AE1D7CCDA700303D39 /* AltPrice.swift in Sources */,
+				7059C19B1DB3F99B00FAEA52 /* SelectImageViewController.swift in Sources */,
 				70D901A51D10FA220078298B /* Constants.swift in Sources */,
 				704FD3B11D84BC2100CC8F9A /* ProductListCell.swift in Sources */,
 				70B311A61D7CC94A00303D39 /* Product.swift in Sources */,
@@ -1110,7 +1186,7 @@
 		};
 		70D84AAE1CB9557300A70485 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2617CC4AE1CA59B7C7DFB253 /* Pods-Layers.debug.xcconfig */;
+			baseConfigurationReference = 3BBF38C8457CCEEEEE5DCB5B /* Pods-Layers.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1134,7 +1210,7 @@
 		};
 		70D84AAF1CB9557300A70485 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3FCE59FA6B494AAB3C36EE8C /* Pods-Layers.release.xcconfig */;
+			baseConfigurationReference = CD3C91E3AD092937583F4819 /* Pods-Layers.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

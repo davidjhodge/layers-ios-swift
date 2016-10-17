@@ -42,7 +42,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>3609</string>
+	<string>3667</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -109,6 +109,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Layers uses the camera so you can take new pictures of products right inside the app.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Layers uses your location to supplement the camera and improve the experience.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To allow you to upload existing photos, Layers needs access to the camera roll.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-Light.otf</string>
