@@ -13,6 +13,7 @@ import DeepLinkKit
 import ObjectMapper
 import Fabric
 import Crashlytics
+import OneSignal
 
 let log = SwiftyBeaver.self
 
@@ -37,6 +38,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Swifty Beaver
         log.addDestination(ConsoleDestination())
+        
+        // Initialize One Signal for Push Notifications
+        OneSignal.initWithLaunchOptions(launchOptions, appId: "d44d9aaf-4ecf-4d95-a118-285493b22834") { (result) in
+            
+            // This block gets called when the user reacts to a notification received
+        }
         
         // UIApperance
         configureDefaultAppearances()

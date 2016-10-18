@@ -42,7 +42,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>3676</string>
+	<string>3681</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -123,6 +123,10 @@
 		<string>Oxygen-Light.ttf</string>
 		<string>Oxygen-Regular.ttf</string>
 		<string>Oxygen-Bold.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>

@@ -155,6 +155,11 @@ class SharePostViewController: UIViewController, UICollectionViewDataSource, UIC
                 
                 cell.captionTextView.attributedText = NSAttributedString(string: "", attributes: [NSFontAttributeName: Font.PrimaryFontLight(size: 14.0), NSForegroundColorAttributeName: Color.GrayColor])
                 
+                if let usersImage = NewProduct.sharedProduct.userImage
+                {
+                    cell.imageView.image = usersImage
+                }
+                
                 return cell
             }
         }
@@ -166,6 +171,23 @@ class SharePostViewController: UIViewController, UICollectionViewDataSource, UIC
 
     
     // MARK: Collection View Delegate Flow Layout
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let flowLayout: UICollectionViewFlowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        
+        let width: CGFloat = (collectionView.bounds.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right)
+        
+        if let section = Section(rawValue: indexPath.section)
+        {
+            if section == .productPreview || section == .addCaption
+            {
+                return CGSize(width: width, height: 96.0)
+            }
+        }
+        
+        return CGSize(width: 0, height: 0)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
         if let section = Section(rawValue: section)

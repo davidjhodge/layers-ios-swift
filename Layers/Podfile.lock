@@ -28,6 +28,7 @@ PODS:
   - MBProgressHUD (1.0.0)
   - NHAlignmentFlowLayout (0.1.0)
   - ObjectMapper (2.0.0)
+  - OneSignal (2.1.16)
   - pop (1.0.9)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
@@ -54,6 +55,7 @@ DEPENDENCIES:
   - MBProgressHUD (~> 1.0)
   - NHAlignmentFlowLayout (~> 0.1)
   - ObjectMapper (~> 2.0)
+  - OneSignal
   - SDWebImage (~> 3.8)
   - SwiftyBeaver (~> 1.0)
   - SwiftyJSON (~> 3.0)
@@ -94,6 +96,7 @@ SPEC CHECKSUMS:
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   NHAlignmentFlowLayout: 7f7e9bd79774a7c733e7ac232f2a131a0ce095b9
   ObjectMapper: aed2570edabbd3c9b26c939e1cabdb6558f933e0
+  OneSignal: 7a4272f857d3005949f83a373868c5c98d02f203
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SwiftyBeaver: e42a664ffbdb5ec68ce968ffd3c54f619c92e0d7
@@ -101,6 +104,6 @@ SPEC CHECKSUMS:
   SwiftyTimer: 2efd74b060d69ad4f1496baf5bbedbe132125fcf
   UITextView+Placeholder: 77680995fcdd07c3f52ec92fe1150874a2ac89ff
 
-PODFILE CHECKSUM: a399612d938a9f46e33b424823c12743c410288b
+PODFILE CHECKSUM: 0290722fbfec60ae187bec90a34bb4c9cb6263be
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.1.0.rc.3

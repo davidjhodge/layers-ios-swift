@@ -27,6 +27,7 @@ pod 'DateTools', '~> 1.7'
 pod 'SwiftyTimer', :git => 'https://github.com/radex/SwiftyTimer.git', :branch => 'swift3'
 pod 'DeviceKit', '~> 1.0'
 pod 'ImagePicker', :git => 'https://github.com/hyperoslo/ImagePicker.git'
+pod 'OneSignal'
 
 end
 
