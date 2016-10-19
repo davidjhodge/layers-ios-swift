@@ -418,7 +418,7 @@ class LRSessionManager: NSObject
             
             let httpBody = jsonBody
             
-            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user"), httpMethod: "PUT", json: httpBody), authorization: true, completion: { (success, error, response) -> Void in
+            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user/register"), httpMethod: "POST", json: httpBody), authorization: true, completion: { (success, error, response) -> Void in
                 
                 if success
                 {

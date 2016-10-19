@@ -9,6 +9,7 @@
 import UIKit
 import FRHyperLabel
 import FBSDKCoreKit
+import FBSDKLoginKit
 
 class LoginViewController: UIViewController, AuthenticationDelegate {
     
@@ -128,7 +129,103 @@ class LoginViewController: UIViewController, AuthenticationDelegate {
     
     func connectWithFacebook()
     {
-        print("Connected with Facebook")
+        disableButttons()
+        
+        UIApplication.shared.setStatusBarStyle(.default, animated: true)
+        
+        let loginManager: FBSDKLoginManager = FBSDKLoginManager()
+        
+        loginManager.logIn(withReadPermissions: ["public_profile", "user_friends", "email"], from: self, handler: {(result:FBSDKLoginManagerLoginResult?, error:Error?) -> Void in
+            
+            if error != nil
+            {
+                log.debug(error?.localizedDescription)
+                
+                self.enableButtons()
+            }
+            else if (result?.isCancelled)!
+            {
+                log.debug("User cancelled Facebook Login")
+                
+                self.enableButtons()
+            }
+            else
+            {
+                log.debug("User successfully logged in with Facebook!")
+                
+                // Facebook token now exists and can be accessed at FBSDKAccessToken.currentAccessToken()
+                
+                self.handleFacebookLogin()
+                
+                DispatchQueue.main.async(execute: { () -> Void in
+                    
+                    self.disableButttons()
+                })
+            }
+            
+            DispatchQueue.main.async(execute: { () -> Void in
+                
+                UIApplication.shared.setStatusBarStyle(.lightContent, animated: false)
+            })
+        })
+    }
+    
+    func handleFacebookLogin()
+    {
+        LRSessionManager.sharedManager.loginWithFacebook({ (success, error, response) -> Void in
+            
+            if success
+            {
+                // User login succeeded. Note that this means an account already existed
+                self.authenticationDidSucceed()
+                
+                DispatchQueue.main.async(execute: { () -> Void in
+                    
+                    AppStateTransitioner.transitionToMainStoryboard(true)
+                })
+            }
+            else
+            {
+                //User login failed, continue with registration
+                LRSessionManager.sharedManager.fetchFacebookUserInfo( { (success, error, result) -> Void in
+                    
+                    if success
+                    {
+                        log.debug("Facebook Registration Integration Complete.")
+                        
+                        FBSDKAppEvents.logEvent("Login Facebook Registrations")
+                        
+                        // Show Confirmation Screen
+                        let loginStoryboard = UIStoryboard(name: "Login", bundle: Bundle.main)
+                        if let confirmFacebookVc = loginStoryboard.instantiateViewController(withIdentifier: "ConfirmFacebookInfoViewController") as? ConfirmFacebookInfoViewController
+                        {
+                            if let facebookResponse = result as? FacebookUserResponse
+                            {
+                                confirmFacebookVc.facebookResponse = facebookResponse
+                            }
+                            
+                            DispatchQueue.main.async(execute: { () -> Void in
+                                
+                                self.navigationController?.pushViewController(confirmFacebookVc, animated: true)
+                            })
+                        }
+                        
+                        return
+                    }
+                    else
+                    {
+                        self.enableButtons()
+                        
+                        DispatchQueue.main.async(execute: { () -> Void in
+                            
+                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
+                        })
+                    }
+                })
+            }
+        })
     }
     
     func signUp()

@@ -601,9 +601,15 @@ class DiscoverViewController: UIViewController, UICollectionViewDataSource, UICo
             // View Button
             cell.viewButton.setAttributedTitle(NSAttributedString(string: "View".uppercased(), attributes: FontAttributes.buttonAttributes), for: UIControlState())
             
-            cell.viewButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6)
+//            cell.viewButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6)
+//            
+//            cell.viewButton.setImage(UIImage(named: "outbound-filled"), for: UIControlState())
             
-            cell.viewButton.setImage(UIImage(named: "outbound-filled"), for: UIControlState())
+            cell.viewButton.layer.borderColor = Color.PrimaryAppColor.cgColor
+            
+            cell.viewButton.layer.cornerRadius = 4.0
+            
+            cell.viewButton.layer.borderWidth = 1.5
 
             // Specifies which cell index the button was tapped at
             cell.viewButton.tag = (indexPath as NSIndexPath).row

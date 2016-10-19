@@ -28,7 +28,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jn1-61-q0Q" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="OOB-dY-5bK"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="uRP-w7-BzX">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="uRP-w7-BzX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -434,7 +434,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ProductCell" id="bSV-av-Htb" customClass="ProductCell" customModule="Layers" customModuleProvider="target">
-                                        <rect key="frame" x="114" y="8" width="148" height="226"/>
+                                        <rect key="frame" x="113.5" y="8" width="148" height="226"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="148" height="226"/>
@@ -571,13 +571,13 @@
                                                         <constraint firstItem="47b-oN-tVe" firstAttribute="top" secondItem="AmL-wg-twy" secondAttribute="top" constant="8" id="Kzf-yu-keE"/>
                                                     </constraints>
                                                 </view>
-                                                <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iec-HS-JHT">
+                                                <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iec-HS-JHT">
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="KSO-r7-7AP"/>
-                                                        <constraint firstAttribute="width" constant="112" id="ctN-uH-g10"/>
+                                                        <constraint firstAttribute="width" constant="72" id="ctN-uH-g10"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
-                                                    <state key="normal" title="VIEW ONLINE">
+                                                    <state key="normal" title="VIEW">
                                                         <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     </state>
                                                 </button>
@@ -867,7 +867,7 @@ To keep browsing, try Search.</string>
                                             <outlet property="smallPriceLabel" destination="Wo5-Jm-B2T" id="79d-lP-Imv"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="StyleCell" rowHeight="44" id="ddo-Uu-Zxs" customClass="StyleCell" customModule="Layers" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StyleCell" rowHeight="44" id="ddo-Uu-Zxs" customClass="StyleCell" customModule="Layers" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="518" width="584" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ddo-Uu-Zxs" id="EjI-KJ-Xex">
@@ -922,7 +922,7 @@ To keep browsing, try Search.</string>
                                             <outlet property="styleLabel" destination="39X-o7-Gt2" id="ViD-5T-QKi"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SizeCell" rowHeight="44" id="4X7-nF-41r" customClass="SizeCell" customModule="Layers" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SizeCell" rowHeight="44" id="4X7-nF-41r" customClass="SizeCell" customModule="Layers" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="562" width="584" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4X7-nF-41r" id="nHh-US-KD7">
@@ -967,7 +967,7 @@ To keep browsing, try Search.</string>
                                             <outlet property="sizeLabel" destination="IhX-bB-IhO" id="Eh2-oo-cgX"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MoreDetailsCell" rowHeight="44" id="wgs-Pe-Tgr" customClass="MoreDetailsCell" customModule="Layers" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MoreDetailsCell" rowHeight="44" id="wgs-Pe-Tgr" customClass="MoreDetailsCell" customModule="Layers" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="606" width="584" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wgs-Pe-Tgr" id="nke-UT-J2f">
@@ -1158,7 +1158,7 @@ To keep browsing, try Search.</string>
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="iAW-BK-2cD" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="gOQ-eK-EV2">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="gOQ-eK-EV2">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
