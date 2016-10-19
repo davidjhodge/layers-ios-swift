@@ -745,6 +745,8 @@ class LRSessionManager: NSObject
     }
     
     // MARK: Fetching Server Data
+    
+    // MARK: Products
     func loadDiscoverProducts(_ completionHandler: LRCompletionBlock?)
     {
         var request = URLRequest(url: APIUrlAtEndpoint("products/531614790"))
@@ -895,6 +897,29 @@ class LRSessionManager: NSObject
                 completion(false, "INVALID_PARAMETERS".localized, nil)
             }
         }
+    }
+    
+    // MARK: Posts
+    func loadPosts(_ completionHandler: LRCompletionBlock?)
+    {
+        var request = URLRequest(url: APIUrlAtEndpoint("posts"))
+        
+        request.httpMethod = "GET"
+        
+        sendRequest(request, authorization: true, completion: { (success, error, response) -> Void in
+            
+            if success
+            {
+                
+            }
+            else
+            {
+                if let completion = completionHandler
+                {
+                    completion(false, error, nil)
+                }
+            }
+        })
     }
     
     // MARK: Filtering
