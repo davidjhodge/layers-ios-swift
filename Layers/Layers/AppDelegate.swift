@@ -17,7 +17,7 @@ import OneSignal
 
 let log = SwiftyBeaver.self
 
-private let facebookScheme: String = "fb982100215236828"
+private let facebookScheme = kFacebookAppId
 private let layersScheme: String = "trylayers"
 
 @UIApplicationMain
@@ -40,7 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.addDestination(ConsoleDestination())
         
         // Initialize One Signal for Push Notifications
-        OneSignal.initWithLaunchOptions(launchOptions, appId: "d44d9aaf-4ecf-4d95-a118-285493b22834") { (result) in
+        OneSignal.initWithLaunchOptions(launchOptions, appId: kOneSignalAppId) { (result) in
             
             // This block gets called when the user reacts to a notification received
         }
@@ -52,21 +52,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         registerRoutes()
         
         // Determine intial view controller based on FirstLaunchExperience        
-//        if LRSessionManager.sharedManager.hasCompletedFirstLaunch() == true
-//        {
-//            if LRSessionManager.sharedManager.hasCredentials()
-//            {
-//                AppStateTransitioner.transitionToMainStoryboard(false)
-//            }
-//            else
-//            {
-//                AppStateTransitioner.transitionToLoginStoryboard(false)
-//            }
-//        }
-//        else
-//        {
-            AppStateTransitioner.transitionToMainStoryboard(false)
-//        }
+        if LRSessionManager.sharedManager.hasCompletedFirstLaunch() == true
+        {
+            if LRSessionManager.sharedManager.hasCredentials()
+            {
+                AppStateTransitioner.transitionToMainStoryboard(false)
+            }
+            else
+            {
+                AppStateTransitioner.transitionToLoginStoryboard(false)
+            }
+        }
+        else
+        {
+            AppStateTransitioner.transitionToLoginStoryboard(false)
+        }
 
         window?.makeKeyAndVisible()
                 

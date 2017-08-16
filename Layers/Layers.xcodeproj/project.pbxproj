@@ -80,6 +80,7 @@
 		707F48D31D04BCCE00E82A4C /* HighlightedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707F48D21D04BCCE00E82A4C /* HighlightedButton.swift */; };
 		707F48DD1D07A84900E82A4C /* SearchProductCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707F48DC1D07A84900E82A4C /* SearchProductCollectionViewController.swift */; };
 		70837E6B1CFA4AA500C83045 /* ProductRouteHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70837E6A1CFA4AA500C83045 /* ProductRouteHandler.swift */; };
+		7085E0111F43EEFC0076AB54 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7085E0101F43EEFC0076AB54 /* Config.swift */; };
 		70987BE51CB95B4F00D86FBA /* AppStateTransitioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */; };
 		70987BEA1CB95F1900D86FBA /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BE91CB95F1900D86FBA /* DiscoverViewController.swift */; };
 		70987BEE1CB9658200D86FBA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70987BED1CB9658200D86FBA /* User.swift */; };
@@ -218,6 +219,7 @@
 		707F48D21D04BCCE00E82A4C /* HighlightedButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighlightedButton.swift; sourceTree = "<group>"; };
 		707F48DC1D07A84900E82A4C /* SearchProductCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProductCollectionViewController.swift; sourceTree = "<group>"; };
 		70837E6A1CFA4AA500C83045 /* ProductRouteHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductRouteHandler.swift; sourceTree = "<group>"; };
+		7085E0101F43EEFC0076AB54 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		70987BE41CB95B4F00D86FBA /* AppStateTransitioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStateTransitioner.swift; sourceTree = "<group>"; };
 		70987BE91CB95F1900D86FBA /* DiscoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
 		70987BED1CB9658200D86FBA /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -755,6 +757,7 @@
 			children = (
 				70D84A9E1CB9557300A70485 /* AppDelegate.swift */,
 				70D901A41D10FA220078298B /* Constants.swift */,
+				7085E0101F43EEFC0076AB54 /* Config.swift */,
 				703D463E1D15CA7E00AB25C0 /* OpenSource.swift */,
 				703D46401D15CCCA00AB25C0 /* OpenSourceList.plist */,
 				70837E691CFA4A9200C83045 /* Deep Linking */,
@@ -1080,6 +1083,7 @@
 				70EEEDBA1D57D65D0028F0DF /* ProductPatch.swift in Sources */,
 				70776FD31CC8A9FF002E6F25 /* Localization.swift in Sources */,
 				70D84A9F1CB9557300A70485 /* AppDelegate.swift in Sources */,
+				7085E0111F43EEFC0076AB54 /* Config.swift in Sources */,
 				70B311AE1D7CCDA700303D39 /* AltPrice.swift in Sources */,
 				7059C19B1DB3F99B00FAEA52 /* SelectImageViewController.swift in Sources */,
 				70D901A51D10FA220078298B /* Constants.swift in Sources */,

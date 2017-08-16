@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>TRACKING_ID</key>
-	<string>UA-73127666-1</string>
+	<string>INSERT_TRACKING_ID</string>
 	<key>CLIENT_ID</key>
-	<string>148800836392-h1bc20svvchdvubp04firjumb6imaf0v.apps.googleusercontent.com</string>
+	<string>INSERT_CLIENT_ID</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.148800836392-h1bc20svvchdvubp04firjumb6imaf0v</string>
+	<string>INSERT_REVERSED_CLIENT_ID</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.layers.Layers</string>
 	<key>PROJECT_ID</key>
-	<string>layers-5ec40</string>
+	<string>INSERT_PROJECT_ID</string>
 	<key>IS_ADS_ENABLED</key>
 	<false/>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:148800836392:ios:97286d6101388486</string>
+	<string>INSERT_APP_ID</string>
 </dict>
 </plist>

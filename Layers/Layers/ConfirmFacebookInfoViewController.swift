@@ -129,7 +129,7 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
                 
                 if let email = email
                 {
-                    LRSessionManager.sharedManager.registerWithFacebook(email, firstName: firstName, lastName: lastName, gender: gender, age: age, completionHandler: { (success, error, response) -> Void in
+                    LRSessionManager.sharedManager.connectWithFacebook(email, firstName: firstName, lastName: lastName, gender: gender, age: age, completionHandler: { (success, error, response) -> Void in
                         
                         if success
                         {
@@ -166,26 +166,14 @@ class ConfirmFacebookInfoViewController: UIViewController, UITableViewDataSource
             self.view.endEditing(true)
         })
         
-        if isModal
-        {
-            // Logged in on Account Page
-            DispatchQueue.main.async(execute: { () -> Void in
-
-                self.dismiss(animated: true, completion: nil)
-            })
+        DispatchQueue.main.async(execute: { () -> Void in
+            
+            self.dismiss(animated: true, completion: nil)
+        })
         
-            if let authDelegate = delegate
-            {
-                authDelegate.authenticationDidSucceed()
-            }
-        }
-        else
+        if let authDelegate = delegate
         {
-            // Logged in on Get Started Screen
-            DispatchQueue.main.async(execute: { () -> Void in
-                
-                AppStateTransitioner.transitionToMainStoryboard(true)
-            })
+            authDelegate.authenticationDidSucceed()
         }
     }
     

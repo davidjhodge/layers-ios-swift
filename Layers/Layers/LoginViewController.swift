@@ -151,9 +151,11 @@ class LoginViewController: UIViewController, AuthenticationDelegate {
             }
             else
             {
-                log.debug("User successfully logged in with Facebook!")
+                log.debug("User successfully authenticated with Facebook and received a Facebook token.")
                 
                 // Facebook token now exists and can be accessed at FBSDKAccessToken.currentAccessToken()
+                let token = FBSDKAccessToken.current().tokenString
+                
                 
                 self.handleFacebookLogin()
                 
@@ -172,58 +174,57 @@ class LoginViewController: UIViewController, AuthenticationDelegate {
     
     func handleFacebookLogin()
     {
-        LRSessionManager.sharedManager.loginWithFacebook({ (success, error, response) -> Void in
+        LRSessionManager.sharedManager.connectWithFacebook({ (success, error, response) -> Void in
             
             if success
             {
                 // User login succeeded. Note that this means an account already existed
                 self.authenticationDidSucceed()
-                
-                DispatchQueue.main.async(execute: { () -> Void in
-                    
-                    AppStateTransitioner.transitionToMainStoryboard(true)
-                })
             }
             else
             {
+                self.enableButtons()
+
                 //User login failed, continue with registration
-                LRSessionManager.sharedManager.fetchFacebookUserInfo( { (success, error, result) -> Void in
-                    
-                    if success
-                    {
-                        log.debug("Facebook Registration Integration Complete.")
-                        
-                        FBSDKAppEvents.logEvent("Login Facebook Registrations")
-                        
-                        // Show Confirmation Screen
-                        let loginStoryboard = UIStoryboard(name: "Login", bundle: Bundle.main)
-                        if let confirmFacebookVc = loginStoryboard.instantiateViewController(withIdentifier: "ConfirmFacebookInfoViewController") as? ConfirmFacebookInfoViewController
-                        {
-                            if let facebookResponse = result as? FacebookUserResponse
-                            {
-                                confirmFacebookVc.facebookResponse = facebookResponse
-                            }
-                            
-                            DispatchQueue.main.async(execute: { () -> Void in
-                                
-                                self.navigationController?.pushViewController(confirmFacebookVc, animated: true)
-                            })
-                        }
-                        
-                        return
-                    }
-                    else
-                    {
-                        self.enableButtons()
-                        
-                        DispatchQueue.main.async(execute: { () -> Void in
-                            
-                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                            self.present(alert, animated: true, completion: nil)
-                        })
-                    }
-                })
+//                LRSessionManager.sharedManager.fetchFacebookUserInfo( { (success, error, result) -> Void in
+//                    
+//                    if success
+//                    {
+//                        log.debug("Facebook Registration Integration Complete.")
+//                        
+//                        FBSDKAppEvents.logEvent("Login Facebook Registrations")
+//                        
+//                        // Show Confirmation Screen
+//                        let loginStoryboard = UIStoryboard(name: "Login", bundle: Bundle.main)
+//                        if let confirmFacebookVc = loginStoryboard.instantiateViewController(withIdentifier: "ConfirmFacebookInfoViewController") as? ConfirmFacebookInfoViewController
+//                        {
+//                            if let facebookResponse = result as? FacebookUserResponse
+//                            {
+//                                confirmFacebookVc.facebookResponse = facebookResponse
+//                                
+//                                confirmFacebookVc.delegate = self
+//                            }
+//                            
+//                            DispatchQueue.main.async(execute: { () -> Void in
+//                                
+//                                self.present(confirmFacebookVc, animated: true, completion: nil)
+//                            })
+//                        }
+//                        
+//                        return
+//                    }
+//                    else
+//                    {
+//                        self.enableButtons()
+//                        
+//                        DispatchQueue.main.async(execute: { () -> Void in
+//                            
+//                            let alert = UIAlertController(title: error, message: nil, preferredStyle: .alert)
+//                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//                            self.present(alert, animated: true, completion: nil)
+//                        })
+//                    }
+//                })
             }
         })
     }
@@ -282,6 +283,11 @@ class LoginViewController: UIViewController, AuthenticationDelegate {
     func authenticationDidSucceed()
     {
         print("Authentication Succeeded")
+        
+        DispatchQueue.main.async(execute: { () -> Void in
+            
+            AppStateTransitioner.transitionToMainStoryboard(true)
+        })
     }
     
     // MARK: Handle UI Interactivity

@@ -15,8 +15,8 @@ import KeychainAccess
 
 import FBSDKLoginKit
 
-//let kLRAPIBase = "https://api.trylayers.com/"
-let kLRAPIBase = "http://52.24.175.141:8000/"
+let kLRAPIBase = "https://api.trylayers.com/"
+//let kLRAPIBase = "http://52.24.175.141:8000/"
 
 let kDeviceId = "kDeviceId"
 let kTokenObject = "kTokenObject"
@@ -307,8 +307,9 @@ class LRSessionManager: NSObject
 
         let jsonBody = ["device_id":    uuidString,
                         "device_name":  model,
-                        "os_version":   systemVersion,
-                        "timezone":     timeZone] as [String : Any]
+                        "device_version":   systemVersion,
+                        "timezone":     timeZone,
+                        "firebase_id":  ""] as [String : Any]
         
         sendRequest(self.jsonRequest(APIUrlAtEndpoint("device"), httpMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
          
@@ -400,21 +401,27 @@ class LRSessionManager: NSObject
         })
     }
     
-    func registerWithFacebook(_ email: String, firstName: String?, lastName: String?, gender: String?, age: NSNumber?, completionHandler: LRCompletionBlock?)
+    func connectWithFacebook(_ completionHandler: LRCompletionBlock?)
+    {
+        connectWithFacebook(nil, firstName: nil, lastName: nil, gender: nil, age: nil, completionHandler: completionHandler)
+    }
+    
+    func connectWithFacebook(_ email: String?, firstName: String?, lastName: String?, gender: String?, age: NSNumber?, completionHandler: LRCompletionBlock?)
     {
         if let facebookToken = FBSDKAccessToken.current().tokenString
         {
             var jsonBody: Dictionary<String,AnyObject> = [
-                "facebook_token":   facebookToken as AnyObject,
-                "email":            email as AnyObject]
+                "facebook_token":   facebookToken as AnyObject]
+            
+            if email != nil { jsonBody["email"] = email as AnyObject }
             
             if firstName != nil { jsonBody["first_name"] = firstName as AnyObject? }
             
             if lastName != nil { jsonBody["last_name"] = lastName as AnyObject? }
             
-            if gender != nil { jsonBody["gender"] = gender as AnyObject? }
-            
-            if age != nil { jsonBody["age"] = age }
+//            if gender != nil { jsonBody["gender"] = gender as AnyObject? }
+//            
+//            if age != nil { jsonBody["age"] = age }
             
             let httpBody = jsonBody
             
@@ -511,61 +518,6 @@ class LRSessionManager: NSObject
         }
     }
 
-    func loginWithFacebook(_ completionHandler: LRCompletionBlock?)
-    {
-        if let facebookToken = FBSDKAccessToken.current().tokenString,
-            let deviceId = deviceKey
-        {
-            let jsonBody = ["facebook_token": facebookToken,
-                            "device_id": deviceId]
-
-            sendRequest(self.jsonRequest(APIUrlAtEndpoint("user/session"), httpMethod: "POST", json: jsonBody), authorization: false, completion: { (success, error, response) -> Void in
-                
-                if success
-                {
-                    if let jsonDict = response?.dictionaryObject
-                    {
-                        if let tokenResponse = Mapper<DeviceTokenResponse>().map(JSON: jsonDict)
-                        {
-                            log.debug("User logged in with Facebook.")
-                            
-                            self.tokenObject = tokenResponse
-                            
-                            self.saveCredentials()
-                            
-                            if let completion = completionHandler
-                            {
-                                completion(true, nil, tokenResponse)
-                                
-                                return
-                            }
-                        }
-                    }
-                    
-                    // Invalid Response
-                    if let completion = completionHandler
-                    {
-                        completion(false, "Invalid token response.", nil)
-                    }
-                }
-                else
-                {
-                    if let completion = completionHandler
-                    {
-                        completion(false, error, nil)
-                    }
-                }
-            })
-        }
-        else
-        {
-            if let completion = completionHandler
-            {
-                completion(false, "Invalid Facebook Token.", nil)
-            }
-        }
-    }
-    
     func refreshToken(_ completionHandler: LRJsonCompletionBlock?)
     {
         if let currentRefreshToken = tokenObject?.refreshToken

@@ -107,7 +107,7 @@ class GetStartedViewController: UIViewController, AuthenticationDelegate
     
     func handleFacebookLogin()
     {
-        LRSessionManager.sharedManager.loginWithFacebook({ (success, error, response) -> Void in
+        LRSessionManager.sharedManager.connectWithFacebook({ (success, error, response) -> Void in
             
             if success
             {
