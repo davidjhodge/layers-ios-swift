@@ -18,14 +18,6 @@ import KeychainAccess
 
 import SwiftyJSON
 
-private let kAWSCognitoAppClientId = "22lne1f5vp57ls55bkmifp06ir"
-private let kAWSCognitoAppClientSecret = "1qq3jup3mg7qq3ekbnok3tgkecbjlkr6gke9fqa8tfa4spdl4qbj"
-
-//private let kAWSCognitoIdentityPoolId = "us-east-1:7a62ae60-d5ab-44a9-a224-c9b5167fc932"
-private let kAWSCognitoIdentityPoolId = "us-east-1:d3064c43-adb0-4e40-800c-8795078b56ab" // New identity pool
-
-private let kAWSSNSApplicationARN = "arn:aws:sns:us-east-1:843366835636:app/APNS_SANDBOX/Layers_Development"
-
 class AWSManager: NSObject
 {
     // Static variable to allow single access to the service.
